@@ -1,5 +1,21 @@
 project:
-  title: "stats_notes_book"
-
+  title: "Henderson's Statistics Notes"
+  author: 
+    - name: "Kristin Henderson"
+      affiliation: "SMU MSDS Program"
+      orcid: "0000-0002-9265-7709"
+      
 editor: visual
 
+format:
+  html:
+    theme: cosmo # Use a simple, clean theme for now
+    toc: true    # Enable a table of contents
+    toc-depth: 2 # Set the depth of the table of contents
+    number-sections: true # Number the sections
+
+book:
+  chapters:      # Define the chapters of your book
+    - index.qmd  # Introduction or preface
+    - chapter1.qmd  # Add additional chapters as they are created
+    - chapter2.qmd
