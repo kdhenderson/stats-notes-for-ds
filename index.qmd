@@ -1,0 +1,7 @@
+---
+title: "Henderson's Statistics Notes"
+---
+
+# Welcome to Henderson's Statistics Notes
+
+This book is a student's companion for the SMU Master of Science in Data Science Statistical Foundations and Applied Statistics courses. 

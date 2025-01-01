@@ -1,0 +1,83 @@
+---
+title: "Chapter 1: Drawing Statistical Conclusions"
+---
+
+# The difference between an observational study and an experiment
+An investigator actively controls/manipulates the environment in an experiment, and there is randomization in the assignment of treatment group. The researcher is passive in an observational study.
+Randomization makes the treatment groups roughly equal across all variables that might influence the response except for the treatment itself, and it also removes potential bias from the researcher.
+We can make cause-and-effect conclusions from a randomized experiment that the treatment causes the response.
+
+# The value of an observational study
+Ethical considerations prohibit randomized experiments.
+Evidence gathering may be the goal rather than causation.
+Causation can be established in other ways. It is possible to establish causation with large numbers of observational studies combined with theoretical considerations, as in the case of smoking causing lung cancer.
+
+# Ethics of gathering data
+Informed consent should be obtained from study participants.
+The Institutional Review Board is a mechanism for determining whether a study is appropriate. In addition to objectives related to minimizing risk and maximizing benefit, it will review the experimental design and statistical plan.
+
+# Statistical sampling
+Random sampling uses chance to select a representative sample from a larger population allowing for inferences from the sample to be made about the broader population. This is different from a randomized experiment where assignment to treatment groups are random.
+A parameter describes a characteristic of the population, and a statistic describes a characteristic of the sample.
+Sample design determines what inferences we can make from the sample to the population. 
+Examples of randomization:
+Simple random sample
+Stratified random sample  - first splitting into groups, then randomizing within those groups, for example splitting by gender, then randomizing within gender.
+
+# Measuring uncertainty
+Hypothesis testing: The null hypothesis is a statement about the current value of the parameter, and alternative hypothesis is a statement about the possible effect of treatment on the same parameter.
+A test statistic is a measure of a sample that’s meant to estimate the parameter of interest, divided by a measure of variability.
+P-value is calculated from the test statistic. 
+Observational studies use a fictitious chance model, using the same calculations but the conclusions are different because of the lack of randomization.
+
+# Strategy of hypothesis testing (how to test for an effect) – lottery example
+Assumption: That Bivin is playing fair.
+Evidence: He won 10x in a row.
+Probability: The probability of winning 10x in a row if he is playing fair is very, very small.
+Decision: He is not playing fair. / Reject the assumption.
+Conclusion: Since the probability of winning 10x in a row is very small if he is playing fair, then we will conclude that Bivin is cheating.
+
+# Our assumption is the null hypothesis, which always has the equal sign in it.
+(Since assignment to treatment groups is random, we assume that if the treatment has no effect, the means of the parameter are equal.)
+
+# Our evidence is gathered by collecting a sample and finding the difference in sample means.
+
+# If our assumption is true, the difference in sample means should be pretty close to zero. What is pretty close? This is what our p-value indicates.
+
+# p-value: The probability of observing by random chance a result as extreme or more extreme than what was observed under the assumption that the null hypothesis is true.
+
+# Permutation testing:
+What are all the possible outcomes of our test? A different permutation is just as likely under the randomization of subjects as the randomization we got in our test. Under the assumption that the null hypothesis is true, the results of all the possible permutations will be near zero.
+
+# The p-value is calculated by finding the number of permutations with a result as or more extreme than the result we observed and dividing but the total permutations.
+
+# Using the p-value, we decide that our result is either unlikely or not unlikely if the population means are equal. Therefore, we either reject or fail to reject the null hypothesis at a specified significance level.
+alpha (α) = the significance level
+
+# The conclusion is reported to the client by stating what the null/alternative hypotheses are in plain language with a p-value reported.
+
+# Writing up results
+Results are often communicated in writing to non-expert audiences.
+Include context about the experiment like:
+What is the research question?
+What were the treatment groups?
+What was measured?
+Include descriptive statistics such as:
+Mean
+Standard deviation
+Outliers with possible explanations
+Important differences
+p-value, whether it supports the null hypothesis, and what that means
+Difficulties, confounding variables
+Can the results be generalized to the population of interest (is the sample representative)?
+Include enough detail for your study to be reproduced
+
+# Interview with Vincent Yates – his advice:
+Statistics are at the core of every decision; good statistics are at the core of good decisions.
+As you learn the concepts, focus less on the procedural and more on answering why am I doing this, what do the numbers really mean, what does it really tell you about the data.
+It is easy to get an answer; it is hard to get the right answer and know it is right or not right. Looking back on this, I’m not sure if he was saying, you can get an answer, but whether it really answers the question you care about depends on the experimental design.
+Take something you are passionate about, find the data, explore and analyze it, and see what great questions arise.
+
+
+
+
