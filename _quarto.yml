@@ -1,11 +1,5 @@
 project:
   title: "Henderson's Statistics Notes"
-  author: 
-    - name: "Kristin Henderson"
-      affiliation: "SMU MSDS Program"
-      orcid: "0000-0002-9265-7709"
-      
-editor: visual
 
 format:
   html:
@@ -15,6 +9,10 @@ format:
     number-sections: true # Number the sections
 
 book:
+  author: 
+    - name: "Kristin Henderson"
+      affiliation: "SMU MSDS Program"
+      orcid: "0000-0002-9265-7709"
   chapters:      # Define the chapters of your book
     - index.qmd  # Introduction or preface
     - chapter1.qmd  # Add additional chapters as they are created

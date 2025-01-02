@@ -39,21 +39,21 @@ Random sampling uses chance to select a representative sample, allowing us to in
 
 #### Key Concepts
 1. **Hypotheses**:
-   - **Null Hypothesis (\(H_0\))**: Assumes no effect or difference (e.g., treatment means are equal).
+   - **Null Hypothesis ($H_0$)**: Assumes no effect or difference (e.g., treatment means are equal).
      - Because treatment group assignment is random, we assume that if the treatment has no effect, the parameter means are equal across groups.
-   - **Alternative Hypothesis (\(H_a\))**: Suggests an effect or difference exists.
+   - **Alternative Hypothesis ($H_a$)**: Suggests an effect or difference exists.
 2. **Test Statistic**: Divides a sample estimate (e.g. difference in means) by a measure of variability (e.g. standard error).
    - Example: A t-statistic in a two-sample t-test.
-3. **P-Value**: Probability of observing by random chance a result as extreme as the sample, assuming \(H_0\) is true. Calculated from the test statistic.
-4. **Decision**: Compare the p-value to the significance level (\(\alpha\)). Under the assumption that the population means are equal, the result is either unlikely or not unlikely.
-   - If \(p < \alpha\): Reject \(H_0\).
-   - Otherwise: Fail to reject \(H_0\).
+3. **P-Value**: Probability of observing by random chance a result as extreme as the sample, assuming $H_0$ is true. Calculated from the test statistic.
+4. **Decision**: Compare the p-value to the significance level ($\alpha$). Under the assumption that the population means are equal, the result is either unlikely or not unlikely.
+   - If $p < \alpha$: Reject $H_0$.
+   - Otherwise: Fail to reject $H_0$.
 5. **Conclusion**: State the null and alternative hypotheses in plain language, reporting a p-value.
    - Observational studies use a fictitious chance model, using the same calculations but the conclusions are different because of the lack of randomization
 
 #### General Principles
 - Evidence is gathered by collecting a sample and analyzing differences in key metrics.
-- If \(H_0\) is true, differences between sample means should be small. The p-value helps quantify "small".
+- If $H_0$ is true, differences between sample means should be small. The p-value helps quantify "small".
 
 #### Lottery Example
 - Assumption (hypotheses): Bivin is playing fair.
@@ -68,7 +68,7 @@ Random sampling uses chance to select a representative sample, allowing us to in
 - **Purpose**: Tests results against all possible randomizations to assess how unusual the observed result is.
   - Example: In an experiment, permutations represent all possible assignments of participants to treatment groups.
 - **P-Value Calculation**: Count the number of permutations as extreme as the observed result, divided by the total permutations.
-  - Example: If 10 out of 1,000 permutations are as extreme as the observed difference, the p-value is \(10 / 1,000 = 0.01\).
+  - Example: If 10 out of 1,000 permutations are as extreme as the observed difference, the p-value is $10 / 1,000 = 0.01$.
 
 
 ## Writing Up Results
