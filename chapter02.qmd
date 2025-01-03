@@ -1,0 +1,89 @@
+---
+title: "Chapter 2: Inference Using T-Distributions"
+---
+
+# Inference Using T-Distributions
+
+
+## Central Limit Theorem (CLT)
+If we pull a large enough sample from a normal (or approximately normal) distribution, the sampling distribution of the sample mean will also be normal. The mean of the sampling distribution of the sample means is the same as the mean of the population from which those sample means were taken. This is why we can use $ \bar{X} $ to infer about $ \mu $.
+
+
+## Interpretation of a confidence interval
+If we took many, many samples from the same population and constructed a confidence interval for the mean from each one, then approximately 95 percent of those intervals would contain the true mean. We hope that we have contained the mean in our interval, and thus we are 95 percent confident that our interval contains the mean.
+
+
+## Confidence Intervals
+- Measure how large or small a parameter value could be.
+- Random sampling results in slightly different estimates of a population mean.
+- We calculate an interval around our sample mean with a certain level of confidence that it contains the population mean (plausible values).
+- From normal distribution theory:
+  - Approximately $68\%$ of values lie within $1\sigma$ of $\mu$,
+  - Approximately $95\%$ within $2\sigma$,
+  - Approximately $99.7\%$ within $3\sigma$.
+- Since we usually want to estimate the population mean ($\mu$) and standard deviation ($\sigma$), we use the sample standard deviation ($s$) as an estimate.
+- A t-distribution has fatter tails than a normal distribution, accounting for error in estimating the standard deviation.
+
+The formula for a confidence interval is:
+$$
+CI = \bar{X} \pm t_{\text{crit}} \left( \frac{s}{\sqrt{n}} \right)
+$$
+where $t_{\text{crit}}$ is determined by the desired confidence level and degrees of freedom.  
+- Confidence Interval (CI) Example Statement: "With $\_\_\%$ confidence, the true mean $\mu$ is between $\_\_$ and $\_\_$, based on a sample $n = \_\_$ from this population."
+
+
+## Hypothesis Testing
+
+### Steps for Testing Significance:
+1. Choose a significance level $\alpha$:
+   - $\alpha$ determines the probability of a Type I error (rejecting the null hypothesis when it is true).
+   - A lower $\alpha$ reduces the chance of a Type I error.
+2. Choose a one-sided or two-sided test and confirm assumptions are met (e.g. near-normal distribution, random sampling).
+3. State the hypotheses: the assumption about characteristics of one or more parameter in the population.
+   - $H_0$: Null hypothesis
+   - $H_a$: Alternative hypothesis
+4. Follow these six steps:
+   1. Identify $H_0$ and $H_a$.
+   2. Find the critical value(s) and draw and shade the rejection region.
+   3. Calculate the test statistic (i.e. the evidence).
+   4. Compute the p-value.
+   5. Decide whether to reject or fail to reject $H_0$.
+   6. Write a conclusion in non-technical terms, including the p-value, confidence interval, and scope.
+
+### Test Statistic:
+- A measure of a sample (the estimate) divided by its variability:
+$$
+t = \frac{\bar{X} - \mu_0}{\frac{s}{\sqrt{n}}}
+$$
+- For a one-sided test, the sign of the numerator matters. It is always the sample mean minus the population mean.
+
+### p-Value:
+- Calculated assuming the null hypothesis is true.
+- A small p-value suggests that random variation alone is unlikely to explain the observed differences.
+- Computed as the area under the tails (one or two) beyond the t-statistic, corresponding to $H_a$.
+- A p-value is a probability not a hard cutoff, you can just state the value and let the reader decide.
+
+
+## Linking Hypothesis Tests and Confidence Intervals
+- A $(1-\alpha)\%$ confidence interval is equivalent to a two-sided hypothesis test with a significance level of $\alpha$.
+- Hypothesis tests can be evaluated through confidence intervals.
+
+
+## Statistical Significance vs. Practical Significance
+- Statistical significance implies results are unlikely due to random sampling error but does not guarantee practical significance.
+- p-values are influenced by sample size.
+- Effect size, such as Cohen’s $d$, measures practical value.
+
+
+## In R:
+- **Critical Value:** `qt(alpha, df)`
+  - Use $\alpha/2$ or $1-\alpha/2$ for a two-sided test; $\alpha$ or $1-\alpha$ for a one-sided test.
+- **p-Value:** `pt(t-statistic, df, lower.tail = TRUE/FALSE)`
+  - Multiply by 2 for a two-tailed p-value.
+
+
+## Complete Analysis Format:
+1. Statement of the problem.
+2. Address the assumptions.
+3. Perform the appropriate test (five steps).
+4. Provide a conclusion in non-technical terms, including the p-value, confidence interval, and scope of inference.
