@@ -42,33 +42,37 @@ title: "Chapter 3: Data Screening, Assumptions, and Transformations"
 
 
 ## Robustness
-- A statistical procedure is robust if it is valid even when the assumptions aren’t met.
-- It is valid if the uncertainty measures are nearly equal to the expected rates, e.g. 95% CI are valid if they capture the true value of the parameter 95% of the time (think of the demo in units 2/3).
+- A procedure is **robust** if its results remain valid despite minor assumption violations.
+- Example: 95% confidence intervals (CIs) should capture the true parameter value 95% of the time.
 
-## Robustness in t-Tools (moderate):
-- The larger the sample, the larger the departure from normality can be (if the tails aren’t too heavy, lots of large outliers).
-- For two-sample t-tests, samples with a different shape/skewness can be a problem.
-- Differing standard deviations, especially when the sample sizes aren’t the same is a bigger problem.
-- Worst situation: when the ratio of standard deviations is far from 1 and the smaller size sample is from the population with the larger standard deviation. This means you may have captured a sample that doesn’t reflect the variability of the population.
+### Moderate Robustness in t-Tools
+- **Sample size effects**:
+  - Larger samples tolerate greater deviations from normality (unless tails are excessively heavy, meaning there are many large outliers).
+- **Two-sample t-tests**:
+  - Problems arise with differing shapes/skewness or unequal standard deviations.
+  - Worst-case scenario: Smaller sample size paired with a population of larger standard deviation. In this case, the sample may fail to accurately represent the population's variability.
 
 ## Independence
-- Must be built into experimental design.
-- Observations are independent if knowledge of the value of one observation reveals nothing about values of other observations.
-- Cluster effects occur when data are collected in subgroups (e.g. mouse littermates) and must be analyzed with different tools or by treating each cluster as a single observation.
-- Serial effects occurs when measurements are taken over time.
+- **Definition**: Observations are independent if knowing one value provides no information about another. Independent observations must be built into the experimental design.
+- **Cluster effects**: Occur in subgroup data (e.g. littermates) and require analysis with different tools or by treating each cluster as a single observation.
+- **Serial effects**: Occur when measurements are taken over time.
 
-## Outliers:
-- Are observations far from the group average.
-- Heavy (long) – tailed distributions are often caused by outliers.
-- t-statistics are not robust to long tails/outliers.
+
+## Outliers
+- **Definition**: Observations far from the group average.
+- **Effects**:
+  - Long-tailed distributions often result from outliers.
+  - t-statistics are sensitive to outliers.
+
+### Dealing with Outliers
+- Do not delete unless they are clear data entry or measurement errors.
+- Run analyses with and without outliers and report both results.
+
 
 ## Resistance:
 - A statistical procedure is resistant if it doesn’t change much when a small part of the data changes (e.g. the median is resistant, the mean isn’t).
 - t-tools are based on means and aren’t resistant to long tails
 
-## Dealing with outliers:
-- Should not delete unless it’s clearly a data entry or measurement error.
-- Run the test with and without and compare (and mention in discussion).
 
 ## Log Transformation (natural log usually):
 - Use if ratio of largest to smallest is greater than 10
