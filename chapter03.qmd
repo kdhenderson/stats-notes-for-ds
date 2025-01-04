@@ -52,6 +52,7 @@ title: "Chapter 3: Data Screening, Assumptions, and Transformations"
   - Problems arise with differing shapes/skewness or unequal standard deviations.
   - Worst-case scenario: Smaller sample size paired with a population of larger standard deviation. In this case, the sample may fail to accurately represent the population's variability.
 
+
 ## Independence
 - **Definition**: Observations are independent if knowing one value provides no information about another. Independent observations must be built into the experimental design.
 - **Cluster effects**: Occur in subgroup data (e.g. littermates) and require analysis with different tools or by treating each cluster as a single observation.
@@ -69,69 +70,74 @@ title: "Chapter 3: Data Screening, Assumptions, and Transformations"
 - Run analyses with and without outliers and report both results.
 
 
-## Resistance:
-- A statistical procedure is resistant if it doesn’t change much when a small part of the data changes (e.g. the median is resistant, the mean isn’t).
-- t-tools are based on means and aren’t resistant to long tails
+## Resistance
+- A procedure is **resistant** if it remains stable when small parts of the data change.
+  - Example: Median is resistant, while the mean is not.
+- t-tools are based on means and are not resistant to outliers or long tails.
 
 
-## Log Transformation (natural log usually):
-- Use if ratio of largest to smallest is greater than 10
-- Consider if data is skewed (in QQ plot or other graph)
-- Consider if group with larger mean has larger spread
-- Will correct nonconstant variance and non-normality
-- Need to back transform median and CI to the original scale.
+## Log Transformation (Natural Log)
+- **When to use**:
+  - Ratio of largest to smallest value > 10.
+  - Skewed data.
+  - Group with larger mean also have the larger variance.
+- **Effects**:
+  - Corrects non-normality and non-constant variance.
+  - Requires back-transformation to interpret median and CIs on the original scale.
 
-## Other transformations are harder to back transform.
+### Other Transformations
 - Square root
 - Inverse
 - Reciprocal
+- **Note**: These transformations are harder to back-transform than log transformations.
 
-## Log Transformation, in statistics implied base e:
-- Proposition 1:
-  - Normal distribution (mean = median)
-- Proposition 2: 
-  - Log is a monotonically increasing function.
-  - log(median x) = median(log(x))
-- Proposition 3:
-  - log(a) – log(b) = log(a/b)
-- Propostion 4: 
-  - e^log(x) = x
+  
+## Log Transformations: Propositions (Logarithmic Properties)
+1. Normal distribution: The mean equals the median in a normal distribution.
+2. Monotonicity: The log function is monotonically increasing, meaning log(median x) = median(log(x)).
+3. Log differences:
+   - $\log(a) - \log(b) = \log\left(\frac{a}{b}\right)$
+4. Exponentiation: $e^{\log(x)} = x$
 
-## Interpretation for t-test:
-- mean(log x) – mean(log y) = g
-- Because normal distributed:
-  - median(log x) – median(log y) = g
-- log(median x) – log(median y) = g
-- e^log(median x / median y) = e^g
-- median x / median y = e^g
-- It is estimated that the median of x is e^g times the median of y
-- Software will also give you a confidence interval for g.
+
+## t-Test Interpretation (Log-Transformed Data)
+- $\text{mean}(\log x) - \text{mean}(\log y) = \gamma$
+- The distribution is approximately normal, so the mean and median are equal:  
+  $\text{median}(\log x) - \text{median}(\log y) = \gamma$
+- The logarithmic function is monotonically increasing:  
+  $\log(\text{median}(x)) - \log(\text{median}(y)) = \gamma$
+- Exponentiation gives:  
+  $e^{\log(\text{median}(x) / \text{median}(y))} = e^\gamma$
+- Therefore,  
+  $\text{median}(x) / \text{median}(y) = e^\gamma$
+- **Interpretation**: The median of $x$ is estimated to be $e^\gamma$ times the median of $y$.
+
 
 ## Inequality of Variance
-- Guidance: always use the visual evidence as primary evidence.
-- F-test – null hypothesis: population variances are equal, alternative: population variance are not equal
-  - Not robust to assumption of normality
-- Use hypothesis tests for equality of variance cautiously.
+- **Visual evidence** should be used as primary evidence for detecting unequal variances.
+- **F-test**: Tests for equal variances but is sensitive to normality violations.  
+  - $H_0$: population variances are equal
+  - $H_a$: population variances are not equal
+- Use hypothesis tests for equality of variance with caution.
+
 
 ## General Rules of Thumb
-- If sample sizes are the same and sufficiently large, the t-tools are robust to violations of normality and the equality of standard deviation
-- If two populations have the same standard deviations, t-test is valid with sufficient sample size.
-- If two populations have the different standard deviations, but sample sizes are sufficiently large and the same, t-tools are valid.
-- If standard deviations are different and sample sizes are different, the t-tools aren’t valid.
+- Equal sample sizes and large samples: t-tools are robust.
+- Different standard deviations:
+  - Equal sample sizes: t-tools are valid with large samples.
+  - Unequal sample sizes: t-tools are not valid.
 
-## Welch’s t-test:
-- A variation of the t-test for when standard deviations are different. (Still assumes normality.)
-- Standard error equals the square root of the sum of each sample’s variance divided by its corresponding sample size.
-- It also adjusts the degrees of freedom to account for this uncertainty by the Satterthwaite approximation.
 
-## Going back to non-normal distributions:
-- Long-tailed distributions – CIs are wider than (1- α)%. The t-test is failing to reject too often. It is grabbing the true µ more than (1- α)% of the time, and not rejecting enough (not α% of the time).
+## Welch’s t-Test
+- Adjusted for unequal standard deviations.
+- Adjusts degrees of freedom using the Satterthwaite approximation.
+- Still assumes normality.
+
+
+## Non-Normal Distributions
+- Long-tailed distributions:
+  - Wider CIs than expected (e.g. $> (1-\alpha) \%$), leading to fewer rejections of the null hypothesis.
+  - Fewer rejections can increase the true capture rate of $\mu$ to $> (1-\alpha) \%$, resulting in rejection rates $< \alpha \%$.
 ![](images/display_3_4.png){width=4in}^[Source: Ramsey and Schafer (2012).]
-- When sample sizes and standard deviations both differ, CIs are either too narrow or too wide.
+- When sample sizes and standard deviations both differ, CIs can become either too narrow or too wide.
 ![](images/display_3_5.png){width=4in}^[Source: Ramsey and Schafer (2012).]
-
-
-
-
-
-
