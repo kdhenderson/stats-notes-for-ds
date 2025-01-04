@@ -1,0 +1,133 @@
+---
+title: "Chapter 3: Data Screening, Assumptions, and Transformations"
+---
+
+# Data Screening, Assumptions, and Transformations
+
+
+## Experimental Design
+- **Randomization**: Reduces potential bias.
+- **Placebo**: Controls for confounding variables; ensures only the variable being tested differs.
+- **Blinding**: Minimizes bias in experimental outcomes.
+
+
+## Conditions for Null Hypothesis Significance Testing (NHST)
+1. Random sampling
+2. Independent observations
+3. Representative of the population
+4. Quantitative observations
+5. Nearly normal distribution
+6. Equal standard deviations for two-sample tests (homoscedasticity, meaning the distributions have the same shape).
+
+
+## Paired t-Test
+- Used when the assumption of independence is violated.
+- Compares the difference between paired samples using a one-sample t-test.
+
+
+## Tools for Checking Normality
+1. **Boxplot**
+   - Visualizes the five-number summary.
+   - Highlights symmetry, skewness, and tail behavior.
+   - Useful for side-by-side comparisons.
+2. **Dotplot**
+   - Displays individual data points.
+   - Simple to construct and interpret.
+3. **Histogram**
+   - Shows data symmetry and shape.
+4. **Normal Quantile (QQ) Plot**
+   - Plots theoretical normal values (X-axis) against observed data (Y-axis).
+   - Normal distribution aligns points along a straight line.
+   - Sensitive to deviations from normality.
+
+
+## Robustness
+- A statistical procedure is robust if it is valid even when the assumptions aren’t met.
+- It is valid if the uncertainty measures are nearly equal to the expected rates, e.g. 95% CI are valid if they capture the true value of the parameter 95% of the time (think of the demo in units 2/3).
+
+## Robustness in t-Tools (moderate):
+- The larger the sample, the larger the departure from normality can be (if the tails aren’t too heavy, lots of large outliers).
+- For two-sample t-tests, samples with a different shape/skewness can be a problem.
+- Differing standard deviations, especially when the sample sizes aren’t the same is a bigger problem.
+- Worst situation: when the ratio of standard deviations is far from 1 and the smaller size sample is from the population with the larger standard deviation. This means you may have captured a sample that doesn’t reflect the variability of the population.
+
+## Independence
+- Must be built into experimental design.
+- Observations are independent if knowledge of the value of one observation reveals nothing about values of other observations.
+- Cluster effects occur when data are collected in subgroups (e.g. mouse littermates) and must be analyzed with different tools or by treating each cluster as a single observation.
+- Serial effects occurs when measurements are taken over time.
+
+## Outliers:
+- Are observations far from the group average.
+- Heavy (long) – tailed distributions are often caused by outliers.
+- t-statistics are not robust to long tails/outliers.
+
+## Resistance:
+- A statistical procedure is resistant if it doesn’t change much when a small part of the data changes (e.g. the median is resistant, the mean isn’t).
+- t-tools are based on means and aren’t resistant to long tails
+
+## Dealing with outliers:
+- Should not delete unless it’s clearly a data entry or measurement error.
+- Run the test with and without and compare (and mention in discussion).
+
+## Log Transformation (natural log usually):
+- Use if ratio of largest to smallest is greater than 10
+- Consider if data is skewed (in QQ plot or other graph)
+- Consider if group with larger mean has larger spread
+- Will correct nonconstant variance and non-normality
+- Need to back transform median and CI to the original scale.
+
+## Other transformations are harder to back transform.
+- Square root
+- Inverse
+- Reciprocal
+
+## Log Transformation, in statistics implied base e:
+- Proposition 1:
+  - Normal distribution (mean = median)
+- Proposition 2: 
+  - Log is a monotonically increasing function.
+  - log(median x) = median(log(x))
+- Proposition 3:
+  - log(a) – log(b) = log(a/b)
+- Propostion 4: 
+  - e^log(x) = x
+
+## Interpretation for t-test:
+- mean(log x) – mean(log y) = g
+- Because normal distributed:
+  - median(log x) – median(log y) = g
+- log(median x) – log(median y) = g
+- e^log(median x / median y) = e^g
+- median x / median y = e^g
+- It is estimated that the median of x is e^g times the median of y
+- Software will also give you a confidence interval for g.
+
+## Inequality of Variance
+- Guidance: always use the visual evidence as primary evidence.
+- F-test – null hypothesis: population variances are equal, alternative: population variance are not equal
+  - Not robust to assumption of normality
+- Use hypothesis tests for equality of variance cautiously.
+
+## General Rules of Thumb
+- If sample sizes are the same and sufficiently large, the t-tools are robust to violations of normality and the equality of standard deviation
+- If two populations have the same standard deviations, t-test is valid with sufficient sample size.
+- If two populations have the different standard deviations, but sample sizes are sufficiently large and the same, t-tools are valid.
+- If standard deviations are different and sample sizes are different, the t-tools aren’t valid.
+
+## Welch’s t-test:
+- A variation of the t-test for when standard deviations are different. (Still assumes normality.)
+- Standard error equals the square root of the sum of each sample’s variance divided by its corresponding sample size.
+- It also adjusts the degrees of freedom to account for this uncertainty by the Satterthwaite approximation.
+
+## Going back to non-normal distributions:
+- Long-tailed distributions – CIs are wider than (1- α)%. The t-test is failing to reject too often. It is grabbing the true µ more than (1- α)% of the time, and not rejecting enough (not α% of the time).
+![](images/display_3_4.png){width=4in}^[Source: Ramsey and Schafer (2012).]
+- When sample sizes and standard deviations both differ, CIs are either too narrow or too wide.
+![](images/display_3_5.png){width=4in}^[Source: Ramsey and Schafer (2012).]
+
+
+
+
+
+
