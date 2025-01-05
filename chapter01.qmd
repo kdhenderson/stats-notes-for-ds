@@ -1,9 +1,6 @@
 ---
-title: "Chapter 1: Drawing Statistical Conclusions"
+title: "Drawing Statistical Conclusions"
 ---
-
-# Drawing Statistical Conclusions
-
 
 ## Observational Studies vs. Experiments
 - **Experiment:** The investigator actively manipulates the environment with random assignment to treatment groups.

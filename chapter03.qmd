@@ -1,9 +1,6 @@
 ---
-title: "Chapter 3: Data Screening, Assumptions, and Transformations"
+title: "Data Screening, Assumptions, and Transformations"
 ---
-
-# Data Screening, Assumptions, and Transformations
-
 
 ## Experimental Design
 - **Randomization**: Reduces potential bias.

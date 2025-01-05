@@ -1,4 +1,5 @@
 project:
+  type: book
   title: "Henderson's Statistics Notes"
 
 format:
@@ -7,6 +8,8 @@ format:
     toc: true    # Enable a table of contents
     toc-depth: 2 # Set the depth of the table of contents
     number-sections: true # Number the sections
+    #chapter-level: 1  # Ensure chapters are properly numbered starting from "1"
+
 
 book:
   author: 
@@ -15,5 +18,6 @@ book:
       orcid: "0000-0002-9265-7709"
   chapters:      # Define the chapters of your book
     - index.qmd  # Introduction or preface
-    - chapter1.qmd  # Add additional chapters as they are created
-    - chapter2.qmd
+    - chapter01.qmd  # Add additional chapters as they are created
+    - chapter02.qmd
+    - chapter03.qmd
