@@ -137,7 +137,10 @@ title: "Chapter 3: Data Screening, Assumptions, and Transformations"
 ## Non-Normal Distributions
 - Long-tailed distributions:
   - Wider CIs than expected (e.g. $> (1-\alpha) \%$), leading to fewer rejections of the null hypothesis.
-  - Fewer rejections can increase the true capture rate of $\mu$ to $> (1-\alpha) \%$, resulting in rejection rates $< \alpha \%$.
-![](images/display_3_4.png){width=4in}^[Source: Ramsey and Schafer (2012).]
-- When sample sizes and standard deviations both differ, CIs can become either too narrow or too wide.
-![](images/display_3_5.png){width=4in}^[Source: Ramsey and Schafer (2012).]
+  - Fewer rejections can increase the true capture rate of $\mu$ to $> (1-\alpha) \%$, resulting in rejection rates $< \alpha \%$.  
+
+![](images/display_3_4.png){width=5in fig-align="left"}^[Source: Ramsey and Schafer (2012).]  
+
+- When sample sizes and standard deviations both differ, CIs can become either too narrow or too wide.  
+
+![](images/display_3_5.png){width=5in fig-align="left"}^[Source: Ramsey and Schafer (2012).]  
