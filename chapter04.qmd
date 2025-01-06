@@ -1,0 +1,73 @@
+---
+title: "Type I, Type II Error, and Power"
+---
+
+## Objectives:
+- Understand Type I and Type II errors, and statistical power.
+- Calculate sample size needed to achieve a specific power.
+- Create and interpret power curves.
+
+
+## Helpful Resources:
+- [Interactive Power Applet](https://statsthroughsimulation.shinyapps.io/PowerApplet/)
+- [SAS Power and Sample Size Documentation](https://support.sas.com/documentation/onlinedoc/stat/141/power.pdfx)
+
+
+## Type I Error
+- If the null hypothesis ($H_0$) is true, the test is correct if it fails to reject (FTR).
+- Rejecting $H_0$ when it is true is a Type I error, with a probability equal to $\alpha$.
+- The critical value determines the rejection region. If $\bar{x}$ is on the $H_0$ side, the test FTRt.
+- There is an $\alpha$% chance that $H_0$ is true and $\bar{x}$ will be as extreme or more extreme than the critical value, leading to a Type I error.
+
+
+## Type II Error
+- If $H_0$ is false, the test is correct if it rejects $H_0$.
+- Failing to reject $H_0$ when it is false is a Type II error, with a probability equal to $\beta$.
+
+
+![Type I and II Errors Table](images/sketch_4_1.png){width=2.5in}  
+*This table summarizes the outcomes of hypothesis testing, highlighting the probabilities of Type I error ($\alpha$), Type II error ($\beta$), and power ($1 - \beta$).*
+
+
+## Power
+- Power is the probability of correctly rejecting $H_0$ when it is false ($1 - \beta$).
+- It measures the test's ability to detect true differences in population distributions.
+- Higher power means a greater ability to detect a real effect.
+
+
+## Effect Size
+- Effect size is the difference between the null mean and the true mean.
+- **Example:** If the null mean is 50 and the true mean is 60, the raw effect size is 10.
+- Cohen's D is one measure, $\frac{\text{raw effect size}}{\text{standard deviation}}$. It is the normalized difference between the means.
+- Increasing the effect size increases power and decreases $\beta$, but it does not affect the critical value or $\alpha$.
+- Power and the probability of a Type II error will change depending on the actual value of $\mu$.
+
+![Sampling Distributions, Power, and Effect Size](images/sketch_4_2.png)  
+*This diagram illustrates the relationship between effect size, critical values, power, and Type I and Type II errors. Narrower distributions from larger sample sizes improve the ability to detect true differences.*
+
+
+## How to Increase Power
+- **Increase effect size:** Larger differences are easier to detect.
+- **Increase $\alpha$:** A less stringent threshold makes rejection more likely. Increasing $\alpha$ makes the critical value less extreme, making it easier for the test statistic to to exceed it.
+- **Increase sample size:** Larger samples reduce variability in $\bar{x}$, making it more likely to be close to $\mu$ and increasing the test's ability to detect true differences.
+- **Note:** If power is close to $\beta$, the chances of detect the difference or make a type II error are similar. This can happen when the effect size is too small. Increasing sample size can help.
+
+
+## Balancing Type I and Type II Errors
+- Reducing $\alpha$ decreases the chance of a Type I error but increases the chance of a Type II error.
+
+
+## Summary of Start-to-Finish Analysis for Client Presentation
+
+### Initial Meetings:
+- Define key parameters, such as power ($\geq 80\%$).
+- Perform a power analysis to determine required sample sizes for different power thresholds.
+- Provide sample size options based on budget and desired power.
+- Present a power curve to illustrate how power changes with sample size.
+
+### Final Presentation:
+- Restate the question of interest and test parameters.
+- Visualize the data using histograms or boxplots and summary statistics.
+- Present results, including $p$-values, confidence intervals, and scope.
+- Provide an appendix with assumptions and a six-step hypothesis test.
+- Include contact information.
