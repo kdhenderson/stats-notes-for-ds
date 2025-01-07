@@ -57,6 +57,127 @@ title: "Type I, Type II Error, and Power"
 - Reducing $\alpha$ decreases the chance of a Type I error but increases the chance of a Type II error.
 
 
+## Example Code For Finding Power or Other Missing Parameters
+
+R code:
+```{r eval=FALSE}
+library(tidyverse)
+
+## Missing parameter is indicated with `NULL`
+
+# Example for one-sample test
+power.t.test(n = 41, delta = .07, 
+sd = .2, sig.level = 0.05,
+power = NULL, 
+type = "one.sample", alternative = "one.sided")
+
+# Example for two-sample test
+power.t.test(n = 250, delta = 5,
+sd = 25, sig.level = 0.05, 
+power = NULL, 
+type = "two.sample", alternative = "one.sided")
+
+```
+
+SAS code:
+```{sas eval=FALSE}
+/* Missing parameter is indicated with a period */
+
+/* Example for one-sample test */
+proc power;
+	onesamplemeans
+		sides=1
+		alpha=.1
+		nullmean=20000
+		mean=20450
+		stddev=500
+		ntotal=8
+		power=.;
+run;
+
+/* Example for two-sample test */
+proc power; 
+*can specify mean for each (nullmean) and ntotal;
+	twosamplemeans
+		sides=1
+		alpha=.05
+		meandiff=4
+		stddev=3
+		npergroup=50
+		power=.;
+run;
+
+```
+
+
+## Example Code For Creating a Power Curve
+
+R code:
+```{r eval=FALSE}
+# Loop to calculate power for sample sizes from 60 to 80
+powerholder = c()
+samplesizes = seq(60, 80, by = 1)
+
+for(i in 1:length(samplesizes))
+{
+  powerholder[i] = power.t.test(n = samplesizes[i], delta = 0.07, sd = 0.20, sig.level = .05,
+                                type = "one.sample", alternative = "one.sided")$power
+}
+
+# Create a data frame
+powerdf = data.frame(samplesizes, powerholder)
+
+# Create the power curve
+powerdf %>% ggplot(aes(x = samplesizes, y = powerholder)) +
+  geom_line(color = "blue3", linewidth = 1.5) +
+  ggtitle("Power Curve") +
+  ylab("Power") +
+  xlab("Sample Sizes") +
+  ylim(0.75, 1.0) +
+  theme_bw()
+
+```
+
+SAS code:
+```{sas eval = FALSE}
+/* Power curve for different sample sizes */
+ods graphics on;
+
+proc power;
+	onesamplemeans
+		sides=1
+		alpha=.05
+		nullmean=0
+		ntotal=60 80
+		mean=.07
+		stddev=.2
+		power = .;
+		plot x=n min=60 max=80;
+run;
+
+ods graphics off;
+
+
+/* Power curve for different effect sizes */
+ods graphics on;
+
+proc power;
+	twosamplemeans
+		sides=1
+		alpha=.05
+		nulldiff=0
+		meandiff=3 to 5 by 0.1 
+		ntotal=47
+		stddev=4.5
+		power = .;
+		plot x=effect min=3 max=5;
+run;
+
+ods graphics off;
+
+```
+
+
 ## Summary of Start-to-Finish Analysis for Client Presentation
 
 ### Initial Meetings:
