@@ -65,13 +65,13 @@ library(tidyverse)
 
 ## Missing parameter is indicated with `NULL`
 
-# Example for one-sample test
+# Calculate power for one-sample t-test with specified parameters
 power.t.test(n = 41, delta = .07, 
 sd = .2, sig.level = 0.05,
 power = NULL, 
 type = "one.sample", alternative = "one.sided")
 
-# Example for two-sample test
+# Example for two-sample t-test
 power.t.test(n = 250, delta = 5,
 sd = 25, sig.level = 0.05, 
 power = NULL, 
@@ -83,7 +83,7 @@ SAS code:
 ```{sas eval=FALSE}
 /* Missing parameter is indicated with a period */
 
-/* Example for one-sample test */
+/* Example for one-sample t-test */
 proc power;
 	onesamplemeans
 		sides=1
@@ -95,7 +95,7 @@ proc power;
 		power=.;
 run;
 
-/* Example for two-sample test */
+/* Example for two-sample t-test */
 proc power; 
 *can specify mean for each (nullmean) and ntotal;
 	twosamplemeans
