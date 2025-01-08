@@ -1,0 +1,195 @@
+---
+title: "Alternatives to the T-Tools"
+---
+
+## Objectives:
+- When are analysis methods based on the T-tools inappropriate for a data set
+- Principles behind the rank-sum and signed-rank tests
+- Principles behind permutation tests
+- Appropriately apply and interpret rank-sum, signed-rank and permutation tests.
+
+## Nonparametric Methods
+- Solution when assumption of the t-test can’t be overcome, e.g. skewness is too bad, variances between samples are too different, or sample sizes are too small to make assumption about population.
+
+## Censored data
+- When we don’t know the value, which could be because the value exceeded the measurement limit (e.g. the students took longer than the allotted time to complete the problem).
+- However, we do know the ranks, which is an advantage of the rank-sum test.
+
+## Permutation Test
+- Does a similar thing that a two-sample t-test does but without the assumption of normality
+- Only assumption is that the null hypothesis is true.  random shuffling of the data is consistent with the null hypothesis (build null distribution from the data.)
+- Permute n+m observations between the 2 treatments.
+- Can’t do if the observations are ordered in some way.
+- Compare observed difference in parameter and permuted difference.
+- Can use a wide variety of different test statistics: means, medians, ratios, etc.
+- Good for the O-ring study because of non-normality and large number of ties.
+
+## Wilcoxon Rank Sum Test
+- What and When?
+  - Distribution free method for two independent samples, which is resistant to outliers and deals with censored observations.
+  - Good for minimizing the effect of outliers or if you aren’t sure about normality of population, particularly if sample sizes are too small to permit  assessment of distributional assumptions.
+- How?... Method:
+  - H0: median group1 = median group 2
+  - Combine n observations from group 1 and m observations from group 2, and sort and rank them. Ties get the average rank.
+  - If null is true, ranks should be random (sum of ranks in each group should be ~ equal according to sample size).
+  - The test statistic is the sum of all ranks within one group (conventionally the smaller group for ease of computation). (This is a permutation test on the rank sum statistic rather than the difference of means.)
+  - Find the p-value: calculate the number of sum ranks for a particular group greater than the observed value for the same group divided by the total permutations.
+- Fully non-parametric (exact): find all possible permutations on the ranks. Can take a long time with larger sample sizes.
+- Can also use normal approximation to the test with a larger number of observations. Distribution of the rank sum statistic approximates a normal distribution, especially at larger sample sizes without a lot of ties.
+- Continuity correction is needed when approximating a discrete distribution (e.g. rank-sum statistic) with a continuous distribution (e.g. normal approximation). To get a p-value, we approximate the area of the bars with the area under the curve, so we need to correct. For a left sided test, add a little. Right sided test, subtract a little bit.
+- For confidence interval use Hodges Lehmann estimation (at least in SAS). Need to rewatch video for this.
+
+## Wilcoxon Rank Sum Test: Normal Approximation with Continuity Correction
+![](images/display_4_6.png)  
+![](images/display_continuityCorrection.png)  
+- Z =  (𝑇 −𝑀𝑒𝑎𝑛(𝑇))/(𝑆𝐷(𝑇))
+- T – rank sum statistic, the sum of ranks for one of the groups.
+- R-bar – average of all the ranks (both groups)
+- sR – standard deviations of all the ranks (both groups)
+- Mean(T) and SD(T) – the theoretical (null hypothesis) mean and standard deviation of one group
+- p-value – proportion of values from a standard normal distribution that are more extreme than the observed Z-statistic.
+
+## Alternatives to the paired t-test
+- Wilcoxon Signed-Rank Test - alternative to a paired t-test
+  - Null hypothesis: the mean difference is equal.
+  - For a one-sided test, be careful of the direction of the test, the sign of the difference.
+  - Compute difference in each pair.
+  - Ranks are done in absolute value.
+  - The signed-rank statistic is the sum of the positive ranks (all ranks from positive differences).
+  - Also, can do an exact test or a normal approximation.
+    - Normal:
+      - Mean(S) = n(n+1)/4
+      - SD(S) = sqrt[n(n+1)(2n+1)/24]
+      - Z-statistic = S – Mean(S) / SD(S)
+      - Lookup p-value (software, z-table)
+  - Resistant to outliers but maintains relative magnitude of the differences (unlike the sign test).
+![](images/notes_5_1.png)  
+
+## Code Examples: Signed-Rank and Sign Tests
+
+SAS code:
+```{sas eval=FALSE}
+/* Sign Test and Signed Rank Test */
+
+/* paired density of nerve cell count
+between 2 sites in each horse's intestine */
+
+data horse;
+input horse site1 site2;
+datalines;
+6 14.2 16.4
+4 17 19
+8 37.4 37.6
+5 11.2 6.6
+7 24.2 14.4
+9 35.2 24.4
+3 35.2 23.2
+1 50.6 38
+2 39.2 18.6
+;
+
+proc print data = horse;
+run;
+
+* paired t-test;
+/* normality might be suspect because 
+sample size is small */
+proc ttest data = horse;
+paired site1*site2;
+run;
+
+/* H0: median difference between site1 and site2 is zero
+Ha: median difference not zero (2-sided)
+or median difference between site1 and site2 >0 (1-sided) */
+* signed rank test (sign and magnitude of differences);
+
+* copy the dataset and make a diff column;
+data horse2;
+set horse;
+diff = site1 - site2;
+run;
+
+* look at the new dataset;
+proc print data = horse2;
+run;
+
+/* proc univariate does a paired t-test,
+a sign test and a signed rank test by default */
+proc univariate data = horse2;
+var diff;
+run;
+
+
+/* Conclusion: There is strong evidence that the median difference of nerve density between site 1 and site 2 is greater than zero (Wilcoxon signed-rank test, one-sided p-value of 0.0294.) In other words, there is strong evidence to suggest that the median density of nerve cells is greater at site 1 than site 2. */
+
+```
+
+R code:
+```{r eval=FALSE}
+wilcox.test(horse$site1, horse$site2, paired = true)
+
+```
+
+## Alternatives to the paired t-test and F-test
+- Sign Test - alternative to a paired t-test
+  - Tests for median difference
+  - Very simple, just the number of positive values after taking the differences between paired observations (K).
+  - Null hypothesis: K = n/2
+  - Find the difference between the paired values and record the sign.
+  - Normal approximation to the binomial distribution:
+    - Z =  (K – 0.5 – n/2) / sqrt(n/4)
+    - Observed (w. continuity correction) – expected / st. dev.
+    - Where K is the observed positives, 0.5 is continuity correction, n/2 is half of the observations = our expected number of positives, over the standard deviation
+    - Don’t know why st. dev. is over 4?
+  - Not a powerful test, so unlikely to detect a difference.
+- Levene’s (Median) Test of Equal Spread - alternative to the F-test (visual test still best)
+  - Useful for non-normal distributions.
+  - H0: the distributions have the same spread, HA: different spread
+  - Takes absolute value of each observation minus median and does a two-sample t-test on those values  for each group.
+  - F-test looks at the variance.
+  - In SAS, called Brown Forsythe Test -> proc glm.
+  - In SAS, Levene’s test is the abs diff of the obs from the mean of its group. This can also be called in proc glm.
+
+SAS code:
+```{sas eval = FALSE}
+/* Test Prep Example */
+data exam;
+input score type $;
+datalines;
+37 New
+49 New
+55 New
+77 New
+23 Trad
+31 Trad
+46 Trad
+;
+
+/* Levene's Test / Brown Forsythe Test */
+proc glm data = exam;
+class type;
+model score = type;
+means type / hovtest = bf; *hov = homogeneity of variance bf = brown forsythe;
+run;
+
+* demo of what the Brown Forsythe test does;
+* find the diffs between observation and group median;
+
+data medianDiff;
+input diff type $;
+datalines;
+15 New
+3 New
+3 New
+25 New
+8 Trad
+0 Trad
+15 Trad
+;
+* do a t-test on the diffs should equal glm result;
+proc ttest data = medianDiff;
+class type;
+var diff;
+run;
+
+```
