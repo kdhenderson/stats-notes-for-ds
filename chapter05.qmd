@@ -2,27 +2,40 @@
 title: "Alternatives to the T-Tools"
 ---
 
-## Objectives:
-- When are analysis methods based on the T-tools inappropriate for a data set
-- Principles behind the rank-sum and signed-rank tests
-- Principles behind permutation tests
-- Appropriately apply and interpret rank-sum, signed-rank and permutation tests.
+## Objectives
+- Identify when analysis methods based on the t-tools are inappropriate for a dataset.
+- Understand the principles behind rank-sum, signed-rank, and permutation tests.
+- Learn how to appropriately apply and interpret rank-sum, signed-rank, and permutation tests.
+
 
 ## Nonparametric Methods
-- Solution when assumption of the t-test can’t be overcome, e.g. skewness is too bad, variances between samples are too different, or sample sizes are too small to make assumption about population.
+- Nonparametric methods provide a solution when assumptions of the t-test cannot be met, such as:
+  - Severe skewness in data.
+  - Large differences in variances between samples.
+  - Small sample sizes that preclude assumptions about the population.
 
-## Censored data
-- When we don’t know the value, which could be because the value exceeded the measurement limit (e.g. the students took longer than the allotted time to complete the problem).
-- However, we do know the ranks, which is an advantage of the rank-sum test.
+
+## Censored Data
+- Censored data occurs when the exact value of an observation is unknown, often due to exceeding a measurement limit (e.g. students taking longer than the maximum allowed time to complete a test).
+- Rank-based tests, such as the rank-sum test, rely on rank information, making them robust to censored observations.
+
 
 ## Permutation Test
-- Does a similar thing that a two-sample t-test does but without the assumption of normality
-- Only assumption is that the null hypothesis is true.  random shuffling of the data is consistent with the null hypothesis (build null distribution from the data.)
-- Permute n+m observations between the 2 treatments.
-- Can’t do if the observations are ordered in some way.
-- Compare observed difference in parameter and permuted difference.
-- Can use a wide variety of different test statistics: means, medians, ratios, etc.
-- Good for the O-ring study because of non-normality and large number of ties.
+- A permutation test serves as a nonparametric alternative to the two-sample t-test, as it does not assume normality.
+- **Assumptions**:
+  - The null hypothesis is true, and random shuffling of data is consistent with it.
+  - The null distribution is built through repeated permutations of the data.
+- **Procedure**:
+  1. Combine $n + m$ observations from the two treatments.
+  2. Permute these observations randomly between the treatments.
+  3. Compute the test statistic (e.g., mean, median, or ratio) for each permutation.
+  4. Compare the observed test statistic to the distribution of permuted test statistics.
+- **Applications**:
+  - Ideal for non-normal data or datasets with ties (e.g. the Challenger O-ring study).
+  - Useful for a wide variety of parameters (e.g. mean, median, ratio).
+  - Not suitable when observations have an inherent order.
+
+
 
 ## Wilcoxon Rank Sum Test
 - What and When?
