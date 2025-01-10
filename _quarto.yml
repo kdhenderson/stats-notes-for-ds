@@ -9,7 +9,7 @@ format:
     toc-depth: 2 # Set the depth of the table of contents
     number-sections: true # Number the sections
     #chapter-level: 1  # Ensure chapters are properly numbered starting from "1"
-
+    css: styles.css
 
 book:
   author: 
@@ -21,3 +21,11 @@ book:
     - chapter01.qmd  # Add additional chapters as they are created
     - chapter02.qmd
     - chapter03.qmd
+    - chapter04.qmd
+    - chapter05.qmd
+    #- chapter06.qmd
+    #- chapter07.qmd
+    #- chapter08.qmd
+    #- chapter09.qmd
+    #- chapter10.qmd
+    
