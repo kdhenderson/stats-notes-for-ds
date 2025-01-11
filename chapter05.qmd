@@ -56,24 +56,24 @@ title: "Alternatives to the T-Tools"
        - **Limitation**: Computationally impractical for large sample sizes.
      - **Normal Approximation**:
        - The rank sum statistic approximates a normal distribution for larger sample sizes, especially with few ties.
-       - Apply a continuity correction to adjust for the discrete nature of rank sums:
+       - Apply a continuity correction to adjust for the discrete nature of rank sums by approximating their area (represented as bars) with the area under a continuous curve (e.g. the normal distribution), improving the accuracy of p-value calculations:
          - For a left-sided test, add a small adjustment.
          - For a right-sided test, subtract a small adjustment.
 - **Confidence Intervals**:
   - Use Hodges-Lehmann estimation.
-- **Notes**:
-  - Continuity correction adjusts for the discrete nature of rank sums by approximating their area (represented as bars) with the area under a continuous curve (e.g. the normal distribution), improving the accuracy of p-value calculations.
 
 
-## Wilcoxon Rank Sum Test: Normal Approximation with Continuity Correction
-![](images/display_4_6.png)  
-![](images/display_continuityCorrection.png)  
-- Z =  (𝑇 −𝑀𝑒𝑎𝑛(𝑇))/(𝑆𝐷(𝑇))
-- T – rank sum statistic, the sum of ranks for one of the groups.
-- R-bar – average of all the ranks (both groups)
-- sR – standard deviations of all the ranks (both groups)
-- Mean(T) and SD(T) – the theoretical (null hypothesis) mean and standard deviation of one group
-- p-value – proportion of values from a standard normal distribution that are more extreme than the observed Z-statistic.
+### Normal Approximation with Continuity Correction
+![Sampling distribution of the rank-sum statistic under the null hypothesis.](images/display_4_6.png)  
+![Illustration of the continuity correction for approximating p-values.](images/display_continuityCorrection.png)  
+
+- $Z = \frac{T - \text{Mean}(T)}{\text{SD}(T)}$
+- $T$: Rank sum statistic.  
+- $\bar{R}$: Average of all the ranks (both groups).  
+- $s_R$ – Standard deviations of all the ranks (both groups).  
+- $\text{Mean}(T)$ and $\text{SD}(T)$: Theoretical mean and standard deviation of the rank sum statistic under $H_0$.  
+- **p-value**: Proportion of values from a standard normal distribution more extreme than the observed Z-statistic ($Z$).
+
 
 ## Alternatives to the paired t-test
 - Wilcoxon Signed-Rank Test - alternative to a paired t-test
@@ -91,9 +91,91 @@ title: "Alternatives to the T-Tools"
   - Resistant to outliers but maintains relative magnitude of the differences (unlike the sign test).
 ![](images/notes_5_1.png)  
 
-## Code Examples: Signed-Rank and Sign Tests
+## Alternatives to the Paired t-Test
 
-SAS code:
+### Wilcoxon Signed-Rank Test
+- **Hypothesis**:
+  - $H_0$: Mean difference between paired observations is zero.
+  - For a one-sided test, carefully consider the direction of the test based on the sign of the differences.  
+- **Procedure**:
+  1. Compute differences for each pair.
+  2. Rank *absolute* differences and sum positive ranks.
+  3. Compute p-values using:
+     - **Exact Test**: Evaluate all possible permutations of ranks (computationally intensive for large $n$).
+     - Normal approximation:
+       - $\text{Mean}(S) = \frac{n(n+1)}{4}$
+       - $\text{SD}(S) = \sqrt{\frac{n(n+1)(2n+1)}{24}}$
+       - $Z = \frac{S - \text{Mean}(S)}{\text{SD}(S)}$
+       - **p-Value**: Derived from software or Z-tables. 
+- **Notes**:
+  - Resistant to outliers while preserving the relative magnitude of the differences, unlike the simpler sign test.
+![Handwritten Example: Wilcoxon Signed-Rank Test Procedure.](images/notes_5_1.png)  
+
+### Sign Test
+- **Purpose**:
+  - Simple alternative to the paired t-test.
+  - Tests for median difference.
+  - Not a powerful test, so unlikely to detect a difference.
+- **Procedure**:
+  - Count positive differences after taking the differences between paired observations ($K$).
+  - $H_0$: $K = \frac{n}{2}$
+  - Use a normal approximation:
+    - $Z = \frac{K - 0.5 - \frac{n}{2}}{\sqrt{\frac{n}{4}}}$
+    - Observed (w. continuity correction) – expected / st. dev.
+    - Where K is the observed positives, 0.5 is continuity correction, n/2 is half of the observations = our expected number of positives, over the standard deviation
+    - Don’t know why st. dev. is over 4?
+    
+### Sign Test
+- **Purpose**:
+  - A simple alternative to the paired t-test.
+  - Tests for a median difference between paired observations.
+  - Not a powerful test, so it may fail to detect small or moderate differences.
+- **Procedure**:
+  1. Compute the differences between paired observations.
+  2. Count the number of positive differences ($K$).
+  3. **Hypothesis**:
+     - $H_0$: $K = \frac{n}{2}$ (half the observations are expected to be positive under the null hypothesis).
+  4. Use a normal approximation for large $n$:
+     - $Z = \frac{K - 0.5 - \frac{n}{2}}{\sqrt{\frac{n}{4}}}$
+       - The numerator represents the observed number of positives ($K$) with a continuity correction ($-0.5$) to adjust for the discrete nature of $K$.
+       - The denominator, $\sqrt{\frac{n}{4}}$, is the standard deviation under the null hypothesis.
+
+    
+## Levene’s (Median) Test of Equal Spread
+- **Purpose**:
+  - Alternative to the F-test for non-normal distributions.
+  - Visual test is still best.
+- **Hypothesis**:
+  - $H_0$: Distributions have equal spread.
+- **Procedure**:
+  - Compute absolute of each observation minus the group median.
+  - Perform a two-sample t-test on the deviations.
+  - F-test looks at the variance.
+  - In SAS, called Brown Forsythe Test -> proc glm.
+  - In SAS, Levene’s test is the abs diff of the obs from the mean of its group. This can also be called in proc glm.
+
+## Levene’s (Median) Test of Equal Spread
+- **Purpose**:
+  - Robust alternative to the F-test for assessing equality of spread (variances) in non-normal distributions.
+  - A visual inspection (e.g. boxplots) is often still the best initial approach.
+- **Hypothesis**:
+  - $H_0$: The distributions have equal spread.
+  - $H_A$: The distributions have different spreads.
+- **Procedure**:
+  1. For each observation, calculate the **absolute deviation**:
+     - Absolute deviation = $| \text{observation} - \text{group median} |$.
+  2. Perform a two-sample t-test on the calculated absolute deviations for each group.
+  3. Interpret the results:
+     - Reject $H_0$ if the p-value is below the significance threshold, indicating unequal spread.
+- **Notes**:
+  - In SAS:
+    - The Brown-Forsythe Test (a variation of Levene's test) can be implemented using `proc glm`.
+    - Levene’s test can also be performed by computing the absolute deviations of observations from the group mean or median and running a t-test on these deviations.
+
+
+## Code Examples
+
+### Signed-Rank and Sign Tests in SAS
 ```{sas eval=FALSE}
 /* Sign Test and Signed Rank Test */
 
@@ -150,33 +232,13 @@ run;
 
 ```
 
-R code:
+### Signed-Rank Test in R
 ```{r eval=FALSE}
 wilcox.test(horse$site1, horse$site2, paired = true)
 
 ```
 
-## Alternatives to the paired t-test and F-test
-- Sign Test - alternative to a paired t-test
-  - Tests for median difference
-  - Very simple, just the number of positive values after taking the differences between paired observations (K).
-  - Null hypothesis: K = n/2
-  - Find the difference between the paired values and record the sign.
-  - Normal approximation to the binomial distribution:
-    - Z =  (K – 0.5 – n/2) / sqrt(n/4)
-    - Observed (w. continuity correction) – expected / st. dev.
-    - Where K is the observed positives, 0.5 is continuity correction, n/2 is half of the observations = our expected number of positives, over the standard deviation
-    - Don’t know why st. dev. is over 4?
-  - Not a powerful test, so unlikely to detect a difference.
-- Levene’s (Median) Test of Equal Spread - alternative to the F-test (visual test still best)
-  - Useful for non-normal distributions.
-  - H0: the distributions have the same spread, HA: different spread
-  - Takes absolute value of each observation minus median and does a two-sample t-test on those values  for each group.
-  - F-test looks at the variance.
-  - In SAS, called Brown Forsythe Test -> proc glm.
-  - In SAS, Levene’s test is the abs diff of the obs from the mean of its group. This can also be called in proc glm.
-
-SAS code:
+### Levene's Test in SAS
 ```{sas eval = FALSE}
 /* Test Prep Example */
 data exam;
