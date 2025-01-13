@@ -3,107 +3,136 @@ title: "Comparisons Among Several Samples"
 ---
 
 ## Objectives
-- ANOVA tests to test for differences in means between 3 or more groups.
-- How to examine model assumption.
-- Sample size necessary to achieve a particular effect size in the ANOVA.
-- How to make statistical inferences for multiple samples and interpret the results in context.
-- The extra sum of squares principle and using it to obtain an analysis of variance table.
-- How to apply the concept of full and reduced models to test different combinations of means.
-- The Kruskal - Wallis test, a non-parametric version of the ANOVA.
-Random versus fixed effects.
+- Learn to use ANOVA tests for comparing means among three or more groups.
+- Understand how to examine model assumptions for validity.
+- Calculate the sample size necessary to detect a particular effect size in ANOVA.
+- Make statistical inferences for multiple samples and interpret results in context.
+- Apply the extra sum of squares principle to create and interpret ANOVA tables.
+- Use full and reduced models to test different combinations of group means.
+- Understand the Kruskal-Wallis test as a non-parametric alternative to ANOVA.
+- Differentiate between random and fixed effects.
 
 ## ANOVA: Analysis of Variance
-- Used for testing the quality of means from more than two populations.
-- For comparing variability within groups to variability between groups.
-- Assumptions:
+- **Purpose**: Test equality of means from more than two populations by comparing variability within groups to variability between groups.
+- **Assumptions**:
   - All populations have normal distributions (reasonable symmetry in samples).
-  - Populations standard deviations are equal  (must be met because otherwise differences in variability could be responsible for difference in means rather than actual difference).
-  - Independence within samples (automatic with random samples) and between samples.
-- Null: all populations mean are equal.
-- Alternative: at least one of the population means is not equal to at least one other.
-- ANOVA performs the first test for differences, subsequent tests follow to find which means are different from the others.
+  - Population standard deviations are equal (to ensure differences in means aren't confounded by differences in variability).
+  - Independence within (achieved automatically with random samples) and between samples.
+- **Hypotheses**:
+  - $H_0$: All population means are equal.
+  - $H_A$: At least one population mean differs from another.
+- ANOVA is a preliminary test; subsequent post-hoc tests identify which means differ.
 
-**images (notes_6_1, notes_6_2, notes_6_3)**
+![Equal Means vs. Separate Means Models](images/notes_6_1.jpg)  
+*Figure 1: Comparison of equal means and separate means models, illustrating residual differences.*  
 
-ANOVA: 6-step hypothesis test
-H0: m1 = m2 = m3 … (all means are equal, equal means model); HA: at least one pair is different (separate means model).
-If the null is true, the data all come from the same distribution with the same mean (the grand mean).
-We are testing whether the data come from the same distribution (one mean, grand mean, equal means) vs. different distributions (separate means).
-Good fitting model will have smaller residuals (observed – predicted). Comparing models by finding the sum of squared residuals. 
-Get critical value
-Comes from an F-distribution: we need degrees of freedom. There are 2 df numbers.
-F-statistic measures the ratio of two variances (extra SS/ extra df / MSE = MS between / MS within = variation explained by the full model / variation left to be explained).
-In R: qf(alpha, dfmodel, dferror). qf() is the quantiles from an f-distribution. R-tailed test -> 1-alpha.
+![ANOVA Table](images/notes_6_2.jpg) 
+*Figure 2: ANOVA table showing degrees of freedom, sum of squares, mean squares, $F$-statistic, and $p$-value.*  
 
-ANOVA 6-step hypothesis test
-Get F-statistic -> F in SAS ANOVA table
-p-value
-Reject or FTR
-If reject H0, there is evidence that at least one pair of the group means are different (p-value from an anova).
+![Detailed ANOVA Table Overview](images/notes_6_3.png) 
+*Figure 3: Detailed breakdown of ANOVA table components.*  
 
-**images (notes_6_4, notes_6_5)**
+## ANOVA: 6-step hypothesis test
+1. **Define Hypotheses**:
+   - $H_0: \mu_1 = \mu_2 = \mu_3 = \dots$ (Equal means model).
+   - $H_A$: At least one pair of means is different.
+   - Null assumes data come from the same distribution (grand mean); alternative assumes different distributions (separate means).
+   - Models are compared by finding the sum of squared residuals. A good fitting model will have smaller residuals (observed - predicted).  
+2. **Get Critical Value**:
+   - From an $F$-distribution.
+   - Degrees of freedom: $df_1$ (model) and $df_2$ (error).
+   - Calculate quantiles in R using `qf(alpha, df1, df2)`. Use $1-\alpha$ for a R-tailed test.  
+3. **Calculate $F$-Statistic** (F in SAS ANOVA table):
+   - Formula:  
+     $F = \frac{\text{MS between}}{\text{MS within}} = \frac{\frac{\text{extra SS}}{\text{extra df}}}{\text{MSE}} = \frac{\text{Variation explained by the full model}}{\text{Variation left to be explained}}$.
+   - Where:
+     - $\text{MS between} = \frac{\text{extra SS}}{\text{extra df}}$
+     - $\text{MS within} = \text{MSE} = \frac{\text{Error SS}}{\text{Error df}}$
+4. **Determine p-value**:
+   - Compare $F$-statistic to the critical value.
+5. **Decision**:
+   - Reject $H_0$ if $p$-value < $\alpha$; otherwise, fail to reject.
+6. **Interpretation**:
+   - Rejecting $H_0$ indicates evidence that at least one pair of group means is different.
 
-SAS code for ANOVA
+![SAS Output Table](notes_6_4.jpg)  
+*Figure 4: SAS output showing $F$-statistic, $p$-value, and $R^2$ metrics.*  
+
+![R-Squared and Variance Explained](notes_6_5.jpg)  
+*Figure 5: Illustration of $R^2$, showing the proportion of total variance explained by the model.*  
+
+## SAS code for ANOVA
+```{sas eval=FALSE}
 * generalized (generalization is that we are going to # of groups) linear model;
 proc glm data = dataSet;
 class group;
 model responseVar = group; * fits an anova;
 run;
-R code for ANOVA
+```
+
+## R code for ANOVA
+```{r eval=FALSE}
 # aov = analysis of variance
 # numerical response ~ factor groupings
 fit = aov(x ~ group, data = anovaCT)
 summary(fit)
-R-Squared =(𝑉𝑎𝑟𝑖𝑎𝑡𝑖𝑜𝑛 𝐸𝑥𝑝𝑙𝑎𝑖𝑛𝑒𝑑 𝑏𝑦 𝐹𝑢𝑙𝑙 𝑀𝑜𝑑𝑒𝑙)/(𝑇𝑜𝑡𝑎𝑙 𝑉𝑎𝑟𝑖𝑎𝑡𝑖𝑜𝑛 )=(𝐸𝑥𝑡𝑟𝑎 𝑆𝑢𝑚 𝑜𝑓 𝑆𝑞𝑢𝑎𝑟𝑒𝑠)/(𝑇𝑜𝑡𝑎𝑙 𝑆𝑢𝑚 𝑜𝑓 𝑆𝑞𝑢𝑎𝑟𝑒𝑠)
-Percentage of the total variance that was explained by group membership.
-It is estimated that R-squared % of the variation in the response can be explained by group membership.
-R2 = coefficient of determination
-R = correlation coefficient
-RMSE = sqrt(MSE) = sqrt(unexplained variation)
+```
 
-Coefficient of Variation  = RMSE / grand (score) mean * 100
-Relative standard deviation, how much error is left relative to the mean
-ANOVA Assumptions and Robustness
-Normality per group, though ANOVA is robust to normality assumption with a big enough sample size. dependent on the magnitude of violation.
-Equal standard deviation. This is very important; ANOVA is not as robust even as t-tools.
-Independence within and between groups is crucial.
-Same visual checks as t-tools with more groups using  histograms and boxplots for normality and variance and Q-Q plots for normality. 
-More about standard deviation:
-The only way the confidence intervals are true is when the standard deviations are equal.
-Confidence intervals are the widest when the sample with the widest standard deviation also has the largest sample size.
+## R-Squared =(𝑉𝑎𝑟𝑖𝑎𝑡𝑖𝑜𝑛 𝐸𝑥𝑝𝑙𝑎𝑖𝑛𝑒𝑑 𝑏𝑦 𝐹𝑢𝑙𝑙 𝑀𝑜𝑑𝑒𝑙)/(𝑇𝑜𝑡𝑎𝑙 𝑉𝑎𝑟𝑖𝑎𝑡𝑖𝑜𝑛 )=(𝐸𝑥𝑡𝑟𝑎 𝑆𝑢𝑚 𝑜𝑓 𝑆𝑞𝑢𝑎𝑟𝑒𝑠)/(𝑇𝑜𝑡𝑎𝑙 𝑆𝑢𝑚 𝑜𝑓 𝑆𝑞𝑢𝑎𝑟𝑒𝑠)
+- Percentage of the total variance that was explained by group membership.
+- It is estimated that R-squared % of the variation in the response can be explained by group membership.
+- R2 = coefficient of determination
+- R = correlation coefficient
 
-Welch’s ANOVA
-Same assumption of normality.
-Useful when standard deviations are not equal.
-As in the t-test, degrees of freedom are adjusted lower.
-Kruskal-Wallis Test
-Is a non-parametric alternative to an ANOVA on the difference of medians. 
-Can be used when the assumptions aren’t met for the ANOVA or Welch’s ANOVA, in the case of significant deviations from normality or small sample sizes.
-Good for non-symmetric distributions.
-Is basically an ANOVA after transformation to ranks.
-P-values are from a chi-square distribution.
+## RMSE = sqrt(MSE) = sqrt(unexplained variation)
 
-Power Analysis for ANOVA – SAS code
-SAS: proc power;
+## Coefficient of Variation  = RMSE / grand (score) mean * 100
+- Relative standard deviation, how much error is left relative to the mean
+
+## ANOVA Assumptions and Robustness
+- Normality per group, though ANOVA is robust to normality assumption with a big enough sample size. dependent on the magnitude of violation.
+- Equal standard deviation. This is very important; ANOVA is not as robust even as t-tools.
+- Independence within and between groups is crucial.
+- Same visual checks as t-tools with more groups using  histograms and boxplots for normality and variance and Q-Q plots for normality. 
+- More about standard deviation:
+  - The only way the confidence intervals are true is when the standard deviations are equal.
+  - Confidence intervals are the widest when the sample with the widest standard deviation also has the largest sample size.
+
+## Welch’s ANOVA
+- Same assumption of normality.
+- Useful when standard deviations are not equal.
+- As in the t-test, degrees of freedom are adjusted lower.
+
+## Kruskal-Wallis Test
+- Is a non-parametric alternative to an ANOVA on the difference of medians. 
+- Can be used when the assumptions aren’t met for the ANOVA or Welch’s ANOVA, in the case of significant deviations from normality or small sample sizes.
+- Good for non-symmetric distributions.
+- Is basically an ANOVA after transformation to ranks.
+- P-values are from a chi-square distribution.
+
+## Power Analysis for ANOVA – SAS code
+```{sas eval=FALSE}
+proc power;
 onewayanova test-overall;
 groupmeans
+```
 
-Random (vs. Fixed) Effects
-Observations are a random sample from a large population of possible levels.
-Levels of observations are meant to be representative of the population of things you could sample (even though you can/may not be sampling every possible level).
-Desired inferences are on the (whole) population of levels (more than those in the study).
-Statistically, to avoid increasing the probabilities of type 1 and 2 error, the model needs to include variance in the full model (residual variance, variance of each observation from the overall mean) and error associated with random effects. There is more error associated with random effects model.
-Inferences in a fixed effects model are limited to the specific levels in the study.
+## Random (vs. Fixed) Effects
+- Observations are a random sample from a large population of possible levels.
+- Levels of observations are meant to be representative of the population of things you could sample (even though you can/may not be sampling every possible level).
+- Desired inferences are on the (whole) population of levels (more than those in the study).
+- Statistically, to avoid increasing the probabilities of type 1 and 2 error, the model needs to include variance in the full model (residual variance, variance of each observation from the overall mean) and error associated with random effects. There is more error associated with random effects model.
+- Inferences in a fixed effects model are limited to the specific levels in the study.
 
-Writing Up Results
-ANOVA tells us if the between group variability is larger than the within group variability, that there is evidence that means are different.
-F-test doesn’t provide answer to the QOI (only tells us at least a pair of means is different, not which or how). Other tests are required.
-What to include in a write-up:
-What is the question/problem, treatment groups and context.
-How was the data gathered, with sample sizes and treatments.
-Results of assumption check, relying on the graphics.
-Descriptive statistics for each group.
-Effect size, statistic (F in this case), df, p-value.
-Residual diagnostics, information about transformations, other tests.
-Decision and interpretation of it in the context of the problem.
+## Writing Up Results
+- ANOVA tells us if the between group variability is larger than the within group variability, that there is evidence that means are different.
+- F-test doesn’t provide answer to the QOI (only tells us at least a pair of means is different, not which or how). Other tests are required.
+- What to include in a write-up:
+  - What is the question/problem, treatment groups and context.
+  - How was the data gathered, with sample sizes and treatments.
+  - Results of assumption check, relying on the graphics.
+  - Descriptive statistics for each group.
+  - Effect size, statistic (F in this case), df, p-value.
+  - Residual diagnostics, information about transformations, other tests.
+  - Decision and interpretation of it in the context of the problem.
 
