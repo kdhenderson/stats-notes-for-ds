@@ -63,10 +63,10 @@ title: "Comparisons Among Several Samples"
 
 ## SAS code for ANOVA
 ```{sas eval=FALSE}
-* generalized (generalization is that we are going to # of groups) linear model;
+* Generalized Linear Model: Extends analysis to multiple groups (e.g. ANOVA for 3+ groups);
 proc glm data = dataSet;
 class group;
-model responseVar = group; * fits an anova;
+model responseVar = groupingVar; * Fits an ANOVA;
 run;
 ```
 
@@ -74,34 +74,45 @@ run;
 ```{r eval=FALSE}
 # aov = analysis of variance
 # numerical response ~ factor groupings
-fit = aov(x ~ group, data = anovaCT)
+fit = aov(responseVar ~ groupingVar, data = dataSet)
 summary(fit)
 ```
 
-## R-Squared =(𝑉𝑎𝑟𝑖𝑎𝑡𝑖𝑜𝑛 𝐸𝑥𝑝𝑙𝑎𝑖𝑛𝑒𝑑 𝑏𝑦 𝐹𝑢𝑙𝑙 𝑀𝑜𝑑𝑒𝑙)/(𝑇𝑜𝑡𝑎𝑙 𝑉𝑎𝑟𝑖𝑎𝑡𝑖𝑜𝑛 )=(𝐸𝑥𝑡𝑟𝑎 𝑆𝑢𝑚 𝑜𝑓 𝑆𝑞𝑢𝑎𝑟𝑒𝑠)/(𝑇𝑜𝑡𝑎𝑙 𝑆𝑢𝑚 𝑜𝑓 𝑆𝑞𝑢𝑎𝑟𝑒𝑠)
-- Percentage of the total variance that was explained by group membership.
-- It is estimated that R-squared % of the variation in the response can be explained by group membership.
-- R2 = coefficient of determination
-- R = correlation coefficient
 
-## RMSE = sqrt(MSE) = sqrt(unexplained variation)
+## Key Metrics in ANOVA
 
-## Coefficient of Variation  = RMSE / grand (score) mean * 100
-- Relative standard deviation, how much error is left relative to the mean
+### $R^2$: Coefficient of Determination
+- $R^2 = \frac{\text{Variation Explained by Full Model}}{\text{Total Variation}} = \frac{\text{Extra Sum of Squares}}{\text{Total Sum of Squares}}$. 
+- Represents the percentage of total variance explained by group membership.
+- Example: $R^2$ of 0.75 indicates 75% of the response variation is explained by group differences.
+- $R$: Correlation coefficient
+
+### RMSE: Root Mean Square Error
+- $\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{\text{Unexplained Variation}}$
+- Quantifies the amount of unexplained variation in the model.
+
+### Coefficient of Variation (CV)
+$\text{CV} = \frac{\text{RMSE}}{\text{Grand Mean}} \times 100$
+- Measures relative standard deviation as a percentage of the mean.
+
 
 ## ANOVA Assumptions and Robustness
-- Normality per group, though ANOVA is robust to normality assumption with a big enough sample size. dependent on the magnitude of violation.
-- Equal standard deviation. This is very important; ANOVA is not as robust even as t-tools.
-- Independence within and between groups is crucial.
-- Same visual checks as t-tools with more groups using  histograms and boxplots for normality and variance and Q-Q plots for normality. 
-- More about standard deviation:
-  - The only way the confidence intervals are true is when the standard deviations are equal.
-  - Confidence intervals are the widest when the sample with the widest standard deviation also has the largest sample size.
+- **Normality**:
+  - Check with histograms, boxplots, and Q-Q plots.
+  - ANOVA is robust to slight violations of normality, especially with large sample sizes.
+- **Equal Standard Deviations**:
+  - This assumption is crucial for the validity of ANOVA results.
+  - ANOVA is less robust to violations of this assumption compared to $t$-tests.
+  - Confidence intervals depend on this assumption being met.
+  - Confidence intervals are widest when the group with the largest standard deviation also has the largest sample size.
+- **Independence**:
+  - Ensure independence of observations both within and between groups.  
+
 
 ## Welch’s ANOVA
-- Same assumption of normality.
-- Useful when standard deviations are not equal.
-- As in the t-test, degrees of freedom are adjusted lower.
+- Still assumes normality.
+- Adjusts for unequal standard deviations.
+- Degrees of freedom are lowered.
 
 ## Kruskal-Wallis Test
 - Is a non-parametric alternative to an ANOVA on the difference of medians. 
@@ -109,6 +120,16 @@ summary(fit)
 - Good for non-symmetric distributions.
 - Is basically an ANOVA after transformation to ranks.
 - P-values are from a chi-square distribution.
+
+
+## Kruskal-Wallis Test
+- Non-parametric alternative for ANOVA.
+- Tests medians instead of means.
+- **Assumptions**:
+  - Does not require normality, making it useful for non-symmetric distributions or small sample sizes.  
+  - Robust to unequal variances.
+- $p$-values follow a chi-square distribution.
+
 
 ## Power Analysis for ANOVA – SAS code
 ```{sas eval=FALSE}
