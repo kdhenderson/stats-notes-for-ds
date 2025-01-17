@@ -12,6 +12,7 @@ title: "Comparisons Among Several Samples"
 - Understand the Kruskal-Wallis test as a non-parametric alternative to ANOVA.
 - Differentiate between random and fixed effects.
 
+
 ## ANOVA: Analysis of Variance
 - **Purpose**: Test equality of means from more than two populations by comparing variability within groups to variability between groups.
 - **Assumptions**:
@@ -31,6 +32,7 @@ title: "Comparisons Among Several Samples"
 
 ![Detailed ANOVA Table Overview](images/notes_6_3.png) 
 *Figure 3: Detailed breakdown of ANOVA table components.*  
+
 
 ## ANOVA: 6-step hypothesis test
 1. **Define Hypotheses**:
@@ -61,6 +63,7 @@ title: "Comparisons Among Several Samples"
 ![R-Squared and Variance Explained](notes_6_5.jpg)  
 *Figure 5: Illustration of $R^2$, showing the proportion of total variance explained by the model.*  
 
+
 ## SAS code for ANOVA
 ```{sas eval=FALSE}
 * Generalized Linear Model: Extends analysis to multiple groups (e.g. ANOVA for 3+ groups);
@@ -69,6 +72,7 @@ class group;
 model responseVar = groupingVar; * Fits an ANOVA;
 run;
 ```
+
 
 ## R code for ANOVA
 ```{r eval=FALSE}
