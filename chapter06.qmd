@@ -114,13 +114,6 @@ $\text{CV} = \frac{\text{RMSE}}{\text{Grand Mean}} \times 100$
 - Adjusts for unequal standard deviations.
 - Degrees of freedom are lowered.
 
-## Kruskal-Wallis Test
-- Is a non-parametric alternative to an ANOVA on the difference of medians. 
-- Can be used when the assumptions aren’t met for the ANOVA or Welch’s ANOVA, in the case of significant deviations from normality or small sample sizes.
-- Good for non-symmetric distributions.
-- Is basically an ANOVA after transformation to ranks.
-- P-values are from a chi-square distribution.
-
 
 ## Kruskal-Wallis Test
 - Non-parametric alternative for ANOVA.
@@ -134,26 +127,38 @@ $\text{CV} = \frac{\text{RMSE}}{\text{Grand Mean}} \times 100$
 ## Power Analysis for ANOVA – SAS code
 ```{sas eval=FALSE}
 proc power;
-onewayanova test-overall;
-groupmeans
+  onewayanova test=overall;
+  groupmeans ... ;
+run;
 ```
 
-## Random (vs. Fixed) Effects
-- Observations are a random sample from a large population of possible levels.
-- Levels of observations are meant to be representative of the population of things you could sample (even though you can/may not be sampling every possible level).
-- Desired inferences are on the (whole) population of levels (more than those in the study).
-- Statistically, to avoid increasing the probabilities of type 1 and 2 error, the model needs to include variance in the full model (residual variance, variance of each observation from the overall mean) and error associated with random effects. There is more error associated with random effects model.
-- Inferences in a fixed effects model are limited to the specific levels in the study.
+
+## Random vs. Fixed Effects
+- **Random Effects**:
+  - Observations are a random sample from a larger population of possible levels.
+  - Levels of observations are meant to be representative of the population of things you could sample, even if you cannot sample every possible level.
+  - Desired inferences are on the entire population of levels, not just the levels included in the study.
+  - Variance includes:
+    - Residual variance (variance of each observation from the overall mean).
+    - Variance associated with random effects.
+  - There is typically more error associated with random effects models.
+- **Fixed Effects**:
+  - Inferences are specific to the levels included in the study.
+  - Levels are not intended to represent a larger population.
+- **Statistical Considerations**:
+  - Random effects models account for extra variability by including variance from random effects, reducing the probabilities of Type I and Type II errors.
+  - Fixed effects models do not include this extra variability, which may lead to increased risk of Type I or II errors if used improperly.
+
 
 ## Writing Up Results
-- ANOVA tells us if the between group variability is larger than the within group variability, that there is evidence that means are different.
-- F-test doesn’t provide answer to the QOI (only tells us at least a pair of means is different, not which or how). Other tests are required.
-- What to include in a write-up:
-  - What is the question/problem, treatment groups and context.
-  - How was the data gathered, with sample sizes and treatments.
-  - Results of assumption check, relying on the graphics.
-  - Descriptive statistics for each group.
-  - Effect size, statistic (F in this case), df, p-value.
-  - Residual diagnostics, information about transformations, other tests.
-  - Decision and interpretation of it in the context of the problem.
+- ANOVA tests whether the between-group variability is significantly larger than the within-group variability, providing evidence that group means are different.
+- The $F$-test does not identify which specific means are different or how they differ. Additional tests (e.g. post-hoc tests) are required to answer these questions of interest (QOI).
 
+### Steps for Writing Results:
+1. State the research question, treatments, and context.
+2. Describe data collection methods, sample sizes, and treatments.
+3. Summarize assumption checks (relying on visual evidence).
+4. Provide descriptive statistics for groups.
+5. Report effect size, $F$-statistic, degrees of freedom, and $p$-value.
+6. Include residual diagnostics, mention transformations and information about other tests if used.  
+7. Conclude with decisions and contextual interpretations.
