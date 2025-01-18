@@ -23,8 +23,8 @@ book:
     - chapter03.qmd
     - chapter04.qmd
     - chapter05.qmd
-    #- chapter06.qmd
-    #- chapter07.qmd
+    - chapter06.qmd
+    - chapter07.qmd
     #- chapter08.qmd
     #- chapter09.qmd
     #- chapter10.qmd

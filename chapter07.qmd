@@ -1,0 +1,123 @@
+---
+title: "Linear Combinations and the Multiple Comparison Problem"
+---
+
+## Objectives
+- Understand weaknesses of the alternative hypothesis for an ANOVA F-test.
+- Formulate appropriate linear combinations of means.
+- Understand the multiple comparison problem and how to correct for it.
+- Use the formulation to make appropriate inferences.
+
+
+## Fallacies in Hypothesis Testing
+1. **False Causality**: A small p-value does not indicate causation. Causality can only be inferred from randomized experiments, not observational studies.
+2. **Accepting the Null**: Should state, “no evidence of a difference,” not that the null hypothesis is true. There isn't enough evidence to suggest a difference is due to anything but chance. 
+3. **Statistical vs. Practical Significance**: Statistical significance does not imply practical importance. Evaluate with power, effect size, and confidence intervals.  
+   - Differences that are statistically but not practically significant may be due to a large sample size.  
+   - If a difference is practically significant but not statistically significant, collect more data.
+4. **Data Dredging**: Avoid fishing for significance (data snooping). This can lead to publication bias against negative results.
+5. **Good Statistics from Bad Data**: Biased or non-random data compromises conclusions. Experimental design determines what inferences can be made and what statistical methods can be used.
+
+
+## Linear Combination of Group Means
+An ANOVA only allows pairwise comparison of means. It doesn’t account for structure in the the groups. What if we want to compare an average of means to a single mean or the average of other means?
+Begin any analysis involving several groups by using ANOVA framework (as an initial screening device) to test for any difference in means to determine if further testing is needed.
+Linear contrasts
+g = C1m1 + C2m2 + … CImI, where g is a parameter called the linear combination of group means, and C are coefficients that add to zero making the linear combination a contrast.
+Use g and x-bar to estimate g and m.
+Standard error for g, SE(g) = Sp√(□(64&〖"C1" 〗^2/n1+〖"C2" 〗^2/n2+ … +〖"CI" 〗^2/nI))  
+Even if only two groups are being compared, and the other coefficients / terms under the square root are zero, the assumption of equal variance allows the for the use of the pooled standard deviation from all groups.
+The t-statistic, ta,df = g – g / SE(g), is observed minus expected divided by standard error with degrees of freedom equal to the pooled standard deviation.
+
+
+## Steps for a linear contrast test
+1. Get summary statistics: means, sample sizes and pooled standard deviations (ANOVA -> RMSE).
+2. Specify the coefficients: add to zero.
+3. Estimate g, the linear combination, the contrast.
+4. Find the standard error of the estimate, SE(g).
+5. Construct the confidence interval with a t-distribution multiplier, and df used for the MSE: CI = g ± "ta,df" * SE(g)
+Common linear combinations/contrasts: comparing averages of group means (Spock judges), comparing rates (rodent diet restriction study, unit changes).
+Simultaneous Inferences
+Allow us to determine which one of the population means isn’t equal to the others. If we want to test all possible pairs, you have to test many pairs. The more tests you do, the more likely it is you will make a type 1 error.
+This is about adjusting the significance level or p-value to keep the type 1 error rate down.
+There is a distinction between an individual confidence level that captures its parameter 1-alpha% of the time. When considering a family of confidence intervals, the relative frequency in which all intervals simultaneously capture their parameters is smaller than 1-alpha%. This compound uncertainty leads us to a familywise confidence level.
+
+
+## Some Post-Hoc Procedures
+These test for all pairwise difference in means:
+Bonferroni adjustment
+Tukey’s honestly signficiant difference (HSD)
+Ryan-Eilliot-Gabriel-Welsch Q-procedure (REGWQ)
+Tests for pairwise differences from a control:  Dunnett’s procedure
+Tests for all possible differences:  Scheffé’s method uses an F-distribution.
+
+
+## Dunnett’s Procedure
+Only compares treatment to control (reference group)
+Difference in each sample mean to control mean using d-statistic
+D = d(k-1,N-k) * √(2MSE/nharmonic)
+dfk-1,n-k, where k-1 is df from betweenSS and n-k is df from withinSS
+
+
+## Bonferroni Adjustment
+Overall type 1 error rate divided by the number of pairwise tests = new significance level (4 groups choose 2 = 6 pairs -> 0.05/6 -> significance level = 0.0083)
+Very conservative. It has a smaller type 1 error rate than expected. It doesn’t tend to reject as often as it should.
+
+
+## Tukey’s Honestly Significant Difference (HSD) procedure
+Based on the studentized range statistic
+q = 𝑋 ̅largestGrp – 𝑋 ̅smallestGrp / √(MSE*1/n) - when groups have same n 
+Obtains simultaneous confidence intervals for each pair of populations means (𝑋 ̅i – 𝑋 ̅j) ± q-critical value * √(MSE/n)
+q-critical value = qalpha,(k, n-k)
+Tukey-Kramer procedure for unequal sample sizes use: 2ninj / (ni + nj) (SAS does this)
+
+
+## REGWQ Procedure
+Algorithm-based
+Advantages: SAS recommends this to keep the type I error rate at the nominal level and has good power
+Method:  Arrange sample means in descending order. Reject that the means are the same if the difference in the means is greater than a q-critical value (studentized range). Adjust p-value down for number of comparisons.
+
+
+## Even if null is true, we can still end up rejecting the null by chance if too many tests are done!
+## Think about the experimental design when deciding the appropriate analysis.
+## After testing for group differences with ANOVA if the F-statistic is:
+- Not significant, stop
+- Is significant, rather than proceed to post-hoc battery of tests, think about these: 
+  - Is there inherent structure related to the levels of a factor?   - Is it more appropriate to test one mean against other combinations of means or other linear combinations of mean?
+  - The structure of the data are important for further testing and may not lead to multiple pairwise comparisons.
+  - For planned comparisons, the number of significant tests is kept small, because we have predictions built into the study of specific combinations that we are interested in testing.
+  - Unplanned post-hoc comparisons can be done when we don’t have specific predictions about which groups may be different than other groups.
+
+## Reporting Results
+Discuss the research question, design and expectations of group differences.
+Explain results of exploratory data analysis and any remedies for violations of assumptions (e.g. did we choose to do a non-parametric test).
+Report the overall F-statistic, its degrees of freedom and the p-value.
+Report effect size (sum of squared regression / sum of squared total), tells us if we have a large enough practical effect that matches statistical significance.
+Results and rationale for any post-hoc tests. Describe if we are doing planned comparisons and/or pairwise comparisons.
+Conclusion in the context of the problem.
+Discuss any weaknesses in the conclusions due to experimental design.
+
+
+::: {#contrastExample layout-ncol=2}
+
+![](images/notes_7_1_exHandicapContrast_1.png){}
+![](images/notes_7_2_exHandicapContrast_2.png){}
+
+![](images/notes_7_3_exHandicapContrast_3.png){}
+![](images/notes_7_4_exHandicapContrast_4.png){}
+
+![](images/notes_7_5_exHandicapContrast_5.png){}
+![](images/notes_7_6_exHandicapContrast_6.png){}
+
+![](images/notes_7_7_exHandicapContrast_7.png){}
+![](images/notes_7_8_theoryOfBonferroni_1.png){}
+
+![](images/notes_7_9_exMultipleComparison_1.png){}
+![](images/notes_7_10_exMultipleComparison_2.png){}
+
+![](images/notes_7_11_exMultipleComparison_3.png){}
+![](images/notes_7_12_exMultipleComparison_4.png){}
+
+![](images/notes_7_13_exMultipleComparison_5.png){}
+:::
+
