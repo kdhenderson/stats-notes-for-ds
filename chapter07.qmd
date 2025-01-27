@@ -20,27 +20,54 @@ title: "Linear Combinations and the Multiple Comparison Problem"
 
 
 ## Linear Combination of Group Means
-An ANOVA only allows pairwise comparison of means. It doesn’t account for structure in the the groups. What if we want to compare an average of means to a single mean or the average of other means?
-Begin any analysis involving several groups by using ANOVA framework (as an initial screening device) to test for any difference in means to determine if further testing is needed.
-Linear contrasts
-g = C1m1 + C2m2 + … CImI, where g is a parameter called the linear combination of group means, and C are coefficients that add to zero making the linear combination a contrast.
-Use g and x-bar to estimate g and m.
-Standard error for g, SE(g) = Sp√(□(64&〖"C1" 〗^2/n1+〖"C2" 〗^2/n2+ … +〖"CI" 〗^2/nI))  
-Even if only two groups are being compared, and the other coefficients / terms under the square root are zero, the assumption of equal variance allows the for the use of the pooled standard deviation from all groups.
-The t-statistic, ta,df = g – g / SE(g), is observed minus expected divided by standard error with degrees of freedom equal to the pooled standard deviation.
+
+- An ANOVA only allows pairwise comparisons of means and does not account for structure within the groups. For example, you might want to compare an average of means to a single mean or to the average of other means. 
+- To begin, use the ANOVA framework as an initial screening device to test for any overall differences in means to determine whether further testing is necessary.
+   
+### Linear Contrasts
+
+- A **linear combination** of group means is defined as:
+  $$
+  \gamma = C_1\mu_1 + C_2\mu_2 + \dots + C_I\mu_I
+  $$
+  where $\gamma$ is the parameter representing the linear combination, and $C_i$ are coefficients that sum to zero, making the combination a **contrast**.
+- Use $g$ and $\bar{x}$ to estimate $\gamma$ and $\mu$.
+- The standard error of $g$, denoted $SE(g)$, is calculated as:
+  $$
+  SE(g) = S_p \sqrt{\frac{C_1^2}{n_1} + \frac{C_2^2}{n_2} + \dots + \frac{C_I^2}{n_I}}
+  $$
+  where $S_p$ is the pooled standard deviation.  
+  Even when comparing only two groups (i.e. the other coefficients / terms under the square root are zero), the pooled standard deviation is used under the assumption of equal variances from all groups.
+- The $t$-statistic for testing contrasts is:
+  $$
+  t_{\alpha, df} = \frac{g - \gamma}{SE(g)}
+  $$
+  where $g$ is the observed linear combination, $\gamma$ is the hypothesized value (e.g. $\gamma = 0$), and $df$ are the degrees of freedom associated with the pooled standard deviation.
 
 
-## Steps for a linear contrast test
-1. Get summary statistics: means, sample sizes and pooled standard deviations (ANOVA -> RMSE).
-2. Specify the coefficients: add to zero.
-3. Estimate g, the linear combination, the contrast.
-4. Find the standard error of the estimate, SE(g).
-5. Construct the confidence interval with a t-distribution multiplier, and df used for the MSE: CI = g ± "ta,df" * SE(g)
-Common linear combinations/contrasts: comparing averages of group means (Spock judges), comparing rates (rodent diet restriction study, unit changes).
-Simultaneous Inferences
-Allow us to determine which one of the population means isn’t equal to the others. If we want to test all possible pairs, you have to test many pairs. The more tests you do, the more likely it is you will make a type 1 error.
-This is about adjusting the significance level or p-value to keep the type 1 error rate down.
-There is a distinction between an individual confidence level that captures its parameter 1-alpha% of the time. When considering a family of confidence intervals, the relative frequency in which all intervals simultaneously capture their parameters is smaller than 1-alpha%. This compound uncertainty leads us to a familywise confidence level.
+## Steps for a Linear Contrast Test
+
+1. **Summary Statistics**: Obtain group means, sample sizes, and the pooled standard deviation from the ANOVA model (e.g. $RMSE$).
+2. **Specify Coefficients**: Choose $C_i$ such that their sum equals zero.
+3. **Estimate the Contrast**: Compute the linear combination $g$ using the group means and coefficients.
+4. **Calculate Standard Error**: $SE(g)$  
+5. **Construct Confidence Intervals**: $CI = g \pm t_{\alpha, df} \cdot SE(g)$  
+6. **Perform the Test**: Calculate the $t$-statistic.
+
+### Simultaneous Inferences
+- When testing multiple contrasts or pairwise comparisons, the likelihood of a **Type I error** increases. Adjustments are needed to the significance level or p-value to maintain the overall error rate.
+- Note the distinction between:
+  - **Individual confidence level**: The probability that a single interval captures the parameter ($1 - \alpha$).
+  - **Familywise confidence level**: The probability that all intervals simultaneously capture their parameters is less than $1 - \alpha$, leading to compound uncertainty.
+
+### Common Applications of Linear Contrasts
+1. Comparing averages of group means, e.g., \( \text{Average of groups 1 and 2 vs. group 3} \).
+2. Comparing rates in studies, e.g. dietary interventions in rodents.
+3. Testing specific hypotheses about combinations of group means.
+
+
+---
+left off here
 
 
 ## Some Post-Hoc Procedures
