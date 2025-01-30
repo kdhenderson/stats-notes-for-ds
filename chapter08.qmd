@@ -3,94 +3,164 @@ title: "Linear Correlation and Simple Linear Regression"
 ---
 
 ## Objectives
-The concept of effect size in two-sample and multi-sample studies. (I don’t think we talked about this…)
-How to calculate and interpret Pearson’s r.
-The relationship between Pearson’s r and scatterplots.
-How patterns in the data affect the magnitude and sign of Pearson’s r.
-When does correlation equal causation and when does it not.
-Resources
-rpsychologist.com/d3/correlation
-https://www.rossmanchance.com/applets/2021/regshuffle/regshuffle.htm
-Scatterplots
-Represent relationship between 2 quantitative variables, i.e. how they move together (variations can show 3+).
-Explanatory variable is plotted on X axis and response variable is plotted on the Y axis.
-Each dot is an observation.
-Look for patterns of association, e.g. positive/negative linear, curved up/down, logarithmic, sinusoidal, or random cloud.
+- Understand how to calculate and interpret Pearson’s $r$.
+- Recognize the relationship between Pearson’s $r$ and scatterplots.
+- Identify how patterns in data affect the magnitude and sign of Pearson’s $r$.
+- Discuss when correlation equals causation and when it does not.
+- Explore the basics of simple linear regression.
 
-Interpreting Correlations
-Square of correlation coefficient equals shared variance.
-If correlation is 0.8, then the shared variance is 64%, which means 64% of the variability in response is attributed to / explained by the linear relationship of the explanatory variable with the response variable. 
-Correlation is for linear relationships.
-A correlation of 1 means that one variable perfectly predicts the other. Correlations close to zero indicate very little shared variance.
-The sign of the correlation indicates the direction of the slope, so a negative correlation reflects an inverse relationship. Both positive and negative correlations of the same magnitude have the same shared variance.
-Changing the sample size, doesn’t change the correlation.
-Correlation Analysis
-Always look at a scatterplot of the data first for a visual of the relationship.
-Find correlation for the strength of the relationship.
-$r = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{(n-1) S_x S_y} = \frac{\sum_{i=1}^n Z_x Z_y}{(n-1) S_x S_y}$
-where	n = number of (x,y) pairs
+### Resources
+- [Interactive Correlation Visualization](https://rpsychologist.com/d3/correlation)
+- [Regression Shuffle Applet](https://www.rossmanchance.com/applets/2021/regshuffle/regshuffle.htm)
 
-Importance of plotting the data on a scatterplot (Anscombe dataset)
-Is linear regression the correct type of fit? Do you need to account for outliers or curved relationships?
-Outliers can influence the relationship between x and y. R2, regression slope and intercept are very susceptible to outliers (not resistant statistics).
-If the points are scattered around the x-axis on the residual plot, the linear model is a good fit.
 
-Factors that affect the magnitude of Pearson’s R
-Pattern of data points - Only meant to detect differences from a straight line.
-Bivariate outliers can make Pearson’s R larger or smaller than it should be.
-Different distribution shapes for x and y variables, one has larger variability than the other. Pearson’s R isn’t meant to deal with different variability.
-If a restricted range of the data is presented, it can be misleading. Pearson’s R is meant to look at the full range of the data.
-Combining groups with different behavior can be misleading.
-Averages are less variable, so the correlation will be stronger.
+## Scatterplots
+Scatterplots represent the relationship between two quantitative variables, i.e. how they move together (variations can show 3+ variables). Key points:
+- **Explanatory variable (X)** is plotted on the X-axis, while the **response variable (Y)** is on the Y-axis.
+- Each dot represents an observation.
+- Patterns to look for include:
+  - Positive or negative linear relationships
+  - Curved patterns (e.g., parabolic)
+  - Logarithmic or sinusoidal relationships
+  - Random scatter (no clear relationship)
 
-Facts about the correlation coefficient, Pearson’s r
-r measures strength of a linear relationship between two variables.
-Requires that both variables be quantitative
-Always between −1 and +1
-If r near 0 → weak relationship
-If r near +1 or −1 → strong relationship
-r is unitless. It doesn’t change with the unit of measurement.
-Not resistant to outliers (assumes bivariate normal distribution: for any value of y, x has normal distribution and vice versa)
-r estimates the population correlation, p.
-Interpreting the Coefficient of Determination, r2
-This is the percentage of variance in y than can be explained by the changes in x (Dr. McGee).
-Key: The value of r2 is the estimated (if calculated from a sample) proportion of the variation in y that is explained by the linear relationship between x and y (Dr. Sadler).
-R2 = 1 – SSres / SStot = how much of the total amount of variance that could be explained from the equal means model has been reduced / explained by the model.
 
-Correlation doesn’t equal causation.
-Association (strong correlation) is not causation.
-The (only) way to make cause and effect statements is with a randomized experiment.
+## Interpreting Correlations
+### Square of Correlation Coefficient ($r^2$)
+- Represents shared variance. Example: $r = 0.8$ implies $r^2 = 0.64$, meaning 64% of variability in $Y$ is explained by its linear relationship with $X$.
 
-Things to remember
-One of the assumptions of the correlation coefficient is equal standard deviation. Don’t confuse fewer data points with smaller standard deviation.
-The range of the data is a proxy for the spread. Knowing the particular x value reduces the variation.
+### Significance
+- $r = 1$: Perfect positive linear relationship.
+- $r = -1$: Perfect negative linear relationship.
+- $r = 0$: No linear relationship.
 
-Data Exploration
-Always plot the data
-With scatterplots for 2 quantitative variables
-Look for overall pattern: positive/negative, strong/weak, curved/linear
-Calculate a numerical summary – if the relationship is linear
-Plot a regression line
+### Key Notes
+- The sign of $r$ indicates the direction of the slope (positive or negative):
+  - A negative correlation reflects an inverse relationship.
+  - Positive and negative correlations of the same magnitude have the same shared variance.
+- Changing sample size does not affect $r$.
+- Correlation does not imply causation.
 
-Least Squares Regression
-Origin of the term regression came from Francis Galton – ‘Regression toward mediocrity’ -> regression to the mean
-A regression line is a straight line that describes how a response variable changes as an explanatory variable changes and is used to predict the value of y for a given value of x.
-With correlation you can flip x and y, but the regression equation depends on the choice of explanatory and response variables. 
-Only one best-fit line per dataset.
-Minimize the distance of the observed points to the line, the residuals. i.e. minimize the sum of the squared distances of each point to the line.
-Residual = observed - predicted
-All the residuals would be zero for a perfect fitting line.
-Best fitting line (slope and y-intercept) minimizes the sum of squared residuals (SSR).
-("b1" ) ̂ and r always have the same sign.
-Least squares regression line always passes through xbar, ybar.
-In simple regression, there is a single explanatory variable. 
-For each value of the explanatory variable there is a subpopulation of responses.
-The regression of the response variable on the explanatory variable is a mathematical relationship between the means of these subpopulations and the explanatory variable.
+
+## Correlation Analysis
+### Key Formula
+$$
+r = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{(n-1) S_x S_y} = \frac{\sum_{i=1}^n Z_x Z_y}{n-1}
+$$
+Where $n$ = number of $(x, y)$ pairs.
+
+### Why Plot the Data First?
+- Use scatterplots to visually check for linear relationships, outliers, or curved patterns, e.g. Anscombe dataset. Then find the correlation for the strength of the relationship.
+- Outliers can heavily influence $r$, regression slopes, and intercepts, as they are not resistant statistics.
+
+
+## Factors Affecting the Magnitude of $r$
+- **Bivariate Outliers**: Can inflate or deflate $r$.
+- **Distribution Shape**: Differences in variability between $X$ and $Y$ can distort $r$.
+- **Range Restrictions**: Restricted ranges of data can misrepresent $r$.
+- **Combining Groups**: Mixed groups may lead to misleading correlations. Averages are less variable, so the correlation will be stronger.
+
+
+## Facts About $r$
+- $r$ estimates the population correlation, $\rho$.
+- Measures the strength of a linear relationship between two variables.
+- Always between $-1$ and $1$.
+- Unitless; unaffected by changes in measurement scales.
+- Assumes both variables are quantitative.
+- Assumes bivariate normal distribution (for any value of $y$, $x$ has a normal distribution, and vice versa).
+- Not resistant to outliers.
+
+
+## Interpreting $r^2$, the Coefficient of Determination
+
+### Definition
+- $r^2$ represents the proportion of variance in $Y$ explained by its linear relationship with $X$:
+  - $r^2$ represents the proportion of variance in $Y$ that can be explained by changes in $X$ (Dr. McGee).
+  - $r^2$ is the estimated (if calculated from a sample) proportion of the variation in $Y$ explained by the linear relationship between $X$ and $Y$ (Dr. Sadler).
+
+### Formula
+$$
+R^2 = 1 - \frac{SS_{res}}{SS_{tot}}
+$$
+Where:
+- $SS_{res}$ = sum of squared residuals.
+- $SS_{tot}$ = total sum of squares.
+
+This measures how much of the total variance from the equal means model is explained by the regression model.
+
+
+## Correlation Doesn’t Equal Causation
+- Association (strong correlation) is not causation.
+- The only way to make cause-and-effect statements is with a randomized experiment.
+
+
+## Keys to Remember
+- The correlation coefficient assumes **equal standard deviation**:
+  - Don’t confuse fewer data points with smaller standard deviation.
+- The range of the data is a proxy for the spread. Knowing the particular $X$ value reduces the variation.
+
+
+## Data Exploration
+- Always plot the data using scatterplots for two quantitative variables.
+- Look for overall patterns: positive/negative, strong/weak, curved/linear.
+- If the relationship is linear, calculate a numerical summary.
+- Plot a regression line for interpretation.
+
+
+## Least Squares Regression
+
+### Origin of Regression
+- The term **regression** originates from Francis Galton’s phrase "Regression toward mediocrity," referring to regression to the mean.
+- A regression line is a straight line that describes how a **response variable ($Y$)** changes as an **explanatory variable ($X$)** changes. It is used to predict the value of $Y$ for a given $X$.
+
+### Key Points
+1. **One Best-Fit Line**: 
+   - There is only one best-fit line per dataset.
+   - This line minimizes the distance between observed points and the line (residuals).
+   - Residuals: $\text{Residual} = \text{Observed} - \text{Predicted}$.
+   - The best-fit line (slope and y-intercept) minimizes the **sum of squared residuals (SSR)**.
+   - All the residuals would be zero for a perfect fitting line.
+
+2. **Relation to Correlation**:
+   - $\hat{b_1}$ (slope) and $r$ always have the same sign.
+   - The least squares regression line always passes through $(\bar{X}, \bar{Y})$.
+
+3. **Choice of Variables**:
+   - Regression equation depends on the designation of explanatory and response variables.
+   - **With correlation**, you can flip $X$ and $Y$, but not with regression.
+
+4. **Subpopulations**:
+   - In simple regression with a single explanatory variable, each value of the explanatory variable corresponds to a subpopulation of responses.
+   - Regression describes the relationship between the means of these subpopulations and the explanatory variable.
+
+### Estimating Regression Coefficients
+1. **Slope ($\hat{\beta}_1$)**:
+   $$
+   \hat{\beta}_1 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n (X_i - \bar{X})^2} = r \frac{S_y}{S_x}
+   $$
+2. **Intercept ($\hat{\beta}_0$)**:
+   $$
+   \hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}
+   $$
+
+### Definition
+A regression line predicts $Y$ from $X$:
+$$
+Y = \beta_0 + \beta_1 X
+$$
+
+### Interpretation
+1. **Slope ($\hat{\beta}_1$)**, coefficient of x:
+   - Represents the predicted change in $Y$ for a one-unit increase in $X$.
+   - Example: A slope of $6.708$ means a 1-hour increase in study time predicts an average score increase of $6.708$ points.
+2. **Intercept ($\hat{\beta}_0$)**, a constant:
+   - Represents the predicted $Y$ when $X = 0$.
+   - Example: An intercept of $40.993$ means a predicted score of $40.993$ when no study time is recorded.
+
 
 Main uses of regression
 Prediction 
 Interpretation:
-y = mx + b -> y = b0 + b1 x 
 b1  (coefficient of x) = slope = rise / run = Dy / Dx
 b0 (constant) = y-intercept
 Slope interpretation: a 1 unit increase in x results in a b1 unit increase in the predicted y, or it is estimated that a 1 unit increase in x results in a b1 unit increase in y.
@@ -100,10 +170,6 @@ Extrapolation
 Predictions are only valid for values of x inside the domain of x that were used to build the model.
 Use extrapolation with care and communicate that the data are the result of extrapolation.
 
-Estimating Regression Coefficients:
-- $\hat{\beta}_1 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n (X_i - \bar{X})^2} = r \frac{S_y}{S_x}$
-- $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}$
-")"
 
 Assumptions for linear regression
 Normality – conditional on x
@@ -179,7 +245,7 @@ summary(fit)
 
 ```
 
-![Least Squares Regression Line 2](images/notes_8_6_parameterEstimateTable_R.png) 
+![Least Squares Regression Line 2](images/notes_8_7_parameterEstimateTable_R.png) 
 
 *Figure 4: Least Squares Regression Line*  
 
@@ -195,12 +261,12 @@ $H_a: \beta_0 \neq 0$
 $H_0: \beta_1 = 0$
 $H_a: \beta_1 \neq 0$
 
-![Study Hours Example](notes_8_8_studyHourExample.png)
+![Study Hours Example](images/notes_8_8_studyHourExample.png)
 
-Putting it all together
-Read in the data.
-Plot the data to check for visual evidence of a linear relationship.
-Test the linear correlation coefficient.
-If we reject that rho equals zero, there is significant linear correlation, then the slope is also significantly different than zero.
-Then… we can predict and interpret.
+### Putting It All Together
+1. Plot the data to visualize the relationship.
+2. Test the linear correlation coefficient.
+3. Reject $H_0$ if $\rho = 0$ is not supported (significant correlation). The slope ($\beta_1$) is also significantly different from zero.
+4. Calculate and interpret regression coefficients.
+5. Use the regression model for predictions within the valid range.
 
