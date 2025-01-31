@@ -15,7 +15,7 @@ title: "Linear Correlation and Simple Linear Regression"
 
 
 ## Scatterplots
-Scatterplots represent the relationship between two quantitative variables, i.e. how they move together (variations can show 3+ variables). Key points:
+Scatterplots visually represent the relationship between two quantitative variables, illustrating how they vary together. (Variations can show 3+ variables). Key points:
 - **Explanatory variable (X)** is plotted on the X-axis, while the **response variable (Y)** is on the Y-axis.
 - Each dot represents an observation.
 - Patterns to look for include:
@@ -51,7 +51,7 @@ Where $n$ = number of $(x, y)$ pairs.
 
 ### Why Plot the Data First?
 - Use scatterplots to visually check for linear relationships, outliers, or curved patterns, e.g. Anscombe dataset. Then find the correlation for the strength of the relationship.
-- Outliers can heavily influence $r$, regression slopes, and intercepts, as they are not resistant statistics.
+- Outliers can significantly distort $r$, regression slopes, and intercepts, as these measures are not resistant to extreme values.
 
 
 ## Factors Affecting the Magnitude of $r$
@@ -76,7 +76,8 @@ Where $n$ = number of $(x, y)$ pairs.
 ### Definition
 - $r^2$ represents the proportion of variance in $Y$ explained by its linear relationship with $X$:
   - $r^2$ represents the proportion of variance in $Y$ that can be explained by changes in $X$ (Dr. McGee).
-  - $r^2$ is the estimated (if calculated from a sample) proportion of the variation in $Y$ explained by the linear relationship between $X$ and $Y$ (Dr. Sadler).
+  - $r^2$ is the estimated (if calculated from a sample) proportion of the variation in $Y$ explained by the linear relationship between $X$ and $Y$ (Dr. Sadler).  
+  - For example, an $r^2$ of 0.75 means that 75% of the variability in $Y$ can be attributed to its linear relationship with $X$, while the remaining 25% is unexplained by the model.
 
 ### Formula
 $$
@@ -117,7 +118,7 @@ This measures how much of the total variance from the equal means model is expla
 1. **One Best-Fit Line**: 
    - There is only one best-fit line per dataset.
    - This line minimizes the distance between observed points and the line (residuals).
-   - Residuals: $\text{Residual} = \text{Observed} - \text{Predicted}$.
+   - **Residuals**: The difference between the observed value ($y_i$) and the predicted value ($\hat{y}_i$), calculated as $\text{Residual} = y_i - \hat{y}_i$. Residuals measure the error in prediction.
    - The best-fit line (slope and y-intercept) minimizes the **sum of squared residuals (SSR)**.
    - All the residuals would be zero for a perfect fitting line.
 
@@ -152,69 +153,96 @@ $$
 ### Interpretation
 1. **Slope ($\hat{\beta}_1$)**, coefficient of x:
    - Represents the predicted change in $Y$ for a one-unit increase in $X$.
+   - Rise over run, or $\frac{\Delta Y}{\Delta X}$
+   - A 1 unit increase in $X$ results in a $\beta_1$ unit increase in the predicted $Y$. It is estimated that a 1 unit increase in $X$ results in a $\beta_1$ unit increase in $Y$.
    - Example: A slope of $6.708$ means a 1-hour increase in study time predicts an average score increase of $6.708$ points.
 2. **Intercept ($\hat{\beta}_0$)**, a constant:
    - Represents the predicted $Y$ when $X = 0$.
+   - The predicted response that corresponds to $X = 0$. It is estimated that when $X = 0$, $Y$ will be $\beta_0$.
    - Example: An intercept of $40.993$ means a predicted score of $40.993$ when no study time is recorded.
 
+### Extrapolation
+- Predictions are only valid for $X$ values within the range used to build the model.
+- **Extrapolation**: Predicting values of $Y$ for $X$ outside the observed data range. Use cautiously, as extrapolated predictions may not reliably represent real-world behavior and clearly communicate that the results are extrapolated.
 
-Main uses of regression
-Prediction 
-Interpretation:
-b1  (coefficient of x) = slope = rise / run = Dy / Dx
-b0 (constant) = y-intercept
-Slope interpretation: a 1 unit increase in x results in a b1 unit increase in the predicted y, or it is estimated that a 1 unit increase in x results in a b1 unit increase in y.
-y-intercept interpretation: the predicted response that corresponds to x = 0, or it is estimated that when x = 0, y will be b0.
+### Assumptions for Linear Regression
+1. **Normality**, conditional on $X$:
+   - The response variable is normally distributed for each value of $X$.
+2. **Linearity**:
+   - The relationship between the means of $Y$ for each value of $X$ is linear. The mean of the normal distributions follow a linear pattern.
+3. **Equal Standard Deviation**:
+   - Variance of residuals is constant for all $X$.
+   - Estimate: $\hat{\sigma} = \sqrt{\frac{\sum_{i=1}^n \text{residuals}_i^2}{n - 2}} = \text{RMSE}$.
+4. **Independence**:
+   - Observations are independent of each other.
 
-Extrapolation
-Predictions are only valid for values of x inside the domain of x that were used to build the model.
-Use extrapolation with care and communicate that the data are the result of extrapolation.
-
-
-Assumptions for linear regression
-Normality – conditional on x
-Linearity – mean of the normal distributions follow a linear pattern (have a linear relationship with x)
-Equal standard deviation - $\hat{\sigma} = \sqrt{\frac{\sum_{i=1}^n residuals_i^2}{n - 2}} = \text{RMSE}$
-Independence
-
-Some notation for the regression of Y on X
-m{Y|X} = b0 + b1X -> the mean of Y as a function of X or for a specific value of x, the mean of Y when X = Xi
-s{Y|X} = s, for all X (equal standard deviation assumption -> the standard deviation of Y as a function of X
+### Notation
+- $m_{Y|X} = b_0 + b_1X$: Mean of $Y$ as a function of $X$ or for a specific value of $X$.
+- $s_{Y|X} = s$: Standard deviation of $Y$ as a function of $X$, assuming equal standard deviation across $X$ values.
 
 ::: {#R-hand-calculated layout-ncol=2}
 ![Pearson's R pg1](images/notes_8_1_pearsonsRbyhand_1.png)  
 ![Pearson's R pg2](images/notes_8_2_pearsonsRbyhand_2.png)
 :::
-*Figure 1: Pearson's R (hand-calculated).*  
+*Figure 1: Hand-calculated Pearson's $r$.*  
 
-Pearson’s R and 6-step hypothesis test 
-Hypotheses (testing rho, the population correlation coefficient):
-H0: 𝜌 = 0
-HA: 𝜌 ≠ 0
-Critical value (from a t-distribution):
-±t0.975, 13-2 = ±2.201
-As before:
-SAS – quantile("t", 0.975, 13-2); R – qt(0.975, 11)
-Test statistic - transform the sample linear correlation coefficient to something with a t-distribution by this:
-(𝑟√(𝑛 −2))/√(1 −𝑟^2 )~𝑡_(𝑛−2)	t =(.8217√(13 −2))/√(1 −〖.8217〗^2 ) = 4.71818
+## Pearson’s $r$ and 6-Step Hypothesis Test
+
+### 1. Hypotheses (Testing $\rho$, the Population Correlation Coefficient)
+- $H_0$: $\rho = 0$ (No linear correlation exists in the population)
+- $H_A$: $\rho \neq 0$ (A linear correlation exists in the population)
+
+### 2. Critical Value (From a $t$-Distribution)
+- $\pm t_{0.975, 13-2} = \pm 2.201$
+
+#### Computing the Critical Value:
+- In SAS: `quantile("t", 0.975, 13-2)`
+- In R: `qt(0.975, 11)`
+
+### 3. Test Statistic
+The sample linear correlation coefficient $r$ is transformed into a $t$-distribution using the formula:
+$$
+t = \frac{r\sqrt{n - 2}}{\sqrt{1 - r^2}} \sim t_{n-2}
+$$
+#### Substituting Values:
+$$
+t = \frac{0.8217 \cdot \sqrt{13 - 2}}{\sqrt{1 - (0.8217)^2}} = 4.71818
+$$
+
+### Compute $r$ in Statistical Software
+
+#### In SAS:
+```{sas eval=FALSE}
+proc corr data = Studytime;
+run;
 To get r:
 in SAS:
 proc corr data = Studytime;
 run;
-in R:
+```
+
+#### In R:
+```{r eval=FALSE}
 cor.test(StudyTime$StudyHours,StudyTime$ExamScore)
-p-value = 0.0006
+```
 
 ::: {#R-from-code layout-ncol=2}
 ![Pearson's R Code Output SAS](images/notes_8_3_pearsonsR_SAS.png) 
 ![Pearson's R Code Output R](images/notes_8_4_pearsonsR_R.png)
 :::
-*Figure 2: Pearson's R output in SAS and R.*  
+*Figure 2: Outputs in SAS and R.*  
 
-Decision: Reject H0 at a = 0.05
-Conclusion: There is strong evidence at the a = 0.05 level of significance to suggest that exam scores are linearly related to study hours (p-value = 0.0006 from a test of linear correlation?).
-(Since it’s significant, it makes sense to interpret R2). It is estimated that R2 = 67.52% of the variation in the exam score is explained by its relationship with study hours
-Because the students weren’t randomly assigned study hours, we cannot establish causation, only association. Additionally, because we do not know how the data were selected, we cannot generalize the result beyond the subjects in this study.
+### 4. Find the $p$-value
+- $p-\text{value} = 0.0006$ 
+
+### 5. Decision
+- At $\alpha = 0.05$, reject $H_0$ because $p = 0.0006 < 0.05$.
+
+### 6. Conclusion
+- **Interpretation**: At the $\alpha = 0.05$ significance level, the test provides strong evidence that exam scores are linearly correlated with study hours (p-value = 0.0006).
+- (Since it’s significant, it makes sense to interpret $R^2$).
+- It is estimated that $R^2 = 67.52\%$ of the variation in the exam score is explained by its relationship with study hours
+- **Scope**:Because the students weren’t randomly assigned study hours, we cannot establish causation, only association. Additionally, because we do not know how the data were selected, we cannot generalize the result beyond the subjects in this study.
 
 
 ![Least Squares Regression Line 1](images/notes_8_5_handCalculatedParameterEstimates.png)  
