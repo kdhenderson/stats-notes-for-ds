@@ -26,6 +26,6 @@ book:
     - chapter06.qmd
     - chapter07.qmd
     - chapter08.qmd
-    #- chapter09.qmd
+    - chapter09.qmd
     #- chapter10.qmd
     

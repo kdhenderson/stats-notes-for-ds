@@ -247,8 +247,7 @@ cor.test(StudyTime$StudyHours,StudyTime$ExamScore)
 
 ![Least Squares Regression Line 1](images/notes_8_5_handCalculatedParameterEstimates.png)  
 
-```{sas eval=False}
-
+```{sas eval=FALSE}
 proc reg data = StudyTime;
 * response = explanatory;
 model ExamScore = StudyTime;
@@ -265,8 +264,7 @@ run;
 
 ![Least Squares Regression Line 2](images/notes_8_6_parameterEstimateTable_SAS.png) 
 
-```{r}
-
+```{r eval=FALSE}
 #lm - linear model(response ~ explanatory, data)
 fit = lm(ExamScore~StudyHours, data= StudyTime)
 summary(fit)

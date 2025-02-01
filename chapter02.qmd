@@ -3,7 +3,7 @@ title: "Inference Using T-Distributions"
 ---
 
 ## Central Limit Theorem (CLT)
-If we pull a large enough sample from a normal (or approximately normal) distribution, the sampling distribution of the sample mean will also be normal. The mean of the sampling distribution of the sample means is the same as the mean of the population from which those sample means were taken. This is why we can use $ \bar{X} $ to infer about $ \mu $.
+If we pull a large enough sample from a normal (or approximately normal) distribution, the sampling distribution of the sample mean will also be normal. The mean of the sampling distribution of the sample means is the same as the mean of the population from which those sample means were taken. This is why we can use $\bar{X}$ to infer about $\mu$.
 
 
 ## Interpretation of a confidence interval

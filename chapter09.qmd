@@ -1,0 +1,110 @@
+---
+title: "Quantifying Uncertainty: Confidence, Prediction and Calibration Intervals"
+---
+
+## Objectives
+- Calculate and interpret confidence intervals for the slope of a regression line.
+- Predict future values using the regression model.
+- Obtain and interpret confidence intervals for predicted responses.
+- Use a regression model to calibrate one measurement against another.
+
+
+## Resources
+- [Rossman Chance Applets: Regression Shuffle](https://www.rossmanchance.com/applets/2021/regshuffle/regshuffle.htm)
+
+
+## Statistical Relationships
+- **Key Insight:** The value of the explanatory variable determines the mean response value.
+- Variability exists around the response variable for a given explanatory value.
+- Slope and intercept have unique distributions and standard errors.
+
+## Formal Assumptions
+- **Linearity:** A linear relationship exists between the means of the response variable distributions and the explanatory variable.
+- **Independence:** Observations are independent.
+- **Normality:** The response variable $y$ is normally distributed for each fixed $x$ value. 
+  - Errors are in $y$, not $x$.  
+  - Normality is not assumed for $y$ overall but for $y$ at a fixed $x$)
+- **Constant Variance:** Variability in $y$ distributions is constant across all values of $x$.
+
+
+---
+
+## Regression Model
+- **Theoretical model:**
+  $y = \beta_0 + \beta_1 x + \varepsilon$
+Y = mean + residual (the error that takes you to the observation)
+e is normally distributed with mean zero and constant variance s2.
+- **Regression line (estimated values):**
+  $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$  
+- **Residuals:**
+  $e_i = y_i - \bar{y} = y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i)$
+)
+- **Distribution of residuals:**
+  $\varepsilon \sim N(0, \sigma^2)$  
+  Residuals are normally distributed around zero, with an estimated standard deviation equal to the standard deviation of each $y$ distribution.
+
+## Using Residual Plots To Check Regression Validity
+- Residuals can be used to check if assumption were met.
+- View in a residual plot (horizontal axis is x variable or fitted values, vertical axis is the residuals)
+- Look for random distribution without pattern or outliers, mean value of zero, uniform variability along horizontal axis.
+- Why plot the residuals? It’s easier to see departures from a horizontal rather than sloped line.
+- If the residuals are randomly distributed with constant variance (narrower = stronger relationship, wider = weaker) and a Q-Q plot of the residuals show normality, the data are okay for inference.
+
+## Inferential Tools for a Predicted Response
+- With a regression equation we can calculate a predicted response value using an explanatory value.
+- There is error associated with this prediction. because the model is based on a sample and estimated parameters.
+- There are two interpretations for confidence intervals. Do we want a population mean for all values of y for a specific value of x (confidence interval), or do we want a specific y value for an x value (prediction interval).
+
+## Predicting for the Mean Response (Confidence Intervals)
+  - **Mean of Y, given $X_0$:**
+    $\hat{Y} \{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
+  - **Standard error of the mean at $X = X_0$:**
+    $SE(\hat{Y} \{Y | X_0\}) = \hat{\sigma} \sqrt{\frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n-1) S_X^2}}$
+  - **Confidence interval:**  
+  Confidence interval will be wider for values that are far from the mean (accounted for here I think):
+    $CI = X_0 \pm t_{\alpha/2, n-2} \cdot SE(\hat{Y} \{Y | X_0\})$
+
+## Predicting an Individual Response (Prediction Intervals)
+  - **Individual value of Y, given $X_0$:**
+    $Pred\{Y | X_0\} = \hat{Y} \{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
+  - **Prediction error:**  random sampling error (individual) + estimation error
+    $SE(\hat{Y} \{Y | X_0\}) = \hat{\sigma} \sqrt{1 + \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n-1) S_X^2}}$
+Interval is wider when predicting from an individual (more variability). It is a little narrower closer to the mean of x.
+  $CI = X_0 \pm t_{\alpha/2, n-2} \cdot SE(\hat{Y} \{Y | X_0\})$
+
+![Residual Analysis](images/notes_9_1.png){width=5in fig-align="left"}  
+## Visualization and Outputs
+
+### Example Data and Model in SAS:
+```{sas eval=FALSE}
+proc glm data=ToyExample;
+  model score = level / solution;
+run;
+```
+
+![SAS Output](images/notes_9_2_sasOutput.png){width=5in fig-align="left"} 
+
+### Example Data and Model in R:
+```{r eval=FALSE}
+fit <- lm(score ~ level, data = anovaData)
+anova(fit)
+summary(fit)
+
+```
+
+![R Output - ANOVA](images/notes_9_3_ROutput1.png){width=5in fig-align="left"}
+![R Output - Summary](images/notes_9_4_ROutput2.png){width=5in fig-align="left"}
+![Confidence and Prediction Intervals](images/notes_9_5.png) {width=5in fig-align="left"}
+![Calibration Interval (Mean)](images/notes_9_6.png) {width=5in fig-align="left"}
+![](images/notes_9_7.png){width=5in fig-align="left"}
+![Calibration Interval (Individual)](images/notes_9_8.png){width=5in fig-align="left"}
+
+
+## Regression for Calibration (inverse prediction)
+- Rather than predicting $y$ for a value of $x$, calibration is estimating the value of $x$ (easy to measure) that results in a desired value of $y$ ($y = y_0$).
+- **Prediction:**
+  $Pred\{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
+- **Calibration:**
+  $Pred\{X | Y_0\} = \hat{X} = \frac{y_0 - \hat{\beta}_0}{\hat{\beta}_1}$
+- **Standard error (SE) for calibration intervals:**
+  $SE(\hat{X}) = \frac{SE(\hat{Y} \{Y | X_0\})}{|\hat{\beta}_1|}$
