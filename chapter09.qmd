@@ -34,43 +34,55 @@ title: "Quantifying Uncertainty: Confidence, Prediction and Calibration Interval
   $y = \beta_0 + \beta_1 x + \varepsilon$
 Y = mean + residual (the error that takes you to the observation)
 e is normally distributed with mean zero and constant variance s2.
-- **Regression line (estimated values):**
-  $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$  
-- **Residuals:**
-  $e_i = y_i - \bar{y} = y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i)$
+
+
+## Regression Model
+- **Theoretical Model:**
+  $$
+  y = \beta_0 + \beta_1 x + \varepsilon
+  $$
+  - $y = \text{mean} \pm \text{residual}$, where the residual is the error between the mean and the observation.
+  - Residuals ($\varepsilon$) are normally distributed with mean zero and constant variance ($\sigma^2$).
+- **Regression Line (Estimated Values):** $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$
+- **Residuals:** $e_i = y_i - \bar{y} = y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i)$
 )
-- **Distribution of residuals:**
-  $\varepsilon \sim N(0, \sigma^2)$  
-  Residuals are normally distributed around zero, with an estimated standard deviation equal to the standard deviation of each $y$ distribution.
+- **Distribution of Residuals:** $\varepsilon \sim N(0, \sigma^2)$  
+  - Residuals are normally distributed around zero, with an estimated standard deviation equal to the standard deviation of each $y$ distribution.
 
-## Using Residual Plots To Check Regression Validity
-- Residuals can be used to check if assumption were met.
-- View in a residual plot (horizontal axis is x variable or fitted values, vertical axis is the residuals)
-- Look for random distribution without pattern or outliers, mean value of zero, uniform variability along horizontal axis.
-- Why plot the residuals? It’s easier to see departures from a horizontal rather than sloped line.
-- If the residuals are randomly distributed with constant variance (narrower = stronger relationship, wider = weaker) and a Q-Q plot of the residuals show normality, the data are okay for inference.
 
-## Inferential Tools for a Predicted Response
-- With a regression equation we can calculate a predicted response value using an explanatory value.
+## Using Residual Plots to Check Regression Validity
+- **Key Points:**
+  - Residual plots help validate regression assumptions.
+  - Random residual patterns suggest a valid model.
+    - Look for random distribution without pattern or outliers, mean value of zero, uniform variability along horizontal axis.
+    - Why plot the residuals? It’s easier to see departures from a horizontal rather than sloped line.
+  - A Q-Q plot of residuals confirms normality.
+  - If the residuals are randomly distributed with constant variance (narrower = stronger relationship, wider = weaker) and a Q-Q plot of the residuals show normality, the data are okay for inference.
+
+
+## Inferential Tools for Predicted Responses
+- Regression models predict response values for given explanatory values, incorporating prediction error.
 - There is error associated with this prediction. because the model is based on a sample and estimated parameters.
 - There are two interpretations for confidence intervals. Do we want a population mean for all values of y for a specific value of x (confidence interval), or do we want a specific y value for an x value (prediction interval).
 
-## Predicting for the Mean Response (Confidence Intervals)
+### Confidence Intervals for the Mean Response
   - **Mean of Y, given $X_0$:**
     $\hat{Y} \{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
   - **Standard error of the mean at $X = X_0$:**
     $SE(\hat{Y} \{Y | X_0\}) = \hat{\sigma} \sqrt{\frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n-1) S_X^2}}$
   - **Confidence interval:**  
-  Confidence interval will be wider for values that are far from the mean (accounted for here I think):
+    - Confidence interval will be wider for values that are far from the mean (accounted for here I think):
     $CI = X_0 \pm t_{\alpha/2, n-2} \cdot SE(\hat{Y} \{Y | X_0\})$
 
-## Predicting an Individual Response (Prediction Intervals)
-  - **Individual value of Y, given $X_0$:**
-    $Pred\{Y | X_0\} = \hat{Y} \{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
-  - **Prediction error:**  random sampling error (individual) + estimation error
-    $SE(\hat{Y} \{Y | X_0\}) = \hat{\sigma} \sqrt{1 + \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n-1) S_X^2}}$
-Interval is wider when predicting from an individual (more variability). It is a little narrower closer to the mean of x.
+### Prediction Intervals for Individual Responses
+- **Individual value of Y, given $X_0$:**
+  $Pred\{Y | X_0\} = \hat{Y} \{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
+- **Prediction error:**  random sampling error (individual) + estimation error
+  $SE(\hat{Y} \{Y | X_0\}) = \hat{\sigma} \sqrt{1 + \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n-1) S_X^2}}$
+- **Prediction Interval:**
+  - Interval is wider when predicting from an individual (more variability). It is a little narrower closer to the mean of x.
   $CI = X_0 \pm t_{\alpha/2, n-2} \cdot SE(\hat{Y} \{Y | X_0\})$
+
 
 ![Residual Analysis](images/notes_9_1.png){width=5in fig-align="left"}  
 ## Visualization and Outputs
