@@ -27,22 +27,13 @@ title: "Quantifying Uncertainty: Confidence, Prediction and Calibration Interval
 - **Constant Variance:** Variability in $y$ distributions is constant across all values of $x$.
 
 
----
-
-## Regression Model
-- **Theoretical model:**
-  $y = \beta_0 + \beta_1 x + \varepsilon$
-Y = mean + residual (the error that takes you to the observation)
-e is normally distributed with mean zero and constant variance s2.
-
-
 ## Regression Model
 - **Theoretical Model:**
   $$
   y = \beta_0 + \beta_1 x + \varepsilon
   $$
-  - $y = \text{mean} \pm \text{residual}$, where the residual is the error between the mean and the observation.
-  - Residuals ($\varepsilon$) are normally distributed with mean zero and constant variance ($\sigma^2$).
+  - $y = \text{mean} \pm \text{residual}$, where the residual represents the error between the mean and the observed value.
+  - Residuals ($\varepsilon$) follow a normal distribution with mean zero and constant variance ($\sigma^2$).
 - **Regression Line (Estimated Values):** $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$
 - **Residuals:** $e_i = y_i - \bar{y} = y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i)$
 )
@@ -58,6 +49,32 @@ e is normally distributed with mean zero and constant variance s2.
     - Why plot the residuals? It’s easier to see departures from a horizontal rather than sloped line.
   - A Q-Q plot of residuals confirms normality.
   - If the residuals are randomly distributed with constant variance (narrower = stronger relationship, wider = weaker) and a Q-Q plot of the residuals show normality, the data are okay for inference.
+
+![Residual Analysis](images/notes_9_1.png){width=5in fig-align="left"}  
+
+## Visualization and Outputs
+
+### Example Data and Model in SAS:
+
+```{sas eval=FALSE}
+proc glm data=ToyExample;
+  model score = level / solution;
+run;
+```
+
+![SAS Output](images/notes_9_2_sasOutput.png){width=5in fig-align="left"} 
+
+### Example Data and Model in R:
+
+```{r eval=FALSE}
+fit <- lm(score ~ level, data = anovaData)
+anova(fit)
+summary(fit)
+
+```
+
+![R Output - ANOVA](images/notes_9_3_ROutput1.png){width=5in fig-align="left"}
+![R Output - Summary](images/notes_9_4_ROutput2.png){width=5in fig-align="left"}
 
 
 ## Inferential Tools for Predicted Responses
@@ -83,40 +100,17 @@ e is normally distributed with mean zero and constant variance s2.
   - Interval is wider when predicting from an individual (more variability). It is a little narrower closer to the mean of x.
   $CI = X_0 \pm t_{\alpha/2, n-2} \cdot SE(\hat{Y} \{Y | X_0\})$
 
-
-![Residual Analysis](images/notes_9_1.png){width=5in fig-align="left"}  
-## Visualization and Outputs
-
-### Example Data and Model in SAS:
-```{sas eval=FALSE}
-proc glm data=ToyExample;
-  model score = level / solution;
-run;
-```
-
-![SAS Output](images/notes_9_2_sasOutput.png){width=5in fig-align="left"} 
-
-### Example Data and Model in R:
-```{r eval=FALSE}
-fit <- lm(score ~ level, data = anovaData)
-anova(fit)
-summary(fit)
-
-```
-
-![R Output - ANOVA](images/notes_9_3_ROutput1.png){width=5in fig-align="left"}
-![R Output - Summary](images/notes_9_4_ROutput2.png){width=5in fig-align="left"}
 ![Confidence and Prediction Intervals](images/notes_9_5.png) {width=5in fig-align="left"}
+
+
+## Regression for Calibration (Inverse Prediction)
+
+- **Objective:** Rather than predicting $y$ for a value of $x$, calibration is estimating the value of $x$ (easy to measure) that results in a desired value of $y$ ($y = y_0$).
+- **Prediction Equation:** $Pred\{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
+- **Calibration Equation:** $Pred\{X | Y_0\} = \hat{X} = \frac{y_0 - \hat{\beta}_0}{\hat{\beta}_1}$
+- **Standard Error for Calibration Intervals:** $SE(\hat{X}) = \frac{SE(\hat{Y} \{Y | X_0\})}{|\hat{\beta}_1|}$  
+
 ![Calibration Interval (Mean)](images/notes_9_6.png) {width=5in fig-align="left"}
-![](images/notes_9_7.png){width=5in fig-align="left"}
-![Calibration Interval (Individual)](images/notes_9_8.png){width=5in fig-align="left"}
+![](images/notes_9_7.png) {width=5in fig-align="left"}
 
-
-## Regression for Calibration (inverse prediction)
-- Rather than predicting $y$ for a value of $x$, calibration is estimating the value of $x$ (easy to measure) that results in a desired value of $y$ ($y = y_0$).
-- **Prediction:**
-  $Pred\{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
-- **Calibration:**
-  $Pred\{X | Y_0\} = \hat{X} = \frac{y_0 - \hat{\beta}_0}{\hat{\beta}_1}$
-- **Standard error (SE) for calibration intervals:**
-  $SE(\hat{X}) = \frac{SE(\hat{Y} \{Y | X_0\})}{|\hat{\beta}_1|}$
+![Calibration Interval (Individual)](images/notes_9_8.png) {width=5in fig-align="left"}
