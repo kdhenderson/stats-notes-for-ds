@@ -1,0 +1,241 @@
+---
+title: "Regression Diagnostics and Model Refinement"
+---
+
+## Objectives
+Calculate and interpret residuals, standardized residuals, and studentized residuals
+Use residuals to check regression assumptions
+Apply necessary remedies when assumptions are violated
+Understand robustness of assumptions (i.e. what can you get away with?)
+
+
+## Robustness of Regression Assumptions
+
+### Linearity:
+- Parameter estimates will be misleading if a straight line is not an adequate model or only fits part of the data. Predictions will be biased, and CI will not give appropriate degree of uncertainty.
+- Other terms (quadratic, cubic) terms can be added to make the model fit better.
+
+### Normality:
+- Transformations to correct for normality usually correct for constant variance also.
+- Estimates of coefficients and standard error are robust to non-normality, except when there are lots of outliers and small sample sizes.
+- Confidence intervals are only affected by outliers (long tails).
+- Prediction intervals are affected by non-normality, because they are based on normal distributions.
+
+### Constant variance: for every value of x, the spread of y is the same.
+- Least squares estimates will be unbiased with slight violation, but for the values of x with large variability in y, the standard errors won’t accurately reflect the uncertainty in the estimate.
+- Large violations should be corrected by transformation.
+
+### Independence
+- Parameter estimates are not affected by violations of independence.
+- However, standard errors are. Smaller standard errors make it easier to reject.
+- Serial and cluster effects require different models.
+
+### How much can we deviate from assumptions and still get accurate estimates?
+- Small violations are okay.
+- Transformations can often be used.
+- Only with departures from linearity or departures from normality due to outliers are other methods required.
+
+
+## Influential and Outlying Observations
+- Influential obs -> does adding one point change the slope
+- Leverage statistic reflects how far a point is from x-bar, farther away -> more leverage
+- Definitions:
+  - Leverage is a function of the distance from xi to x-bar in units of standard deviations.
+  - Leverage is a function of the proportion of the total sum of squares of the explanatory variable contributed by the ith case.
+- Outliers with low leverage and influence don’t change the estimates much.
+- Outliers with high leverage but low influence (consistent with the trend of but removed from the rest of the data) don’t change the correlation or standard error or even the parameter estimates much. 
+- Outliers with high leverage and influence can lead to misleading results. The regression line will be pulled to those points resulting in different parameter estimates.
+- How do we detect them, how far is too far?
+
+
+## Leverage statistic, $h_{ii}$
+- $h_{ii}$ measures the role of $x$ values in determining the predicted value (how far the $x$ values are from the $\bar{x}$).
+- **High leverage:** when $h_{ii} > \frac{2p}{n}$ (where $p$ is the number of parameters).
+- $h_{ii} = \frac{1}{n} + \frac{(X_i - \bar{X})^2}{\sum_{j=1}^{n} (X_j - \bar{X})^2}$  
+(deviations of each $x$ observation from $\bar{x}$, accounting for the variability in $x$ overall).
+- **OR**
+  $$
+  h_{ii} = \frac{1}{n-1} \left[ \frac{(X_i - \bar{X})}{s_x} \right]^2 + \frac{1}{n}
+  $$
+
+
+## Types of Residuals
+- **Standardized:** $e_i / \text{RMSE}$
+- **Studentized:** $e_i / \sqrt{\text{MSE} \cdot (1 - h_{ii})}$
+- **Studentized-deleted (r-student):**
+  - Remove a value and calculate the regression model and studentized residual without it. If the residual is very large → influential point.
+  - Same equation as above except, instead of sigma-hat, the standard deviation is calculated without the point in question.
+  - $\text{RSTUDENT} = \frac{\text{res}_i}{s_i \sqrt{1 - h_i}}$
+- **Why different types?** Methods to normalize the variance so the residuals are more comparable.
+
+
+## Leave-One-Out Statistic: PRESS (predicted residual sum of squares)
+$$\text{PRESS}_p = \sum_{i=1}^n \left(Y_i - \hat{Y}_{i(i)}\right)^2 = \sum e_{i(i)}^2$$
+- Smaller is better.
+
+
+## Leave-One-Out Statistic ($\hat{Y}_{j(i)}$): Cook’s Distance
+- Blend of both residuals and leverage:
+$$D_i = \sum_{i=1}^n \frac{\left(\hat{Y}_{j(i)} - \hat{Y}_j\right)^2}{p \cdot \text{MSE}} = \frac{1}{p} (\text{studres}_i)^2 \left[\frac{h_i}{1 - h_i}\right]$$
+- $p =$ number of parameters.
+
+
+## Durbin-Watson Test
+- Detects departures from independence:
+$$d = \frac{\sum_{i=1}^n (e_i - e_{i-1})^2}{\sum_{i=1}^n e_i^2}$$
+- Distributed symmetrically about 2; $\sim 0$ positively correlated residuals, $\sim 4$ negatively correlated residuals.
+- Available in R and SAS.
+
+
+## Recap
+
+| **Name**                | **Expression**                                       | **Use**                        |
+|-------------------------|-----------------------------------------------------|--------------------------------|
+| **Residual**            | $e_i = y_i - \hat{y}_i$                              | Residual plots                |
+| **Standardized residual** | $r_i = \frac{e_i}{s \sqrt{1 - h_{ii}}}$            | Identify outliers             |
+| **Studentized residual** | $t_i = \frac{e_i}{s_{(i)} \sqrt{1 - h_{ii}}}$       | Test outlying $Y$’s           |
+| **Deleted residual**     | $e_{i(i)} = y_i - \hat{y}_{i(i)} = \frac{e_i}{1 - h_{ii}}$ | Calculate PRESS               |
+
+- **PRESS:** Models with smaller values are better fitting.
+- **Durbin–Watson test:** Use to detect independence violations.
+
+> Under the assumption that the residuals are normally distributed, at the $\alpha = 0.05$ level of significance, we would expect 5% of studentized residuals to be greater than 2 or less than -2.
+
+![Residual Panel](images/notes_10_1_residual_panel.png)
+
+
+## Graphical Assessment of Scatterplots
+- Means? linear; SD? about equal; looks great!
+- Means? curved; SD? about equal; transform X
+- Means? curved; SD? increasing; transform Y
+- Skewness – can model mean, but confidence and prediction intervals will be compromised.
+- Means? linear; SD? increasing; use weighted regression
+
+![Regression Patterns](images/notes_10_2_regression_patterns.png){width=5in fig-align="left"} 
+
+
+## Transformation Recommendations
+- 1st: Log
+- 2nd: Square Root
+- 3rd: Other
+
+
+## Interpretation
+- Must be worded for audience and what variable(s) was transformed
+- Back-transform
+- Other interpretation
+
+
+## Remedies for Violations
+
+### Nonlinearity: 
+- More complicated models
+- Transformation on X
+- Add another variable (might help nonconstant variance too)
+
+### Nonconstant variance:
+- Transformation on Y
+- Weighted least squares – down weight observations with larger variance, so they don’t influence the regression model as much as observations closer to the line
+
+### Correlated errors: In residual plots, you may see small values follow small values, and large follow large.
+- Serial effects within data -> time series or spatial models
+
+### Outliers
+- Use robust regression procedures
+- Check for data entry or other errors (only delete in this situation)
+
+### Non-normality
+- Fix last, usually fixed with the above
+- Transform the data
+
+![Residual Patterns](images/notes_10_3_regression_patterns.png){width=5in fig-align="left"} 
+
+
+## Log Transformation: They Work & Are Easy to Interpret
+
+- **Log on response (log-linear):**  
+  $\log\hat{Y}_i = \beta_0 + \beta_1 X_i$
+  - Mean of the response is log-linearly related to the explanatory variable.
+  - $\text{Median}\{Y|X\} = \exp(\beta_0) \exp(\beta_1 X)$
+  - One unit increase in $X$ → multiplicative change in $\exp(\beta_1)$ in the median of $Y|X$.
+  - $\text{Median}\{Y|(X + 1)\} / \text{Median}\{Y|X\} = \exp(\beta_1)$
+- **Log on explanatory variable (linear-log):**  
+  $\hat{Y}_i = \beta_0 + \beta_1 \log X_i$
+  - Depends on log base (e.g. $2$ → doubling, $10$ → ten-fold).
+- **Both logged (log-log):**  
+  $\log\hat{Y}_i = \beta_0 + \beta_1 \log X_i$
+  - **Complicated** :/
+  - Doubling (or tenfold increase) of $X$ is associated with a change of $2^{\beta_1}$ (or $10^{\beta_1}$) in the median of $Y$.
+
+
+## Interpretations of Log Transformation Varieties
+
+- **Log-linear model:**  
+  A one unit increase in $X$ is associated with a multiplicative change of $e^{\beta_1}$ in the median of $Y|X$.
+- **Linear-log model:**  
+  A doubling of $X$ is associated with a $\beta_1 \log(2)$ unit change in the mean of $Y|X$.
+- **Log-log model:**  
+  A doubling of $X$ is associated with a $2^{\beta_1}$ multiplicative change in the median of $Y|X$.
+- **Remember:** Logging $Y$ → median.
+
+![Log-Linear Transformation](images/notes_10_4_loglinear.png)
+![Linear-Log Transformation](images/notes_10_5_linearlog.png)
+![Log-Log Transformation](images/notes_10_6_loglog.png)
+
+
+## Formal Test for Lack of Fit
+- Do this when you have different values of Y for replicated observations of X. 
+- F-test for lack of fit has the usual assumptions: normality of (Y|X), independence of (X, Y) pairs, and constant variance of Y across all values of X.
+- Procedure:
+  - Fit a linear regression and obtain SSresLR (linear fit).
+  - Fit an ANOVA and use replicated X values as the treatment variable to obtain SSresSM (separate means model).
+  - Null hypothesis: linear model fits. Alternative: variability cannot be explained by the model.
+  - F = [(SSresLR - SSresSM) / (dfLR - dfSM)] / MSESM
+  - (In example: Reject -> Cubic fit, y’ = b0 + b1x + b2x2 + b3x3)
+  - Guidance:
+    - Even if the model fits well, it may not be (probably isn’t) the best model.
+    - Principle of parsimony: Find the simplest model (i.e. the model with the smallest number of predictors) that explains the most variation.
+
+
+## Strategy of the Lack of Fit Test
+- ANOVA compares the equal means model to a linear regression model.
+- Lack of fit test – when it fails to reject, the model is comparable with the best fitting model.
+
+
+### Example in SAS:
+
+```{sas eval=FALSE}
+/* linear regression model */
+proc glm data = IronCor;
+model Corrosion = IronContent / solution;
+run;
+
+/* separate means model (7 groups) */
+proc glm data = IronCor;
+class IronContent;
+model Corrosion = IronContent;
+run;
+
+data critval;
+criticalValue = finv(0.95, 5, 6);
+run;
+proc print data = critval;
+run;
+
+data pval;
+pValue = 1-probf(9.28, 5, 6);
+run;
+proc print data = pval;
+run;
+
+```
+
+![](images/notes_10_7_sas1.png){width=5in fig-align="left"}
+![](images/notes_10_8_sas2.png){width=5in fig-align="left"}
+![](images/notes_10_9_extrasumofsquares.png){width=5in fig-align="left"}
+![](images/notes_10_10_sas3.png){width=5in fig-align="left"}
+![](images/notes_10_11_sas4.png){width=5in fig-align="left"}
+
+- H0: Linear regression model has good fit. (No lack of fit.)
+- HA: The SMM fits better. (LRM is lacking fit.)
+- There is strong evidence to suggest the linear regression model has a lack of fit with respect to the separate means model. (It is not comparable with Messi.)

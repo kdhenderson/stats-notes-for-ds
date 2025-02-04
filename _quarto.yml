@@ -27,5 +27,6 @@ book:
     - chapter07.qmd
     - chapter08.qmd
     - chapter09.qmd
-    #- chapter10.qmd
+    - chapter10.qmd
+    #- chapter11.qmd
     
