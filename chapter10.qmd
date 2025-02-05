@@ -3,38 +3,40 @@ title: "Regression Diagnostics and Model Refinement"
 ---
 
 ## Objectives
-Calculate and interpret residuals, standardized residuals, and studentized residuals
-Use residuals to check regression assumptions
-Apply necessary remedies when assumptions are violated
-Understand robustness of assumptions (i.e. what can you get away with?)
+- Calculate and interpret residuals, standardized residuals, and studentized residuals.
+- Use residuals to check regression assumptions.
+- Apply necessary remedies when assumptions are violated.
+- Understand the robustness of assumptions (i.e. what can you get away with?).
 
 
 ## Robustness of Regression Assumptions
 
-### Linearity:
-- Parameter estimates will be misleading if a straight line is not an adequate model or only fits part of the data. Predictions will be biased, and CI will not give appropriate degree of uncertainty.
-- Other terms (quadratic, cubic) terms can be added to make the model fit better.
+### Linearity
+- Parameter estimates will be misleading if a straight-line model is inadequate or fits only part of the data. Predictions will be biased, and confidence intervals (CI) will not appropriately reflect uncertainty.
+- **Remedy:** Consider adding quadratic or cubic terms to improve model fit.
 
-### Normality:
-- Transformations to correct for normality usually correct for constant variance also.
-- Estimates of coefficients and standard error are robust to non-normality, except when there are lots of outliers and small sample sizes.
-- Confidence intervals are only affected by outliers (long tails).
-- Prediction intervals are affected by non-normality, because they are based on normal distributions.
+### Normality
+- Transformations that correct for normality often address constant variance as well.
+- **Effects of non-normality:**
+  - **Coefficient estimates & standard errors:** Robust, except with many outliers and small sample sizes.
+  - **Confidence intervals:** Affected primarily by outliers (long tails).
+  - **Prediction intervals:** Sensitive to non-normality due to their reliance on normal distributions.
 
-### Constant variance: for every value of x, the spread of y is the same.
-- Least squares estimates will be unbiased with slight violation, but for the values of x with large variability in y, the standard errors won’t accurately reflect the uncertainty in the estimate.
-- Large violations should be corrected by transformation.
+### Constant Variance (Homoscedasticity): for every value of x, the spread of y is the same.
+- Least squares estimates remain unbiased with slight violations. However, large violations cause standard errors to misrepresent uncertainty.
+- **Remedy:** Large violations should be corrected using a transformation.
 
 ### Independence
-- Parameter estimates are not affected by violations of independence.
-- However, standard errors are. Smaller standard errors make it easier to reject.
-- Serial and cluster effects require different models.
+- **Parameter estimates:** Not affected by violations.
+- **Standard errors:** Affected significantly. Smaller standard errors make hypothesis testing misleading (make it easier to reject).
+- **Remedy:** Serial and cluster effects require different models.
 
 ### How much can we deviate from assumptions and still get accurate estimates?
-- Small violations are okay.
-- Transformations can often be used.
-- Only with departures from linearity or departures from normality due to outliers are other methods required.
+- Small violations are acceptable.
+- Transformations can often help.
+- Only severe departures from linearity or normality (due to outliers) require alternative methods.
 
+---
 
 ## Influential and Outlying Observations
 - Influential obs -> does adding one point change the slope
@@ -184,17 +186,23 @@ $$d = \frac{\sum_{i=1}^n (e_i - e_{i-1})^2}{\sum_{i=1}^n e_i^2}$$
 
 
 ## Formal Test for Lack of Fit
-- Do this when you have different values of Y for replicated observations of X. 
-- F-test for lack of fit has the usual assumptions: normality of (Y|X), independence of (X, Y) pairs, and constant variance of Y across all values of X.
-- Procedure:
-  - Fit a linear regression and obtain SSresLR (linear fit).
-  - Fit an ANOVA and use replicated X values as the treatment variable to obtain SSresSM (separate means model).
-  - Null hypothesis: linear model fits. Alternative: variability cannot be explained by the model.
-  - F = [(SSresLR - SSresSM) / (dfLR - dfSM)] / MSESM
-  - (In example: Reject -> Cubic fit, y’ = b0 + b1x + b2x2 + b3x3)
-  - Guidance:
-    - Even if the model fits well, it may not be (probably isn’t) the best model.
-    - Principle of parsimony: Find the simplest model (i.e. the model with the smallest number of predictors) that explains the most variation.
+- **Use:** different values of Y for replicated observations of X
+- **F-test for lack of fit** has the usual assumptions:
+  - Normality of $Y|X$,
+  - Independence of $(X, Y)$ pairs,
+  - Constant variance of $Y$ across all values of $X$.
+
+- **Procedure**:
+  1. Fit a linear regression and obtain $SS_{\text{res}_{LR}}$ (linear fit).
+  2. Fit an ANOVA and use replicated $X$ values as the treatment variable to obtain $SS_{\text{res}_{SM}}$ (separate means model).
+  3. **Null hypothesis**: The linear model fits.  
+     **Alternative**: Variability cannot be explained by the model.
+  4. Compute:
+     $F = \frac{(SS_{\text{res}_{LR}} - SS_{\text{res}_{SM}}) / (\text{df}_{LR} - \text{df}_{SM})}{\text{MSE}_{SM}}$
+  5. In the example: Reject $\rightarrow$ Cubic fit, $y' = b_0 + b_1x + b_2x^2 + b_3x^3$.
+- **Guidance**:
+  - Even if the model fits well, it may not be (and probably isn’t) the best model.
+  - **Principle of parsimony**: Find the simplest model (i.e. the model with the smallest number of predictors) that explains the most variation.
 
 
 ## Strategy of the Lack of Fit Test
@@ -236,6 +244,6 @@ run;
 ![](images/notes_10_10_sas3.png){width=5in fig-align="left"}
 ![](images/notes_10_11_sas4.png){width=5in fig-align="left"}
 
-- H0: Linear regression model has good fit. (No lack of fit.)
-- HA: The SMM fits better. (LRM is lacking fit.)
+- $H_0$: Linear regression model has good fit. (No lack of fit.)
+- $H_A$: The SMM fits better. (LRM is lacking fit.)
 - There is strong evidence to suggest the linear regression model has a lack of fit with respect to the separate means model. (It is not comparable with Messi.)
