@@ -39,16 +39,23 @@ title: "Regression Diagnostics and Model Refinement"
 ---
 
 ## Influential and Outlying Observations
-- Influential obs -> does adding one point change the slope
-- Leverage statistic reflects how far a point is from x-bar, farther away -> more leverage
-- Definitions:
-  - Leverage is a function of the distance from xi to x-bar in units of standard deviations.
-  - Leverage is a function of the proportion of the total sum of squares of the explanatory variable contributed by the ith case.
-- Outliers with low leverage and influence don’t change the estimates much.
-- Outliers with high leverage but low influence (consistent with the trend of but removed from the rest of the data) don’t change the correlation or standard error or even the parameter estimates much. 
-- Outliers with high leverage and influence can lead to misleading results. The regression line will be pulled to those points resulting in different parameter estimates.
-- How do we detect them, how far is too far?
 
+### Key Concepts
+
+- **Influential observations:** Does adding one point change the slope?
+- **Leverage:** Reflects how far a point is from $\bar{x}$. Points that are farther have higher leverage.
+  - Function of distance from $x_i$ to $\bar{x}$ in standard deviations.
+  - Function of the proportion of total sum of squares contributed by $x_i$.
+
+### Impact of Outliers
+
+- **Low leverage, low influence:** Minimal effect on estimates.
+- **High leverage, low influence:** Consistent with trend but far from most data. Does not change correlation, standard error, or parameter estimates significantly.
+- **High leverage, high influence:** Can distort results by pulling the regression line toward the outlier resulting in different parameter estimates.
+
+### How do we detect them? How far is too far?
+
+---
 
 ## Leverage statistic, $h_{ii}$
 - $h_{ii}$ measures the role of $x$ values in determining the predicted value (how far the $x$ values are from the $\bar{x}$).
