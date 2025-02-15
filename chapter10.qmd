@@ -55,14 +55,14 @@ title: "Regression Diagnostics and Model Refinement"
 
 ### How do we detect them? How far is too far?
 
----
-
-## Leverage statistic, $h_{ii}$
-- $h_{ii}$ measures the role of $x$ values in determining the predicted value (how far the $x$ values are from the $\bar{x}$).
-- **High leverage:** when $h_{ii} > \frac{2p}{n}$ (where $p$ is the number of parameters).
-- $h_{ii} = \frac{1}{n} + \frac{(X_i - \bar{X})^2}{\sum_{j=1}^{n} (X_j - \bar{X})^2}$  
-(deviations of each $x$ observation from $\bar{x}$, accounting for the variability in $x$ overall).
-- **OR**
+#### **Leverage Statistic, $h_{ii}$**
+- Measures the influence of $x$ values on predictions (how far the $x$ values are from the $\bar{x}$).
+- **High leverage:** When $h_{ii} > \frac{2p}{n}$ (where $p$ is the number of parameters).
+- Calculation:
+  $$
+  h_{ii} = \frac{1}{n} + \frac{(X_i - \bar{X})^2}{\sum_{j=1}^{n} (X_j - \bar{X})^2}
+  $$
+  **or**
   $$
   h_{ii} = \frac{1}{n-1} \left[ \frac{(X_i - \bar{X})}{s_x} \right]^2 + \frac{1}{n}
   $$
@@ -71,12 +71,17 @@ title: "Regression Diagnostics and Model Refinement"
 ## Types of Residuals
 - **Standardized:** $e_i / \text{RMSE}$
 - **Studentized:** $e_i / \sqrt{\text{MSE} \cdot (1 - h_{ii})}$
-- **Studentized-deleted (r-student):**
-  - Remove a value and calculate the regression model and studentized residual without it. If the residual is very large → influential point.
-  - Same equation as above except, instead of sigma-hat, the standard deviation is calculated without the point in question.
-  - $\text{RSTUDENT} = \frac{\text{res}_i}{s_i \sqrt{1 - h_i}}$
-- **Why different types?** Methods to normalize the variance so the residuals are more comparable.
+- **Studentized-deleted (R-student):**
+  - Remove an observation, recalculate the regression, and compute the studentized residual.
+  - Standard deviation is calculated without the point in question.
+  - Large residual values indicate influential points.
+  - Formula:
+    $$
+    \text{RSTUDENT} = \frac{\text{res}_i}{s_i \sqrt{1 - h_i}}
+    $$
+- **Why different types?** To normalize variance and make residuals comparable.
 
+---
 
 ## Leave-One-Out Statistic: PRESS (predicted residual sum of squares)
 $$\text{PRESS}_p = \sum_{i=1}^n \left(Y_i - \hat{Y}_{i(i)}\right)^2 = \sum e_{i(i)}^2$$
