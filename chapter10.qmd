@@ -81,18 +81,24 @@ title: "Regression Diagnostics and Model Refinement"
     $$
 - **Why different types?** To normalize variance and make residuals comparable.
 
----
 
-## Leave-One-Out Statistic: PRESS (predicted residual sum of squares)
-$$\text{PRESS}_p = \sum_{i=1}^n \left(Y_i - \hat{Y}_{i(i)}\right)^2 = \sum e_{i(i)}^2$$
-- Smaller is better.
+## **Leave-One-Out Statistics**  
+$\hat{Y}_{i(i)}$ is the predicted value of $Y_i$ when the $i$-th observation is left out of the regression model.
 
+### **PRESS (Predicted Residual Sum of Squares)**
+$$
+\text{PRESS}_p = \sum_{i=1}^n \left(Y_i - \hat{Y}_{i(i)}\right)^2 = \sum e_{i(i)}^2
+$$
+- A smaller PRESS value indicates a better-fitting model.
 
-## Leave-One-Out Statistic ($\hat{Y}_{j(i)}$): Cook’s Distance
-- Blend of both residuals and leverage:
-$$D_i = \sum_{i=1}^n \frac{\left(\hat{Y}_{j(i)} - \hat{Y}_j\right)^2}{p \cdot \text{MSE}} = \frac{1}{p} (\text{studres}_i)^2 \left[\frac{h_i}{1 - h_i}\right]$$
+### **Cook’s Distance ($D_i$)**
+- Blends residuals and leverage:
+$$
+D_i = \sum_{i=1}^n \frac{\left(\hat{Y}_{i(i)} - \hat{Y}_i\right)^2}{p \cdot \text{MSE}} = \frac{1}{p} (\text{studres}_i)^2 \left[\frac{h_i}{1 - h_i}\right]
+$$
 - $p =$ number of parameters.
 
+---
 
 ## Durbin-Watson Test
 - Detects departures from independence:
