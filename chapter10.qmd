@@ -98,14 +98,16 @@ D_i = \sum_{i=1}^n \frac{\left(\hat{Y}_{i(i)} - \hat{Y}_i\right)^2}{p \cdot \tex
 $$
 - $p =$ number of parameters.
 
----
 
-## Durbin-Watson Test
-- Detects departures from independence:
-$$d = \frac{\sum_{i=1}^n (e_i - e_{i-1})^2}{\sum_{i=1}^n e_i^2}$$
-- Distributed symmetrically about 2; $\sim 0$ positively correlated residuals, $\sim 4$ negatively correlated residuals.
+## **Durbin-Watson Test for Independence**
+$$
+d = \frac{\sum_{i=1}^n (e_i - e_{i-1})^2}{\sum_{i=1}^n e_i^2}
+$$
+- Values near 0 indicate positive correlation; values near 4 indicate negative correlation. Distributed symmetrically about 2.
 - Available in R and SAS.
 
+
+---
 
 ## Recap
 
@@ -130,6 +132,15 @@ $$d = \frac{\sum_{i=1}^n (e_i - e_{i-1})^2}{\sum_{i=1}^n e_i^2}$$
 - Means? curved; SD? increasing; transform Y
 - Skewness – can model mean, but confidence and prediction intervals will be compromised.
 - Means? linear; SD? increasing; use weighted regression
+
+## **Graphical Assessment of Residuals**
+| **Pattern**             | **Potential Issue** | **Solution** |
+|-------------------------|--------------------|-------------|
+| Means? linear, SD? constant | Model fits well | No action needed |
+| Means? curved, SD? equal | Nonlinearity | Transform $X$ |
+| Means? curved, SD? increasing | Nonlinearity + heteroscedasticity | Transform $Y$ |
+| Skewed residuals | Non-normality | Can model mean, but confidence and prediction intervals will be compromised. Consider transformations |
+| Means? linear, SD? increasing | Heteroscedasticity | Use weighted regression |
 
 ![Regression Patterns](images/notes_10_2_regression_patterns.png){width=5in fig-align="left"} 
 
