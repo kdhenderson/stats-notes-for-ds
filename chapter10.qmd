@@ -15,7 +15,7 @@ execute:
 
 ### Linearity
 - Parameter estimates will be misleading if a straight-line model is inadequate or fits only part of the data. Predictions will be biased, and confidence intervals (CI) will not appropriately reflect uncertainty.
-- **Remedy:** Consider adding quadratic or cubic terms to improve model fit.
+- **Remedy:** Consider adding polynomial terms (quadratic or cubic) to improve model fit.
 
 ### Normality
 - Transformations that correct for normality often address constant variance as well.
@@ -33,26 +33,23 @@ execute:
 - **Standard errors:** Affected significantly. Smaller standard errors make hypothesis testing misleading (make it easier to reject).
 - **Remedy:** Serial and cluster effects require different models.
 
-### How much can we deviate from assumptions and still get accurate estimates?
+### How much deviation from assumptions still give accurate estimates?
 - Small violations are acceptable.
 - Transformations can often help.
 - Only severe departures from linearity or normality (due to outliers) require alternative methods.
 
----
 
 ## Influential and Outlying Observations
 
 ### Key Concepts
-
 - **Influential observations:** Does adding one point change the slope?
 - **Leverage:** Reflects how far a point is from $\bar{x}$. Points that are farther have higher leverage.
   - Function of distance from $x_i$ to $\bar{x}$ in standard deviations.
   - Function of the proportion of total sum of squares contributed by $x_i$.
 
 ### Impact of Outliers
-
 - **Low leverage, low influence:** Minimal effect on estimates.
-- **High leverage, low influence:** Consistent with trend but far from most data. Does not change correlation, standard error, or parameter estimates significantly.
+- **High leverage, low influence:** Far from most data but consistent with trend; minimal effect on correlation, standard error, and estimates.
 - **High leverage, high influence:** Can distort results by pulling the regression line toward the outlier resulting in different parameter estimates.
 
 ### How do we detect them? How far is too far?
@@ -109,8 +106,6 @@ $$
 - Available in R and SAS.
 
 
----
-
 ## Recap
 
 | **Name**                | **Expression**                                       | **Use**                        |
@@ -120,22 +115,20 @@ $$
 | **Studentized residual** | $t_i = \frac{e_i}{s_{(i)} \sqrt{1 - h_{ii}}}$       | Test outlying $Y$’s           |
 | **Deleted residual**     | $e_{i(i)} = y_i - \hat{y}_{i(i)} = \frac{e_i}{1 - h_{ii}}$ | Calculate PRESS               |
 
-- **PRESS:** Models with smaller values are better fitting.
-- **Durbin–Watson test:** Use to detect independence violations.
-
-> Under the assumption that the residuals are normally distributed, at the $\alpha = 0.05$ level of significance, we would expect 5% of studentized residuals to be greater than 2 or less than -2.
+> At $\alpha = 0.05$, we expect 5% of studentized residuals to be greater than 2 or less than -2.
 
 ![Residual Panel](images/notes_10_1_residual_panel.png)
 
 
 ## Graphical Assessment of Residuals
+
 | **Pattern**             | **Potential Issue** | **Solution** |
 |-------------------------|--------------------|-------------|
-| Means? linear, SD? constant | Model fits well | No action needed |
-| Means? curved, SD? equal | Nonlinearity | Transform $X$ |
-| Means? curved, SD? increasing | Nonlinearity + heteroscedasticity | Transform $Y$ |
-| Skewed residuals | Non-normality | Can model mean, but CIs and PIs are unreliable. Consider transformations. |
-| Means? linear, SD? increasing | Heteroscedasticity | Use weighted regression |
+| Linear means, constant SD | Model fits well | No action needed |
+| Curved means, equal SD | Nonlinearity | Transform $X$ |
+| Curved means, increasing SD | Nonlinearity + heteroscedasticity | Transform $Y$ |
+| Skewed residuals | Non-normality | Can model mean, but CIs/PIs unreliable. Consider transformations. |
+| Linear means, increasing SD | Heteroscedasticity | Use weighted regression |
 
 ![Regression Patterns](images/notes_10_2_regression_patterns.png){width=5in fig-align="left"} 
 
@@ -233,7 +226,6 @@ $$
 
 
 ### Example in SAS:
-
 ```{sas eval=FALSE}
 /* linear regression model */
 proc glm data = IronCor;
@@ -266,6 +258,6 @@ run;
 ![](images/notes_10_10_sas3.png){width=5in fig-align="left"}
 ![](images/notes_10_11_sas4.png){width=5in fig-align="left"}
 
-- $H_0$: Linear regression model has good fit. (No lack of fit.)
+- $H_0$: Linear regression model has a good fit. (No lack of fit.)
 - $H_A$: The SMM fits better. (LRM is lacking fit.)
 - There is strong evidence to suggest the linear regression model has a lack of fit with respect to the separate means model. (It is not comparable with Messi.)
