@@ -1,5 +1,7 @@
 ---
 title: "Regression Diagnostics and Model Refinement"
+execute:
+  engine: knitr
 ---
 
 ## Objectives
@@ -55,7 +57,7 @@ title: "Regression Diagnostics and Model Refinement"
 
 ### How do we detect them? How far is too far?
 
-#### **Leverage Statistic, $h_{ii}$**
+#### Leverage Statistic, $h_{ii}$
 - Measures the influence of $x$ values on predictions (how far the $x$ values are from the $\bar{x}$).
 - **High leverage:** When $h_{ii} > \frac{2p}{n}$ (where $p$ is the number of parameters).
 - Calculation:
@@ -82,16 +84,16 @@ title: "Regression Diagnostics and Model Refinement"
 - **Why different types?** To normalize variance and make residuals comparable.
 
 
-## **Leave-One-Out Statistics**  
+## Leave-One-Out Statistics  
 $\hat{Y}_{i(i)}$ is the predicted value of $Y_i$ when the $i$-th observation is left out of the regression model.
 
-### **PRESS (Predicted Residual Sum of Squares)**
+### PRESS (Predicted Residual Sum of Squares)
 $$
 \text{PRESS}_p = \sum_{i=1}^n \left(Y_i - \hat{Y}_{i(i)}\right)^2 = \sum e_{i(i)}^2
 $$
 - A smaller PRESS value indicates a better-fitting model.
 
-### **Cook’s Distance ($D_i$)**
+### Cook’s Distance ($D_i$)
 - Blends residuals and leverage:
 $$
 D_i = \sum_{i=1}^n \frac{\left(\hat{Y}_{i(i)} - \hat{Y}_i\right)^2}{p \cdot \text{MSE}} = \frac{1}{p} (\text{studres}_i)^2 \left[\frac{h_i}{1 - h_i}\right]
@@ -99,7 +101,7 @@ $$
 - $p =$ number of parameters.
 
 
-## **Durbin-Watson Test for Independence**
+## Durbin-Watson Test for Independence
 $$
 d = \frac{\sum_{i=1}^n (e_i - e_{i-1})^2}{\sum_{i=1}^n e_i^2}
 $$
@@ -126,35 +128,26 @@ $$
 ![Residual Panel](images/notes_10_1_residual_panel.png)
 
 
-## Graphical Assessment of Scatterplots
-- Means? linear; SD? about equal; looks great!
-- Means? curved; SD? about equal; transform X
-- Means? curved; SD? increasing; transform Y
-- Skewness – can model mean, but confidence and prediction intervals will be compromised.
-- Means? linear; SD? increasing; use weighted regression
-
-## **Graphical Assessment of Residuals**
+## Graphical Assessment of Residuals
 | **Pattern**             | **Potential Issue** | **Solution** |
 |-------------------------|--------------------|-------------|
 | Means? linear, SD? constant | Model fits well | No action needed |
 | Means? curved, SD? equal | Nonlinearity | Transform $X$ |
 | Means? curved, SD? increasing | Nonlinearity + heteroscedasticity | Transform $Y$ |
-| Skewed residuals | Non-normality | Can model mean, but confidence and prediction intervals will be compromised. Consider transformations |
+| Skewed residuals | Non-normality | Can model mean, but CIs and PIs are unreliable. Consider transformations. |
 | Means? linear, SD? increasing | Heteroscedasticity | Use weighted regression |
 
 ![Regression Patterns](images/notes_10_2_regression_patterns.png){width=5in fig-align="left"} 
 
 
 ## Transformation Recommendations
-- 1st: Log
-- 2nd: Square Root
-- 3rd: Other
+1. Log
+2. Square root
+3. Other
 
-
-## Interpretation
-- Must be worded for audience and what variable(s) was transformed
-- Back-transform
-- Other interpretation
+### Interpretation Considerations
+- Adjust wording for the audience and transformed variables.
+- Back-transform results if needed.
 
 
 ## Remedies for Violations
