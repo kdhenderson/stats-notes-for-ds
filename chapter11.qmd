@@ -1,0 +1,126 @@
+---
+title: "Multiple Linear Regression"
+---
+
+## Objectives
+
+- Learn how to obtain a multiple linear regression (MLR) model.
+- Understand the meaning of regression coefficients.
+- Identify the types of data structures that can be analyzed with multiple regression.
+- Visualize and interpret multidimensional relationships among qualitative and quantitative variables.
+- Determine when and how to include interaction terms in a model.
+
+
+## Adding a Third Variable
+
+- When adding $X_2$ to the model, the relationship between $X_1$ and $Y$ may:
+  - Remain unchanged, indicating that $X_2$ is unnecessary.
+  - Become stronger, weaker, or change direction.
+  - Vary across different values of $X_2$, suggesting an interaction effect.
+- Typically, explanatory variables $X_1$ and $X_2$ are correlated.
+  - Ideally, there should be no correlation.
+  - Correlation introduces changes in the estimated response when additional variables are included.
+  - Variables should only be added to improve model explanation, not simply to increase fit.
+
+
+## Exploratory Approaches to Adding a Third Variable
+
+- **Scatterplots**:
+  - Plot each pair: $(X_1, X_2, Y)$.
+  - Identify potential linear relationships.
+  - Explanatory variables can be weakly correlated but should have a strong linear relationship with the response variable.
+- **Pearson Correlation**:
+  - Calculate correlation between all pairs of variables.
+  - Correlation between explanatory variables should be weaker than their correlation with the response variable.
+  - If the correlation between explanatory variables is too strong, they may be redundant (multicollinearity).
+- **Multicollinearity**:
+  - Occurs when explanatory variables are highly correlated, violating the independence assumption.
+
+## Regression Equations with Two Predictors
+- **Population equation**: $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2$
+- **Interpreting slopes**:
+  - The coefficient of an explanatory variable in an MLR model **does not** usually equal its coefficient in a simple linear regression (SLR), except when $X_2$ is completely independent of $X_1$.
+  - In **MLR**, the coefficient represents the effect of changing the value of a predictor while **holding all other variables constant**.
+  - In **SLR**, the coefficient represents the effect of changing the value of a predictor **without accounting for other variables**.
+
+
+## Benefits of Adding Variables
+- Improves response prediction.
+- Increases the proportion of variance explained by the model.
+- More realistic when a single explanatory variable is inadequate to describe the response.
+
+## Incorporating Categorical (Dummy) Explanatory Variables
+- **Best practice** for a two-category variable:
+  - Code one category as **0** (reference) and the other as **1**.
+  - The reference category’s mean corresponds to the intercept.
+  - The coefficient of the indicator variable represents the average difference between the two groups.
+
+## Approaches to Handling a Third Variable with Two Categories
+- **SLR**: Both categories are combined.
+- **Parallel Lines Model**: Different intercepts, same slope.
+- **Interaction Model**: Different intercepts **and** slopes.
+
+
+![Multiple Linear Regression Model Examples](images/display_11_1.png){width=5in fig-align="left"} 
+
+
+## Assumption of Constant Variance
+- **Constant variance assumption**: $\text{Var}\{Y \mid X_1, X_2\} = \sigma^2$
+  The variance of $Y$ remains the same across all values of $X_1$ and $X_2$.
+
+## Interpretation of Regression Coefficients
+- The regression surface of an MLR model with two explanatory variables is **planar**:
+  - $\beta_0$ represents the height of the plane when both predictors are zero.
+  - $\beta_1$ represents the slope along $X_1$, holding $X_2$ constant.
+  - $\beta_2$ represents the slope along $X_2$, holding $X_1$ constant.
+- The **effect of an explanatory variable** is the **change in mean response** associated with a one-unit increase in that variable, while keeping all other explanatory variables fixed.
+  - **Effect of $X_1$**: $\mu(Y \mid X_1 + 1, X_2) - \mu(Y \mid X_1, X_2) = \beta_1$
+  - **Effect of $X_2$**: $\mu(Y \mid X_1, X_2 + 1) - \mu(Y \mid X_1, X_2) = \beta_2$
+  - The **coefficient of each explanatory variable measures its effect at fixed values of the other**.
+  - In the planar model, effects are the same at all levels of the explanatory variable.
+
+![Regression Plane](images/display_11_2.png){width=5in fig-align="left"} 
+## Parallel Lines Regression Model
+
+- **Indicator (dummy) variable**:  
+  - Represents two levels of a categorical explanatory variable.  
+  - Takes values 0, indicating an attribute is absent (reference group) or 1, indicating it is present (comparison group).  
+  - The fit is the same if you reverse the levels of the indicator.  
+- **Regression Model for an Indicator Variable**:
+  - When $\text{pred}_2 = 0$:  
+    $$
+    \mu(Y \mid X_1, \text{pred}_2 = 0) = \beta_0 + \beta_1 X_1 + \beta_2(0) = \beta_0 + \beta_1 X_1
+    $$
+  - When $\text{pred}_2 = 1$:  
+    $$
+    \mu(Y \mid X_1, \text{pred}_2 = 1) = \beta_0 + \beta_1 X_1 + \beta_2(1) = (\beta_0 + \beta_2) + \beta_1 X_1
+    $$
+  - **Interpretation**:  
+    - **Slope**: $\beta_1$ (same for both categories).  
+    - **Intercept**: Adjusted by $\beta_2$ between the two groups.  
+    - Intercept where $\text{pred}_2 = 0 is \beta_0, and intercept where \text{pred}_2 = 1 is \beta_0 + \beta_2.  
+    - The two lines are separated by a constant **vertical** distance of $\beta_2$.  
+    - The coefficient of the indicator variable is the difference between the mean response for the indicated category (= 1) and the reference category (= 0), at fixed values of the other explanatory variables.   
+
+## Indicator Variables for Categorical Variables with 3+ Categories
+- For a categorical variable with $k$ levels, **$k-1$ indicator variables** are needed.
+- The reference category has no indicator variable.
+- A **shorthand notation** capitalizes the categorical variable name for the set of indicators (e.g. $\mu\{\text{response} \mid \text{pred}_1, \text{PRED}_2\}$).
+
+## Product Term for Interaction
+- **Interaction occurs** when the effect of one explanatory variable **depends on another**.
+- An **interaction term** is the product of two explanatory variables.
+- **Example: Two-Level Indicator Variable**  
+  - General Model: $\mu(Y \mid X_1, X_2) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 (X_1 \times X_2)$
+  - When $X_2 = 0$: $\mu(Y \mid X_1, X_2 = 0) = \beta_0 + \beta_1X_1$
+  - When $X_2 = 1$: $\mu(Y \mid X_1, X_2 = 1) = \beta_0 + \beta_2 + (\beta_1 + \beta_3)X_1$
+  - **Interpretation (separate slopes model)**:
+    - $\beta_1$: Slope at the reference level.
+    - $\beta_3$: Difference in slopes between groups.
+
+
+## Example: Gender, Salary, and Years Model
+
+![](images/notes_11_1.png){width=5in fig-align="left"}  
+![](images/notes_11_2.png){width=5in fig-align="left"}  
+![](images/notes_11_3.png){width=5in fig-align="left"}
