@@ -1,0 +1,103 @@
+---
+title: "Inferences for Multiple Linear Regression"
+---
+
+## Objectives
+
+- How to interpret inferential statistics for various types of regression models, including those with indicator variables, quadratic terms and interaction terms.
+- How to interpret and communicate the results from a multiple regression analysis.
+
+
+## MLR with a Single Predictor: Polynomial Regression
+
+- Still a linear model
+  - Curvi-linear trend
+  - Linear in the $\beta_iX^j$ term: for every one unit increase in $X^j$, still changing $Y$ by constant $\beta_i$ 
+  - If the quadratic coefficient is significant but the linear term is not, still include the linear / lower order terms. They are a singular idea.
+  - Interpretation can be difficult, especially with higher order terms.
+- For a quadratic model we can interpret by finding the vertex.
+  - The vertex (absolute max/min) is found with $x_\text{vertex} = −\beta_1 / 2\beta_2$
+  - The evidence suggests that mean $X$ which $Y$ stops getting larger/smaller is $−\beta_1 / 2\beta_2$ based on a quadratic regression model.
+
+
+## $R^2$
+
+- Measure of effect size for SLR and MLR.
+- The proportion of variance of the response that is explained by its relationship with the variables in the model.
+- Calculation in MLR
+  - Multiple $R^2$: Find correlation between the observed Y and predicted Y squared.
+  - Work out partition of sums of squares: $R^2 = (\text{SS}_\text{total} - \text{SS}_\text{residual}) / \text{SS}_\text{total} = 1 – (\text{SS}_\text{residual} / \text{SS}_\text{total})
+- Overall F-Test
+  - Test statistic can be rewritten using $R^2$.
+  - Testing if all the parameters equal zero is equivalent to testing if $R^2 = 0$. (I don’t really understand this.)
+- $R^2$ and Parsimony
+  - More predictors in the model > $R^2$.
+  - Can oversaturate the model - $R^2$ can equal 1 even if predictors aren’t adding to model.
+  - Models should be parsimonious – simplest model that gives the largest $R^2$.
+- Adjusted $R^2$ and Parsimony
+  - Better for a measure of effect size in MLR, because it adjusts for number of predictor variables ($k$) and sample size.
+  - $R^2_\text{adj} = 1 – (1 - R^2)*[(n-1) / (n-k-1)] = R^2 – (1 - R^2)*[k / (n-k-1)]$ Penalizes addition of (extraneous) predictor variables and small sample sizes. Net positive if predictor variable explains a lot of the variance.
+
+
+## Overfitting
+
+- $R^2$ can always be made 1.
+- It indicates how well the model fits the sample data (noise and signal).
+- It isn’t an indictor of how well the model fits a new sample from the same population.
+
+
+## ”Controlling” for other variables in the model
+
+- For a fixed $X_2$ value (looking at a subpopulation of $X_2$ of similar values), we can see what happens to $Y$ as as $X_1$ changes. 
+
+
+## Overall F-Test
+
+- Tests if the model itself is significant
+- $H_0$: all slopes are equal to 0 (i.e. $R = 0$).
+- $H_a$: at least one slope is not equal to 0.
+- F-statistic is the test statistic:
+$$
+F = \frac{\text{SS}_{\text{regression}} / k}{\text{SS}_{\text{residual}} / [n - (k+1)]} = \frac{\text{MS}_{\text{regression}}}{\text{MS}_{\text{error}}}
+$$
+- Can be written as a ratio of $R^2$.
+
+
+## Significance test for each predictor (t-tests)
+
+- $H_0: \beta_i = 0$
+- $H_a: \beta_i \neq 0$
+- The test statistic: $t = \frac{b_i}{SE_{b_i}}, \quad \text{with } df = n - k - 1$
+- Standard error calculation: $SE = \frac{\hat{\sigma}}{\sqrt{\sum_{i=1}^{n} (X_i - \bar{X})^2}}, \quad \hat{\sigma} = \sqrt{\frac{\text{SSR}}{(n - k - 1)}}$
+
+
+## Prediction in MLR
+
+- Predicted values are the same as estimated means
+- To get confidence (predicted mean) and prediction (individual prediction) intervals, use software because all variables need to be in the model.
+
+
+## Partial F-Test (extra-sum-of-squares)
+
+- When some of $k$ predictors in a complete model don’t have statistically significant slopes, we look at a reduced model with $g$ of $k$ predictors.
+- $H_0$: all $k – g$ slopes are equal (to each other and) to 0.
+- $H_a$: at least one slope is not equal to 0.
+- Simultaneous test that extra $k - g$ predictors aren’t necessary.
+
+
+## Least Squares Estimates and Standard Errors
+
+- Least squares estimates of the $\beta$s are in the coefficient column of the parameter estimate table.
+-The estimate of $\sigma^2$ is the $\frac{\text{sum of squared residuals (sum of squared error (SSE))}}{\text{the df (n-p): MSE}}$.
+- The sq rt of the estimate of variance or estimate of $\sigma^2$ is the estimated st. dev. about the regression??. This is called residual SD, residual SE (in R), RMSE.
+
+
+## Example
+
+![](images/notes_12_1.png){width=5in fig-align="left"}  
+![](images/notes_12_2.png){width=5in fig-align="left"}  
+![](images/notes_12_3.png){width=5in fig-align="left"}
+![](images/notes_12_4.png){width=5in fig-align="left"}
+![](images/notes_12_5.png){width=5in fig-align="left"}
+![](images/notes_12_6.png){width=5in fig-align="left"}
+![](images/notes_12_7.png){width=5in fig-align="left"}
