@@ -4,40 +4,54 @@ title: "Inferences for Multiple Linear Regression"
 
 ## Objectives
 
-- How to interpret inferential statistics for various types of regression models, including those with indicator variables, quadratic terms and interaction terms.
-- How to interpret and communicate the results from a multiple regression analysis.
+- Interpret inferential statistics for various types of regression models, including those with indicator variables, quadratic terms, and interaction terms.
+- Interpret and communicate results from a multiple regression analysis.
 
 
-## MLR with a Single Predictor: Polynomial Regression
+## Multiple Linear Regression (MLR) with a Single Predictor: Polynomial Regression
 
-- Still a linear model
-  - Curvi-linear trend
-  - Linear in the $\beta_iX^j$ term: for every one unit increase in $X^j$, still changing $Y$ by constant $\beta_i$ 
-  - If the quadratic coefficient is significant but the linear term is not, still include the linear / lower order terms. They are a singular idea.
-  - Interpretation can be difficult, especially with higher order terms.
-- For a quadratic model we can interpret by finding the vertex.
-  - The vertex (absolute max/min) is found with $x_\text{vertex} = −\beta_1 / 2\beta_2$
-  - The evidence suggests that mean $X$ which $Y$ stops getting larger/smaller is $−\beta_1 / 2\beta_2$ based on a quadratic regression model.
+- Still a linear model:
+  - Captures curvilinear trends.
+  - Linear in the $\beta_i X^j$ term: for every one-unit increase in $X^j$, $Y$ changes by a constant $\beta_i$. 
+  - If the quadratic coefficient is significant but the linear term is not, still include the linear/lower-order terms as they form a singular idea.
+  - Interpretation can be difficult, especially with higher-order terms.
+
+- Interpretation of a quadratic model:
+  - Find the vertex (absolute max/min) using:$x_{\text{vertex}} = \frac{-\beta_1}{2\beta_2}$
+  - This suggests that the mean $X$ at which $Y$ stops increasing or decreasing is given by $-\beta_1 / 2\beta_2$ based on a quadratic regression model.
 
 
-## $R^2$
+## Coefficient of Determination: $R^2$
 
-- Measure of effect size for SLR and MLR.
-- The proportion of variance of the response that is explained by its relationship with the variables in the model.
-- Calculation in MLR
-  - Multiple $R^2$: Find correlation between the observed Y and predicted Y squared.
-  - Work out partition of sums of squares: $R^2 = (\text{SS}_\text{total} - \text{SS}_\text{residual}) / \text{SS}_\text{total} = 1 – (\text{SS}_\text{residual} / \text{SS}_\text{total})
-- Overall F-Test
-  - Test statistic can be rewritten using $R^2$.
-  - Testing if all the parameters equal zero is equivalent to testing if $R^2 = 0$. (I don’t really understand this.)
-- $R^2$ and Parsimony
-  - More predictors in the model > $R^2$.
-  - Can oversaturate the model - $R^2$ can equal 1 even if predictors aren’t adding to model.
-  - Models should be parsimonious – simplest model that gives the largest $R^2$.
-- Adjusted $R^2$ and Parsimony
-  - Better for a measure of effect size in MLR, because it adjusts for number of predictor variables ($k$) and sample size.
-  - $R^2_\text{adj} = 1 – (1 - R^2)*[(n-1) / (n-k-1)] = R^2 – (1 - R^2)*[k / (n-k-1)]$ Penalizes addition of (extraneous) predictor variables and small sample sizes. Net positive if predictor variable explains a lot of the variance.
+- A measure of effect size for both SLR and MLR.
+- Represents the proportion of variance in the response variable explained by the model.
 
+### Calculation in MLR:
+- **Multiple $R^2$:** Find the squared correlation between observed $Y$ and predicted $Y$.
+- **Partition of sums of squares:**
+  $$
+  R^2 = \frac{\text{SS}_{\text{total}} - \text{SS}_{\text{residual}}}{\text{SS}_{\text{total}}} = 1 – \frac{\text{SS}_{\text{residual}}}{\text{SS}_{\text{total}}}
+  $$
+
+### Relationship with the Overall F-Test:
+- The F-test statistic can be rewritten in terms of $R^2$.
+- Testing if all parameters equal zero is equivalent to testing if $R^2 = 0$.
+
+### $R^2$ and Parsimony:
+- Adding more predictors increases $R^2$.
+- An oversaturated model can have $R^2 = 1$ even if predictors do not contribute meaningfully.
+- The goal is a parsimonious model—one that is as simple as possible while still maximizing $R^2$.
+
+### Adjusted $R^2$:
+- Accounts for the number of predictors ($k$) and sample size ($n$).
+- Formula:
+  $$
+  R^2_{\text{adj}} = R^2 – (1 - R^2) \frac{k}{n-k-1}
+  $$
+- Penalizes unnecessary predictors and small sample sizes. Rewards variables that significantly improve model fit, resulting in a net positive if a predictor variable explains a lot of the variance.
+- Is a better measure of effect size in MLR.
+
+---
 
 ## Overfitting
 
