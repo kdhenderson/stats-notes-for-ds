@@ -44,45 +44,75 @@ title: "Inferences for Multiple Linear Regression"
 
 ### Adjusted $R^2$:
 - Accounts for the number of predictors ($k$) and sample size ($n$).
-- Formula:
-  $$
-  R^2_{\text{adj}} = R^2 – (1 - R^2) \frac{k}{n-k-1}
-  $$
+- Formula: $R^2_{\text{adj}} = R^2 – (1 - R^2) \frac{k}{n-k-1}$
 - Penalizes unnecessary predictors and small sample sizes. Rewards variables that significantly improve model fit, resulting in a net positive if a predictor variable explains a lot of the variance.
 - Is a better measure of effect size in MLR.
 
----
 
 ## Overfitting
 
-- $R^2$ can always be made 1.
-- It indicates how well the model fits the sample data (noise and signal).
-- It isn’t an indictor of how well the model fits a new sample from the same population.
+- $R^2$ can always be made 1, but that does not indicate good predictive power.
+- Overfitting means the model fits both noise and signal in the sample data.
+- A high $R^2$ does not guarantee that the model generalizes well to new data.
 
 
-## ”Controlling” for other variables in the model
+## Controlling for Other Variables in MLR
 
-- For a fixed $X_2$ value (looking at a subpopulation of $X_2$ of similar values), we can see what happens to $Y$ as as $X_1$ changes. 
+- When holding $X_2$ constant (i.e. looking at a subpopulation with similar $X_2$ values), we can examine the effect of changes in $X_1$ on $Y$.
 
 
 ## Overall F-Test
 
-- Tests if the model itself is significant
-- $H_0$: all slopes are equal to 0 (i.e. $R = 0$).
-- $H_a$: at least one slope is not equal to 0.
-- F-statistic is the test statistic:
-$$
-F = \frac{\text{SS}_{\text{regression}} / k}{\text{SS}_{\text{residual}} / [n - (k+1)]} = \frac{\text{MS}_{\text{regression}}}{\text{MS}_{\text{error}}}
-$$
-- Can be written as a ratio of $R^2$.
+- Tests whether the model is statistically significant.
+- **Hypotheses:**
+  - $H_0$: All slopes are equal to 0 (i.e. $R^2 = 0$).
+  - $H_a$: At least one slope is not zero.
+- **F-statistic formula:** $F = \frac{\text{SS}_{\text{regression}} / k}{\text{SS}_{\text{residual}} / (n - k - 1)} = \frac{\text{MS}_{\text{regression}}}{\text{MS}_{\text{error}}}$
+- Can also be expressed in terms of $R^2$.
 
 
-## Significance test for each predictor (t-tests)
+## Significance Tests for Each Predictor (t-tests)
 
-- $H_0: \beta_i = 0$
-- $H_a: \beta_i \neq 0$
-- The test statistic: $t = \frac{b_i}{SE_{b_i}}, \quad \text{with } df = n - k - 1$
-- Standard error calculation: $SE = \frac{\hat{\sigma}}{\sqrt{\sum_{i=1}^{n} (X_i - \bar{X})^2}}, \quad \hat{\sigma} = \sqrt{\frac{\text{SSR}}{(n - k - 1)}}$
+- **Hypotheses:**
+  - $H_0: \beta_i = 0$ (predictor has no effect)
+  - $H_a: \beta_i \neq 0$ (predictor has an effect)
+- **Test statistic:** $t = \frac{b_i}{SE_{b_i}}, \quad \text{with } df = n - k - 1$
+- **Standard error calculation:** $SE = \frac{\hat{\sigma}}{\sqrt{\sum_{i=1}^{n} (X_i - \bar{X})^2}}, \quad \hat{\sigma} = \sqrt{\frac{\text{SSR}}{(n - k - 1)}}$
+
+
+## Confidence Intervals for Linear Combinations of Coefficients
+
+- 95% CI for difference in intercepts:
+  $$
+  (\hat{\beta}_2 + \hat{\beta}_3) - \hat{\beta}_0
+  $$
+  - To find the SE:
+    $$
+    \text{Var}(\hat{\beta}_2 + \hat{\beta}_3) = \text{Var}(\hat{\beta}_2) + \text{Var}(\hat{\beta}_3) + 2 \text{Cov}(\hat{\beta}_2, \hat{\beta}_3)
+    $$
+  - Compute the CI:
+    $$
+    (\hat{\beta}_2 + \hat{\beta}_3) \pm t_{0.975, df} \times SE(\hat{\beta}_2 + \hat{\beta}_3)
+    $$
+
+![Confidence Interval Example](images/notes_12_6.png)
+
+
+## Variance of Sum and Difference of Random Variables
+
+- Formula:
+  $$
+  \text{Var}(aX + bY) = a^2 \text{Var}(X) + b^2 \text{Var}(Y) + 2ab \text{Cov}(X, Y)
+  $$
+- Used to compute the variance of estimates in regression.
+
+![Variance Calulation](images/notes_12_5.png)
+
+
+## Interpreting p-values in Regression Output
+
+- Example p-value interpretation for testing equality of mean energy expenditures:
+  - $p = 0.7030$ suggests no significant difference.
 
 
 ## Prediction in MLR
@@ -91,12 +121,27 @@ $$
 - To get confidence (predicted mean) and prediction (individual prediction) intervals, use software because all variables need to be in the model.
 
 
-## Partial F-Test (extra-sum-of-squares)
+## Partial F-Test (Extra-Sum-of-Squares)
 
-- When some of $k$ predictors in a complete model don’t have statistically significant slopes, we look at a reduced model with $g$ of $k$ predictors.
-- $H_0$: all $k – g$ slopes are equal (to each other and) to 0.
-- $H_a$: at least one slope is not equal to 0.
-- Simultaneous test that extra $k - g$ predictors aren’t necessary.
+- Used when a subset of $k$ predictors does not have statistically significant slopes, i.e. to examine a reduced model with $g$ of $k$ predictors.
+- **Hypotheses:**
+  - $H_0$: The extra $k-g$ predictors do not contribute (all their slopes are 0).
+  - $H_a$: At least one of the extra predictors has a nonzero slope.
+- Simultaneously tests whether additional predictors improve the model.
+
+![Extra-Sum-of-Squares F-Test Example](images/notes_12_1.png)
+![Extra-Sum-of-Squares F-Test Example](images/notes_12_2.png)
+![Extra-Sum-of-Squares F-Test Example](images/notes_12_3.png)
+![Parameter Estimates and Standard Errors](images/notes_12_4.png)
+
+
+## Testing Intercept Differences in Regression Models
+
+- Testing whether intercepts differ between bat types:
+  - $H_0: \beta_3 = 0$ (no difference)
+  - $H_a: \beta_3 \neq 0$ (significant difference)
+
+![Testing Intercepts for Bat Types](images/notes_12_7.png)
 
 
 ## Least Squares Estimates and Standard Errors
@@ -105,13 +150,3 @@ $$
 -The estimate of $\sigma^2$ is the $\frac{\text{sum of squared residuals (sum of squared error (SSE))}}{\text{the df (n-p): MSE}}$.
 - The sq rt of the estimate of variance or estimate of $\sigma^2$ is the estimated st. dev. about the regression??. This is called residual SD, residual SE (in R), RMSE.
 
-
-## Example
-
-![](images/notes_12_1.png){width=5in fig-align="left"}  
-![](images/notes_12_2.png){width=5in fig-align="left"}  
-![](images/notes_12_3.png){width=5in fig-align="left"}
-![](images/notes_12_4.png){width=5in fig-align="left"}
-![](images/notes_12_5.png){width=5in fig-align="left"}
-![](images/notes_12_6.png){width=5in fig-align="left"}
-![](images/notes_12_7.png){width=5in fig-align="left"}
