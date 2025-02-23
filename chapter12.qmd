@@ -71,6 +71,18 @@ title: "Inferences for Multiple Linear Regression"
 - Can also be expressed in terms of $R^2$.
 
 
+## Partial F-Test (Extra-Sum-of-Squares)
+
+- Used when a subset of $k$ predictors does not have statistically significant slopes, i.e. to examine a reduced model with $g$ of $k$ predictors.
+- **Hypotheses:**
+  - $H_0$: The extra $k-g$ predictors do not contribute (all their slopes are 0).
+  - $H_a$: At least one of the extra predictors has a nonzero slope.
+- Simultaneously tests whether additional predictors improve the model.
+
+![Extra-Sum-of-Squares F-Test Example](images/notes_12_1.png)  
+*Figure: Extra sum of squares F-test example, including full and reduced models for log(cost) with and without age and gender, and interpretation.*
+
+
 ## Significance Tests for Each Predictor (t-tests)
 
 - **Hypotheses:**
@@ -80,39 +92,65 @@ title: "Inferences for Multiple Linear Regression"
 - **Standard error calculation:** $SE = \frac{\hat{\sigma}}{\sqrt{\sum_{i=1}^{n} (X_i - \bar{X})^2}}, \quad \hat{\sigma} = \sqrt{\frac{\text{SSR}}{(n - k - 1)}}$
 
 
+## Testing Intercept and Slope Differences in Regression Models (Bat Echolocation Example)
+
+- **Question of Interest 1:**  
+  Do echolocating and non-echolocating bats have equal slopes?  
+  - Models for echolocating bats, non-echolocating bats, and birds are written out.  
+  - Null and alternative hypotheses:
+    - $H_0$: Slopes are equal
+    - $H_a$: Slopes are not equal
+
+![Bat Echolocation Example](images/notes_12_2.png)  
+*Figure: Model setup and hypothesis for testing slope differences in echolocating and non-echolocating bats.*
+
+- **Continuation:**  
+  SAS output tables for full and reduced models with interpretation.
+
+![Bat Example - Full and Reduced Models](images/notes_12_3.png)  
+*Figure: SAS output tables for full and reduced models, testing slope differences in echolocating and non-echolocating bats.*
+
+- **Next Question of Interest:**  
+  Are the intercepts for bat types different?  
+  - Null and alternative hypotheses:
+    - $H_0$: Intercepts are equal
+    - $H_a$: Intercepts are different
+
+![Parameter Estimates for Bat Example](images/notes_12_4.png)  
+*Figure: Parameter estimate table with interpretation and p-value.*
+
+
 ## Confidence Intervals for Linear Combinations of Coefficients
 
-- 95% CI for difference in intercepts:
-  $$
-  (\hat{\beta}_2 + \hat{\beta}_3) - \hat{\beta}_0
-  $$
-  - To find the SE:
-    $$
-    \text{Var}(\hat{\beta}_2 + \hat{\beta}_3) = \text{Var}(\hat{\beta}_2) + \text{Var}(\hat{\beta}_3) + 2 \text{Cov}(\hat{\beta}_2, \hat{\beta}_3)
-    $$
-  - Compute the CI:
+- 95% CI for difference in intercepts:  
+  $$ (\hat{\beta}_2 + \hat{\beta}_3) - \hat{\beta}_0 $$
+- To find the SE (**Variance calculation**):  
+  $$ \text{Var}(\hat{\beta}_2 + \hat{\beta}_3) = \text{Var}(\hat{\beta}_2) + \text{Var}(\hat{\beta}_3) + 2 \text{Cov}(\hat{\beta}_2, \hat{\beta}_3) $$
+- Compute the CI:
     $$
     (\hat{\beta}_2 + \hat{\beta}_3) \pm t_{0.975, df} \times SE(\hat{\beta}_2 + \hat{\beta}_3)
     $$
 
-![Confidence Interval Example](images/notes_12_6.png)
+![CIs for Linear Combinations of Coefficients](images/notes_12_6.png)  
+*Figure: Confidence interval calculations for linear combinations of coefficients, applied to the bat echolocation example.*
 
 
 ## Variance of Sum and Difference of Random Variables
 
-- Formula:
-  $$
-  \text{Var}(aX + bY) = a^2 \text{Var}(X) + b^2 \text{Var}(Y) + 2ab \text{Cov}(X, Y)
-  $$
+- Formula: $\text{Var}(aX + bY) = a^2 \text{Var}(X) + b^2 \text{Var}(Y) + 2ab \text{Cov}(X, Y)$
 - Used to compute the variance of estimates in regression.
 
-![Variance Calulation](images/notes_12_5.png)
+![Variance of Sum and Difference of Random Variables](images/notes_12_5.png)  
+*Figure: Variance of sum and difference of random variables, discussing covariance and its use in confidence intervals.*
 
 
 ## Interpreting p-values in Regression Output
 
 - Example p-value interpretation for testing equality of mean energy expenditures:
   - $p = 0.7030$ suggests no significant difference.
+
+![Parameter Estimate and Covariance Table](images/notes_12_7.png)  
+*Figure: Parameter estimate table and covariance table with interpretation for the bat echolocation example.*
 
 
 ## Prediction in MLR
@@ -121,32 +159,16 @@ title: "Inferences for Multiple Linear Regression"
 - To get confidence (predicted mean) and prediction (individual prediction) intervals, use software because all variables need to be in the model.
 
 
-## Partial F-Test (Extra-Sum-of-Squares)
-
-- Used when a subset of $k$ predictors does not have statistically significant slopes, i.e. to examine a reduced model with $g$ of $k$ predictors.
-- **Hypotheses:**
-  - $H_0$: The extra $k-g$ predictors do not contribute (all their slopes are 0).
-  - $H_a$: At least one of the extra predictors has a nonzero slope.
-- Simultaneously tests whether additional predictors improve the model.
-
-![Extra-Sum-of-Squares F-Test Example](images/notes_12_1.png)
-![Extra-Sum-of-Squares F-Test Example](images/notes_12_2.png)
-![Extra-Sum-of-Squares F-Test Example](images/notes_12_3.png)
-![Parameter Estimates and Standard Errors](images/notes_12_4.png)
-
-
 ## Testing Intercept Differences in Regression Models
 
-- Testing whether intercepts differ between bat types:
+- Example: Testing whether intercepts differ between bat types:
   - $H_0: \beta_3 = 0$ (no difference)
   - $H_a: \beta_3 \neq 0$ (significant difference)
-
-![Testing Intercepts for Bat Types](images/notes_12_7.png)
 
 
 ## Least Squares Estimates and Standard Errors
 
-- Least squares estimates of the $\beta$s are in the coefficient column of the parameter estimate table.
--The estimate of $\sigma^2$ is the $\frac{\text{sum of squared residuals (sum of squared error (SSE))}}{\text{the df (n-p): MSE}}$.
-- The sq rt of the estimate of variance or estimate of $\sigma^2$ is the estimated st. dev. about the regression??. This is called residual SD, residual SE (in R), RMSE.
-
+- The least squares estimates of $\beta$s are in the coefficient column of the parameter estimate table.
+- The estimate of $\sigma^2$ is given by:
+  $$ \frac{\text{sum of squared residuals (SSE)}}{\text{df} (n-p)} = \text{MSE} $$
+- The square root of MSE gives residual SE (or RMSE).
