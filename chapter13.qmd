@@ -1,0 +1,211 @@
+---
+title: "Model Selection and Validation"
+---
+
+## Objectives
+
+- What is the proper order for a regression analysis?
+- How to use residuals to check regression assumptions.
+- How to apply the necessary remedies when the assumptions are violated.
+- How to apply variable selection algorithms and interpret the results.
+- Statistical and conceptual issues for automatic variable selection in multiple linear regression
+
+
+
+## Parameter estimates are highly context dependent.
+
+- Magnitude of correlations depends on:
+  - Range of values
+  - Reliability of measurement
+  - Type of participants included in study
+- Specific slope estimate depends on:
+  - Range of x and y scores
+  - Types of participants in sample
+  - Context of specific set of predictor variables
+- Example: tentative model for alcohol metabolism in men and women
+  - Should contain variables whose values best answer the ?s in a straightforward manner
+  - Should include potentially confounding variables
+  - Should include features that capture important relationships found in the initial graphical analysis (all those that are highly correlated with response from scatterplot matrix)
+
+
+## Inferences on Partial Slopes
+
+- Look at individual tests for each slope in the model to determine significance. Can exclude if the slope isn’t sig.
+- Variance Inflation Factor (VIF): an R2 which is the proportion of variance in a particular explanatory variable including all other predictor variables. Large R2 means value is well predicted by other variables and isn’t needed. Small means it is needed because it isn’t well predicted.
+
+
+## Collinearity
+
+- Some explanatory variables can be well explained by other explanatory variables in the mode and including them would be redundant.
+
+
+## First-Pass Model
+
+- Look for variables that aren’t statistically significant (could be 3-way interaction, 2-way interaction, or single variable).
+- Should they be excluded? Look if the variable is collinear with other variables in the model but looking at VIF.
+  - This value is relative(> 10 the variable may be redundant).
+  - Investigate further with partial residual plot.
+- Partial residual plot: 
+  - Fit the model with x1& x2 in the model (e.g. lbody & lgest) for bs
+  - Calculate partial residuals [f(x2)]: pres = y – (b0 + b1x1)
+  - If the partial residual plot looks linear, include the variable x2. If it isn’t a strong linear relationship, consider removing. (The slope of a SLR of x2 on pres matches the MLR model b2).
+
+
+![Partial Residuals: Mammal Brain Example](images/display_13_1.png){width=5in fig-align="left"} 
+
+
+## Dealing with outliers
+
+- Review: least squares is not resistant to outliers.
+- A robust regression procedure is useful when the response distribution is prone to outliers even with remedies.
+- If we use least squares, examine outliers/influence.
+  - Are suspect observations influential and why?
+  - Do they provide interesting information about the process under study?
+
+
+## Guidelines
+
+- If the observation differs from the rest of the data in a sparsely represented region (not many values of y measured for a range of x values), restrict the range.
+  - Those few points will influence the regression.
+  - Document that the range was restricted and why.
+- If the observation is not unusual and no other explanation can be found, do not omit. Report results with and without the observation.
+- If there is strong reason to believe that the case belongs to a different population, omit it.
+- If there is no reason to believe it belongs to a different population, can anything be learned from it? A rare value can reveal information that would’ve been otherwise overlooked.
+
+
+## Identifying influential cases
+
+- Outlier influence can be tested with measurements including these that use the ‘leave one out’ strategy (big change after leaving one out, that one is influential):
+  - DFFITS, difference  in the fits: Measures the difference in fitted values for the ith case when all n cases are used vs. with the ith case excluded.
+    - $\text{DFFITS}_i = \frac{\hat{Y}_i - \hat{Y}_{i(i)}}{\sqrt{\text{MSE} \cdot h_{ii}}}$, where hii is leverage statistic. There is an alternate calculation that relates it to studentized residual.
+  - DFBetas, difference in the betas: Measures the difference in slopes n cases are used vs. when the ith case is excluded.
+  - Cook’s distance: Measures the distance of the outlier and the leverage at the same time (joint influence).
+    - Plot Di to identify large values.
+    - Removing an influential point may have little effect because there’s another influential point nearby. Could worsen the fit because there’s another influential point opposite to it.
+    - High VIF may be due to influential points. Check before removing variables.
+- Covariance ratio: if the covariance ration > 1 + (3k/n), deleting the observation adversely affects the accuracy of at least one of the parameter estimates.
+
+
+## Testing slopes for statistical significance
+
+- Key assumption: the explanatory variables (terms in the model) sufficiently describe the process in question. It is misleading to leave out important variables or to include nonessential terms.
+- Find the smallest model that explains the relationship sufficiently and includes all the important explanatory variables.
+
+## Strategies
+
+- Examine data for outliers and influence observations and decide to include or not.
+- Use partial residual plot to determine influence. Remove terms that don’t have a linear relationship. Keep in mind that removing non-statistically significant terms can change significance of other terms.
+- Remove nuisance variables, terms that don’t help answer the study ?s.
+- Check model after every change.
+
+
+## Strategies for numerous outliers or nonconstant variance
+
+- Weighted least squares weights values with large variants less than values with small variants, so less precise measurements will affect the values less.
+- Measurement error models are appropriate when X is measured with error as well as Y. Not an issue if the purpose is prediction.
+
+
+## Proving causality
+
+- Only possible in randomized experiments
+- ood regression model / high r-square show association not causation. We may have left out an important variable.
+
+## Example of putting it together (alcohol metabolism)
+
+1. Plot the data in a scatterplot
+2. Develop tentative models (use QOIs, account for confounders and relationships)
+3. Fit the model
+4. Evaluate the residual plots (for constant SD, normality and zero mean, identification of influential points)
+
+
+## Example: Alcohol Metabolism
+
+![](images/notes_13_2.png){width=5in fig-align="left"}  
+![](images/notes_13_3.png){width=5in fig-align="left"} 
+![](images/notes_13_4.png){width=5in fig-align="left"} 
+
+
+## Variable selection
+
+- “Garbage predictors” can enlarge R2 creating a false appearance of prediction.
+- How can we determine which of many predictors should be included?
+  - Removing and inserting various variables can change the results of the others and can be confusing.
+
+
+## Automatic variable selection techniques
+
+- Forward selection
+- Backward selection
+- Stepwise regression
+- Sometimes these result in the same model, and sometimes not. Which model makes sense, the smallest?, look at R2, and check regression diagnostics for influential points/variables.
+
+
+## Forward selection
+
+- Begins with no predictors in the model.
+- Fits SLR model for all potential predictors one at a time.
+- If first predictor is statistically significant, it is left in the model. Then the next predictor with the best statistical significance is included.
+- Predictors are added until R2 doesn’t increase significantly.
+- Pros: 
+  - Easy to compute and understand
+  - Can always be performed, even if n < k (sample size < predictors).
+- Cons: 
+  - Possible to get a bad initial fit. Maybe it was significant only with no other variables in the model or with the previous variable.
+  - Doesn’t guarantee the best subset selections.
+  - No check for collinearity, so collinear variables may enter “randomly”.
+
+
+## Backward elimination
+
+- Begins with all predictors in the model.
+- For each predictor, we compute an F-statistic, which tells us how much the overall F decreases when we drop a variable from the model.
+- Keep dropping variables from the model until reaching a significant increase in the F-statistic.
+  - Drops variables that are neither statistically significant nor cause a large change in R2.
+- When we get a large change in R2, we stop dropping variables.
+- Pros: 
+  - Begin with a good fit (has all the variables).
+  - Good initial estimate of s2 (if n is large).
+  - Only deletes noninfluential predictors.
+- Cons: 
+  - Cannot be used if n < k.
+  - May have few error degrees of freedom initially, making it harder to select values to omit.
+  - Doesn’t guarantee best subset selections. Collinear variables may be deleted randomly.
+  - No model (residual) checks at any stage.
+
+
+## Stepwise selection
+
+- Starts with no predictors.
+- First, adds an explanatory variable. Uses simple linear regression for each possible variable and adds the one with the most significant results based on the p-value and t-statistic from a t-test.
+- At each stage, performs a backward elimination.
+- If you enter a 2nd variable and the 1st is no longer significant, then drop it. (This may be due to collinearity between the variables.) This continues until all terms are statistically significant.
+- Thresholds are set for entering / removing variables. Specify a p-value-to-enter (p-valueE = 0.15 or whatever you choose) and a p-value-to-remove (p-valueR = 0.15 or whatever you choose).
+P-value statistic is only one option for making these selections.
+- Cautions: 
+  - All the important predictor variables for predicting Y may not have been identified (type II error).
+  - Also, not all the unimportant predictors may have eliminated (type I error).
+  - You can make the p-value threshold higher (or different) to subset the variables or use different selection techniques to get candidate models for further analysis.
+  
+
+## Select a selection procedure
+
+- No one is universally better.
+- We are doing multiple comparisons. The more variables the more tests, and the increase in probability of a type I error.
+- Use your knowledge of the data ( :o) human in the loop) Look at the included variables, regression diagnostics, and influence statistics. Ensure assumptions are met and the included variables make sense.
+
+
+## Variable selection criteria
+
+- P-values
+- AIC (penalized for # parameters, smaller the better)
+- BIC (or SBC, more penalized for # parameters, smaller better)
+- PRESS – leave one out statistic, where you fit on all but one and get a residual for the left out one, do that n times and square the residuals
+- Mallow Cp statistic - smaller the better, closest to p
+- R2 - larger the better (not overfit)
+
+
+## Mallow’s Cp – best subset selection
+
+- $C_p = p + (n - p) \times \frac{\hat{\sigma}^2 - \hat{\sigma}^2_{\text{full}}}{\hat{\sigma}^2_{\text{full}}}$
+- Model with the Cp closest to p is preferred, where p is the number of parameters including the intercept. The expected Cp for a model with no overfit is p.
+- For linear regression, the Cp statistic is equivalent to the AIC.
