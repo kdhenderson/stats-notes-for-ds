@@ -17,24 +17,24 @@ book:
       affiliation: "SMU MSDS Program"
       orcid: "0000-0002-9265-7709"
   chapters:
+    - index.qmd  # Introduction or preface
     - part: "Statistical Foundations"
-    - chapters:
-    #- index.qmd  # Introduction or preface
-      - foundation-chapter01.qmd  # Add additional chapters as they are created
-      - foundation-chapter02.qmd
-      - foundation-chapter03.qmd
-      - foundation-chapter04.qmd
-      - foundation-chapter05.qmd
-      - foundation-chapter06.qmd
-      - foundation-chapter07.qmd
-      - foundation-chapter08.qmd
-      - foundation-chapter09.qmd
-      - foundation-chapter10.qmd
-      - foundation-chapter11.qmd
-      - foundation-chapter12.qmd
-      - foundation-chapter13.qmd
+      chapters:
+        - foundation-chapter01.qmd  # Add additional chapters as they are created
+        - foundation-chapter02.qmd
+        - foundation-chapter03.qmd
+        - foundation-chapter04.qmd
+        - foundation-chapter05.qmd
+        - foundation-chapter06.qmd
+        - foundation-chapter07.qmd
+        - foundation-chapter08.qmd
+        - foundation-chapter09.qmd
+        - foundation-chapter10.qmd
+        - foundation-chapter11.qmd
+        - foundation-chapter12.qmd
+        - foundation-chapter13.qmd
     - part: "Applied Statistics"
-    - chapters:
-        - applied-chapter01.qmd
-        #- applied-chapter02.qmd
-        #- applied-chapter03.qmd
+      chapters:
+          - applied-chapter01.qmd
+          #- applied-chapter02.qmd
+          #- applied-chapter03.qmd
