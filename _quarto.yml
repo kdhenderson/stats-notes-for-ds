@@ -1,6 +1,6 @@
 project:
   type: book
-  title: "Henderson's Statistics Notes"
+  title: "Henderson's Statistics Notes for Data Science"
 
 format:
   html:
@@ -16,17 +16,25 @@ book:
     - name: "Kristin Henderson"
       affiliation: "SMU MSDS Program"
       orcid: "0000-0002-9265-7709"
-  chapters:      # Define the chapters of your book
-    - index.qmd  # Introduction or preface
-    - chapter01.qmd  # Add additional chapters as they are created
-    - chapter02.qmd
-    - chapter03.qmd
-    - chapter04.qmd
-    - chapter05.qmd
-    - chapter06.qmd
-    - chapter07.qmd
-    - chapter08.qmd
-    - chapter09.qmd
-    - chapter10.qmd
-    #- chapter11.qmd
-    
+  chapters:
+    - part: "Statistical Foundations"
+    - chapters:
+    #- index.qmd  # Introduction or preface
+      - foundation-chapter01.qmd  # Add additional chapters as they are created
+      - foundation-chapter02.qmd
+      - foundation-chapter03.qmd
+      - foundation-chapter04.qmd
+      - foundation-chapter05.qmd
+      - foundation-chapter06.qmd
+      - foundation-chapter07.qmd
+      - foundation-chapter08.qmd
+      - foundation-chapter09.qmd
+      - foundation-chapter10.qmd
+      - foundation-chapter11.qmd
+      - foundation-chapter12.qmd
+      - foundation-chapter13.qmd
+    - part: "Applied Statistics"
+    - chapters:
+        - applied-chapter01.qmd
+        #- applied-chapter02.qmd
+        #- applied-chapter03.qmd

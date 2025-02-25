@@ -5,4 +5,10 @@ format:
     number-sections: false
 ---
 
-This book is a student's companion for the SMU Master of Science in Data Science Statistical Foundations and Applied Statistics courses. 
+# Introduction
+
+This book serves as a companion for students in the SMU Master of Science in Data Science program, specifically for the **Statistical Foundations** and **Applied Statistics** courses. It is designed to provide both theoretical understanding and practical applications of statistical methods.
+
+## **Book Structure**
+- **Part 1: Statistical Foundations**: Covers the theoretical groundwork.
+- **Part 2: Applied Statistics**: Focuses on real-world statistical applications.

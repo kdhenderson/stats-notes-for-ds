@@ -1,0 +1,223 @@
+---
+title: "Multiple Linear Regression (MLR) Revisited"
+---
+
+## Objectives
+
+- Understand regression problems and distinguish them from classification problems.
+- Identify when to use explanatory versus predictive modeling.
+- Compare parametric and nonparametric regression models and their trade-offs.
+- Review multiple linear regression (MLR) and its applications.
+- Evaluate key assumptions of MLR and correctly interpret model coefficients.
+- Explore techniques to increase model complexity when needed.
+- Detect and address multicollinearity in regression models.
+
+
+## Key Terms
+
+- Response Variable vs. Explanatory Variables  
+  - The **response variable** (dependent variable) is what we aim to explain or predict.  
+  - **Explanatory variables** (independent variables) are the factors that may influence the response.
+
+- Regression vs. Classification 
+  - **Regression**: The response is a continuous numeric variable (e.g. predicting car mileage).  
+  - **Classification**: The response variable is categorical and can have two (binary) or more than two levels (e.g. predicting where a car was made: North America, Asia, or Europe).
+
+
+### Example: Regression Problem - MPG Dataset  
+A common regression problem is predicting a car's miles per gallon (MPG) using various features:
+
+- Response Variable: `mpg` (miles per gallon)
+- Explanatory Variables: `cylinders`, `horsepower`, `origin` (3 levels), `year`, etc.
+
+### Regression Modeling Workflow
+When analyzing a regression problem, we typically follow these steps:
+
+1. Exploratory Data Analysis (EDA) 
+   - Visualize relationships between the response and each explanatory variable.
+   - Identify potential trends, outliers, and transformations.
+
+2. Key Questions to Consider  
+   - Which variables explain `mpg`, and how strong are these relationships?  
+   - Are there specific hypotheses to test (e.g. does a car's origin significantly impact `mpg`)?  
+   - Can we use this model to predict the `mpg` of a new car?
+
+
+## Regression Problems
+
+A regression problem occurs when the response variable is continuous. The goal can either be **explanation** (understanding relationships) or **prediction** (making accurate future estimates).
+
+### To Explain or To Predict?
+
+1. Explaining Relationships  
+   - Hypothesis testing and confidence intervals  
+   - Identifying relationships between response and predictors  
+   - Adjusting for confounding (lurking) variables
+
+2. Predicting Future Outcomes  
+   - Focused on accuracy, not interpretation  
+   - More complex models can be used
+
+To determine the appropriate approach, ask:
+What is the primary goal—explanation, prediction, or both?
+
+
+---
+
+### Parametric vs. Nonparametric Regression Tools
+
+Think about how the relationships between the response and predictor variables behave in terms of a mathematical function (e.g. linear or quadratic)?
+
+Example:
+numeric predictor horsepower -> quadratic function
+categorical predictor cylinders -> piecewise function
+
+General Regression Model Structure:
+X = (X1, X2, ..., Xp)
+Y = f(X) + E
+
+f(X) - deterministic
+E - error
+
+population function: f
+sample function: f-hat (estimate of what the function is using the dataset)
+
+two approaches to estimating f:
+1. Parametric:
+  - you must specify the form of f
+  - additional assumptions on the error term
+  - can be highly interpretable with a simpler model
+  - can predict well IF f is correctly specified
+  - allows for hypothesis testing framework
+2. Nonparametric:
+  - not required to specify what f looks like
+  - completely data-driven
+  - can predict very complex situations well
+  - flexibility comes with a cost of interpretation and loss of hypothesis testing frameworks
+  
+Parametric pros:
+1. great for interpretation
+2. allows for hypothesis testing
+3. does not require large data sets
+4. easier to implement in large p (predictor variables) and small n situations
+Parametric cons:
+1. difficult to specify extremely complex forms of f
+2. for large data sets, nonparametric models will typically perform (predict) as good or better
+3. fixing diagnostic checks (time cost) - assumptions, multicollinearity, influential points
+
+Interpretation vs. Flexibility (complexity) of Models 
+
+
+### Revisiting MLR
+
+**Model Summary**
+
+Y = b0 + b1X1 + ... + bpXp + E
+- response Y
+- p explanatory variables
+- X = (X1, X2, ..., Xp)
+
+**Assumptions and Diagnostics**
+
+E: errors are independent, normally distributed, constant variance
+
+Residual diagnostics:
+- Residual vs fitted (predicted values) to check for constant variance
+- q-q plot and/or histogram for normality
+- Independence assumption is made based on the data collection process (same subject -> repeated measures or over time -> time series).
+
+**Basic Interpretations**
+
+When each predictor is included in the model only once
+
+Continuous predictors:
+  - For every 1 unit increase in X, there is an increase (decrease) of beta in the response variable Y holding the other variables fixed.
+  
+Categorical variables are "dummy-tized":
+  - Ex: X1 categorical with groups A, B, and C while X2, X3 are continuous
+  Y = b0 + b1LevelB + b2LevelC + b3X2 + b4X3
+  b1: the difference in the mean response (B vs. A (ref/intercept/not in model specifically)) holding the other variables fixed
+  b2: the difference in the mean response (C vs. A) holding the other variables fixed
+  
+"holding all other variables fixed": most advantageous property MLR has
+-> put in real world context:
+  Sex discrimination in pay:
+  What confounding variables could help explain a pay gay? (level of position, education, job role)
+  Interpretation: It is estimated that a male with the same IQ level and education level (instead of saying the generic holding all other variables constant) has an average salary that is $28,463 higher than females. 
+
+
+**Benefits from Adjusting**
+
+
+**Transformations**
+General rules of thumb:
+* non-constant variance -> transform Y
+* trend in residual plots -> transform or add terms with X
+
+Pros and Cons:
+- produces models where assumptions are met
+- reliable statistical inference on the regression coefficients
+- interpretation of the coefficients is still available for log transformation
+- interpretation is difficult with exotic transformation (not an issue if predicting only)
+
+To fit a polynomial model:
+`lm(y ~ poly(x1,3), data=mydata) # predictor, degree
+
+Ways models can get more complex:
+- modeling a nonlinear trend (one predictor, multiple coefficients from higher order terms)
+- multiple linear trends by category (multiple predictors with interaction between predictors)
+
+Add predictor one at a time -> additive model, changing intercept but not slope
+
+Add interaction -> non-additive, different intercept and slope
+
+
+**Hypothesis testing involving interactions:** 
+
+How do you generate a confidence interval around the non-reference category
+if X1 is numerical and X2 has 2 categorical levels, with an interaction term
+ref (X2 = 0): Y = b0 + b1X1
+non-ref (X2 = 1): Y = (b0 + b2) + (b1 + b3)X1
+
+Do this with contrasts.
+H0: c0b0 + c1b1 + c2b2 + c3b3 = 0
+
+
+### Multicollinearity
+
+Multiple explanatory variables in your model are correlated to each other.
+
+Becomes an issue especially when trying to explain.
+1. Makes it harder to "hold the other variables fixed".
+2. Creates additional uncertainty in the estimated regression coefficients (wider intervals, larger p-values).
+3. Model conclusions can change drastically depending on what variables you add or delete from the model.
+
+Variance Inflation Factors - high correlation between predictors makes high VIF, which make the SE(beta) large too. (The SE(beta) is a function of the relationship between the variability of the response and predictors and the VIF.)
+
+VIF Properties/Rules
+- If variable has a VIF approx. 1, then there is not collinearity issue.
+- If 5 < VIF < 10, then that variable has mild collinearity and should be investigated.
+- If VIF > 10, then that variable has severe collinearity and should be investigated.
+
+High VIFs are not always concerning.
+  - Adding complexity such as polynomial terms and interaction terms
+  - Expected with categorical variables with more than two levels
+  - If you only care about interpreting one regression coefficient and it has low VIF (i.e. if you are just accounting for the other variables)
+  
+Addressing multicollinearity, 3 settings:
+
+1. When very specific questions are defined up front
+  - already have a plan for hypothesis test
+  - fit model, assumptions, address issues with assumptions
+  - check for multicollinearity (VIFs, graphics): revisit EDA if multicollinearity -> does adjustment make sense; do the results change if you remove the variables with high multicollinearity
+  - report findings of the original planned model but make note of multicollinearity concern, potentially include secondary analysis
+  - alternative strategies: aggregate the correlated variables into a single variable; data reduction (PCA): create new variables from your original ones 
+  
+2. No specific question, in exploratory modeling phase, but want an interpretable model (which predictors are important and which aren't)
+  - identify a subset of predictor variables that help explain the response
+  - typically there are many explanatory variables to consider
+  - use manual and automated model-building processes to fit the data set as well as possible and ensure it is free from multicollinearity issues (this process tends to dampen the multicollinearity issue anyway)
+
+3. Objective is to predict only
+  - there is no issue with multicollinearity when only making predictions. (the issue is with the SEs and with the hypothesis testing components of the regression tools)
+  - focus becomes creating a good estimate of f, more exotic transformations and complexity, just need to verify that the model works on similar future data
