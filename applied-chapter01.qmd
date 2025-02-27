@@ -61,10 +61,8 @@ A regression problem occurs when the response variable is continuous. The goal c
 To determine the appropriate approach, ask:
 What is the primary goal—explanation, prediction, or both?
 
-
 ---
-
-### Parametric vs. Nonparametric Regression Tools
+## Parametric vs. Nonparametric Regression Tools
 
 Think about how the relationships between the response and predictor variables behave in terms of a mathematical function (e.g. linear or quadratic)?
 
@@ -72,29 +70,33 @@ Example:
 numeric predictor horsepower -> quadratic function
 categorical predictor cylinders -> piecewise function
 
-General Regression Model Structure:
-X = (X1, X2, ..., Xp)
-Y = f(X) + E
+### General Regression Model Structure
 
-f(X) - deterministic
-E - error
+$Y = f(X) + \varepsilon$, where $X = (x_1, x_2, ..., x_p)$
+- $f(X)$: Deterministic
+- $\varepsilon$: Random error
 
 population function: f
 sample function: f-hat (estimate of what the function is using the dataset)
 
 two approaches to estimating f:
-1. Parametric:
-  - you must specify the form of f
-  - additional assumptions on the error term
-  - can be highly interpretable with a simpler model
-  - can predict well IF f is correctly specified
-  - allows for hypothesis testing framework
-2. Nonparametric:
-  - not required to specify what f looks like
-  - completely data-driven
-  - can predict very complex situations well
-  - flexibility comes with a cost of interpretation and loss of hypothesis testing frameworks
   
+#### **Parametric Approach**
+- Requires specifying the functional form of $f(X)$.
+- Has additional assumptions on the error term.
+- Simpler models can be highly interpretable.
+- Allows hypothesis testing.
+- Performs well when the model is correctly specified.
+
+#### **Nonparametric Approach**
+- Data-driven, no need to specify $f(X)$.
+- Can predict very complex situations well.
+- Flexible but harder to interpret.
+- Typically provides reliable estimations with large data sets.
+- Not conducive for hypothesis testing.
+
+**Tradeoff:** Parametric models are interpretable but restrictive, while nonparametric models are flexible but less explainable.
+
 Parametric pros:
 1. great for interpretation
 2. allows for hypothesis testing
@@ -107,7 +109,7 @@ Parametric cons:
 
 Interpretation vs. Flexibility (complexity) of Models 
 
-
+---
 ### Revisiting MLR
 
 **Model Summary**
