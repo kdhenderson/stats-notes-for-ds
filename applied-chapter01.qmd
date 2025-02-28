@@ -61,72 +61,96 @@ A regression problem occurs when the response variable is continuous. The goal c
 To determine the appropriate approach, ask:
 What is the primary goal—explanation, prediction, or both?
 
----
+
 ## Parametric vs. Nonparametric Regression Tools
-
-Think about how the relationships between the response and predictor variables behave in terms of a mathematical function (e.g. linear or quadratic)?
-
-Example:
-numeric predictor horsepower -> quadratic function
-categorical predictor cylinders -> piecewise function
 
 ### General Regression Model Structure
 
-$Y = f(X) + \varepsilon$, where $X = (x_1, x_2, ..., x_p)$
-- $f(X)$: Deterministic
-- $\varepsilon$: Random error
+The regression model follows:
 
-population function: f
-sample function: f-hat (estimate of what the function is using the dataset)
+$$
+Y = f(X) + \varepsilon
+$$
 
-two approaches to estimating f:
+where:  
+- $X = (x_1, x_2, ..., x_p)$ represents the explanatory variables.  
+- $f(X)$ is the deterministic component.  
+- $\varepsilon$ is the random error.  
+
+### Key Terminology
+- Population function: $f$ (true but unknown function in the population).  
+- Sample function: $\hat{f}$ (estimate of $f$ using observed data).  
+
+### Estimating $f$: Parametric vs. Nonparametric Approaches  
+
+There are two primary approaches for estimating $f$:  
+1. **Parametric** 
+2. **Nonparametric**
+
+The choice depends on how the response and predictor variables relate mathematically.  
+For example:  
+- A numeric predictor like horsepower may follow a quadratic function.  
+- A categorical predictor like cylinders may follow a piecewise function.  
+
+### Parametric Approach
+- Requires specifying the functional form of $f(X)$.  
+- Assumes additional conditions about the error term.  
+- Allows hypothesis testing.  
+- Works well when the model is correctly specified.  
+- Simpler models can be more interpretable.  
+
+### Nonparametric Approach
+- No need to specify $f(X)$.  
+- Fully data-driven and flexible.  
+- Can capture complex relationships.  
+- More difficult to interpret.  
+- May require larger datasets for reliable estimation.  
+- Does not support traditional hypothesis testing frameworks.  
+
+### Tradeoffs: Interpretability vs. Flexibility
+
+| Approach       | Pros | Cons |
+|---------------|------|------|
+| Parametric    | Interpretable  <br> Allows hypothesis testing  <br> Works well for small datasets  <br> Easier for high $p$, low $n$ settings | Cannot model complex relationships well  <br> Sensitive to misspecification |
+| Nonparametric | Adapts to complex patterns  <br> Less restrictive assumptions  <br> Often performs better for large datasets | Requires large datasets  <br> No hypothesis testing  <br> Harder to interpret |
+
+### Challenges with Parametric Models
+1. Specifying highly complex forms of $f(X)$ is difficult.  
+2. For large datasets, nonparametric models often perform as well or better.  
+3. Additional diagnostic checks are required, such as:  
+   - Checking model assumptions (linearity, normality, independence).  
+   - Addressing multicollinearity and influential points.  
+
+
+## A Review of Multiple Linear Regression (MLR)
+
+### Model Structure
+
+$$
+Y = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p + \varepsilon
+$$
+
+where:  
+- $Y$ is the response variable.  
+- $X_1, X_2, ..., X_p$ are the explanatory variables.  
+- $\varepsilon$ is the random error term.
+
+### Assumptions of MLR
+1. **Linearity** – The relationship between predictors and response is linear.  
+2. **Independence** – Errors are independent.  
+3. **Homoscedasticity** – Errors have constant variance.  
+4. **Normality** – Errors follow a normal distribution. 
   
-#### **Parametric Approach**
-- Requires specifying the functional form of $f(X)$.
-- Has additional assumptions on the error term.
-- Simpler models can be highly interpretable.
-- Allows hypothesis testing.
-- Performs well when the model is correctly specified.
+### Residual Diagnostic Checks  
+These checks help assess whether assumptions hold:  
 
-#### **Nonparametric Approach**
-- Data-driven, no need to specify $f(X)$.
-- Can predict very complex situations well.
-- Flexible but harder to interpret.
-- Typically provides reliable estimations with large data sets.
-- Not conducive for hypothesis testing.
-
-**Tradeoff:** Parametric models are interpretable but restrictive, while nonparametric models are flexible but less explainable.
-
-Parametric pros:
-1. great for interpretation
-2. allows for hypothesis testing
-3. does not require large data sets
-4. easier to implement in large p (predictor variables) and small n situations
-Parametric cons:
-1. difficult to specify extremely complex forms of f
-2. for large data sets, nonparametric models will typically perform (predict) as good or better
-3. fixing diagnostic checks (time cost) - assumptions, multicollinearity, influential points
-
-Interpretation vs. Flexibility (complexity) of Models 
+- **Residual vs. Fitted Plot** – Examines constant variance (homoscedasticity).  
+- **Q-Q Plot and/or Histogram** – Evaluates whether residuals are normally distributed.  
+- **Variance Inflation Factor (VIF)** – Detects multicollinearity among predictors.  
+- **Data Collection Process Review** – Ensures independence.  
+  - Violations often occur in repeated measures on the same subject or in time series data.  
 
 ---
-### Revisiting MLR
-
-**Model Summary**
-
-Y = b0 + b1X1 + ... + bpXp + E
-- response Y
-- p explanatory variables
-- X = (X1, X2, ..., Xp)
-
-**Assumptions and Diagnostics**
-
-E: errors are independent, normally distributed, constant variance
-
-Residual diagnostics:
-- Residual vs fitted (predicted values) to check for constant variance
-- q-q plot and/or histogram for normality
-- Independence assumption is made based on the data collection process (same subject -> repeated measures or over time -> time series).
 
 **Basic Interpretations**
 
