@@ -145,58 +145,61 @@ where:
 These checks help assess whether assumptions hold:  
 
 - **Residual vs. Fitted Plot** – Examines constant variance (homoscedasticity).  
-- **Q-Q Plot and/or Histogram** – Evaluates whether residuals are normally distributed.  
-- **Variance Inflation Factor (VIF)** – Detects multicollinearity among predictors.  
+- **Q-Q Plot and/or Histogram** – Assesses whether residuals follow a normal distribution.  
+- **Variance Inflation Factor (VIF)** – Identifies multicollinearity among predictors.  
 - **Data Collection Process Review** – Ensures independence.  
   - Violations often occur in repeated measures on the same subject or in time series data.  
 
 ---
+### Basic Interpretations
 
-**Basic Interpretations**
+- When each predictor is included in the model only once, interpretations follow these general rules:  
+  - **Continuous predictors**: A one-unit increase in $X$ results in a change of $\beta$ in $Y$, holding all other variables constant. 
+  - **Categorical variables**: Represented using dummy variables. 
+**Example:** Suppose $X_1$ is categorical with three levels (A, B, C), while $X_2$ and $X_3$ are continuous. The model:  
 
-When each predictor is included in the model only once
+$$
+Y = \beta_0 + \beta_1\text{LevelB} + \beta_2\text{LevelC} + \beta_3X_2 + \beta_4X_3
+$$
 
-Continuous predictors:
-  - For every 1 unit increase in X, there is an increase (decrease) of beta in the response variable Y holding the other variables fixed.
-  
-Categorical variables are "dummy-tized":
-  - Ex: X1 categorical with groups A, B, and C while X2, X3 are continuous
-  Y = b0 + b1LevelB + b2LevelC + b3X2 + b4X3
-  b1: the difference in the mean response (B vs. A (ref/intercept/not in model specifically)) holding the other variables fixed
-  b2: the difference in the mean response (C vs. A) holding the other variables fixed
-  
-"holding all other variables fixed": most advantageous property MLR has
--> put in real world context:
-  Sex discrimination in pay:
-  What confounding variables could help explain a pay gay? (level of position, education, job role)
-  Interpretation: It is estimated that a male with the same IQ level and education level (instead of saying the generic holding all other variables constant) has an average salary that is $28,463 higher than females. 
+- $\beta_1$: Difference in mean response between group B and reference group A, holding other variables constant.  
+- $\beta_2$: Difference in mean response between group C and reference group A, holding other variables constant.  
+- The reference group A is not specifically listed in the model.
 
+**Why "holding all other variables constant" is important**  
+A key advantage of MLR is its ability to **control for confounding variables**.  
 
-**Benefits from Adjusting**
+Example: **Sex discrimination in pay**  
+- If we suspect a gender-based wage gap, we should control for factors like **position level, education, and job role**.  
+- A more precise interpretation:  
+  *"A male with the same IQ and education level (instead of generically 'holding all other variables constant') is estimated to earn $28,463 more than a female counterpart."* 
 
 
-**Transformations**
-General rules of thumb:
-* non-constant variance -> transform Y
-* trend in residual plots -> transform or add terms with X
+## Adding Model Complexity
 
-Pros and Cons:
-- produces models where assumptions are met
-- reliable statistical inference on the regression coefficients
-- interpretation of the coefficients is still available for log transformation
-- interpretation is difficult with exotic transformation (not an issue if predicting only)
+### Transformations
+When to transform variables:
+- **Non-constant variance** → Transform $Y$.
+- **Nonlinear trends in residual plots** → Transform $X$ or add polynomial or interaction terms.
 
-To fit a polynomial model:
-`lm(y ~ poly(x1,3), data=mydata) # predictor, degree
+### Pros and Cons of Transformations  
+- Helps satisfy model assumptions.  
+- Allows reliable statistical inference on regression coefficients.  
+- Log transformations retain interpretability.  
+- More complex transformations may hinder interpretation (less of a concern for predictive models).  
 
-Ways models can get more complex:
-- modeling a nonlinear trend (one predictor, multiple coefficients from higher order terms)
-- multiple linear trends by category (multiple predictors with interaction between predictors)
+**Example:** Polynomial regression
+```{r eval=FALSE}
+lm(y ~ poly(x1, 3), data=mydata) # poly(predictor, degree)
+```
 
-Add predictor one at a time -> additive model, changing intercept but not slope
+### Ways to Increase Model Complexity
+- **Modeling nonlinear trends**: Introducing higher-order terms (with multiple coefficients) for a single predictor (e.g. $X^2$ or $X^3$).
+- **Multiple linear trends by category**: Using interaction terms to model relationships (between multiple predictors) that vary by group.
+- **Adding predictors one at a time**: Results in an additive model where the intercept changes, but the slope remains the same.
+- **Adding interactions**: Results in a non-additive model where both the intercept and slope change depending on another variable.
 
-Add interaction -> non-additive, different intercept and slope
-
+---
 
 **Hypothesis testing involving interactions:** 
 
