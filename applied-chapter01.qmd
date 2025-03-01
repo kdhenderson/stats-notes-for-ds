@@ -150,7 +150,6 @@ These checks help assess whether assumptions hold:
 - **Data Collection Process Review** – Ensures independence.  
   - Violations often occur in repeated measures on the same subject or in time series data.  
 
----
 ### Basic Interpretations
 
 - When each predictor is included in the model only once, interpretations follow these general rules:  
@@ -170,7 +169,7 @@ $$
 A key advantage of MLR is its ability to **control for confounding variables**.  
 
 Example: **Sex discrimination in pay**  
-- If we suspect a gender-based wage gap, we should control for factors like **position level, education, and job role**.  
+- If we suspect a gender-based wage gap, we should control for factors like position level, education, and job role.  
 - A more precise interpretation:  
   *"A male with the same IQ and education level (instead of generically 'holding all other variables constant') is estimated to earn $28,463 more than a female counterpart."* 
 
@@ -199,54 +198,62 @@ lm(y ~ poly(x1, 3), data=mydata) # poly(predictor, degree)
 - **Adding predictors one at a time**: Results in an additive model where the intercept changes, but the slope remains the same.
 - **Adding interactions**: Results in a non-additive model where both the intercept and slope change depending on another variable.
 
----
+## Interactions in MLR
 
-**Hypothesis testing involving interactions:** 
-
-How do you generate a confidence interval around the non-reference category
-if X1 is numerical and X2 has 2 categorical levels, with an interaction term
-ref (X2 = 0): Y = b0 + b1X1
-non-ref (X2 = 1): Y = (b0 + b2) + (b1 + b3)X1
-
-Do this with contrasts.
-H0: c0b0 + c1b1 + c2b2 + c3b3 = 0
+If $X_1$ is numeric and $X_2$ is categorical with two levels:
+- **Reference group** (where $X_2=0$): $Y = \beta_0 + \beta_1 X_1$
+- **Non-reference group** (where $X_2=1$): $Y = (\beta_0 + \beta_2) + (\beta_1 + \beta_3)X_1$
 
 
-### Multicollinearity
+## Hypothesis Testing for Interactions
 
-Multiple explanatory variables in your model are correlated to each other.
+To test for the significance of an interaction term and generate a confidence interval around the non-reference category, we use a contrast test:
 
-Becomes an issue especially when trying to explain.
-1. Makes it harder to "hold the other variables fixed".
-2. Creates additional uncertainty in the estimated regression coefficients (wider intervals, larger p-values).
-3. Model conclusions can change drastically depending on what variables you add or delete from the model.
+$$
+H_0: c_0\beta_0 + c_1\beta_1 + c_2\beta_2 + c_3\beta_3 = 0
+$$
 
-Variance Inflation Factors - high correlation between predictors makes high VIF, which make the SE(beta) large too. (The SE(beta) is a function of the relationship between the variability of the response and predictors and the VIF.)
 
-VIF Properties/Rules
-- If variable has a VIF approx. 1, then there is not collinearity issue.
-- If 5 < VIF < 10, then that variable has mild collinearity and should be investigated.
-- If VIF > 10, then that variable has severe collinearity and should be investigated.
+## Multicollinearity
+
+- Multicollinearity occurs when two or more explanatory variables are highly correlated, leading to:
+  - Difficulty in holding other variables fixed.
+  - Increased uncertainty in coefficient estimates (wider intervals, larger p-values)..
+  - Drastic changes in conclusions when variables are added or removed.
+
+### Variance Inflation Factor (VIF)
+
+VIF measures how much a predictor is correlated with other predictors:
+- **Higher correlation** between predictors results in a **higher VIF** and **larger standard errors** ($SE(\beta)$).
+- $SE(\beta)$ is a function of the relationship between the variability of the response, predictors, and the VIF.
+
+- **VIF $\approx$ 1**: No collinearity.
+- **$5 < \text{VIF} < 10$**: Mild collinearity, investigate further.
+- **VIF > 10**: Severe collinearity, investigate adjustments.
 
 High VIFs are not always concerning.
-  - Adding complexity such as polynomial terms and interaction terms
-  - Expected with categorical variables with more than two levels
-  - If you only care about interpreting one regression coefficient and it has low VIF (i.e. if you are just accounting for the other variables)
-  
-Addressing multicollinearity, 3 settings:
+  - Expected with polynomial terms and interaction terms.
+  - Common for categorical variables with with more than two levels.
+  - If interpreting only one coefficient, and it has a low VIF, multicollinearity may not be an issue (i.e. if you are just accounting for the other variables).
 
-1. When very specific questions are defined up front
-  - already have a plan for hypothesis test
-  - fit model, assumptions, address issues with assumptions
-  - check for multicollinearity (VIFs, graphics): revisit EDA if multicollinearity -> does adjustment make sense; do the results change if you remove the variables with high multicollinearity
-  - report findings of the original planned model but make note of multicollinearity concern, potentially include secondary analysis
-  - alternative strategies: aggregate the correlated variables into a single variable; data reduction (PCA): create new variables from your original ones 
   
-2. No specific question, in exploratory modeling phase, but want an interpretable model (which predictors are important and which aren't)
-  - identify a subset of predictor variables that help explain the response
-  - typically there are many explanatory variables to consider
-  - use manual and automated model-building processes to fit the data set as well as possible and ensure it is free from multicollinearity issues (this process tends to dampen the multicollinearity issue anyway)
+## Addressing Multicollinearity
 
-3. Objective is to predict only
-  - there is no issue with multicollinearity when only making predictions. (the issue is with the SEs and with the hypothesis testing components of the regression tools)
-  - focus becomes creating a good estimate of f, more exotic transformations and complexity, just need to verify that the model works on similar future data
+### Scenario 1: Predefined Research Questions
+- Start with a hypothesis and a plan to test it.
+- Fit model and check assumptions.
+- Check for multicollinearity using VIFs and graphics. Consider secondary analysis if multicollinearity is a concern.
+- Report findings including and excluding variables with multicollinearity concerns.
+- Possible solutions:
+  - Aggregate correlated variables into a single variable.
+  - Use data reduction strategies such as Principal Component Analysis (PCA).
+
+### Scenario 2: Exploratory Model Building
+- Used when the goal is an interpretable model, but no predefined hypothesis exists.
+- Identify key predictors.
+- Use model selection techniques to minimize collinearity.
+
+### Scenario 3: Predictive Modeling
+- Multicollinearity is **not a concern** when the goal is pure prediction.
+- It only affects coefficient standard errors ($SE$) and the hypothesis testing framework.
+- The focus is on model performance, not coefficient interpretation.
