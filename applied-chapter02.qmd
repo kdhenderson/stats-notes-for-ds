@@ -1,0 +1,192 @@
+---
+title: "The Bias Variance Trade-off"
+---
+
+## Objectives
+
+- Challenges with building models:
+  - The bias-variance trade-off
+  - Feature selection
+
+
+## Challenges with Building Models
+
+When faced with a large number of possible predictor variables, deciding where to start and how to choose can be challenging. Important considerations include:
+- Many predictors may not be relevant.
+- In some domains, such as medicine, prediction accuracy is critical.
+- Sample size limitations—having many variables but a small sample size—can lead to overfitting.
+
+## Model Reproducibility
+
+For regression models, the most common accuracy measure is **mean squared error (MSE)**, calculated as the sum of squared error divided by the sample size.
+$$ MSE = \frac{\sum (y_i - \hat{y}_i)^2}{n} $$
+
+### Pitfalls of Using Training Data for MSE
+If we calculate MSE on the same data used to build the model:
+1. The MSE values are unreliable for comparing models:
+   - They favor overly complex models.
+   - They can be driven artificially to zero.
+2. There is no guarantee that MSE will generalize to new data.
+
+### Ensuring Reproducibility
+A common approach is:
+1. Splitting the data into a **training set** (70-80%) and a **validation set**.
+  - Another best practice is to split the data into a training and holdout testing set, and then split the training set into a training and validation set for CV and/or hyperparameter tuning.
+2. Using the training set to fit the model.
+3. Predicting on the validation set and computing the validation MSE.
+
+**Metrics like $R^2$, Adjusted $R^2$, and Information Criteria:**
+- These are computed on the training data and tend to favor complex models.
+- Preferred metrics derived from the training data include AIC and BIC for model selection.
+
+**Key Takeaways:**
+1. Model evaluation should always be based on an independent validation dataset.
+2. Plotting validation MSE for models from least to most complex helps identify the best fit without performance issues.
+
+---
+
+# Bias-Variance Trade Off
+
+Comparing models from least to most complex:
+- training MSE tends to always go down with increasing complexity
+- validation MSE has a U shape (This is the **bias-variance trade-off**)
+
+Decomposition of MSE:
+E(validMSE) = var(f-hat) + bias(f-hat)^2 + var(E)
+on avg the mean sq error of validation step breaks into:
+- var(f-hat) measures how much the model changes from data set to data set
+- bias(f-hat) measures on avg how much model predicts off target from true value
+- var(E) irreducible error that we can't do anything about (natural variation around true trend line)
+
+Different scenarios:
+1. High bias / Low variance: linear fits (on a cubic relationship) are consistent regardless of the dataset, but predictions are just off (bias)
+2. Moderate bias / Moderate variance: quadratic fit (for cubic relationship) won't predict well because of bias, the fits will still be relatively consistent 
+3. Low bias / Low variance: cubic fits (truth) are consistent and predictions are on target (low bias)
+4. No bias / Moderate variance:
+  - model gets too complicated
+  - predictions are unique to each dataset
+  - on average the prediction models are capturing the true trend
+  - but the accuracies are bad because the predictions for each dataset are unique and they can't reproduce on another dataset
+5. No bias / High variance: just more extreme, complex fits vary from dataset to dataset, with on target predictions
+
+Models with poor validation MSE due to variance is overfitting. It fits the training dataset well, but it can't reproduce.
+
+High bias models are technically underfit. They don't capture the true trend that exists.
+
+
+# K Fold Cross Validation
+
+Issues with Train/Validation Splitting
+1. Data is too small to split
+2. Validation MSE can vary depending on what data are in the training and validations sets
+
+Pseudo-code
+1. stratify dataset into k disjoint data sets
+2. for each k data sets (folds)
+  - leave it out and treat as test set (each fold is left out only one time)
+  - calculate the validation MSE on each of those runs
+3. avg over all the validation MSEs (global MSE)
+
+Pros of k-fold cross validation
+1. allows for better estimation of the true MSE
+2. dampens the result of any one train/validation split
+3. implemented in most software to assess the bias-variance trade-off
+
+LOOCV: Special case of k-fold cross validation
+- in practice, typically 5-10 folds are used (to keep computational cost down)
+- with very small data sets, k=n can be used -> leave one out CV (common in statistical methodology)
+- this can be computationally expensive
+
+
+# Feature Selection via Penalized Regression
+
+How can we generate a model that has a good bias-variance trade-off (in a semi-automate way)?
+
+Feature selection is the process of using an automated procedure to determine what explanatory variable should or should not be in your model.
+
+Ask the question when learning new tools, how does the tool handle feature selection.
+- MLR: forward/backward/stepwise, penalize regression
+- Trees and RF: feature selection strategies are built into the model
+- KNN: no direct feature selection strategy
+
+Feature selection with MLR
+- Stepwise feature selection was the original approach. Sequentially add or remove predictors looking for the best subset, but usually comparing model fits with some criteria (minimize AIC, BIC, validation MSE, or k-fold CV)
+- 4 main versions: forward, backwards, best subset, hybrids
+- effectively forces some of the coefficients to be zero so the predictor gets multiplied by zero and removed from the model
+
+Penalized Regression
+Three common tools that use penalized regression:
+1. Ridge (older)
+2. Lasso
+3. GLM-NET
+
+Diff between regular regression and penalized regression
+- In regular regression, coefficients are estimated by minimizing the residual sum of squares of the training data.
+- Penalized estimates them by minimizing RSS+penalty term. The penalty term is controlled by its own parameter, lambda. The coefficient of the slope changes based on the penalty term. The stronger the penalty, the closer the slope gets to 0.
+
+With a low penalty, all the coefficients are turned on, similar to regular MLR. As the penalty gets stronger, the coefficients are dampening down.
+
+Main idea of penalized regression
+- overly complicated models will have an artificially low train MSE
+- by adding a penalty term, we bias the coefficients towards 0. will force the fit to be worse on the training set, but should reproduce better on future data sets because it isn't so dependent on training data
+- some coefficients will be zero so they will be removed from the model entirely
+- final question: how do you pick the penalty term?
+
+Penalty control complexity - stronger the penalty, smaller/simpler model
+
+How to pick penalty
+- k-fold CV used to determine the optimal penalty and compare an MSE plot
+
+Technically, the penalty is a function of the penalty term and the coefficient terms. A larger penalty term with all the coefficients, will make the penalty (RSS+penalty) bigger and bigger. The only way to to reduce the residual sum of squares overall is to get rid of some of the coefficients.
+
+When alpha (the mixing parameter) = 1, GLM-NET becomes the lasso method. The penalty equation simplifies. 
+
+When alpha = 0, GLM-NET becomes the ridge method. 
+
+
+# Recap and Consideration
+
+Considerations when using feature selection and the penalized regression strategy:
+- bias-variance trade off provides insight into why some models predict better than others on future data sets
+- validation set and k-fold validation are both a means of comparing models and assessing the bias-variance trade off
+- penalized regression provides a procedure to drop unimportant predictor variables from a model
+
+Which tool should you use?
+- penalized works well when you know a lot of the variables considered for the model should not be important
+- Specifics:
+  - Lasso: only true feature selection approach; dampens VIFs
+  - Ridge: never truly forces coefficients to 0; still dampens VIFs
+  - If you want to use penalized regression specifically for feature selection, it makes sense to use Lasso over GLM-NET and Ridge, because with those two features are not forced out and they will get left in
+- Feature selection usually helps with multicollinearity
+- Forward, backward and stepwise are still valid
+  - criteria used should be based on AIC, a validation set or k-fold CV
+  - it shouldn't be based on p-values or r-squared
+  
+The algorithm is a tool:
+- it is still up to you to add complexity terms.
+- graphically access for polynomial fit and interaction terms to fit different slopes
+- EDA is still important
+
+(Hypothesis) Testing after feature selection
+- penalized regression has limitations
+  - coefficients are there, but there aren't t-stats, p-values or CIs
+- common approach
+  - make note of which predictors were dropped
+  - run a new MLR using only relevant predictors
+  - produce p-values, confidence intervals, etc
+- conducting tests after feature selection
+  - interpretation isn't conservative enough, CIs are too narrow, p-values are too small
+  - it's multiple testing issues (family-wise error rate: the chance of making a type one error goes up)
+  
+Solutions
+- treat feature selection and hypothesis testing as a train/validation procedure (lowers sample size, harder to get significant coefficients)
+  - preform feature selection on the "train" data set
+  - use the "validation set" to fit your model decided by feature selection; report the p-values and conclusions from this model
+
+- newer method exists
+  - R package selection inference
+  - good statistical inference properties using LASSO
+  
+
+- You still have to check model assumptions
+  
