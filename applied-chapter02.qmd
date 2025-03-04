@@ -43,71 +43,69 @@ A common approach is:
 1. Model evaluation should always be based on an independent validation dataset.
 2. Plotting validation MSE for models from least to most complex helps identify the best fit without performance issues.
 
----
 
-# Bias-Variance Trade Off
-
+## Bias-Variance Trade-Off
+### Understanding the Trade-Off
 Comparing models from least to most complex:
-- training MSE tends to always go down with increasing complexity
-- validation MSE has a U shape (This is the **bias-variance trade-off**)
+- **Training MSE** always decreases with complexity.
+- **Validation MSE** follows a U-shape (this is the **bias-variance trade-off**).
 
-Decomposition of MSE:
-E(validMSE) = var(f-hat) + bias(f-hat)^2 + var(E)
-on avg the mean sq error of validation step breaks into:
-- var(f-hat) measures how much the model changes from data set to data set
-- bias(f-hat) measures on avg how much model predicts off target from true value
-- var(E) irreducible error that we can't do anything about (natural variation around true trend line)
+### Decomposing MSE
+The expected validation MSE can be decomposed as:
+$$ E[\text{MSE}_{\text{valid}}] = \text{Var}(\hat{f}) + \text{Bias}(\hat{f})^2 + \text{Var}(\epsilon) $$
+where:
+- $ \text{Var}(\hat{f}) $ measures how much the model changes across different datasets.
+- $ \text{Bias}(\hat{f}) $ measures how far the model's predictions are from the true values on average.
+- $ \text{Var}(\epsilon) $ is the irreducible error due to natural variation (variation around true trend line).
 
-Different scenarios:
-1. High bias / Low variance: linear fits (on a cubic relationship) are consistent regardless of the dataset, but predictions are just off (bias)
-2. Moderate bias / Moderate variance: quadratic fit (for cubic relationship) won't predict well because of bias, the fits will still be relatively consistent 
-3. Low bias / Low variance: cubic fits (truth) are consistent and predictions are on target (low bias)
-4. No bias / Moderate variance:
-  - model gets too complicated
-  - predictions are unique to each dataset
-  - on average the prediction models are capturing the true trend
-  - but the accuracies are bad because the predictions for each dataset are unique and they can't reproduce on another dataset
-5. No bias / High variance: just more extreme, complex fits vary from dataset to dataset, with on target predictions
+### Scenarios:
+1. **High Bias / Low Variance:** Simple models (e.g. linear regression on a cubic relationship) consistently make errors (bias) but are stable across datasets.
+2. **Moderate Bias / Moderate Variance:** Quadratic fits for a cubid relationship still have bias but are more stable (fits are consistent).
+3. **Low Bias / Low Variance:** Cubic fits (the true model) perform well and are stable.
+4. **No Bias / Moderate Variance:** Overly complex models predict well on average but vary significantly across datasets. Poor generalization results in poor accuracy. 
+5. **No Bias / High Variance:** Extreme complexity leads to models that fit each dataset uniquely but fail to generalize.
 
-Models with poor validation MSE due to variance is overfitting. It fits the training dataset well, but it can't reproduce.
+**Overfitting:** When a model has poor validation MSE due to high variance. It fits the training dataset well, but it can't generalize to other datasets.
 
-High bias models are technically underfit. They don't capture the true trend that exists.
+**Underfitting:** When a model has high bias and fails to capture the true trend.
 
 
-# K Fold Cross Validation
+## K-Fold Cross Validation
+### Issues with Train/Validation Splitting
+1. Small datasets may not allow for a reliable split.
+2. Validation MSE varies depending on the chosen train/validation sets.
 
-Issues with Train/Validation Splitting
-1. Data is too small to split
-2. Validation MSE can vary depending on what data are in the training and validations sets
+### K-Fold Cross Validation Process
+1. Partition the dataset into $k$ disjoint subsets.
+2. For each subset (fold):
+   - Leave it out as a test set.
+   - Train on the remaining $k-1$ folds.
+   - Compute validation MSE.
+3. Compute the average validation MSE.
+Notes: In practice, typically 5-10 folds are used to keep computational cost down.
 
-Pseudo-code
-1. stratify dataset into k disjoint data sets
-2. for each k data sets (folds)
-  - leave it out and treat as test set (each fold is left out only one time)
-  - calculate the validation MSE on each of those runs
-3. avg over all the validation MSEs (global MSE)
+### Advantages of K-Fold Cross Validation
+- Provides a better estimate of true MSE.
+- Reduces dependence on any single train/validation split.
+- Commonly implemented in statistical software to assess the bias-variance trade-off.
 
-Pros of k-fold cross validation
-1. allows for better estimation of the true MSE
-2. dampens the result of any one train/validation split
-3. implemented in most software to assess the bias-variance trade-off
-
-LOOCV: Special case of k-fold cross validation
-- in practice, typically 5-10 folds are used (to keep computational cost down)
-- with very small data sets, k=n can be used -> leave one out CV (common in statistical methodology)
-- this can be computationally expensive
+#### Leave-One-Out Cross Validation (LOOCV)
+- A special case where $k=n$ (each observation is left out once), which is common in statistical methodology.
+- Computationally expensive but useful for very small datasets.
 
 
-# Feature Selection via Penalized Regression
+## Feature Selection via Penalized Regression
+### Why Feature Selection?
+- Feature selection helps balance the bias-variance trade-off by reducing complexity while maintaining predictive power.
+- It is the process of using an automated procedure to determine what explanatory variable should or should not be in a model.
 
-How can we generate a model that has a good bias-variance trade-off (in a semi-automate way)?
+### Feature Selection Methods of Modeling Tools
+When using a new tool, it's important to consider if and how it handles feature selection.
+- **Multiple Linear Regression (MLR):** Forward/backward/stepwise selection and penalized regression
+- **Tree-based methods (Random Forests):** Built-in feature selection
+- **K-Nearest Neighbors (KNN):** No direct feature selection
 
-Feature selection is the process of using an automated procedure to determine what explanatory variable should or should not be in your model.
-
-Ask the question when learning new tools, how does the tool handle feature selection.
-- MLR: forward/backward/stepwise, penalize regression
-- Trees and RF: feature selection strategies are built into the model
-- KNN: no direct feature selection strategy
+---
 
 Feature selection with MLR
 - Stepwise feature selection was the original approach. Sequentially add or remove predictors looking for the best subset, but usually comparing model fits with some criteria (minimize AIC, BIC, validation MSE, or k-fold CV)
