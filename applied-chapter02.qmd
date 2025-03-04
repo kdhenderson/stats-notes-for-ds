@@ -101,90 +101,75 @@ Notes: In practice, typically 5-10 folds are used to keep computational cost dow
 
 ### Feature Selection Methods of Modeling Tools
 When using a new tool, it's important to consider if and how it handles feature selection.
-- **Multiple Linear Regression (MLR):** Forward/backward/stepwise selection and penalized regression
+- **Multiple Linear Regression (MLR):** Stepwise selection (forward, backward, best subset, hybrids) and penalized regression
+  - Stepwise feature selection, the original approach, sequentially adds and/or removes predictors looking for the best subset, usually comparing model fits with some criteria (minimize AIC, BIC, validation MSE, or k-fold CV).
+  - Penalized regression effectively forces some of the coefficients zero, so the predictor is multiplied by zero and removed from the model.
 - **Tree-based methods (Random Forests):** Built-in feature selection
 - **K-Nearest Neighbors (KNN):** No direct feature selection
 
 ---
 
-Feature selection with MLR
-- Stepwise feature selection was the original approach. Sequentially add or remove predictors looking for the best subset, but usually comparing model fits with some criteria (minimize AIC, BIC, validation MSE, or k-fold CV)
-- 4 main versions: forward, backwards, best subset, hybrids
-- effectively forces some of the coefficients to be zero so the predictor gets multiplied by zero and removed from the model
+### Penalized Regression Approaches
+1. **Ridge Regression** (older method)
+2. **Lasso Regression** (forces some coefficients to zero)
+3. **Elastic Net (GLM-NET)** (combines Ridge and Lasso)
 
-Penalized Regression
-Three common tools that use penalized regression:
-1. Ridge (older)
-2. Lasso
-3. GLM-NET
+**Key Idea:** Instead of minimizing just the residual sum of squares (RSS) to estimate coefficients, penalized regression minimizes the RSS plus a penalty term controlled by its own parameter, $\lambda$.
+$$ RSS + \lambda \sum |\beta_j|^p $$
+where $p=1$ for Lasso and $p=2$ for Ridge, and $\lambda$ is a penalty parameter.
 
-Diff between regular regression and penalized regression
-- In regular regression, coefficients are estimated by minimizing the residual sum of squares of the training data.
-- Penalized estimates them by minimizing RSS+penalty term. The penalty term is controlled by its own parameter, lambda. The coefficient of the slope changes based on the penalty term. The stronger the penalty, the closer the slope gets to 0.
+For **Elastic Net**, the penalty equation is:
+$$ RSS + \lambda \left[ (1 - \alpha) \sum \beta_j^2 + \alpha \sum |\beta_j| \right] $$
+where $\alpha$, the mixing parameter, determines the mix between Ridge ($\alpha=0$) and Lasso ($\alpha=1$).
 
-With a low penalty, all the coefficients are turned on, similar to regular MLR. As the penalty gets stronger, the coefficients are dampening down.
+### How Penalized Regression Works
+- Low penalty: Similar to standard MLR (all coefficients remain).
+- High penalty: Coefficients shrink towards zero (some are removed).
+  - Forces the fit to be worse on the training set to improve generalization on future datasets.
 
-Main idea of penalized regression
-- overly complicated models will have an artificially low train MSE
-- by adding a penalty term, we bias the coefficients towards 0. will force the fit to be worse on the training set, but should reproduce better on future data sets because it isn't so dependent on training data
-- some coefficients will be zero so they will be removed from the model entirely
-- final question: how do you pick the penalty term?
+**Choosing the Penalty ($\lambda$):**
+- Determined using k-fold cross-validation.
+  - Use an MSE plot to compare different $\lambda$s.
+- Larger penalties lead to smaller, simpler models.
+- The penalty is a function of both the penalty term and the coefficient values. A larger penalty term increases the total penalty, and the only way to minimize RSS + penalty is to shrink or eliminate some coefficients.
 
-Penalty control complexity - stronger the penalty, smaller/simpler model
-
-How to pick penalty
-- k-fold CV used to determine the optimal penalty and compare an MSE plot
-
-Technically, the penalty is a function of the penalty term and the coefficient terms. A larger penalty term with all the coefficients, will make the penalty (RSS+penalty) bigger and bigger. The only way to to reduce the residual sum of squares overall is to get rid of some of the coefficients.
-
-When alpha (the mixing parameter) = 1, GLM-NET becomes the lasso method. The penalty equation simplifies. 
-
-When alpha = 0, GLM-NET becomes the ridge method. 
+### Ridge vs. Lasso vs. GLM-NET
+- **Lasso ($\alpha=1$):** Performs true feature selection by forcing some coefficients to zero.
+- **Ridge ($\alpha=0$):** Shrinks coefficients but does not eliminate them.
+- **Elastic Net ($0 < \alpha < 1$):** A compromise between Lasso and Ridge.
 
 
-# Recap and Consideration
+## Recap and Considerations
+### Model Selection Strategies
+- The bias-variance trade-off explains why some models generalize and predict better on future datasets.
+- Validation and k-fold cross-validation both assess and compare model performance.
+- Penalized regression helps eliminate unimportant predictors.
 
-Considerations when using feature selection and the penalized regression strategy:
-- bias-variance trade off provides insight into why some models predict better than others on future data sets
-- validation set and k-fold validation are both a means of comparing models and assessing the bias-variance trade off
-- penalized regression provides a procedure to drop unimportant predictor variables from a model
+### Choosing the Right Approach
+- Penalized regression works well if many candidate variables are unimportant.
+  - **Lasso:** Best for feature selection (drops predictors entirely) and reduces multicollinearity (dampens VIFs).
+  - **Ridge:** Reduces multicollinearity (dampens VIFs) but retains all predictors (does not force coefficients to zero).
+- **Stepwise Selection:** Still valid but should be based on AIC, validation sets, or k-fold CV, **not** p-values or $R^2$.
 
-Which tool should you use?
-- penalized works well when you know a lot of the variables considered for the model should not be important
-- Specifics:
-  - Lasso: only true feature selection approach; dampens VIFs
-  - Ridge: never truly forces coefficients to 0; still dampens VIFs
-  - If you want to use penalized regression specifically for feature selection, it makes sense to use Lasso over GLM-NET and Ridge, because with those two features are not forced out and they will get left in
-- Feature selection usually helps with multicollinearity
-- Forward, backward and stepwise are still valid
-  - criteria used should be based on AIC, a validation set or k-fold CV
-  - it shouldn't be based on p-values or r-squared
-  
-The algorithm is a tool:
-- it is still up to you to add complexity terms.
-- graphically access for polynomial fit and interaction terms to fit different slopes
-- EDA is still important
+### Feature Selection and Hypothesis Testing
+- Penalized regression does not provide t-statistics, p-values, or confidence intervals.
+- Common approach:
+  1. Identify dropped predictors.
+  2. Refit MLR with only the selected predictors.
+  3. Report p-values and confidence intervals.
 
-(Hypothesis) Testing after feature selection
-- penalized regression has limitations
-  - coefficients are there, but there aren't t-stats, p-values or CIs
-- common approach
-  - make note of which predictors were dropped
-  - run a new MLR using only relevant predictors
-  - produce p-values, confidence intervals, etc
-- conducting tests after feature selection
-  - interpretation isn't conservative enough, CIs are too narrow, p-values are too small
-  - it's multiple testing issues (family-wise error rate: the chance of making a type one error goes up)
-  
-Solutions
-- treat feature selection and hypothesis testing as a train/validation procedure (lowers sample size, harder to get significant coefficients)
-  - preform feature selection on the "train" data set
-  - use the "validation set" to fit your model decided by feature selection; report the p-values and conclusions from this model
+### Caution: Multiple Testing Issues
+- Conducting hypothesis tests after feature selection inflates Type I error rates.
+  - Multiple testing issues result in a family-wise error rate.
+  - The interpretation isn't conservative enough. The CIs are too narrow, and the p-values are too small.
+- Solutions:
+  - Treat feature selection as part of the train/validation process, which reduces sample size and raises the threshold for significance.
+    - Use the training set for feature selection.
+    - Fit the model and report p-values using the validation set.
+  - Use specialized inference methods (e.g. R package **`selectionInference`** for LASSO).
 
-- newer method exists
-  - R package selection inference
-  - good statistical inference properties using LASSO
-  
-
-- You still have to check model assumptions
-  
+### Final Considerations
+- Feature selection is a tool that improves model interpretability.
+- Statistical assumptions must still be checked.
+- EDA remains crucial in model building.
+- Graphical assessment is necessary to determine whether additional complexity terms are needed, such as polynomials and interaction terms to fit different slopes.
