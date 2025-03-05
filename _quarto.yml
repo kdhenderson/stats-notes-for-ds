@@ -36,5 +36,7 @@ book:
     - part: "Applied Statistics"
       chapters:
           - applied-chapter01.qmd
-          #- applied-chapter02.qmd
-          #- applied-chapter03.qmd
+          - applied-chapter02.qmd
+          - applied-chapter03.qmd
+          #- applied-chapter04.qmd
+          #- applied-chapter05.qmd

@@ -1,0 +1,202 @@
+---
+title: "The Bootstrap"
+---
+
+## Objectives
+
+This chapter covers the bootstrap procedure, its benefits, and its role in statistical inference and predictive modeling.
+
+
+## Overview of the Bootstrap Procedure
+
+The bootstrap is a resampling method that allows us to:
+
+- Estimate the variability (uncertainty) of statistical estimators.
+- Perform statistical inference, such as hypothesis testing and confidence intervals.
+- Enhance predictive modeling by stabilizing estimates in high-variance models.
+
+## Key Benefits
+
+Difficulties in Multiple Linear Regression (MLR) that bootstrap addresses:
+
+- No transformation adequately satisfies model assumptions.
+- The transformation that works hinders interpretability, which is needed for the situation.
+- A complex model is required but introduces high variance (overfitting).
+
+The bootstrap is heavily used in **nonparametric predictive modeling**, such as **random forests**, where high variance is common, and it can be used in many statistical procedures.
+
+---
+
+The Bootstrap
+- It allows us to gauge the uncertainty (variability) of estimators.
+- When assumptions are not met typically the **standard errors** are not correct (measure of uncertainty of statistics like average).
+- (SE is usually on the bottom or the t-stat and in the MOE.)
+
+Example I:
+- Outlier is problematic to calculate mean.
+- Could use median to find center
+- Could use trimmed mean (removes the X% smallest and X% largest values)
+- SE(mu) = sigma / sqrt(n); SE(X-bar) = s / sqrt(n)
+- Median has a theoretical standard error; we don't know the formula. Can't estimate the SE or CI
+- Trimmed mean, has same issue as median.
+
+SE
+- idea from repeated sampling (theoretically can build sampling distribution), how variable/uncertain are the x-bars from dataset to dataset
+- SE is the st dev of all the X-bars
+- The SD of the bootstrap distribution is already scaled for the sample size effect because each bootstrap sample has the same size as the original sample. Thus, the SD of the bootstrap distribution directly serves as an estimate of the SE of the statistic for the original sample.
+
+
+Bootstrap Key Analogy
+- the population is to the sample
+- as the sample is to the bootstrap
+
+Bootstrap: Main Idea
+- Mimics the idea of creating the sampling distribution by creating multiple samples from your original sample (bootstrap samples)
+- Available bootstrapped sampling distribution allow for computing SE for any statistic
+- the entire distribution can be used to compute a SE and CI
+
+Pseudo Code
+1. determine the sample size of data set, n
+2. randomly pick an observation from your data set, sample with replacement
+3. repeat step 2 until you get n data points (bootstrap sample)
+4. repeat steps 2 and 3 many tunes (B times)
+- you can use whatever statistic you want. you can use the median
+
+
+
+## Statistical Inference using the Bootstrap
+
+Bootstrap Statistical Inference
+- Most used in practice to build donfidence intervals
+- 5 well know approaches:
+  1. percentile bootstrap (easiest to implement, but has issues)
+  2. empirical bootstrap
+  3. bootstrap t-intervals
+  4. bias corrected and accelerated ($BC_A$)
+  5. ABC method
+  
+Percentile Bootstrap Intervals
+- most intuitive
+- bootstrap resampling allows for an approx. sampling distribution of an estimator we'd like to use (mean, median, correlation, etc.)
+- Idea: for a 95% CI determine the 2.5% and 97.5% percentiles of the bootstrapped distribution
+- remember that no assumption is made on the distribution of the data
+
+Issues with Percentile Bootstrap
+- It typically doesn't perform at the specified coverage probability. (A 95% CI may contain the true parameter at a lower rate.)
+- The main reasons
+    - suffers from a biased shift to the center of the bootstrap distribution
+    - skewness in the bootstrap distribution
+- Statistical inference with nuisance parameters: Can perform poorly when the population from which the data come has multiple parameters but you only care about a CI for one of them.
+    - t-test: mu is of interest, sigma is nuisance parameter
+    - MLR: $\betas$s are of interest, error variance ($\sigma^$) is the nuisance parameter
+    
+    
+Additional Approaches
+- Adjustmets have been made to circumvent the issues with the percentile bootstrap
+  1. empirical bootstrap (addresses bias only)
+  2. bootstrap t-intervals*
+  3. bias corrected and accelerated bootstrap, $BC_A$  (corrects for bias and skewness)*
+    - ABC method
+  * can be computationally demanding
+
+
+## Bootstrapping in MLR
+
+Two main approaches
+1. Bootstrapping pairs: good for when assumptions of normality and/or constant variance is not met
+2. Bootstrapping residuals: good for normality assumption and dealing with leverage
+  - Special type: wild bootstrap is good for constant variance issue.
+  
+Bootstrapping pairs (nonconstant variance remains)
+- Works the same as previously described
+  - Sample with replacement of each row of the data set
+  - Each observed response value will always be paired with its observed predictor values (values in the whole row stay together)
+  - Estimate all the regression coefficients for each bootstrap sample, so that you have a sampling distribution for each coefficient in the model
+
+Bootstrapping Residuals Algorithm (loses the nonconstant variance property)
+- first step: fit a general model $Y = f(x) + \epsilon$ is fitted to the data to obtain the residuals
+- create bootstrap resamples of the residuals
+- for each bootstrap resample of residuals:
+  - create a new bootstrapped response using the predicted values fed back into the original fit plus the bootstrapped errors
+  - estimate new regression coefficient from this data set to get the sampling distribution
+
+Considerations
+- Independence is still needed.
+- If there is a constant variance issue, don't use bootstrapping residuals
+- Categorical variables with low sample size in some levels - consider collapsing levels before starting
+  - bootstrapping might lose the level and there for the coefficient will go missing (more problematic when coding your own bootstrap procedure)
+- lmboot R Package
+
+Bootstrap Inferencing Recap
+- bootstrapping allows us to estimate SEs for statistical estimates in a nonparametric way
+- we don't have to attach assumptions other than independence
+- provides a way to produce SEs of any statistic
+- there are numerous ways to produce a CI under the bootstrap strategy
+  - percentile is easiest to implement
+  - consider alternatives that perform better
+  - $BC_A$ and bootstrap t-interval tend to have better approximation properties that percentile
+  - always exceptions (e.g. small sample sizes hard to estimate skewness, so $BC_A$ has probs)
+- paired bootstrap is preferred in regression when dealing with nonconstant variance
+- if you are concerned your model is too simple and doesn't capture true trend, any bootstrap regression approach can obtain better SE estimates than MLR
+- a bootstrap can be used to provide inference on penalized regression coefficient estimates
+- there are also parametric bootstrap procedures
+    - assumptions are still in place
+    - resamples come from a theoretical distribution (simulated dataset rather than from your actual dataset)
+- bootstrap is only as good as the information your sample contains (representative samples are important)
+  - nonparametric method can get lumped as small sample size methods, but sample size in bootstrap needed a representative sample
+  - small data sets cannot guarantedd that we have a good sense of the true distribution
+
+
+## Ensembling and Bagging
+
+Bootstrap's role in predictive modeling
+- Leo Breiman (one of the first to use in a non-classical CI way), developed bagging
+
+Ensembling
+- taking a training data set
+- fit multiple models
+- make a new prediction for the same observation with each model
+- average the predictions for all those models
+
+How does ensembing help?
+- the average of a set of values has a smaller variance than the individual errors
+- Each model's predictions has its own variance (MSE)
+- Ensembles average predictions, so the variance (MSE) for the ensemble tends to get smaller as more models are used in the ensemble
+- The drop in variance is not as strong as for X-bar because the models were built from the same training data.
+- An ensemble prediction tends to smooth out the overfitting. It dampens the variance.
+
+Bias-variance trade-off in ensembling
+1. fit models that are highly complex on purpose that have high variance
+2. the averaging dampens the variance.
+3. the final model could have low bias and lower variance (it has to start with low bias)
+
+Bootstrap Aggregation
+- Bootstrap aggregation (i.e. bagging) is a modificaion of the ensembling strategy to boost prediction performace of a single modeling tool.
+- Ensembling uses a bunch of different tools.
+- You can "bag" a MLR model or "bag" a tree model, etc.
+- Since the modeling tool doesn't change, and there is one training set, you'd get the same model every time, so there is no benefit to ensembling in that case.
+- Solution: get different model fits by using different data sets each time with bootstrap resampling.
+
+
+## Recap
+
+Bagging recap
+- invaluable tool that utilizes ensembling for a single prediction tool
+    - helpful for tools that suffer from high variance
+    - lose interpretation for the gain in prediction performance
+
+- not as helpful for things like MLR (they tend to suffer from bias because they aren't complex enough)
+  - argued to help in situations such as feature selection where models can be much more unstable
+
+Bootstrap inferencing - recommend 1000 - 5000 bootstrap samples
+
+Bagging - recommend 100-500 bootstrap samples
+
+Bagging also provides a way to comput a validation MSE for free
+  - commonly referred to as the "out of bag error"
+    - each bootstrap sample has observations that were not included
+    - mimics the holdout of k-fold
+
+Bootstrap procedure and its applications is one of the biggest contributions to statistics and data science over the past 40 years.
+
+For data scientists, its use in predictive models is critical to understand, as it can help both current methods and future ones to come.
