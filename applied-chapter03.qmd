@@ -61,41 +61,34 @@ The bootstrap is heavily used in **nonparametric predictive modeling**, such as 
 
 ## Statistical Inference Using the Bootstrap
 
----
+### Bootstrap Confidence Intervals
+The bootstrap is commonly used to construct confidence intervals (CIs). Five major approaches:
+1. Percentile Bootstrap (Basic)
+2. Empirical Bootstrap
+3. Bootstrap $t$-Intervals
+4. Bias-Corrected and Accelerated (BCa) Bootstrap
+5. ABC Method
 
-Bootstrap Statistical Inference
-- Most used in practice to build donfidence intervals
-- 5 well know approaches:
-  1. percentile bootstrap (easiest to implement, but has issues)
-  2. empirical bootstrap
-  3. bootstrap t-intervals
-  4. bias corrected and accelerated ($BC_A$)
-  5. ABC method
+#### Percentile Bootstrap Intervals
+- Uses the empirical distribution of the bootstrap samples, which is the most intuitive approach and easies to implement.
+- For a **95% CI**, take the **2.5th and 97.5th percentiles** from the bootstrap distribution.
+- No parametric assumptions of the distribution of data are required.
+
+##### Issues:
+- May not achieve the nominal coverage probability (e.g. a 95% CI may only contain the true parameter 90% of the time).
+- Causes:
+  - Bias in the center of the bootstrap distribution.
+  - Skewness in the bootstrap distribution.
+- Problems arise when dealing with **nuisance parameters** (e.g. variance in regression models).
+
+#### Alternative Approaches
+Several adjustments improve upon the percentile bootstrap:
+- Empirical Bootstrap (addresses bias only).
+- Bootstrap $t$-intervals.
+- BCa Bootstrap (corrects for both bias and skewness).
+- ABC Method (can be computationally demanding).
   
-Percentile Bootstrap Intervals
-- most intuitive
-- bootstrap resampling allows for an approx. sampling distribution of an estimator we'd like to use (mean, median, correlation, etc.)
-- Idea: for a 95% CI determine the 2.5% and 97.5% percentiles of the bootstrapped distribution
-- remember that no assumption is made on the distribution of the data
-
-Issues with Percentile Bootstrap
-- It typically doesn't perform at the specified coverage probability. (A 95% CI may contain the true parameter at a lower rate.)
-- The main reasons
-    - suffers from a biased shift to the center of the bootstrap distribution
-    - skewness in the bootstrap distribution
-- Statistical inference with nuisance parameters: Can perform poorly when the population from which the data come has multiple parameters but you only care about a CI for one of them.
-    - t-test: mu is of interest, sigma is nuisance parameter
-    - MLR: $\betas$s are of interest, error variance ($\sigma^$) is the nuisance parameter
-    
-    
-Additional Approaches
-- Adjustmets have been made to circumvent the issues with the percentile bootstrap
-  1. empirical bootstrap (addresses bias only)
-  2. bootstrap t-intervals*
-  3. bias corrected and accelerated bootstrap, $BC_A$  (corrects for bias and skewness)*
-    - ABC method
-  * can be computationally demanding
-
+---
 
 ## Bootstrapping in MLR
 
