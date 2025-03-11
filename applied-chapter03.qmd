@@ -6,69 +6,62 @@ title: "The Bootstrap"
 
 This chapter covers the bootstrap procedure, its benefits, and its role in statistical inference and predictive modeling.
 
+## Bootstrap Procedure
 
-## Overview of the Bootstrap Procedure
-
+### Overview
 The bootstrap is a resampling method that allows us to:
-
 - Estimate the variability (uncertainty) of statistical estimators.
 - Perform statistical inference, such as hypothesis testing and confidence intervals.
 - Enhance predictive modeling by stabilizing estimates in high-variance models.
 
-## Key Benefits
-
+### Key Benefits
 Difficulties in Multiple Linear Regression (MLR) that bootstrap addresses:
-
 - No transformation adequately satisfies model assumptions.
 - The transformation that works hinders interpretability, which is needed for the situation.
 - A complex model is required but introduces high variance (overfitting).
 
 The bootstrap is heavily used in **nonparametric predictive modeling**, such as **random forests**, where high variance is common, and it can be used in many statistical procedures.
 
-
-## Conceptual Understanding
-
+### Conceptual Understanding
 - **Standard Errors and Uncertainty**:
-  - When assumptions are not met, standard errors (SE) are typically incorrect.
-  - SE is crucial because it determines the variability of estimators like the mean.
-  - Example: The standard error of the mean is given by:
+  - When assumptions are not met, standard errors (SE) are often incorrect.
+  - SE is critical for quantifying the variability of estimators like the mean.
+  - Example: The standard error of the mean is:
     $$
     SE(\bar{X}) = \frac{\sigma}{\sqrt{n}}
     $$
-  - However, for statistics like the **median** or **trimmed mean**, theoretical standard errors are unknown.
+  - However, for statistics like the **median** or **trimmed mean**, , there is no simple theoretical SE formula. This makes bootstrap-based estimation particularly valuable.
 
-- **Key Analogy**:
-  - The **population** is to the **sample** as the **sample** is to the **bootstrap samples**.
+### Impact of Outliers on SE
+- The mean is highly sensitive to outliers, while the median is more robust.
+- The standard error of the mean has a known formula:
+  $$
+  SE(\bar{X}) = \frac{\sigma}{\sqrt{n}}
+  $$
+  whereas the SE for the median is unknown.
+- The bootstrap provides a way to estimate SE for any statistic, even when no closed-form solution exists.
+
+### Key Analogy
+- The **population** is to the **sample** as the **sample** is to the **bootstrap samples**.
+
+### Main Idea
+- The bootstrap mimics the process of generating a sampling distribution.
+- The resulting bootstrap distribution allows:
+  - Estimation of SE for any statistic.
+  - Computation of confidence intervals (CIs).
+- The standard deviation of the bootstrap distribution directly serves as an estimate of the standard error of the statistic because each bootstrap sample has the same size as the original dataset.
+
+### Pseudo-Code for Bootstrap Sampling
+1. Determine the sample size $n$.
+2. Randomly sample $n$ observations **with replacement** from the dataset to obtain the a bootstrap sample.
+3. Compute the statistic of interest (e.g. mean, median).
+4. Repeat steps 2 and 3 **$B$** times (typically $B = 1000$ or more).
+5. Use the resulting bootstrap distribution for inference.
+
+
+## Statistical Inference Using the Bootstrap
 
 ---
-
-The Bootstrap
-- (SE is usually on the bottom or the t-stat and in the MOE.)
-
-Example I:
-- Outlier is problematic to calculate mean.
-- SE(mu) = sigma / sqrt(n); SE(X-bar) = s / sqrt(n)
-
-SE
-- idea from repeated sampling (theoretically can build sampling distribution), how variable/uncertain are the x-bars from dataset to dataset
-- SE is the st dev of all the X-bars
-- The SD of the bootstrap distribution is already scaled for the sample size effect because each bootstrap sample has the same size as the original sample. Thus, the SD of the bootstrap distribution directly serves as an estimate of the SE of the statistic for the original sample.
-
-Bootstrap: Main Idea
-- Mimics the idea of creating the sampling distribution by creating multiple samples from your original sample (bootstrap samples)
-- Available bootstrapped sampling distribution allow for computing SE for any statistic
-- the entire distribution can be used to compute a SE and CI
-
-Pseudo Code
-1. determine the sample size of data set, n
-2. randomly pick an observation from your data set, sample with replacement
-3. repeat step 2 until you get n data points (bootstrap sample)
-4. repeat steps 2 and 3 many tunes (B times)
-- you can use whatever statistic you want. you can use the median
-
-
-
-## Statistical Inference using the Bootstrap
 
 Bootstrap Statistical Inference
 - Most used in practice to build donfidence intervals
