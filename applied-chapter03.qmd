@@ -88,14 +88,18 @@ Several adjustments improve upon the percentile bootstrap:
 - BCa Bootstrap (corrects for both bias and skewness).
 - ABC Method (can be computationally demanding).
   
+
+## Bootstrapping in Multiple Linear Regression
+
+There are two main bootstrap approaches for MLR:
+
+1. **Bootstrapping Pairs** handles violations of normality and constant variance.
+2. **Bootstrapping Residuals**
+   - Assumes normality of residuals.
+   - Addresses high leverage points by resampling residuals rather than entire observations.
+   - Not recommended when there are violations of constant variance. A special type, the wild bootstrap is good for handling heteroskedasticity.
+
 ---
-
-## Bootstrapping in MLR
-
-Two main approaches
-1. Bootstrapping pairs: good for when assumptions of normality and/or constant variance is not met
-2. Bootstrapping residuals: good for normality assumption and dealing with leverage
-  - Special type: wild bootstrap is good for constant variance issue.
   
 Bootstrapping pairs (nonconstant variance remains)
 - Works the same as previously described
