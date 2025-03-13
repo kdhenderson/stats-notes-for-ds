@@ -125,57 +125,37 @@ There are two main bootstrap approaches for MLR:
   - The `lmboot` R package provides tools for bootstrapping residuals.
 
 
-Bootstrap Inferencing Recap
-- bootstrapping allows us to estimate SEs for statistical estimates in a nonparametric way
-- we don't have to attach assumptions other than independence
-- provides a way to produce SEs of any statistic
-- there are numerous ways to produce a CI under the bootstrap strategy
-  - percentile is easiest to implement
-  - consider alternatives that perform better
-  - $BC_A$ and bootstrap t-interval tend to have better approximation properties that percentile
-  - always exceptions (e.g. small sample sizes hard to estimate skewness, so $BC_A$ has probs)
-- paired bootstrap is preferred in regression when dealing with nonconstant variance
-- if you are concerned your model is too simple and doesn't capture true trend, any bootstrap regression approach can obtain better SE estimates than MLR
-- a bootstrap can be used to provide inference on penalized regression coefficient estimates
-- there are also parametric bootstrap procedures
-    - assumptions are still in place
-    - resamples come from a theoretical distribution (simulated dataset rather than from your actual dataset)
-- bootstrap is only as good as the information your sample contains (representative samples are important)
-  - nonparametric method can get lumped as small sample size methods, but sample size in bootstrap needed a representative sample
-  - small data sets cannot guarantedd that we have a good sense of the true distribution
+## Bootstrap in Predictive Modeling: Ensembling and Bagging
 
+The bootstrap plays a crucial role in predictive modeling, particularly in ensemble methods.
+- Leo Breiman developed bagging and was one of the first to use the bootstrap in a non-classical way of developing confidence intervals. 
 
-## Ensembling and Bagging
+### Ensembling
+- Train multiple models (of different types) on a training data set.
+- Make predictions for the same observation across all models.
+- Average the predictions to reduce variance.
 
-Bootstrap's role in predictive modeling
-- Leo Breiman (one of the first to use in a non-classical CI way), developed bagging
+- **Why It Works**
+  - Each model's predictions have their own variance (Mean Squared Error, MSE).
+  - Averaging predictions reduces variance — the variance of an ensemble is generally smaller than the variance of individual models. MSE tends to decrease in larger ensembles.
+  - Helps smooth out overfitting by reducing variance.
+  - However, the variance reduction is not as strong as in traditional averaging (e.g. averaging independent sample means, $X\bar$s) because all models are trained on the same dataset.
 
-Ensembling
-- taking a training data set
-- fit multiple models
-- make a new prediction for the same observation with each model
-- average the predictions for all those models
+### Bias-Variance Trade-off in Ensembling
+1. Fit high-variance models intentionally (e.g. deep decision trees or complex models).
+2. Averaging dampens variance while retaining predictive power.
+3. The final ensemble model can achieve both low bias and lower variance, assuming the base models started with low bias.
 
-How does ensembing help?
-- the average of a set of values has a smaller variance than the individual errors
-- Each model's predictions has its own variance (MSE)
-- Ensembles average predictions, so the variance (MSE) for the ensemble tends to get smaller as more models are used in the ensemble
-- The drop in variance is not as strong as for X-bar because the models were built from the same training data.
-- An ensemble prediction tends to smooth out the overfitting. It dampens the variance.
+### Bootstrap Aggregation (Bagging)
+- Bagging (Bootstrap Aggregation) extends ensembling to improve prediction accuracy for a **single model type**.
+- Instead of different model types, bagging:
+  - Uses bootstrap resampling to create different training datasets.
+  - Fits the same model type (e.g. decision trees) on each bootstrap sample.
+  - Averages predictions across all models (e.g. "bag" a decision tree model).
+- **Why Bagging Works**:
+  - A single MLR model trained on the same data always yields the same results.
+  - Resampling with replacement introduces variation, enabling bagging to improve performance.
 
-Bias-variance trade-off in ensembling
-1. fit models that are highly complex on purpose that have high variance
-2. the averaging dampens the variance.
-3. the final model could have low bias and lower variance (it has to start with low bias)
-
-Bootstrap Aggregation
-- Bootstrap aggregation (i.e. bagging) is a modificaion of the ensembling strategy to boost prediction performace of a single modeling tool.
-- Ensembling uses a bunch of different tools.
-- You can "bag" a MLR model or "bag" a tree model, etc.
-- Since the modeling tool doesn't change, and there is one training set, you'd get the same model every time, so there is no benefit to ensembling in that case.
-- Solution: get different model fits by using different data sets each time with bootstrap resampling.
-
----
 
 ## Recap
 
@@ -193,25 +173,18 @@ Bootstrap Aggregation
   - Although bootstrapping is often used in nonparametric small-sample methods, it still requires a representative sample to capture the true distribution.
   - Small sample sizes may fail to provide an accurate representation of the population, limiting the effectiveness of bootstrapping.
 
---- 
+### Bagging Recap
+- Bagging is a powerful ensemble technique that stabilizes high-variance models from a single prediction tool.
+- It sacrifices interpretability for a gain in predictive performance.
+- It is less effective for MLR (since MLR is usually biased rather than high variance).
+- It is particularly valuable for:
+  - Tree-based models (e.g. decision trees, random forests).
+  - Feature selection in unstable models, where small changes in data can cause significant variation in the selected features.
 
-Bagging recap
-- invaluable tool that utilizes ensembling for a single prediction tool
-    - helpful for tools that suffer from high variance
-    - lose interpretation for the gain in prediction performance
+### Practical Considerations
+- Bootstrap for inference: Use 1000-5000 bootstrap samples.
+- Bagging: Typically requires 100-500 bootstrap samples.
+- Out-of-bag (OOB) error provides an internal validation estimate derived from the observations that weren't included in the bootstrap sample (similar to cross-validation).
 
-- not as helpful for things like MLR (they tend to suffer from bias because they aren't complex enough)
-  - argued to help in situations such as feature selection where models can be much more unstable
-
-Bootstrap inferencing - recommend 1000 - 5000 bootstrap samples
-
-Bagging - recommend 100-500 bootstrap samples
-
-Bagging also provides a way to comput a validation MSE for free
-  - commonly referred to as the "out of bag error"
-    - each bootstrap sample has observations that were not included
-    - mimics the holdout of k-fold
-
-Bootstrap procedure and its applications is one of the biggest contributions to statistics and data science over the past 40 years.
-
-For data scientists, its use in predictive models is critical to understand, as it can help both current methods and future ones to come.
+### Final Thoughts
+The bootstrap is one of the most impactful contributions to statistics and data science in the past 40 years. Understanding its applications in both statistical inference and machine learning is critical for data scientists.
