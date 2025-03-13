@@ -98,28 +98,32 @@ There are two main bootstrap approaches for MLR:
    - Assumes normality of residuals.
    - Addresses high leverage points by resampling residuals rather than entire observations.
    - Not recommended when there are violations of constant variance. A special type, the wild bootstrap is good for handling heteroskedasticity.
-
----
   
-Bootstrapping pairs (nonconstant variance remains)
-- Works the same as previously described
-  - Sample with replacement of each row of the data set
-  - Each observed response value will always be paired with its observed predictor values (values in the whole row stay together)
-  - Estimate all the regression coefficients for each bootstrap sample, so that you have a sampling distribution for each coefficient in the model
+### Bootstrapping Pairs
+ **Process**:
+  - Sample entire rows of data (predictor-response pairs) with replacement.
+  - Each observed response value remains paired with its corresponding predictor values (i.e. values in the whole row stay together).
+  - Fit the regression model on each resampled dataset (bootstrap sample).
+  - Obtain a sampling distribution of regression coefficients.
+- **Key Benefit**:
+  - Preserves the original structure of the data, including any existing nonconstant variance.
 
-Bootstrapping Residuals Algorithm (loses the nonconstant variance property)
-- first step: fit a general model $Y = f(x) + \epsilon$ is fitted to the data to obtain the residuals
-- create bootstrap resamples of the residuals
-- for each bootstrap resample of residuals:
-  - create a new bootstrapped response using the predicted values fed back into the original fit plus the bootstrapped errors
-  - estimate new regression coefficient from this data set to get the sampling distribution
+### Bootstrapping Residuals
+- **Process**:
+  1. Fit the model $Y = f(X) + \epsilon$ to obtain residuals.
+  2. Resample the residuals with replacement.
+  3. Create new responses using: $Y^* = \hat{Y} + \text{bootstrap residual}$
+     - The new bootstrapped response is created adding the bootstrapped errors to the predicted values from the original fit.
+  4. Fit the model to the new dataset and store coefficients to build the sampling distribution.
+- **Limitations**:
+  - Assumes independence.
+  - Not recommended when variance is nonconstant, as the nonconstant variance property is lost.
+  - May drop low-frequency categorical levels:
+    - Consider collapsing levels before bootstrapping.
+    - Otherwise, a level might be missing, causing the corresponding coefficient to be omitted—this is especially problematic when coding your own bootstrap procedure.
+- **Implementation**:
+  - The `lmboot` R package provides tools for bootstrapping residuals.
 
-Considerations
-- Independence is still needed.
-- If there is a constant variance issue, don't use bootstrapping residuals
-- Categorical variables with low sample size in some levels - consider collapsing levels before starting
-  - bootstrapping might lose the level and there for the coefficient will go missing (more problematic when coding your own bootstrap procedure)
-- lmboot R Package
 
 Bootstrap Inferencing Recap
 - bootstrapping allows us to estimate SEs for statistical estimates in a nonparametric way
@@ -171,8 +175,25 @@ Bootstrap Aggregation
 - Since the modeling tool doesn't change, and there is one training set, you'd get the same model every time, so there is no benefit to ensembling in that case.
 - Solution: get different model fits by using different data sets each time with bootstrap resampling.
 
+---
 
 ## Recap
+
+### Bootstrap Inference
+- The bootstrap enables nonparametric estimation of standard errors (SEs) without strict distributional assumptions.
+  - The independence assumption still applies.
+  - Bootstrap regression SE estimates tend to be better than MLR SE estimates if the model is too simple and fails to capture the true trend or complexity.
+- Several approaches exist for constructing confidence intervals, with BCa and bootstrap $t$-intervals being more robust than percentile bootstrap.
+  - Exception: Avoid BCa for small sample sizes, as estimating skewness is unreliable.
+- Paired bootstrap is preferred for regression models with nonconstant variance.
+- The bootstrap can provide inference on penalized regression coefficient estimates.
+- Parametric bootstrap methods exist, but they retain model assumptions.
+  - Resamples come from a theoretical distribution rather than from the actual dataset (i.e. a simulated dataset).
+- Representative samples are crucial for accurate inference.
+  - Although bootstrapping is often used in nonparametric small-sample methods, it still requires a representative sample to capture the true distribution.
+  - Small sample sizes may fail to provide an accurate representation of the population, limiting the effectiveness of bootstrapping.
+
+--- 
 
 Bagging recap
 - invaluable tool that utilizes ensembling for a single prediction tool
