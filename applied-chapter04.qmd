@@ -1,0 +1,281 @@
+---
+title: "Communicating with Clients"
+---
+
+## Objectives
+
+This chapter covers key aspects of communicating statistical analyses effectively, including:
+
+- Consulting and interacting with clients
+- Applying models in practice
+- Effective communication strategies
+- Handling missing data
+- Interpreting Mean Squared Error (MSE)
+
+
+## Consulting
+
+### Statistical Toolset
+A consultant’s statistical toolbox includes:
+- Group comparisons
+- Nonparametric methods
+- Regression analysis
+- Feature selection (penalized regression, stepwise selection)
+- Bootstrap and bagging
+
+### Key Questions Before Starting
+- What should I consider before beginning the analysis?
+- What should the overall plan be?
+- How do I communicate my findings effectively?
+
+### Challenges for New Analysts
+- Not fully understanding client needs
+- Overlooking what the dataset offers
+
+### Effective Communication with Clients
+Good opening lines when talking to clients with limited statistical knowledge:
+- "Tell me about your study/project."  
+  - Avoid asking, "How can I help?" or "What do you need?" as these may bias your understanding.
+
+### Extracting Key Information
+
+#### Study Goals
+- Is the purpose to **explain**, **predict**, or both?
+- What is the response variable? (Numerical, categorical, count, etc.)
+- Are there specific questions the client wants to answer?
+- If predicting, does the client want to quantify how predictors contribute to response changes?
+    
+#### Population and Data Collection
+- What is the target population, and how was data collected?
+- Can conclusions apply to a slightly smaller population?
+- Are some variables hard to obtain/measure or unreliable?
+- Are measurements repeatable?
+- Is each observation independent?
+
+#### Practical Considerations
+- What are meaningful differences, slopes, or accuracy metrics?
+- What actions will be taken based on the results?
+
+---
+
+**Key Info to Extract**
+What this key info gets you
+  - If explaining is part of the goal, some tools don't have the ability to perform hypothesis tests.  
+  - Some people might use the word "predict" loosely. They might mean 'find a correlation' (test of association using tests for regression coefficients).  
+  
+Smaller population definition can help with:  
+  - how to handle missing data  
+  - population restrictions: lupus patients who haven't had a treatment yet  
+  
+Even if data are measured, does it really reflect the truth (how reliable is the data)?  
+ - people not reporting the truth (race)  
+ - instrument doesn't measure well  
+ - does the quality of measurement change as the instrument ages?  
+   
+If you measure again, will you get the same value?  
+  - helps the conversation on what explanatory variables are important to consider  
+  - helps identify confounding variables  
+  
+Independence Assumption  
+  - data collection tells you about the independent assumption  
+  - for example:
+    - student testing from the same school district prob not independent  
+    - measurements over time (closer in time are more related)  
+    - spatial correlated observations (closer in space are more related)  
+    
+Practical vs statistical significance  
+  - ensures you don't read too much into a result  
+    
+Predictive model may not be ready for deployment  
+  - need to collect better predictors  
+  - redefining the response variables  
+  - getting more data to refine models  
+    
+What are you going to do next?  
+  - They say they want to predict, but model will help make future business decisions so hypothesis testing is really needed  
+  - Computation needs for model deployment (beyond the scope of this course)  
+    
+    
+## Big Data Considerations
+
+Google Flu Trends (GFT), a valuable learning lesson  
+- CDC reports number of doc visits related to flu  
+- reports on a 1-2 week lag  
+- GFT originally claimed they could accurately predict the reports on a 1-day lag  
+- GFTs prediction were drastically off, overreporting doc visits by almost 2x. 
+  
+Big Data Hubris  
+- assumes big data fixes all problems and circumvents statistical issues like random sampling  
+- most big data are not the output of highly accurate scientific instruments  
+- garbage in, garbage out (f(garbage) = garbage)  
+  
+Is your model predicting something else?  
+- flu season coinsides with winter  
+- GFT was part flu detector and part winter detector  
+  - important predictors were related to basketball which is a winter sport  
+    
+Predictions are made over time
+- errors of the prediction model are not independent  
+- the correlation that existed within the errors could be used to help improve the predictions  
+  
+Data Snooping  
+- the more predictors, the higher the chances of fining something claimed significant that isn't real (type I error)  
+- when the number of predictors is much higher than the number of observations, overfitted models are much more likely  
+  
+Algorithm Dynamics  
+- Changing the algorithm that produces your dataset, can fundamentally alter the properties of the dataset  
+- is the measurement of a variable stable and comparable across cases and over time?  
+  
+Database Logistics  
+- all big data are stored in databases  
+- just because you have access to all the data doesn't mean you should use it all  
+  - what is an appropriate sample to obtain that truly represents my population?  (sample from all the data)
+  - what variables will have no measurement error vs. which ones are free responses from a questionnaire or prone to errors? (don't need to consider all the variables)  
+  - What variables does it make sense to observe?  
+    
+    
+## Regression Models in Practice
+
+**General Workflow for Regression** (highly iterative process)  
+1. Data processing  
+  - cleaning, curation, dropping  
+2. EDA  
+  - summary stats  
+  - graphics  
+  - light modeling for insight (for assumptions)  
+3. Model building  
+  - feature selection  
+  - tuning (cross-validation)  
+  - manual iteration  
+  - assumption checking / fixing  
+4. Communicate results  
+  - hypothesis testing, interpretation of coefficients  
+  - assess prediction performance, report the metrics on the validation set  
+  - provide a table with model comparison (non-parametric vs. parametric, etc.)  
+  - strategy on deployment of the model, how it can be used  
+  
+Advice while iterating: at some point draw a line after the data processing step.  
+  - iterating too much tends to lead to overfitting  
+  - make sure all the models you report were fitted from the **same** finalized, processed data set to avoid confusion  
+  - consider from which population your final data set comes from (e.g. if you handle missing data a certain way)  
+    
+    
+## Effective Communication of Results
+
+Can be difficult because:  
+  - Tt's a highly iterative process with many decisions along the way.   
+  - You've don't so much. How much detail to give?  
+  - There are many technical things. Know your audience.  
+  - Time and page number constraints  
+  
+Try to summarize your approach and workflow mimicing the theoretical linear workflow.  
+Additional details can be put in an appendix at the back of a report or at the back of the ppt.  
+
+**Typical Report Sections**  
+1. Problem statement and presentation overview  
+2. Data description (variables) and processing summary  
+3. Graphics and summary statistics tables that help articulate what your final model is going to say/do  
+4. Results/interpretation, highlight final model: interpret and/or evaluate prediction performance  
+5. Repeat steps 3 and 4 if there are multiple problem statements  
+6. Conclusions (brief summary statements of global conclusions) and WIP (work in progress)  
+  
+*Problem Statement*  
+  - clearly define the objective and goals  
+  - brief outline of report (structure)  
+    - multiple objectives  
+    - multiple approaches  
+    - appendices for written documents  
+      
+*Data Descriptions*  
+  - When using coded variables:  
+    - provide table mapping coded with actual names  
+  - Including data types is also helpful since not all analysts will treat variables the same way (important for written report)  
+    - Visual presenters can address these organically  
+      
+*Processing Data*  
+  - You will natural iterate your models along with processing data.  
+  - Final processed data should be shown in EDA when presenting and what is used on your final models. (Don't included deleted observations. Include exactly what your model is seeing so the graphics match what model suggests.)  
+  - Address the handling of missing data (brief).  
+  - High-level summaries are needed here.  
+    - Only technical if absolutely critical to the discussion.  
+    
+*EDA*  
+  - **Summary statistics** should always be made available.  
+    - Table: mean, median, sd, min, max, 5 number summary, proportions or counts with categorical variables  
+    - If you don't talk about, put in appendix or back of slide deck.
+    - Provide reader/audience a way to sanity check basic things.  
+    - Can help explain what other parts of your models are doing what they are doing  
+      - Ex: Why are you running KNN on a set of predictors that are z-scored (or scaled in some other way)?  
+  - **Graphics and Tables**  
+    - Don't let them do the talking for you. If you don't talk about it, assume your audience will never look at it.  
+    - If a graph is too busy:  
+      - Focus their attention somehow or make a new graph.  
+  - **Show The Trends**  
+    - EDA graphics you use for your own model-building process many not be the best for presenting  
+    - Focus should be on your response variable and how it relates to the predictors, the trends that help explain why you include an interaction or polynomial term or why you can tell a variable isn't important  
+      - You could parse out numerical and categorical variables (with scatterplots and boxplots separated)  
+    - Mention but don't let things like multicollinearity dominate the EDA discussion - highlight the trends  
+    - You know what the final model looks like:  
+      - Build audience's intuition.   
+      - Highlight important relationships.  
+      - Highlight unimportant ones if that variable was part of the question.  
+  - **Regression Tables**
+    - Do you really want people to see p-values and t-statistics?  
+      - Is a CI and *** for significance enough?  
+      - Maybe you don't need the point estimate, the t-statistic, the p-value?  
+      - Consider creating results from R and remaking them with only the relevant info.  
+      - Don't distract with technical info that isn't utilized.  
+        
+  
+**Missing Data**
+
+Ways that observations can have missing values:  
+  - Missing completely at random (MCAR)  
+  - Missing at random (MAR)  
+  - Missing not at random (MNAR)  
+
+**The Concern with Deletion**  
+  - The most basic approach is to delete the observations (rows) that have missing observations in them.  
+  - Default by most software.  
+  - Could drastically reduce the sample size.  
+  - Deleting observations could potentially change the population of which your sample is representative.  
+
+**Missing Completely at Random (MCAR)**  
+  - Observations that have missing values are a random subset of all the observations.  
+  - Data removed is consistent with data kept.  
+    - similar summary statistics, correlation behavior, and distributions  
+
+**Missing at Random (MAR)**  
+  - Less restrictive than MCAR.  
+  - Observations that are deleted have the same distribution for stratifications of the data based on a known variable.  
+
+**Missing Not at Random (MNAR)**  
+  - Catch-all bucket for not MCAR and not MAR.  
+  - There is a systematic reason for why the missing data are there.  
+
+**Deletion under MCAR and MAR**  
+  - If MCAR or MAR is reasonable, there is some justification for deleting the missing rows.  
+  - Maintain awareness that deleting rows could affect population definition.  
+    - usually do some summary statistics and data description on data deleted vs. data kept  
+  - Imputing the missing values, or incorporating a model that handles missing values, is the approach to take.  
+  - Should never delete with MNAR.  
+
+**Imputation**  
+  - Imputation is the act of replacing missing values in your data set with an estimate of what the actual value should have been.  
+  - New prediction problem: Variable with missing is the response.  
+  - *Simple Imputation*  
+    - Replace the missing values using the mean or median of the variable of interest.  
+    - For categorical variables, replace with the most common categorical level.  
+    - Not always a good approach:  
+      - under the MCAR setting  
+      - large amounts of missing data  
+  - *Imputation via Regression*  
+    1. Fit a regression model using complete data.  
+        - Variable with missing is the response.  
+    2. Predict the missing observation using your model.  
+    3. Repeat steps 1 and 2 for every variable you want to impute missing values.  
+    - Can be done for categorical variables with classification models.  
+    - Imputation processes never incorporate the true response variable. Only use the predictors.  
+    - You can perform your own regression imputation manually.  
+        - Commonsense approach by stratifying data you do have to predict the missing. Example: multiple observations for one country; use simple imputation using data for that country only.  
+    - Visual assessment of missing data is helpful.
