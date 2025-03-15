@@ -56,84 +56,75 @@ Good opening lines when talking to clients with limited statistical knowledge:
 - What are meaningful differences, slopes, or accuracy metrics?
 - What actions will be taken based on the results?
 
----
+#### Why This Information Matters
+- Response variable type determines the appropriate method (e.g. regression vs. classification).
+- Understanding the goal (explanation vs. prediction) helps select appropriate statistical tools.
+  - e.g. selecting a tool that supports hypothesis testing if required.
+- Some people use "predict" loosely, meaning correlation or association tests instead.
+- Adjusting population definition can impact:
+  - Handling missing data
+  - Identifying population restrictions (e.g. specific patient subsets like lupus patients prior to treatment)
 
-**Key Info to Extract**
-What this key info gets you
-  - If explaining is part of the goal, some tools don't have the ability to perform hypothesis tests.  
-  - Some people might use the word "predict" loosely. They might mean 'find a correlation' (test of association using tests for regression coefficients).  
-  
-Smaller population definition can help with:  
-  - how to handle missing data  
-  - population restrictions: lupus patients who haven't had a treatment yet  
-  
-Even if data are measured, does it really reflect the truth (how reliable is the data)?  
- - people not reporting the truth (race)  
- - instrument doesn't measure well  
- - does the quality of measurement change as the instrument ages?  
-   
-If you measure again, will you get the same value?  
-  - helps the conversation on what explanatory variables are important to consider  
-  - helps identify confounding variables  
-  
-Independence Assumption  
-  - data collection tells you about the independent assumption  
-  - for example:
-    - student testing from the same school district prob not independent  
-    - measurements over time (closer in time are more related)  
-    - spatial correlated observations (closer in space are more related)  
-    
-Practical vs statistical significance  
-  - ensures you don't read too much into a result  
-    
-Predictive model may not be ready for deployment  
-  - need to collect better predictors  
-  - redefining the response variables  
-  - getting more data to refine models  
-    
-What are you going to do next?  
-  - They say they want to predict, but model will help make future business decisions so hypothesis testing is really needed  
-  - Computation needs for model deployment (beyond the scope of this course)  
+#### Data Reliability and Independence
+- Is the data an accurate reflection of reality?
+  - Consider biases in reporting (e.g. self-reported data like race).
+  - Instrument reliability and potential degradation over time.
+  - If you measure again, will you get the same value?
+    - Helps identify important explanatory variables and confounding variables.
+- Independence assumption is influenced by data collection methods:
+  - Students from the same district may not be independent.
+  - Time series data may have autocorrelation.
+  - Spatially close observations may be correlated.  
+
+### Practical vs. Statistical Significance
+- Ensures results are interpreted correctly and not overemphasized
+
+### Considerations for Predictive Modeling
+- Model readiness for deployment
+- Need for additional/better predictors
+- Redefining response variables
+- Collecting more data for refinement
+- Identifying whether hypothesis testing is needed for decision-making
+- Computation needs for model deployment (beyond the scope of this course)  
     
     
 ## Big Data Considerations
 
-Google Flu Trends (GFT), a valuable learning lesson  
-- CDC reports number of doc visits related to flu  
-- reports on a 1-2 week lag  
-- GFT originally claimed they could accurately predict the reports on a 1-day lag  
-- GFTs prediction were drastically off, overreporting doc visits by almost 2x. 
+### Google Flu Trends (GFT) Case Study
+- Background: CDC reports flu-related doctor visits with a 1-2 week lag. GFT aimed to predict these visits with a 1-day lag.
+- Issue: GFT overestimated doctor visits by almost 2x.
+
+### Big Data Hubris
+- Assumes big data fixes all statistical issues, including sampling biases (i.e. sampling that isn't random).
+- Many big data sources are not from highly accurate scientific instruments.
+- "Garbage in, garbage out" principle applies.  
+
+### Understanding Model Predictions
+- Flu season coincides with winter.
+- GFT detected both flu and winter, leading to misleading predictors.
+  - Important predictors were basketball related (i.e. winter sport related). 
+
+### Temporal Dependencies in Prediction Models  
+- Errors in prediction models are often not independent over time.  
+- The correlation within prediction errors can be used to improve model accuracy.  
+
+### Data Snooping and Overfitting  
+- The more predictors included, the higher the chance of falsely finding statistical significance (Type I error).
+- When the number of predictors is much higher than the number of observations, overfitting is much more likely.  
+
+### Algorithm Dynamics and Data Stability  
+- Changing the algorithm that produces your dataset can fundamentally alter its properties.  
+- Is the measurement of a variable stable and comparable across cases and over time?  
   
-Big Data Hubris  
-- assumes big data fixes all problems and circumvents statistical issues like random sampling  
-- most big data are not the output of highly accurate scientific instruments  
-- garbage in, garbage out (f(garbage) = garbage)  
-  
-Is your model predicting something else?  
-- flu season coinsides with winter  
-- GFT was part flu detector and part winter detector  
-  - important predictors were related to basketball which is a winter sport  
+### Database Logistics
+- Just because data is available doesn’t mean all of it should be used.
+- Consider:
+  - Sampling appropriately to represent the target population.
+  - Measurement error risks (i.e. consider the error risk of variables.)
+  - The necessity of specific variables - which ones are practically important? 
     
-Predictions are made over time
-- errors of the prediction model are not independent  
-- the correlation that existed within the errors could be used to help improve the predictions  
-  
-Data Snooping  
-- the more predictors, the higher the chances of fining something claimed significant that isn't real (type I error)  
-- when the number of predictors is much higher than the number of observations, overfitted models are much more likely  
-  
-Algorithm Dynamics  
-- Changing the algorithm that produces your dataset, can fundamentally alter the properties of the dataset  
-- is the measurement of a variable stable and comparable across cases and over time?  
-  
-Database Logistics  
-- all big data are stored in databases  
-- just because you have access to all the data doesn't mean you should use it all  
-  - what is an appropriate sample to obtain that truly represents my population?  (sample from all the data)
-  - what variables will have no measurement error vs. which ones are free responses from a questionnaire or prone to errors? (don't need to consider all the variables)  
-  - What variables does it make sense to observe?  
-    
-    
+---
+
 ## Regression Models in Practice
 
 **General Workflow for Regression** (highly iterative process)  
