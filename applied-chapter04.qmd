@@ -127,29 +127,28 @@ Good opening lines when talking to clients with limited statistical knowledge:
 
 ## Regression Models in Practice
 
-**General Workflow for Regression** (highly iterative process)  
-1. Data processing  
-  - cleaning, curation, dropping  
-2. EDA  
-  - summary stats  
-  - graphics  
-  - light modeling for insight (for assumptions)  
-3. Model building  
-  - feature selection  
-  - tuning (cross-validation)  
-  - manual iteration  
-  - assumption checking / fixing  
-4. Communicate results  
-  - hypothesis testing, interpretation of coefficients  
-  - assess prediction performance, report the metrics on the validation set  
-  - provide a table with model comparison (non-parametric vs. parametric, etc.)  
-  - strategy on deployment of the model, how it can be used  
-  
-Advice while iterating: at some point draw a line after the data processing step.  
-  - iterating too much tends to lead to overfitting  
-  - make sure all the models you report were fitted from the **same** finalized, processed data set to avoid confusion  
-  - consider from which population your final data set comes from (e.g. if you handle missing data a certain way)  
-    
+### General Workflow
+
+The general workflow for regression is a highly iterative process.
+
+1. **Data Processing**: Cleaning, curation, dropping variables
+2. **Exploratory Data Analysis (EDA)**:    - Summary statistics
+   - Visualization
+   - Light modeling for insight and assumption checking 
+3. **Model Building**:
+   - Feature selection
+   - Tuning (cross-validation)
+   - Manual iteration
+   - Assumption checking and fixing
+4. **Communicating Results**:
+   - Hypothesis testing and interpretation
+   - Prediction performance metrics, report the validation set results
+   - Model comparison, provide a table (e.g. non-parametric vs. parametric) 
+   - Deployment strategy
+
+**Advice**: Avoid excessive iteration to prevent overfitting. Ensure models use the same finalized, processed dataset. Consider which population your final data set comes from (e.g. if you handle missing data a certain way).  
+
+---  
     
 ## Effective Communication of Results
 
