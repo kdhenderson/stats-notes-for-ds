@@ -146,76 +146,72 @@ The general workflow for regression is a highly iterative process.
    - Model comparison, provide a table (e.g. non-parametric vs. parametric) 
    - Deployment strategy
 
-**Advice**: Avoid excessive iteration to prevent overfitting. Ensure models use the same finalized, processed dataset. Consider which population your final data set comes from (e.g. if you handle missing data a certain way).  
+**Advice**: Avoid excessive iteration to prevent overfitting. Ensure models use the same finalized, processed dataset.  
+Be mindful that the way missing data is handled can influence which population your model represents. For example, if missing values are not missing at random and are removed, the final dataset may not be representative of the full population.  
 
----  
-    
+
 ## Effective Communication of Results
 
-Can be difficult because:  
-  - Tt's a highly iterative process with many decisions along the way.   
-  - You've don't so much. How much detail to give?  
-  - There are many technical things. Know your audience.  
-  - Time and page number constraints  
-  
-Try to summarize your approach and workflow mimicing the theoretical linear workflow.  
-Additional details can be put in an appendix at the back of a report or at the back of the ppt.  
+### Challenges
+- Iterative nature of analysis makes summarization difficult.
+- Finding the right level of technical detail for the audience.
+- Time and page constraints.
 
-**Typical Report Sections**  
-1. Problem statement and presentation overview  
-2. Data description (variables) and processing summary  
-3. Graphics and summary statistics tables that help articulate what your final model is going to say/do  
-4. Results/interpretation, highlight final model: interpret and/or evaluate prediction performance  
-5. Repeat steps 3 and 4 if there are multiple problem statements  
-6. Conclusions (brief summary statements of global conclusions) and WIP (work in progress)  
-  
-*Problem Statement*  
-  - clearly define the objective and goals  
-  - brief outline of report (structure)  
-    - multiple objectives  
-    - multiple approaches  
-    - appendices for written documents  
+### Structuring Reports and Presentations
+Try to summarize your approach and workflow by mimicking a theoretical linear workflow.  
+Additional details can be placed in an appendix at the back of a written report or at the end of a presentation.  
+
+A well-structured report typically includes:
+1. **Problem Statement and Presentation Overview**
+   - Clearly define the objective and goals.
+   - Provide a brief outline of the report structure, especially if there are:
+     - Multiple objectives.
+     - Multiple approaches.
+     - Appendices for more detailed information.
+2. **Data Description and Processing Summary**
+   - Define key variables and their roles in the analysis.
+   - When using coded variables, provide a table mapping codes to actual names.
+   - Consider including data types (numeric, categorical, etc.), as different analysts may interpret variables differently.
+   - Summarize how data processing was conducted.
+3. **Exploratory Data Analysis (EDA)**
+   - Highlight important relationships between variables.
+   - Use summary statistics and visualizations to articulate key insights.
+4. **Results and Interpretation**
+   - Provide a clear explanation of the final model’s findings.
+   - Interpret coefficients and/or evaluate predictive performance.
+5. **Conclusions and Work-in-Progress (WIP)**
+   - Offer brief global conclusions and next steps.
+   - If there are multiple problem statements, repeat steps **3 & 4** as needed.
+
+### Data Processing Considerations
+- Ensure that the final processed dataset aligns with EDA and model inputs.
+- Summarize missing data handling without excessive technical detail.
+
+### Presenting EDA Findings
+- **Summary statistics**: Should always be provided. Include mean, standard deviation, 5-number summary (median, min/max), and category counts or proportions.
+  - Provide reader/audience a way to sanity check basic things.
+  - Can provide intuition for what parts of the model is doing. For example, why are you running KNN on a set of predictors that are z-scored (or scaled in some other way)? 
+- **Graphics and Tables**: 
+  - Don’t assume that figures speak for themselves—explicitly reference them. (Additional figures can be included in an appendix.)
+  - If a graph is too cluttered, either simplify it or guide the audience’s focus.
+- **Showing Trends**:
+  - EDA visuals used for model-building may not be the best for presentation.
+  - Focus on how the response variable relates to predictors.
+  - Highlight trends that justify interaction terms or transformations.
+  - Avoid overemphasizing multicollinearity unless it directly affects interpretation.
+  - Consider parsing out numerical and categorical variables with either scatterplots or boxplots. 
+  - Build the audience's intuition of the final model, highlight important relationships and unimportant ones when a variable was part of the question of interest.
       
-*Data Descriptions*  
-  - When using coded variables:  
-    - provide table mapping coded with actual names  
-  - Including data types is also helpful since not all analysts will treat variables the same way (important for written report)  
-    - Visual presenters can address these organically  
-      
-*Processing Data*  
-  - You will natural iterate your models along with processing data.  
-  - Final processed data should be shown in EDA when presenting and what is used on your final models. (Don't included deleted observations. Include exactly what your model is seeing so the graphics match what model suggests.)  
-  - Address the handling of missing data (brief).  
-  - High-level summaries are needed here.  
-    - Only technical if absolutely critical to the discussion.  
+### Regression Tables
+- Consider whether the audience needs to see p-values and t-statistics.
+  - Would confidence intervals and significance markers (**\*\*\***, **\***, etc.) be clearer?
+  - Can results be reformatted to show only essential information?
+  - Avoid overwhelming the audience with statistics and technical details that aren’t being used in interpretation.
+
+### Interpreting Mean Squared Error (MSE)
+- MSE measures prediction error, balancing bias and variance.
+- A lower MSE suggests a better model fit, but it must be evaluated alongside interpretability and generalization ability.
     
-*EDA*  
-  - **Summary statistics** should always be made available.  
-    - Table: mean, median, sd, min, max, 5 number summary, proportions or counts with categorical variables  
-    - If you don't talk about, put in appendix or back of slide deck.
-    - Provide reader/audience a way to sanity check basic things.  
-    - Can help explain what other parts of your models are doing what they are doing  
-      - Ex: Why are you running KNN on a set of predictors that are z-scored (or scaled in some other way)?  
-  - **Graphics and Tables**  
-    - Don't let them do the talking for you. If you don't talk about it, assume your audience will never look at it.  
-    - If a graph is too busy:  
-      - Focus their attention somehow or make a new graph.  
-  - **Show The Trends**  
-    - EDA graphics you use for your own model-building process many not be the best for presenting  
-    - Focus should be on your response variable and how it relates to the predictors, the trends that help explain why you include an interaction or polynomial term or why you can tell a variable isn't important  
-      - You could parse out numerical and categorical variables (with scatterplots and boxplots separated)  
-    - Mention but don't let things like multicollinearity dominate the EDA discussion - highlight the trends  
-    - You know what the final model looks like:  
-      - Build audience's intuition.   
-      - Highlight important relationships.  
-      - Highlight unimportant ones if that variable was part of the question.  
-  - **Regression Tables**
-    - Do you really want people to see p-values and t-statistics?  
-      - Is a CI and *** for significance enough?  
-      - Maybe you don't need the point estimate, the t-statistic, the p-value?  
-      - Consider creating results from R and remaking them with only the relevant info.  
-      - Don't distract with technical info that isn't utilized.  
-        
   
 **Missing Data**
 
