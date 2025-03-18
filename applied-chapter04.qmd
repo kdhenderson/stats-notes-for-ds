@@ -160,35 +160,37 @@ Be mindful that the way missing data is handled can influence which population y
 Try to summarize your approach and workflow by mimicking a theoretical linear workflow.  
 Additional details can be placed in an appendix at the back of a written report or at the end of a presentation.  
 
-A well-structured report typically includes:
-1. **Problem Statement and Presentation Overview**
-   - Clearly define the objective and goals.
-   - Provide a brief outline of the report structure, especially if there are:
-     - Multiple objectives.
-     - Multiple approaches.
-     - Appendices for more detailed information.
-2. **Data Description and Processing Summary**
-   - Define key variables and their roles in the analysis.
-   - When using coded variables, provide a table mapping codes to actual names.
-   - Consider including data types (numeric, categorical, etc.), as different analysts may interpret variables differently.
-   - Summarize how data processing was conducted.
-3. **Exploratory Data Analysis (EDA)**
-   - Highlight important relationships between variables.
-   - Use summary statistics and visualizations to articulate key insights.
-4. **Results and Interpretation**
-   - Provide a clear explanation of the final model’s findings.
-   - Interpret coefficients and/or evaluate predictive performance.
-   - Explain whether the error magnitude is meaningful in the real-world application.
-5. **Conclusions and Work-in-Progress (WIP)**
-   - Offer brief global conclusions and next steps.
-   - If there are multiple problem statements, repeat steps **3 & 4** as needed.
+A well-structured report typically includes:  
+
+1. **Problem Statement and Presentation Overview**  
+   - Clearly define the objective and goals.  
+   - Provide a brief outline of the report structure, especially if there are:  
+     - Multiple objectives.  
+     - Multiple approaches.  
+     - Appendices for more detailed information.  
+2. **Data Description and Processing Summary**  
+   - Define key variables and their roles in the analysis.  
+   - When using coded variables, provide a table mapping codes to actual names.  
+   - Consider including data types (numeric, categorical, etc.), as different analysts may interpret variables differently.  
+   - Summarize how data processing was conducted.  
+3. **Exploratory Data Analysis (EDA)** 
+   - Highlight important relationships between variables.  
+   - Use summary statistics and visualizations to articulate key insights.  
+4. **Results and Interpretation**  
+   - Provide a clear explanation of the final model’s findings.  
+   - Interpret coefficients and/or evaluate predictive performance.  
+   - Explain whether the error magnitude is meaningful in the real-world application.  
+5. **Conclusions and Work-in-Progress (WIP)**  
+   - Offer brief global conclusions and next steps.  
+   - If there are multiple problem statements, repeat steps 3 & 4 as needed.  
 
 ### Data Processing Considerations
 - Ensure that the final processed dataset aligns with EDA and model inputs.
 - Summarize missing data handling without excessive technical detail.
 
 ### Presenting EDA Findings
-- **Summary statistics**: Should always be provided. Include mean, standard deviation, 5-number summary (median, min/max), and category counts or proportions.
+- **Summary statistics**: 
+  - Should always be provided. Include mean, standard deviation, 5-number summary (median, min/max), and category counts or proportions.
   - Provide reader/audience a way to sanity check basic things.
   - Can provide intuition for what parts of the model is doing. For example, why are you running KNN on a set of predictors that are z-scored (or scaled in some other way)? 
 - **Graphics and Tables**: 
@@ -204,7 +206,7 @@ A well-structured report typically includes:
       
 ### Regression Tables
 - Consider whether the audience needs to see p-values and t-statistics.
-  - Would confidence intervals and significance markers (**\*\*\***, **\***, etc.) be clearer?
+  - Would confidence intervals and significance markers (**\***, **\*\***, **\*\*\***, etc.) be clearer?
   - Can results be reformatted to show only essential information?
   - Avoid overwhelming the audience with statistics and technical details that aren’t being used in interpretation.
 
