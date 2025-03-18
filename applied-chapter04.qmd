@@ -122,8 +122,7 @@ Good opening lines when talking to clients with limited statistical knowledge:
   - Sampling appropriately to represent the target population.
   - Measurement error risks (i.e. consider the error risk of variables.)
   - The necessity of specific variables - which ones are practically important? 
-    
----
+
 
 ## Regression Models in Practice
 
@@ -142,8 +141,8 @@ The general workflow for regression is a highly iterative process.
    - Assumption checking and fixing
 4. **Communicating Results**:
    - Hypothesis testing and interpretation
-   - Prediction performance metrics, report the validation set results
-   - Model comparison, provide a table (e.g. non-parametric vs. parametric) 
+   - Report prediction performance metrics (validation set results)
+   - Model comparison (provide a table, e.g. non-parametric vs. parametric) 
    - Deployment strategy
 
 **Advice**: Avoid excessive iteration to prevent overfitting. Ensure models use the same finalized, processed dataset.  
@@ -179,6 +178,7 @@ A well-structured report typically includes:
 4. **Results and Interpretation**
    - Provide a clear explanation of the final model’s findings.
    - Interpret coefficients and/or evaluate predictive performance.
+   - Explain whether the error magnitude is meaningful in the real-world application.
 5. **Conclusions and Work-in-Progress (WIP)**
    - Offer brief global conclusions and next steps.
    - If there are multiple problem statements, repeat steps **3 & 4** as needed.
@@ -210,58 +210,62 @@ A well-structured report typically includes:
 
 ### Interpreting Mean Squared Error (MSE)
 - MSE measures prediction error, balancing bias and variance.
-- A lower MSE suggests a better model fit, but it must be evaluated alongside interpretability and generalization ability.
-    
-  
-**Missing Data**
+- A lower MSE does not always mean a better model:
+  - Practical significance matters:  
+    - A model predicting hospital stay within ~1 day may be useful, even if another model has a slightly lower MSE but lacks interpretability.
+    - A model achieving a lower MSE but only predicting the mean hospital stay may not be useful.
+- MSE should be considered alongside generalization ability, interpretability, and real-world usefulness.
 
-Ways that observations can have missing values:  
-  - Missing completely at random (MCAR)  
-  - Missing at random (MAR)  
-  - Missing not at random (MNAR)  
 
-**The Concern with Deletion**  
-  - The most basic approach is to delete the observations (rows) that have missing observations in them.  
-  - Default by most software.  
-  - Could drastically reduce the sample size.  
-  - Deleting observations could potentially change the population of which your sample is representative.  
+## Handling Missing Data
 
-**Missing Completely at Random (MCAR)**  
-  - Observations that have missing values are a random subset of all the observations.  
-  - Data removed is consistent with data kept.  
-    - similar summary statistics, correlation behavior, and distributions  
+### Types of Missing Data
+- **Missing Completely at Random (MCAR)**:
+  - The missing observations form a random subset of all observations.  
+  - The data removed is consistent with the data kept, meaning:  
+    - Similar summary statistics, correlation behavior, and distributions.
+  - Listwise deletion is acceptable, and imputation is also an option.
+- **Missing at Random (MAR)**:
+  - The probability of missingness depends on observed covariates but not on the missing values themselves.  
+    - If you stratify the data by a known variable, the missing data within each subgroup is MCAR. 
+    - Example: If income values are missing more often for older individuals, but within each age group the missingness is random, then the data is MAR.
+  - Listwise deletion is generally NOT recommended, but may be acceptable if the covariate influencing missingness is not important in the model.  
+  - Imputation is preferred if the covariate affects the response variable or other predictors.
+- **Missing Not at Random (MNAR)**:
+  - A systematic reason exists for why certain values are missing.  
+    - The probability of missingness depends on the missing values themselves, meaning the reason for missingness is unknown or systematic.  
+    - Example: If people with higher incomes are less likely to report their salary, then missingness depends on the unobserved income values themselves
+  - Catch-all category for cases that do not satisfy MCAR or MAR conditions.  
+  - Listwise deletion is NOT okay, and imputation may not be possible without strong assumptions.
+ 
+### Deletion Considerations
+- Most statistical software deletes rows with missing data by default, but this:
+  - Reduces sample size.  
+  - Changes population representation, potentially introducing bias.  
+- When is deletion acceptable?
+  - MCAR: Deletion is valid because missingness is random.
+  - MAR: Deletion may be justifiable if the missingness is due to a covariate that is not relevant to the analysis.  
+    - However, if the covariate affects the response or other predictors, deletion is not recommended, and imputation should be considered.  
+  - MNAR: Deletion should not be used, as missingness is related to the values themselves and may distort the results.
+  - With MCAR or MAR, consider:
+    - Summary statistics and comparisons of deleted vs. retained data.  
+    - Whether deletion skews the population of interest.
 
-**Missing at Random (MAR)**  
-  - Less restrictive than MCAR.  
-  - Observations that are deleted have the same distribution for stratifications of the data based on a known variable.  
+### Imputation Methods
+There are multiple ways to replace missing values with reasonable estimates:
 
-**Missing Not at Random (MNAR)**  
-  - Catch-all bucket for not MCAR and not MAR.  
-  - There is a systematic reason for why the missing data are there.  
+- **Simple Imputation**: Replace missing values with mean, median, or mode (for categorical values).
+  - Limitations: 
+    - Only reasonable when missing data is truly random (MCAR).  
+    - Can distort distributions if a large proportion of data is missing. 
+- **Regression Imputation**:
+  1. Fit a regression model on complete data.
+  2. Predict missing values using the model.
+  3. Repeat for each variable with missing values.
+  - The variable with missing values becomes the response variable in this prediction problem.
+  - Can be extended to classification models for categorical variables.
+  - Imputation should exclude the true response variable.
 
-**Deletion under MCAR and MAR**  
-  - If MCAR or MAR is reasonable, there is some justification for deleting the missing rows.  
-  - Maintain awareness that deleting rows could affect population definition.  
-    - usually do some summary statistics and data description on data deleted vs. data kept  
-  - Imputing the missing values, or incorporating a model that handles missing values, is the approach to take.  
-  - Should never delete with MNAR.  
-
-**Imputation**  
-  - Imputation is the act of replacing missing values in your data set with an estimate of what the actual value should have been.  
-  - New prediction problem: Variable with missing is the response.  
-  - *Simple Imputation*  
-    - Replace the missing values using the mean or median of the variable of interest.  
-    - For categorical variables, replace with the most common categorical level.  
-    - Not always a good approach:  
-      - under the MCAR setting  
-      - large amounts of missing data  
-  - *Imputation via Regression*  
-    1. Fit a regression model using complete data.  
-        - Variable with missing is the response.  
-    2. Predict the missing observation using your model.  
-    3. Repeat steps 1 and 2 for every variable you want to impute missing values.  
-    - Can be done for categorical variables with classification models.  
-    - Imputation processes never incorporate the true response variable. Only use the predictors.  
-    - You can perform your own regression imputation manually.  
-        - Commonsense approach by stratifying data you do have to predict the missing. Example: multiple observations for one country; use simple imputation using data for that country only.  
-    - Visual assessment of missing data is helpful.
+### Practical Imputation Strategies
+- Stratify data when imputing (e.g. by country or demographic groups).
+- Use visualizations to assess missing data patterns.
