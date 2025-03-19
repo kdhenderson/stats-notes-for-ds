@@ -1,0 +1,321 @@
+---
+title: "Matrices"
+---
+
+## Objectives
+
+This chapter explores fundamental matrix concepts, including operations, applications in summarizing data, and their role in multiple linear regression.
+
+- Review of matrix operations  
+- Special cases of matrix multiplication  
+- Summarizing multiple variables (multivariate normal distribution)  
+- Revisiting multiple linear regression (MLR) 
+
+
+## Review of Matrix Operations
+
+### Symmetric Matrices  
+- A symmetric matrix has the same number of rows and columns (i.e a square matrix).  
+
+### Vectors  
+- A vector is a matrix with a single column.  
+- Variables in vector format: $X = (X_1, X_2, X_3, X_4)$
+
+### Transposing Matrices  
+- The transpose of a matrix swaps its rows and columns.  
+- If $A$ is a matrix, then its transpose is denoted as $A'$ or $A^T$.  
+- The first column becomes the first row in the transpose.  
+
+### Matrix Addition and Subtraction  
+- Matrices must have the same dimensions for addition or subtraction.  
+- Operations are performed elementwise. 
+ 
+### Matrix Multiplication  
+
+- Not all matrices can be multiplied—matrix multiplication is only defined if the number of columns in the first matrix matches the number of rows in the second matrix.  
+- If $A$ is an $m \times n$ matrix and $B$ is an $n \times p$ matrix, then the product $AB$ is an $m \times p$ matrix.  
+- Each element in $AB$ is obtained by computing the dot product of a row from $A$ and a column from $B$.  
+
+#### What is a Dot Product?  
+The dot product of two vectors is the sum of the element-wise multiplications of their corresponding entries.  
+
+For matrix multiplication, to compute the element at row $i$, column $j$ of $AB$, we take:  
+1. Row $i$ from $A$  
+2. Column $j$ from $B$  
+3. Multiply corresponding elements and sum them:  
+   $$
+   AB_{i,j} = A_{i,1}B_{1,j} + A_{i,2}B_{2,j} + \dots + A_{i,n}B_{n,j}
+   $$  
+ 
+#### Step-by-Step Example  
+
+Let:  
+$$
+A =
+\begin{bmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6
+\end{bmatrix}
+$$
+($2 \times 3$ matrix)
+
+$$
+B =
+\begin{bmatrix}
+7 & 8 \\
+9 & 10 \\
+11 & 12
+\end{bmatrix}
+$$
+($3 \times 2$ matrix)
+
+Since $A$ has **3 columns** and $B$ has **3 rows**, multiplication is valid, and the resulting matrix $AB$ has dimension $2 \times 2$.  
+
+To compute the element in **row 1, column 1** of $AB$:  
+
+$$
+AB_{1,1} = (1 \times 7) + (2 \times 9) + (3 \times 11) = 7 + 18 + 33 = 58
+$$
+
+To compute the element in **row 1, column 2**:  
+
+$$
+AB_{1,2} = (1 \times 8) + (2 \times 10) + (3 \times 12) = 8 + 20 + 36 = 64
+$$
+
+To compute the element in **row 2, column 1**:  
+
+$$
+AB_{2,1} = (4 \times 7) + (5 \times 9) + (6 \times 11) = 28 + 45 + 66 = 139
+$$
+
+To compute the element in **row 2, column 2**:  
+
+$$
+AB_{2,2} = (4 \times 8) + (5 \times 10) + (6 \times 12) = 32 + 50 + 72 = 154
+$$
+
+Thus, the final matrix product is:  
+
+$$
+AB =
+\begin{bmatrix}
+58 & 64 \\
+139 & 154
+\end{bmatrix}
+$$  
+
+### Identity Matrices  
+- An identity matrix is always symmetric, with:  
+  - All diagonal elements of **1**  
+  - All off-diagonal elements of **0** 
+- The identity matrix behaves like **1** in scalar multiplication:  
+  - If $A$ is an $r \times c$ matrix and $I$ is a $c \times c$ identity matrix, then $AI = A$.  
+  - If $I$ is an $r \times r$ identity matrix, then $IA = A$.  
+
+### Matrix Inverses  
+- If a matrix is square and meets certain conditions, an inverse matrix exists.  
+- The inverse of $A$ is denoted as $A^{-1}$.  
+- The property: $ AA^{-1} = A^{-1}A = I $  
+- Inverse operations are matrix equivalents of division.  
+  
+### Tips for Reading Matrix Formulas  
+- Always check the dimension of the final result when interpreting matrix expressions.  
+
+---
+
+## Special Cases of Matrix Multiplication
+
+Let $C_{n \times 1}$ be a column vector of chosen numbers, and let $Y_{n \times 1}$ be a column vector representing a sample of data. The computation $C' Y$ (the transpose of $C$ multiplied by $Y$) allows us to compute:
+
+### **Averages**
+If all elements of $C$ are set to $\frac{1}{n}$, then:
+$$
+C' Y = \frac{1}{n} \sum Y_i = \bar{Y}
+$$
+This computes the **sample mean** of $Y$.
+
+### **Weighted Averages**
+If $C$ contains weights that sum to 1 and are all positive, then:
+$$
+C' Y = \sum w_i Y_i
+$$
+This computes a **weighted average** of $Y$.
+
+### **Summation**
+If all elements of $C$ are set to 1, then:
+$$
+C' Y = \sum Y_i
+$$
+This computes the **sum** of all values in $Y$.
+
+### **Extending to Matrices**
+If $C$ is not a vector but a matrix, these computations are performed simultaneously for multiple variables using **matrix multiplication**:
+$$
+C' Y =
+\begin{bmatrix}
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n} \\
+1 & 1 & \dots & 1
+\end{bmatrix}
+\begin{bmatrix}
+y_1 \\ y_2 \\ \vdots \\ y_n
+\end{bmatrix}
+$$
+This results in a matrix where one row stores the means of $Y$ and another stores the sums.
+
+### **Sums of Squares**
+Using matrix multiplication:
+$$
+Y' Y = \sum Y_i^2
+$$
+This computes the **sum of squares** of $Y$, which is often used in variance and regression calculations.
+
+
+## Summarizing Multiple Variables
+
+- Summarizing multiple numeric variables  
+  - One-variable summaries  
+    - Mean and standard deviation (for normally distributed data)  
+    - Five-number summary (Min, 1st quartile, Median, 3rd quartile, Max)  
+  - Multiple variables  
+    - Mean/standard deviation for each variable  
+    - Variables might be correlated as well  
+    - Matrices can help us "bookkeep" the information  
+    
+- Parameters (Two-Variable Case)  
+  - Variable 1 (X~1~)  
+    - Mean $\mu_1$  
+    - Standard deviation $\sigma_1$  
+  - Variable 2 (X~2~)  
+    - Mean $\mu_2$  
+    - Standard deviation $\sigma_2$   
+  - Additional parameter needed to tell us how the variables depend on each other (covary with each other)  
+    - Covariance $\sigma$~12~  
+    - Directly related to correlation  
+    
+- Matrix Representation  
+  - X~1~ and X~2~ follow a multivariate distribution with a mean (vector) $\mu$ and a covariance matrix $\Sigma$.  
+  
+- Covariances to Correlation  
+  - Correlations can be computed directly from the covariance matrix.  
+    $$COR(X_1,X_2) = COV(X_1,X_2) / \sigma_1\sigma_2$$  
+  - If the covariance is zero, then the variables aren't (linearly) correlated.  
+  
+- Covariances are "nonstandardized" correlations.  
+  - Keep in mind the variables and hence the covariance has a unit of measure.  
+  - The correlation depends on the covariance and the standard deviations. The raw covariance value doesn't indicate correlation directly because of scale.  
+- Correlations are "standardized" covariances.  
+  - They are unitless.  
+  - They are between -1 < cor < 1.
+  
+- Multivariate Normal Distribution  
+  - Multiple variables  
+    - Has a mean vector and covariance matrix  
+    - Has a joint distribution that categorizes the likelihood of specific combinations of observations  
+- Some data sets will behave in a way that is consistent with the multivariate normal distribution (MVN).  
+
+- MVN Distribution (Theoretical) Properties  
+  - Each individual variable will behave like a normally distributed variable.  
+  - The relationship between the variables will be linear.  
+  - Data points will be denser around the mean vector (point).  
+  
+- Estimating Parameters from Data  
+  - Estimates of the mean vector and covariance matrix can be obtained from a sample.  
+  - Notation  
+    - $\bar{X}$ is the sample mean vector.  
+    - $S$ or $\hat{\Sigma}$ is the sample covariance matrix.  
+
+- Assessing MVN  
+  - Can always investigate one variable at a time, as they should be normally distributed.  
+  - Check scatterplots (matrices) to make sure they are pairwise linear.  
+  - QQ style plots exist.  
+  - Hypothesis tests for multivariate normality also exist (null is multivariate, reject is not).  
+    - Royston's test  
+    - Mardia's test. 
+    - There is no optimal test.  
+    
+- MVN Applications  
+  - Discriminant analysis (classification tools)  
+  - Used in regression tools  
+    - Re-express assumptions in MLR  
+    - Used in computations of MLR for testing regression coefficients.  
+    - Repeated measures and time series  
+ 
+- If you are interested to know if a dataset is MVN, start with scatterplot matrices.  
+  - The individual curves should be bell shaped.  
+  - The scatterplots should be point clouds, elliptical  or circular, dense in the middle, more linearly related for correlated variables, but no exotic trends.  
+- You can also do a QQ plot (mqqnorm(dataset)), which should be highly linear on the left side with some deviations on the right side.
+
+
+## MLR Revisited
+
+How can linear regression use matrix operations and the assumption of multivariate normality?
+
+- Simple Linear Regression  
+  - The model is often loosely expressed as: $y = \beta_0 + \beta_1x + \epsilon$  
+  - When building a model, the assumption is that this relationship exists for *each observation* in the data set, so technically the model is specified by n equations.  
+    $y_1 = \beta_0 + \beta_1x_1 + \epsilon_1$  
+                      ...  
+    $y_n = \beta_0 + \beta_1x_n + \epsilon_n$  
+    - The errors vary and are unique to each observation, but they are assumed to be independent, normally distributed, and have constant variance.  
+    - The equations can be written in matrix notation.  
+  - The errors can be treated as n separate variables.  
+  - Assume that the errors are MVN.
+
+- Big Picture   
+  - For any MLR problem, to perform tests on each coefficient, need to make two computations.  
+    1. Estimate the regression coefficients with: $\hat{\beta} = (X^T X)^{-1} X^T Y$  
+    2. Get the SEs for the coefficients with: $\sigma^2 (X^T X)^{-1}$, and take the square root of the diagonals.  
+    3. Calculate the t-statistic, p-values, and confidence with the estimates and SEs.  
+
+- The Matrix Advantage  
+  - The formula for regression coefficients is always $\hat{\beta} = (X^T X)^{-1} X^T Y$  
+  - It doesn't depend on number of predictors or sample size.  
+
+
+Code examples:
+```{r matrices, eval = FALSE}
+
+M = matrix(c(0,1,2,3)2,2) #2x2(rxc) matrix, adds values by column
+N = matrix(c(4,3,2,1)2,2)
+t(M) # transposes the matrix
+M * N # elementwise multiplication
+M %*% N # matrix multiplication
+Minv = solve(M) # one of my functions that will find the inverse matrix
+M %*% Minv # confirm it is the inverse function, this should return the identity matrix c(1,0,0,1)
+
+```
+
+```{r verifyingRegCoef}
+
+# Calculate betas with matrix multiplication
+x = c(1,2,3,4,5)
+
+# create response vector
+y = c(6.5, 10.8, 14, 21.2, 26.8)
+
+# create design matrix
+bigX = cbind(rep(1,5),x) # intercept all 1s, x= b1 slope
+bigX
+
+beta_hat = solve(t(bigX) %*% bigX) %*% t(bigX) %*% y
+beta_hat
+
+# compare to lm
+fit = lm(y~x)
+coef(summary(fit))[,1]
+summary(fit)
+
+
+# Calculate SE of the estimates with matrix multiplication
+
+#get sigma^2 = MSR = (residual standard error)^2 from the model summary
+cov_beta = (1.261^2) * solve(t(bigX) %*% bigX)
+cov_beta
+
+sqrt(diag(cov_beta))
+
+# compare to lm SEs
+coef(summary(fit))[,2]
+
+```
