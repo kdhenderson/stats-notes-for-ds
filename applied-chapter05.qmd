@@ -122,35 +122,62 @@ $$
 ### Tips for Reading Matrix Formulas  
 - Always check the dimension of the final result when interpreting matrix expressions.  
 
----
 
 ## Special Cases of Matrix Multiplication
 
 Let $C_{n \times 1}$ be a column vector of chosen numbers, and let $Y_{n \times 1}$ be a column vector representing a sample of data. The computation $C' Y$ (the transpose of $C$ multiplied by $Y$) allows us to compute:
 
-### **Averages**
-If all elements of $C$ are set to $\frac{1}{n}$, then:
-$$
-C' Y = \frac{1}{n} \sum Y_i = \bar{Y}
-$$
-This computes the **sample mean** of $Y$.
+### Averages
+If all elements of $C$ are set to $\frac{1}{n}$, then the matrix multiplication:
 
-### **Weighted Averages**
-If $C$ contains weights that sum to 1 and are all positive, then:
 $$
-C' Y = \sum w_i Y_i
+C' Y =
+\begin{bmatrix}
+\frac{1}{n} & \frac{1}{n} & \dots & \frac{1}{n}
+\end{bmatrix}
+\begin{bmatrix}
+y_1 \\ y_2 \\ \vdots \\ y_n
+\end{bmatrix}
+= \frac{1}{n} (y_1 + y_2 + \dots + y_n) = \frac{1}{n} \sum_{i=1}^{n} y_i = \bar{Y}
 $$
-This computes a **weighted average** of $Y$.
 
-### **Summation**
-If all elements of $C$ are set to 1, then:
-$$
-C' Y = \sum Y_i
-$$
-This computes the **sum** of all values in $Y$.
+This shows that $C' Y$ computes the **sample mean** $\bar{Y}$ using matrix multiplication.
 
-### **Extending to Matrices**
-If $C$ is not a vector but a matrix, these computations are performed simultaneously for multiple variables using **matrix multiplication**:
+### Weighted Averages
+If $C$ contains weights that sum to 1 and are all positive, then the matrix multiplication:
+
+$$
+C' Y =
+\begin{bmatrix}
+w_1 & w_2 & \dots & w_n
+\end{bmatrix}
+\begin{bmatrix}
+y_1 \\ y_2 \\ \vdots \\ y_n
+\end{bmatrix}
+= w_1 y_1 + w_2 y_2 + \dots + w_n y_n = \sum_{i=1}^{n} w_i Y_i = \bar{Y}_w
+$$
+
+This shows that $C' Y$ computes the **weighted mean** $\bar{Y}_w$ using matrix multiplication.
+
+### Summation
+If all elements of $C$ are set to 1, then the matrix multiplication:
+
+$$
+C' Y =
+\begin{bmatrix}
+1 & 1 & \dots & 1
+\end{bmatrix}
+\begin{bmatrix}
+y_1 \\ y_2 \\ \vdots \\ y_n
+\end{bmatrix}
+= y_1 + y_2 + \dots + y_n = \sum_{i=1}^{n} y_i
+$$
+
+This shows that $C' Y$ computes the **sum** of all values in $Y$ using matrix multiplication.
+
+### Extending to Matrices
+If $C$ is not a vector but a matrix, then multiple computations can be performed simultaneously using matrix multiplication:
+
 $$
 C' Y =
 \begin{bmatrix}
@@ -160,16 +187,32 @@ C' Y =
 \begin{bmatrix}
 y_1 \\ y_2 \\ \vdots \\ y_n
 \end{bmatrix}
+=
+\begin{bmatrix}
+\bar{Y} \\
+\sum Y
+\end{bmatrix}
 $$
-This results in a matrix where one row stores the means of $Y$ and another stores the sums.
 
-### **Sums of Squares**
-Using matrix multiplication:
-$$
-Y' Y = \sum Y_i^2
-$$
-This computes the **sum of squares** of $Y$, which is often used in variance and regression calculations.
+This shows that $C' Y$ stores the mean in the first row and the sum in the second, efficiently computing both.
 
+### Sums of Squares
+If $Y$ is multiplied by its own transpose, then the matrix multiplication:
+
+$$
+Y' Y =
+\begin{bmatrix}
+y_1 & y_2 & \dots & y_n
+\end{bmatrix}
+\begin{bmatrix}
+y_1 \\ y_2 \\ \vdots \\ y_n
+\end{bmatrix}
+= y_1^2 + y_2^2 + \dots + y_n^2 = \sum_{i=1}^{n} Y_i^2
+$$
+
+This shows that $Y' Y$ computes the **sum of squares** of $Y$ using matrix multiplication, which is useful for variance and regression calculations.
+
+---
 
 ## Summarizing Multiple Variables
 
