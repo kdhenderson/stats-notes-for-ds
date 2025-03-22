@@ -241,7 +241,7 @@ For two variables $X_1$ and $X_2$:
 In addition to individual means and standard deviations, we also measure **covariance** ($\sigma_{12}$), which describes how the two variables vary together. Covariance is directly related to **correlation**.
 
   
-## **Matrix Representation**
+## Matrix Representation
 Matrices provide a compact way to represent the relationships between multiple variables.
 
 - $X_1$ and $X_2$ follow a **multivariate normal distribution (MVN)**:
@@ -340,77 +340,82 @@ The multivariate normal distribution is widely used in statistics and machine le
   - Hypothesis testing in regression uses MVN properties.
   - Repeated measures and time series analysis rely on MVN structure.
 
----
 
-## MLR Revisited
+## Multiple Linear Regression (MLR) Revisited
 
-How can linear regression use matrix operations and the assumption of multivariate normality?
+How does linear regression use matrix operations and MVN assumptions?
 
-- Simple Linear Regression  
-  - The model is often loosely expressed as: $y = \beta_0 + \beta_1x + \epsilon$  
-  - When building a model, the assumption is that this relationship exists for *each observation* in the data set, so technically the model is specified by n equations.  
-    $y_1 = \beta_0 + \beta_1x_1 + \epsilon_1$  
-                      ...  
-    $y_n = \beta_0 + \beta_1x_n + \epsilon_n$  
-    - The errors vary and are unique to each observation, but they are assumed to be independent, normally distributed, and have constant variance.  
-    - The equations can be written in matrix notation.  
-  - The errors can be treated as n separate variables.  
-  - Assume that the errors are MVN.
+### Simple Linear Regression  
+- Model: $y = \beta_0 + \beta_1x + \epsilon$  
+- This relationship is assumed to hold for *each observation*, meaning the model consists of $n$ equations. For $n$ observations:  
+  $$
+  \begin{aligned}
+  y_1 &= \beta_0 + \beta_1x_1 + \epsilon_1 \\
+  &\vdots \\
+  y_n &= \beta_0 + \beta_1x_n + \epsilon_n
+  \end{aligned}
+  $$
+- Assumptions:  
+  - Errors $\epsilon_i$ are independent, normally distributed, and have constant variance.  
+  - The error terms form a vector $\epsilon$ that follows a multivariate normal distribution.  
+- These equations can be rewritten in matrix form.
 
-- Big Picture   
-  - For any MLR problem, to perform tests on each coefficient, need to make two computations.  
-    1. Estimate the regression coefficients with: $\hat{\beta} = (X^T X)^{-1} X^T Y$  
-    2. Get the SEs for the coefficients with: $\sigma^2 (X^T X)^{-1}$, and take the square root of the diagonals.  
-    3. Calculate the t-statistic, p-values, and confidence with the estimates and SEs.  
+### Big Picture: Computing Regression Coefficients  
+To estimate and test coefficients in MLR:  
 
-- The Matrix Advantage  
-  - The formula for regression coefficients is always $\hat{\beta} = (X^T X)^{-1} X^T Y$  
-  - It doesn't depend on number of predictors or sample size.  
+1. Estimate coefficients using: $\hat{\beta} = (X^T X)^{-1} X^T Y$  
+2. Compute the covariance matrix of estimates: $\text{Var}(\hat{\beta}) = \sigma^2 (X^T X)^{-1}$  
+   - Take the square root of diagonal elements to get standard errors.
+3. Use $\hat{\beta}$ and standard errors to compute $t$-statistics, p-values. and confidence intervals. 
+
+### The Matrix Advantage  
+- The matrix formula $\hat{\beta} = (X^T X)^{-1} X^T Y$ works regardless of the number of predictors or sample size.
+- Matrix form provides a general framework for linear regression.
 
 
-Code examples:
+## Code Examples (in R)
+
+### Matrix Operations
+
 ```{r matrices, eval = FALSE}
+M = matrix(c(0,1,2,3), 2, 2)  # 2x2 (r x c) matrix, filled by column
+N = matrix(c(4,3,2,1), 2, 2)
 
-M = matrix(c(0,1,2,3)2,2) #2x2(rxc) matrix, adds values by column
-N = matrix(c(4,3,2,1)2,2)
-t(M) # transposes the matrix
-M * N # elementwise multiplication
-M %*% N # matrix multiplication
-Minv = solve(M) # one of my functions that will find the inverse matrix
-M %*% Minv # confirm it is the inverse function, this should return the identity matrix c(1,0,0,1)
+t(M)        # Transpose
+M * N       # Elementwise multiplication
+M %*% N     # Matrix multiplication
+Minv = solve(M)     # Matrix inverse
+M %*% Minv          # Should return identity matrix c(1,0,0,1): confirms inverse
 
 ```
 
-```{r verifyingRegCoef}
+### Multiple Linear Regression
 
-# Calculate betas with matrix multiplication
+```{r verifyingRegCoef, eval = FALSE}
+# Predict y from x using matrix algebra
+
 x = c(1,2,3,4,5)
+y = c(6.5, 10.8, 14, 21.2, 26.8) # Response vector
 
-# create response vector
-y = c(6.5, 10.8, 14, 21.2, 26.8)
+# Design matrix: column of 1s for intercept, then x
+bigX = cbind(rep(1, 5), x)
 
-# create design matrix
-bigX = cbind(rep(1,5),x) # intercept all 1s, x= b1 slope
-bigX
-
+# Estimate beta using matrix multiplication
 beta_hat = solve(t(bigX) %*% bigX) %*% t(bigX) %*% y
 beta_hat
 
-# compare to lm
-fit = lm(y~x)
-coef(summary(fit))[,1]
+# Compare to lm()
+fit = lm(y ~ x)
+coef(summary(fit))[,1]   # Estimated coefficients
 summary(fit)
 
 
-# Calculate SE of the estimates with matrix multiplication
+# Estimate standard errors manually
+sigma2 = 1.261^2  # From residual standard error in model summary
+cov_beta = sigma2 * solve(t(bigX) %*% bigX)
+sqrt(diag(cov_beta))      # Standard errors
 
-#get sigma^2 = MSR = (residual standard error)^2 from the model summary
-cov_beta = (1.261^2) * solve(t(bigX) %*% bigX)
-cov_beta
-
-sqrt(diag(cov_beta))
-
-# compare to lm SEs
+# Compare to lm() standard errors
 coef(summary(fit))[,2]
 
 ```
