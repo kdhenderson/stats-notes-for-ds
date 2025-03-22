@@ -212,83 +212,135 @@ $$
 
 This shows that $Y' Y$ computes the **sum of squares** of $Y$ using matrix multiplication, which is useful for variance and regression calculations.
 
----
 
 ## Summarizing Multiple Variables
 
-- Summarizing multiple numeric variables  
-  - One-variable summaries  
-    - Mean and standard deviation (for normally distributed data)  
-    - Five-number summary (Min, 1st quartile, Median, 3rd quartile, Max)  
-  - Multiple variables  
-    - Mean/standard deviation for each variable  
-    - Variables might be correlated as well  
-    - Matrices can help us "bookkeep" the information  
-    
-- Parameters (Two-Variable Case)  
-  - Variable 1 (X~1~)  
-    - Mean $\mu_1$  
-    - Standard deviation $\sigma_1$  
-  - Variable 2 (X~2~)  
-    - Mean $\mu_2$  
-    - Standard deviation $\sigma_2$   
-  - Additional parameter needed to tell us how the variables depend on each other (covary with each other)  
-    - Covariance $\sigma$~12~  
-    - Directly related to correlation  
-    
-- Matrix Representation  
-  - X~1~ and X~2~ follow a multivariate distribution with a mean (vector) $\mu$ and a covariance matrix $\Sigma$.  
-  
-- Covariances to Correlation  
-  - Correlations can be computed directly from the covariance matrix.  
-    $$COR(X_1,X_2) = COV(X_1,X_2) / \sigma_1\sigma_2$$  
-  - If the covariance is zero, then the variables aren't (linearly) correlated.  
-  
-- Covariances are "nonstandardized" correlations.  
-  - Keep in mind the variables and hence the covariance has a unit of measure.  
-  - The correlation depends on the covariance and the standard deviations. The raw covariance value doesn't indicate correlation directly because of scale.  
-- Correlations are "standardized" covariances.  
-  - They are unitless.  
-  - They are between -1 < cor < 1.
-  
-- Multivariate Normal Distribution  
-  - Multiple variables  
-    - Has a mean vector and covariance matrix  
-    - Has a joint distribution that categorizes the likelihood of specific combinations of observations  
-- Some data sets will behave in a way that is consistent with the multivariate normal distribution (MVN).  
+This section describes how to summarize numerical data when working with multiple variables, leading up to the **multivariate normal distribution (MVN)** and how to estimate its parameters.
 
-- MVN Distribution (Theoretical) Properties  
-  - Each individual variable will behave like a normally distributed variable.  
-  - The relationship between the variables will be linear.  
-  - Data points will be denser around the mean vector (point).  
+### One-Variable Summaries 
+- Basic summaries for individual variables:
+  - Mean and standard deviation  (if normally distributed).  
+  - Five-number summary: Min, 1st quartile, Median, 3rd quartile, Max. 
+
+### Multiple Variables  
+- When working with multiple variables:
+  - Compute the mean and standard deviation for each variable.  
+  - Some variables may be correlated.  
+  - Matrices provide a structured way to organize this information. 
+
+### Parameters for Two Variables  
+For two variables $X_1$ and $X_2$:
+
+- $X_1$  
+  - Mean: $\mu_1$  
+  - Standard deviation: $\sigma_1$  
+- $X_2$  
+  - Mean: $\mu_2$  
+  - Standard deviation: $\sigma_2$  
+
+In addition to individual means and standard deviations, we also measure **covariance** ($\sigma_{12}$), which describes how the two variables vary together. Covariance is directly related to **correlation**.
+
   
-- Estimating Parameters from Data  
-  - Estimates of the mean vector and covariance matrix can be obtained from a sample.  
-  - Notation  
-    - $\bar{X}$ is the sample mean vector.  
-    - $S$ or $\hat{\Sigma}$ is the sample covariance matrix.  
+## **Matrix Representation**
+Matrices provide a compact way to represent the relationships between multiple variables.
 
-- Assessing MVN  
-  - Can always investigate one variable at a time, as they should be normally distributed.  
-  - Check scatterplots (matrices) to make sure they are pairwise linear.  
-  - QQ style plots exist.  
-  - Hypothesis tests for multivariate normality also exist (null is multivariate, reject is not).  
-    - Royston's test  
-    - Mardia's test. 
-    - There is no optimal test.  
-    
-- MVN Applications  
-  - Discriminant analysis (classification tools)  
-  - Used in regression tools  
-    - Re-express assumptions in MLR  
-    - Used in computations of MLR for testing regression coefficients.  
-    - Repeated measures and time series  
- 
-- If you are interested to know if a dataset is MVN, start with scatterplot matrices.  
-  - The individual curves should be bell shaped.  
-  - The scatterplots should be point clouds, elliptical  or circular, dense in the middle, more linearly related for correlated variables, but no exotic trends.  
-- You can also do a QQ plot (mqqnorm(dataset)), which should be highly linear on the left side with some deviations on the right side.
+- $X_1$ and $X_2$ follow a **multivariate normal distribution (MVN)**:
+  - **Mean vector**:
+    $$
+    \mu =
+    \begin{bmatrix}
+    \mu_1 \\
+    \mu_2
+    \end{bmatrix}
+    $$
+  - **Covariance matrix**:
+    $$
+    \Sigma =
+    \begin{bmatrix}
+    \sigma_1^2 & \sigma_{12} \\
+    \sigma_{12} & \sigma_2^2
+    \end{bmatrix}
+    $$
+  - The diagonal elements are variances, while off-diagonal elements represent covariances.
+  - The covariance matrix must be symmetric.
 
+
+## Covariance and Correlation
+- **Covariance ($\sigma_{12}$)** measures how two variables move together but depends on scale.
+- **Correlation** is the standardized version of covariance:
+  $$
+  \text{COR}(X_1,X_2) = \frac{\text{COV}(X_1, X_2)}{\sigma_1 \sigma_2}
+  $$
+- Properties:
+  - Covariance has units, correlation does not.
+  - A covariance of zero means the variables are not linearly related.
+  - Correlation ranges from -1 to 1, making it easier to interpret.
+
+
+## Multivariate Normal Distribution (MVN)  
+A multivariate normal distribution (MVN) extends the normal distribution to multiple variables, describing their relationships through both their individual distributions and their dependencies. It is defined by:  
+
+- A mean vector, which gives the expected values of the variables.  
+- A covariance matrix, which describes how the variables vary together.  
+- A joint probability distribution, which specifies the likelihood of different combinations of variable values.  
+  
+### Theoretical Properties
+- Each individual variable follows a normal distribution.
+- The relationships between variables are linear.
+- Data points are denser near the mean vector.
+
+
+## Estimating Parameters from Data
+In practice, we estimate MVN parameters from a sample:
+
+- **Sample Mean Vector**:  
+  $$
+  \bar{X} =
+  \begin{bmatrix}
+  \bar{X}_1 \\
+  \bar{X}_2
+  \end{bmatrix}
+  $$
+- **Sample Covariance Matrix**:
+  $$
+  S =
+  \begin{bmatrix}
+  s_1^2 & s_{12} \\
+  s_{12} & s_2^2
+  \end{bmatrix}
+  $$
+  where:
+  - $s_1^2$ and $s_2^2$ are **sample variances**.
+  - $s_{12}$ is the **sample covariance**.
+
+   
+## Assessing Multivariate Normality 
+To check if data follows an MVN distribution:
+
+- Each variable should be normally distributed  
+  - Density plots should be bell-shaped.  
+  - QQ plots (e.g. `mqqnorm(dataset)`) should be linear with slight tail deviations.  
+- Check scatterplot matrices for pairwise relationships  
+  - Start with these visualizations.  
+  - Patterns should be elliptical or circular, denser in the middle.  
+  - Linear relationships suggest MVN, while unusual trends indicate deviations.  
+- Perform hypothesis tests where the null is MVN:  
+  - Royston’s test
+  - Mardia’s test
+  - No single test is definitive 
+  
+
+## Applications of MVN
+The multivariate normal distribution is widely used in statistics and machine learning:
+
+- Classification:
+  - Discriminant analysis.
+- Regression:
+  - Multiple linear regression (MLR) assumes MVN.
+  - Hypothesis testing in regression uses MVN properties.
+  - Repeated measures and time series analysis rely on MVN structure.
+
+---
 
 ## MLR Revisited
 
