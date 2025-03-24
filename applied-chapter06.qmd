@@ -4,12 +4,12 @@ title: "Repeated Measures"
 
 ## Objectives
 
-- Repeated Measures allow us to relax the independence assumption  
-  - What is repeated measures?  
-  - Correlation structures  
-  - Analysis workflow  
-  - Technical details  
-  - Weighted least squares 
+This chapter explores repeated measures, which allow us to relax the independence assumption.
+
+- Understand when repeated measures are appropriate  
+- Learn about correlation structures, how to visualize them, and select the appropriate structure  
+- Explore generalized least squares (GLS) and weighted least squares (WLS)  
+- Follow a repeated measures workflow to structure analysis  
   
   
 ## What is Repeated Measures?  
@@ -18,42 +18,41 @@ title: "Repeated Measures"
 knitr::include_graphics("appCh06_familyTreeOfLinearModels.png")
 ```
 
-- Linear models (constant variance, normality)  
-  - Errors are independent  
-    - t-tests  
-    - ANOVA  
-    - SLR  
-  - Errors are correlated  
-    - Time series  
-    - Repeated measures  
+## Repeated Measures
 
-- When errors are correlated  
-  - Applying a method that ignores the fact of dependent errors can produced misleading p-values and confidence intervals.  
-  - A method should be used to model the correlation between errors (additional parameters in the model).  
-  - When correlation is accounted for:  
-    - Statistical inference is valid  
-    - Can be used to make better predictions  
-    
-- Multiple measurements taken on the same subject are not independent. (There is a dependence relationship.)
-  - For example, when a subject has high (low) measurements, their measurements are always high (low).  
+- Linear models assume constant variance and normality with independent errors.
+  - Examples: t-tests, ANOVA, simple linear regression (SLR) 
+- When errors are correlated:
+  - Examples: time series, repeated measures  
+  - Ignoring correlation can produce misleading $p$-values and confidence intervals.  
+  - We need to model the correlation among errors (i.e. include additional parameters in the model) for valid inference and better predictions. 
+- Repeated measurse refers to multiple measurements on the same subject (i.e. dependent observations).
+  - For example, if a subject starts with high (or conversely low) values, their measurements tend to remain high (or low) over time.  
 
-- Common repeated measures hypotheses  
-  - Compare every time point to a baseline (control) time point. Do them for each group (e.g. asymptomatic and symptomatic).  
-  - Compare each time point directly between groups (e.g. asymptomatic and symptomatic). Baseline isn't expected to be different, but the other may be.  
+### Common Hypotheses in Repeated Measures:
 
-- Thinking about a regression model  
-  - If we treat time as a categorical variable, $Y = Time + Status + Time * Status + \epsilon$  
-    - Because we measure at discrete time points  
-    - Include interaction term, because the trend depends on status  
-    - We can use regression ideas and contrasts to compare groups.  
-    - We just need a proceduure to model the correlations among the errors.  
-    
-- Identifying repeated measures  
-  - It is up to you to identify repeated measure settings.  
-  - You have to ask questions on how the data were collected.  
-  - Repeated measures can fall into any of the previous methods.  
-      - Repeated measures one-way ANOVA  
-      - Repeated measures MLR  
+- Compare every time point to a baseline (i.e. control), for each group (e.g. asymptomatic vs. symptomatic).
+- Compare each time point between groups (baseline may not differ, but other time points might)
+
+### Regression Perspective
+
+Treat time as a categorical variable because measurements are made at discrete time points:
+
+$$
+Y = \text{Time} + \text{Status} + \text{Time} \times \text{Status} + \varepsilon
+$$
+
+- Include an interaction since trends depend on status  
+- Regression and contrasts help compare groups—we just need to model correlated errors
+
+### Identifying Repeated Measures
+
+- Ask how the data were collected  
+- Repeated measures can apply to:
+  - Repeated measures one-way ANOVA
+  - Repeated measures MLR
+  
+---
       
 ## Correlation Structures
 
