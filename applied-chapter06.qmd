@@ -1,0 +1,187 @@
+---
+title: "Repeated Measures"
+---
+
+## Objectives
+
+- Repeated Measures allow us to relax the independence assumption  
+  - What is repeated measures?  
+  - Correlation structures  
+  - Analysis workflow  
+  - Technical details  
+  - Weighted least squares 
+  
+  
+## What is Repeated Measures?  
+
+```{r out.width="60%", echo = FALSE}
+knitr::include_graphics("appCh06_familyTreeOfLinearModels.png")
+```
+
+- Linear models (constant variance, normality)  
+  - Errors are independent  
+    - t-tests  
+    - ANOVA  
+    - SLR  
+  - Errors are correlated  
+    - Time series  
+    - Repeated measures  
+
+- When errors are correlated  
+  - Applying a method that ignores the fact of dependent errors can produced misleading p-values and confidence intervals.  
+  - A method should be used to model the correlation between errors (additional parameters in the model).  
+  - When correlation is accounted for:  
+    - Statistical inference is valid  
+    - Can be used to make better predictions  
+    
+- Multiple measurements taken on the same subject are not independent. (There is a dependence relationship.)
+  - For example, when a subject has high (low) measurements, their measurements are always high (low).  
+
+- Common repeated measures hypotheses  
+  - Compare every time point to a baseline (control) time point. Do them for each group (e.g. asymptomatic and symptomatic).  
+  - Compare each time point directly between groups (e.g. asymptomatic and symptomatic). Baseline isn't expected to be different, but the other may be.  
+
+- Thinking about a regression model  
+  - If we treat time as a categorical variable, $Y = Time + Status + Time * Status + \epsilon$  
+    - Because we measure at discrete time points  
+    - Include interaction term, because the trend depends on status  
+    - We can use regression ideas and contrasts to compare groups.  
+    - We just need a proceduure to model the correlations among the errors.  
+    
+- Identifying repeated measures  
+  - It is up to you to identify repeated measure settings.  
+  - You have to ask questions on how the data were collected.  
+  - Repeated measures can fall into any of the previous methods.  
+      - Repeated measures one-way ANOVA  
+      - Repeated measures MLR  
+      
+## Correlation Structures
+
+- Assessing error dependence  
+  - Some methods have residual diagnostic tools to help visualize how the errors are correlated.  
+  - Similar approaches exist for repeated measures, but they aren't uses as much in practice.  
+  - The main idea is to explain how your residuals are correlated through a "correlation structure".  
+  
+- Correlogram (pseudo code)  
+  1. Obtain residuals from a regular MLR (some will be from the same subject).   
+  2. Take all residuals that are one unit apart in time.  
+    - Scatterplot the residual (early time point on the x-axis, later time point on y-axis).  
+    - Compute the correlation. Store the result.  
+  3. Repeat step 2 but for residuals that are two, three, four,... k units apart in time.  
+  4. Plot the correlation values vs. how far apart the residuals were in time.  
+  - Correlation will decrease as the distance between the residuals gets larger and will flatten out but will not reach zero.  Seeing large correlation is direct indication of correlated errors.  
+  
+- Correlogram takeaway  
+  - Suggests that observations that are closer in time are more similar (correlated) than observations that are farther apart.  
+  - Observations that are farther apart are still mildly correlated.  
+  
+- Correlation structures  
+  - Correlation structures are theoretical formulas that represent our assumption of what the trend in the correlogram truly is. 
+  - Common structure includes:  
+    - Compound symmetry (horizontal flat line, correlation is always the same regardless of the time)  
+    - Autoregressive  (closer in time, highly correlated; farther apart in time, correlation decreases to almost zero and can almost be like independent errors)  
+    - Gaussian (similar to above, dies off to zero sooner)  
+- Generalized Least Squares (GLS)  
+  - GLS generalizes the OLS technique for multiple linear regression to allow for correlated errors.  
+  - In addition to specifiying a model with response and predictor, the user specifies a correlation structure and software estimates parameters that govern the structure.  
+    - GLS uses the estimates of the correlation structure and updates:  
+      - Regression coefficients  
+      - Standard errors of the regression coefficients  
+    - These estimates are more reliable than MLR,   
+      - As long as the correlation structure is close to the truth.  
+      
+- Estimating the correlation in practice  
+  - (Visual) Alternative to correlograms are variograms and semivariograms (spatial modeling).  
+  - In practice, many repeated measures data sets are not big enough to adequately estimate and visualize the correlation structure (highly variable, hard to see).  
+  - Analyst typically:  
+    - Use theoretical justification for the structure used  
+    - Fit multiple structures and compare their AIC metrics (treat it like feature selection).  
+    - Explore correlograms to help make a decision.  
+  - Turner's experience:  
+    - Compound symmetry works well (humans, biological, etc.)  
+    - Structures that rapidly decrease should be used sparingly unless many of your time points are equally spaced.  
+    
+- Repeated Measure Workflow  
+  1. Identify that you are in a repeated measures setting.  
+  2. Perform EDA based on whatever MLR equivalent setting you are in.  
+    - Determine the general theme and conduct EDA accordingly: ANOVA/SLR/MLR...  
+    - Boxplots, mean plots for ANOVA type settings 
+    - Scatterplot of predictor and response for SLR  
+    - Combinations of above for general MLR setting  
+    - Feature selection tools from regular MLR can be used to assess bias-variance trade-off of complex models.  
+    - General idea: we still want to model the trend out.  
+  3. Residual diagnostics (regular MLR)  
+    - Normality and constant variance checks  
+  4. Update MLR to GLS  
+    - Multiple correlation structures  
+    - Select the best fit using AIC  
+    - Can use correlogram to help decide  
+  5. Conduct inference on the regression coefficients to answer the research question.  
+    - p-values and confidence intervals are more trustworthy.  
+    
+- Other notes
+  - The correlogram and some correlation structures MUST have a time component.  
+  - Some repeated measures data sets may not be collected over time.  
+    - State of Texas STAR exam (multiple test scores from the same schools, from the same school districts)  
+    - Hereditary studies (1 family, 5 observations)  
+  - Common correlation structures requiring a time component  
+    - Autoregressive (exponential) and Gaussian  
+    - Linear and spherical  
+    - Matern (AR and Gaussian as special cases, more flexible/overfit)
+  - Common correlation structures that do not require a time component 
+    - Compound symmetry (CS)  
+    - Variance components  
+
+## Technical Details
+
+```{r out.width="60%", echo = FALSE}
+knitr::include_graphics("appCh06_technicalDetails_pg01.jpg")
+knitr::include_graphics("appCh06_technicalDetails_pg02.jpg")
+knitr::include_graphics("appCh06_technicalDetails_pg03.jpg")
+knitr::include_graphics("appCh06_technicalDetails_pg04.jpg")
+knitr::include_graphics("appCh06_technicalDetails_pg05.jpg")
+```  
+
+- General linear model: relaxes the independence assumption and allows for any specification of correlation between the error terms ($R$)  
+- It includes multiple linear regression as a special case. You just set $R = I$.  
+- Generalization term comes from the fact that MLR can be completed as a special case of general least squares (GLS).  
+- The correlation structures dictate what $R$ looks like mathematically.  
+
+## Weighted Least Squares
+
+- GLS can be used in situations where independence is met but there is a constant variance problem.  
+
+```{r out.width="60%", echo = FALSE}
+knitr::include_graphics("appCh06_weightedLeastSquares_pg01.jpg")
+knitr::include_graphics("appCh06_weightedLeastSquares_pg02.jpg")
+```
+
+- Estimating the weights  
+  - We can only run the GLS procedure if we know the weights.  
+  - There are numerous strategies for estimating the weights.  
+  - Basic strategy follows a theme.  
+  
+- Common weighting strategy  
+  - Fit a regular regression model.  
+  - Plot the absolute values of your residuals vs.  
+    - one of your predictors that explains the constant variance.  
+      - Looking for a trend. Can you use the predictor to explain why the abs(residuals) are going up or down?   
+    - the predicted values.  
+  - Fit a regression equation to the abs(residuals) to estimate the trend of how the variability is behaving. Get the prediction of the absolute residuals and the weight is $w_i = 1/predicted^2$.  
+
+```{r eval = FALSE}
+
+weight.model = lm(abs(model1$residuals)~data1$x)
+wts = 1/fitted(weight.model)^2
+wls.model = lm(y~x, data1, weights=wts)
+
+```
+
+- Constant variance issues are handled by "down weighting" ovservations that have the higher variance.  
+- Fitted line will more closely fit the low-variance observations.  
+- Biggest difference in statistical results is the standard error estimates of the regression coefficients.  
+- Excellent solution for constant variance problem when  
+  - transformations won't fix it.  
+  - exotic transformation works, but you can't explain the model anymore.  
+- Raw residual vs. fitted plots will look the same when examining WLS vs. OLS.  
+  - Studentized residual plots allow you to see the difference and assess if you stabilized the variance or not.  
