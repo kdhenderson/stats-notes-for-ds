@@ -52,53 +52,76 @@ $$
   - Repeated measures one-way ANOVA
   - Repeated measures MLR
   
----
-      
+
 ## Correlation Structures
 
-- Assessing error dependence  
-  - Some methods have residual diagnostic tools to help visualize how the errors are correlated.  
-  - Similar approaches exist for repeated measures, but they aren't uses as much in practice.  
-  - The main idea is to explain how your residuals are correlated through a "correlation structure".  
+### Assessing Error Dependence
+
+- Some methods include residual diagnostic tools to visualize correlated errors.
+- Similar tools exist for repeated measures, but they aren't as commonly used.
+- The key idea is to explain how residuals are correlated using a correlation structure.
+
+### Correlogram (pseudo-code approach):
+
+1. Obtain residuals from a regular MLR (some from the same subject).
+2. For residuals that are one unit apart in time:
+   - Create a scatterplot (earlier time point on the $x$-axis, later time point on the $y$-axis).
+   - Compute the correlation, and store the result.
+3. Repeat for residuals that are two, three, four, ..., $k$ units apart.
+4. Plot the correlation values against the time lag
+
+**Takeaway**:  
+Correlation tends to decrease as the distance between residuals increases and eventually levels off. Large correlations at short time lags are a clear indication of correlated errors.
   
-- Correlogram (pseudo code)  
-  1. Obtain residuals from a regular MLR (some will be from the same subject).   
-  2. Take all residuals that are one unit apart in time.  
-    - Scatterplot the residual (early time point on the x-axis, later time point on y-axis).  
-    - Compute the correlation. Store the result.  
-  3. Repeat step 2 but for residuals that are two, three, four,... k units apart in time.  
-  4. Plot the correlation values vs. how far apart the residuals were in time.  
-  - Correlation will decrease as the distance between the residuals gets larger and will flatten out but will not reach zero.  Seeing large correlation is direct indication of correlated errors.  
+### Correlogram Interpretation
+
+- Observations closer in time are more similar (i.e. more correlated).
+- Observations farther apart in time may still be mildly correlated.
+
+### Common Correlation Structures
+
+Correlation structures are theoretical models that describe the expected trend in the correlogram:
+
+- **Compound symmetry (CS)**:
+  - Correlation is constant (i.e. flat, horizontal line), regardless of time.
+  - Often used when time ordering is not meaningful (e.g. students within the same school).
+
+- **Autoregressive (AR(1))**:
+  - High correlation for nearby time points.
+  - Correlation decreases as time lag increases.
+  - Eventually approaches zero (like independent errors).
+
+- **Gaussian**:
+  - Similar to AR(1), but the drop-off in correlation is even faster.
+  - Often used when time is continuous.
   
-- Correlogram takeaway  
-  - Suggests that observations that are closer in time are more similar (correlated) than observations that are farther apart.  
-  - Observations that are farther apart are still mildly correlated.  
-  
-- Correlation structures  
-  - Correlation structures are theoretical formulas that represent our assumption of what the trend in the correlogram truly is. 
-  - Common structure includes:  
-    - Compound symmetry (horizontal flat line, correlation is always the same regardless of the time)  
-    - Autoregressive  (closer in time, highly correlated; farther apart in time, correlation decreases to almost zero and can almost be like independent errors)  
-    - Gaussian (similar to above, dies off to zero sooner)  
-- Generalized Least Squares (GLS)  
-  - GLS generalizes the OLS technique for multiple linear regression to allow for correlated errors.  
-  - In addition to specifiying a model with response and predictor, the user specifies a correlation structure and software estimates parameters that govern the structure.  
-    - GLS uses the estimates of the correlation structure and updates:  
-      - Regression coefficients  
-      - Standard errors of the regression coefficients  
-    - These estimates are more reliable than MLR,   
-      - As long as the correlation structure is close to the truth.  
-      
-- Estimating the correlation in practice  
-  - (Visual) Alternative to correlograms are variograms and semivariograms (spatial modeling).  
-  - In practice, many repeated measures data sets are not big enough to adequately estimate and visualize the correlation structure (highly variable, hard to see).  
-  - Analyst typically:  
-    - Use theoretical justification for the structure used  
-    - Fit multiple structures and compare their AIC metrics (treat it like feature selection).  
-    - Explore correlograms to help make a decision.  
-  - Turner's experience:  
-    - Compound symmetry works well (humans, biological, etc.)  
-    - Structures that rapidly decrease should be used sparingly unless many of your time points are equally spaced.  
+### Generalized Least Squares (GLS)
+
+- GLS generalizes OLS technique for MLR to handle correlated errors.
+- You specify:
+  - A model with response and predictors
+  - A correlation structure (parameters estimated by software)
+
+GLS updates both:
+- Regression coefficients
+- Standard errors
+
+These estimates are more reliable than standard MLR if the chosen correlation structure is approximately correct.
+
+### Estimating Correlation in Practice
+
+- Variograms and semivariograms (often used in spatial models) can be used as visual alternatives to correlograms.
+- In practice, repeated measures datasets may be too small to visualize correlation clearly through the high variability.
+- Analysts typically:
+  - Use theoretical justification for choosing a structure.
+  - Fit multiple structures and compare using AIC (like feature selection).
+  - Use correlograms as a visual guide.
+
+Instructor note (Turner’s experience):
+- Compound symmetry works well for biological or human-based data.
+- Use structures with rapid decay (e.g. Gaussian) sparingly unless time points are equally spaced and numerous.
+
+---
     
 - Repeated Measure Workflow  
   1. Identify that you are in a repeated measures setting.  
