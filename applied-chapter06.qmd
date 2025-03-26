@@ -121,38 +121,44 @@ Instructor note (Turner’s experience):
 - Compound symmetry works well for biological or human-based data.
 - Use structures with rapid decay (e.g. Gaussian) sparingly unless time points are equally spaced and numerous.
 
----
-    
-- Repeated Measure Workflow  
-  1. Identify that you are in a repeated measures setting.  
-  2. Perform EDA based on whatever MLR equivalent setting you are in.  
-    - Determine the general theme and conduct EDA accordingly: ANOVA/SLR/MLR...  
-    - Boxplots, mean plots for ANOVA type settings 
-    - Scatterplot of predictor and response for SLR  
-    - Combinations of above for general MLR setting  
-    - Feature selection tools from regular MLR can be used to assess bias-variance trade-off of complex models.  
-    - General idea: we still want to model the trend out.  
-  3. Residual diagnostics (regular MLR)  
-    - Normality and constant variance checks  
-  4. Update MLR to GLS  
-    - Multiple correlation structures  
-    - Select the best fit using AIC  
-    - Can use correlogram to help decide  
-  5. Conduct inference on the regression coefficients to answer the research question.  
-    - p-values and confidence intervals are more trustworthy.  
-    
-- Other notes
-  - The correlogram and some correlation structures MUST have a time component.  
-  - Some repeated measures data sets may not be collected over time.  
-    - State of Texas STAR exam (multiple test scores from the same schools, from the same school districts)  
-    - Hereditary studies (1 family, 5 observations)  
-  - Common correlation structures requiring a time component  
-    - Autoregressive (exponential) and Gaussian  
-    - Linear and spherical  
-    - Matern (AR and Gaussian as special cases, more flexible/overfit)
-  - Common correlation structures that do not require a time component 
-    - Compound symmetry (CS)  
-    - Variance components  
+   
+## Repeated Measures Workflow
+
+1. Identify that you are in a repeated measures setting.
+2. Perform EDA based on the equivalent MLR framework (determine the general theme: ANOVA, SLR, or MLR):
+   - Use boxplots or mean plots in ANOVA-style settings.
+   - Use scatterplots of predictor vs. response in SLR-style settings.
+   - Combine approaches for general MLR settings.
+   - Apply feature selection tools from MLR to assess model complexity and the bias-variance trade-off.
+3. Residual diagnostics:
+   - Check for normality and constant variance using residual plots.
+4. Update MLR to GLS:
+   - Try multiple correlation structures.
+   - Use AIC to select the best-fitting model.
+   - Optionally use a correlogram to guide your choice.
+5. Conduct inference on regression coefficients:
+   - Report $p$-values and confidence intervals.
+   - Results will be more trustworthy when correlation is accounted for.
+   
+
+## Additional Notes on Correlation Structures
+
+
+- Some correlation structures **require a time component**:
+  - Autoregressive (AR; exponential decay)
+  - Gaussian
+  - Linear
+  - Spherical
+  - Matérn (a general class that includes AR and Gaussian as special cases; more flexible but may overfit)
+
+- Some correlation structures **do not require a time component**:
+  - Compound symmetry (CS)
+  - Variance components
+
+Examples that don't involve time:
+- Texas STAR exam: multiple test scores from the same schools/school districts
+- Hereditary studies: family studies where siblings or parents/offspring are clustered
+
 
 ## Technical Details
 
@@ -164,46 +170,56 @@ knitr::include_graphics("appCh06_technicalDetails_pg04.jpg")
 knitr::include_graphics("appCh06_technicalDetails_pg05.jpg")
 ```  
 
-- General linear model: relaxes the independence assumption and allows for any specification of correlation between the error terms ($R$)  
-- It includes multiple linear regression as a special case. You just set $R = I$.  
-- Generalization term comes from the fact that MLR can be completed as a special case of general least squares (GLS).  
-- The correlation structures dictate what $R$ looks like mathematically.  
+The general linear model relaxes the independence assumption and allows for any specification of correlation among error terms (with the matrix $R$).
 
-## Weighted Least Squares
+- This includes multiple linear regression (MLR) as a special case when the correlation structure is: $R = I$
 
-- GLS can be used in situations where independence is met but there is a constant variance problem.  
+- The generalization comes from recognizing that MLR can be written as a special case of generalized least squares (GLS).
+- The correlation structure determines what the matrix $R$ looks like mathematically.
+- You still estimate:
+  - Regression coefficients
+  - Standard errors of the coefficients
+- But now, you’re also estimating the correlation structure among residuals.
+
+Key idea: When correlation is accounted for, statistical inference is valid, and predictions can be improved.
+
+
+## Weighted Least Squares (WLS)
+
+GLS can also be applied when independence holds but the assumption of constant variance is violated (i.e. heteroscedasticity).
 
 ```{r out.width="60%", echo = FALSE}
 knitr::include_graphics("appCh06_weightedLeastSquares_pg01.jpg")
 knitr::include_graphics("appCh06_weightedLeastSquares_pg02.jpg")
 ```
 
-- Estimating the weights  
-  - We can only run the GLS procedure if we know the weights.  
-  - There are numerous strategies for estimating the weights.  
-  - Basic strategy follows a theme.  
-  
-- Common weighting strategy  
-  - Fit a regular regression model.  
-  - Plot the absolute values of your residuals vs.  
-    - one of your predictors that explains the constant variance.  
-      - Looking for a trend. Can you use the predictor to explain why the abs(residuals) are going up or down?   
-    - the predicted values.  
-  - Fit a regression equation to the abs(residuals) to estimate the trend of how the variability is behaving. Get the prediction of the absolute residuals and the weight is $w_i = 1/predicted^2$.  
+You can only apply WLS if you know (or can estimate) the weights. There are numerous strategies for estimating the weights, but the basic strategy follows a theme. This is a common approach:
+
+1. Fit a regular regression model.
+2. Plot the absolute values of your residuals against:
+   - One of your predictors that you suspect may explain the changing variance, or  
+   - The predicted values from your model  
+   Look for a pattern or trend in the spread of the residuals.
+3. Fit a regression model to the absolute value of the residuals to estimate the mean behavior (i.e. trend) of the variability.
+4. Use the predicted values from that model to compute weights: $w_i = \frac{1}{(\widehat{\text{predicted}})^2}$
 
 ```{r eval = FALSE}
 
-weight.model = lm(abs(model1$residuals)~data1$x)
-wts = 1/fitted(weight.model)^2
+weight.model = lm(abs(model1$residuals) ~ data1$x)
+wts = 1 / fitted(weight.model)^2
 wls.model = lm(y~x, data1, weights=wts)
 
 ```
 
-- Constant variance issues are handled by "down weighting" ovservations that have the higher variance.  
-- Fitted line will more closely fit the low-variance observations.  
-- Biggest difference in statistical results is the standard error estimates of the regression coefficients.  
-- Excellent solution for constant variance problem when  
-  - transformations won't fix it.  
-  - exotic transformation works, but you can't explain the model anymore.  
-- Raw residual vs. fitted plots will look the same when examining WLS vs. OLS.  
-  - Studentized residual plots allow you to see the difference and assess if you stabilized the variance or not.  
+### Interpretation
+- Observations with higher variance are down-weighted.
+- The fitted line will more closely follow observations with lower variance.
+- The biggest difference is in the standard error estimates of the regression coefficients.
+
+### When to Use WLS
+- When transformations do not fix the constant variance problem.
+- When an exotic transformation works but makes the model hard to interpret.
+
+### Additional Notes
+- Raw residual vs. fitted plots may look the same for OLS and WLS.
+  - Use studentized residuals to check whether the variance has been stabilized
