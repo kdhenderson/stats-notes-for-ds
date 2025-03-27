@@ -1,0 +1,258 @@
+---
+title: "Classification"
+---
+
+## Objectives
+
+- Understand the distinction between regression and classification.  
+- Learn about classification boundaries.  
+- Explore classification methods:  
+  - k-Nearest Neighbors (KNN)  
+  - Linear and Quadratic Discriminant Analysis (LDA/QDA)  
+- Evaluate classification performance using error metrics.  
+
+
+## Regression vs. Classification
+
+Main distinction: The response variable in classification is **categorical**.  
+- Binary: Two outcomes (e.g. Yes/No)  
+- Multiclass: More than two categories  
+
+### Why Not Use MLR?
+- Can't just convert categorical responses into numbers:
+  - It doesn't model trends well.
+  - It violates assumptions due to the discreteness of the response.  
+ 
+
+## Predictive Models for Classification
+
+Classification models work in two steps:
+
+1. **Predict the probability** that a categorical response will occur, given a set of explanatory variables: $P(Y = \text{"Default"} \mid X)$
+2. **Convert that probability into a classification decision** based on a threshold.
+
+### Comparison
+- For continuous responses: $Y = f(X)$
+- For categorical responses: $P(Y = \text{"Default"} \mid X) = f(X)$
+  - The model predicts probabilities, not the class itself.  
+  - Predictions stay between 0 and 1 (unlike MLR, which can go below 0 or above 1).
+
+### Why Predict Probabilities?
+- Predictive models give us finer resolution than a simple yes/no.
+  - Example: A weather forecast predicting 60% chance of rain is more informative than just "yes" or "no".
+- Subtle relationships between predictors and the response lead to variability in predicted probabilities, creating a gray area.
+  - For instance:
+    - $P(Y = \text{"Default"} \mid X = 100) = 0.82$
+    - $P(Y = \text{"Default"} \mid X = 100) = 0.52$
+  - These two predictions might both get classified as "Default", even though the model sees them very differently.
+
+
+## Classification as a Decision Rule
+
+- Classification forces a definitive decision based on the predicted probability:
+  $$
+  Y = 
+  \begin{cases}
+  \text{Default}, & \text{if } f(X) \geq \text{threshold} \\
+  \text{Not}, & \text{otherwise}
+  \end{cases}
+  $$
+- This means classification doesn’t distinguish between a predicted probability of 0.52 and 0.82 if the threshold is 0.5
+
+### Considerations When Classifying
+- The cost of getting the prediction wrong  
+- The prevalence of the classes (how often each class occurs in the data)  
+ 
+
+## Important Realizations
+
+- Assessing how well a model performs is convoluted:
+  - How well does the model predict the true probability of the response?
+  - How well does your classification rule behave given the costs and context of your problem?
+
+- Metrics commonly reported in software:
+  - Often assess classification decisions rather than predicted probabilities  
+  - Are calculated without explicit consideration of the cost of mistakes
+  - Are often used to assess model fit, even though they may not reflect probability accuracy
+ 
+- It’s up to you to assess whether your decision rule fits your specific context, especially when the costs of different types of errors are not equal.
+
+
+## Terminology
+
+- Positive class (+): The outcome for which you want to predict the probability  
+- Negative class (−): The other possible outcome (in a binary response).  
+- These are mathematically arbitrary but can be practically important depending on the question you’re answering.  
+    
+---
+
+**Classification Boundaries**  
+- Parametric models  
+  - Always have been of the "predictive probability" type  
+    - Logistic regression  
+    - LDA/QDA  
+    - Naive Bayes  
+  - To convert the "predictive probability" model into a classification rule, typically use a thresholding technique  
+    - Typically it is 0.5 (a 50/50 chance)  
+    - The 0.5 can be changed to incorporate the cost of making an incorrect decision.  
+- Nonparametric Models  
+  - Originally just made decisions (not probabilities)  
+    - Decision trees (classification trees)  
+    - Random forest  
+    - KNN  
+  - Retroactively added predicted probabilities in software to help standardize functions and workflows  
+- KNN Classification Formally  
+  - Record the response values of the $k$ nearest neighbors to the new explanatory variable $x_{new}$. 
+  - Predicted probabilities are computed as: $\hat{P}(Y = +class | x_{new}) = (# of times +class observed) / k$  
+- Every model, once converted to a classification rule, has an associated classification boundary.  
+- Classification boundaries are helpful in gaining intuition on:  
+  - parametric vs. non-parametric classification models  
+  - models with low/high complexity  
+  
+**Linear and Quadratic Discriminant Analysis (Discriminant Analysis**  
+- Parametric approach  
+  - Only uses numeric predictors (like KNN)  
+  - Predictors are assumed to be MVN for each response class  
+- Common Discriminant Analyses  
+  - Linear discriminant analysis  
+    - Linear (hyperplanes) decision boundaries  
+  - Quadratic discriminant analysis  
+    - Decision boundaries are conic sections  
+    - Typically reduce to quadratic boundaries  
+    - Little more flexibility than linear  
+
+- Assumptions  
+  - $X_+ = (X_1, X_2, ..., X_p)$ is a set of $p$ numeric predictors for the positive response class  
+  - $X_- = (X_1, X_2, ..., X_p)$ is a set of the same $p$ numeric predictors for the negative response class  
+  - LDA 
+    - assumptions on predictors (not error terms as in MLR)  
+    - $X_+ ~ MVN(\mu_+, \Sigma)$  
+    - $X_- ~ MVN(\mu_-, \Sigma)$  
+    - Predictor sets can have different mean vectors for each response, which is what we hope to see (to have separation between the classes) 
+    - Variance-covariance matrix is the same  
+      - The sigma symbol is the same in both the positive and negative class  
+      - The variables in each group should have the same variance and the same correlation between them  
+  - QDA  
+    - Relaxes the assumptions (sigma can be different between classes)  
+    - $X_+ ~ MVN(\mu_+, \Sigma_+)$  
+    - $X_- ~ MVN(\mu_-, \Sigma_-)$   
+    - Predictor sets can have different mean vectors for each response class  
+    - Allows for the variance-covariance matrix to be different for each response class  
+
+- Technical Insights  
+  - LDA/QDA uses Bayes' theorem to perform its predicted probabilities similar to naive Bayes.  
+  - Bayes' theorem says, for events A and B: $P(A|B) = \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|A^C)P(A^C)}$  
+    - Where $A^C$ is A compliment. If A represents the 'yes' group, then $A^C$ represents the 'no' group.  
+    - Example: if we let A = + class and B = X (set of predictor variables), Bayes' theorem provides a predicted probability formula:
+$$
+P(+|X) = \frac{P(X|+)P(+)}{P(X|+)P(+) + P(X|-)P(-)}
+$$
+      - Based on the assumptions, we know that the predictors follow a MVN and update Bayes' formula.     
+$$
+P(+|X) = \frac{MVN(\mu_+, \Sigma)P(+)}{MVN(\mu_+, \Sigma)P(+) + MVN(\mu_-, \Sigma)P(-)}
+$$  
+      - P(+) and P(-) are referred to a prior probabilities.  
+        - Should reflect the frequency in which the two classes occur without any predictor information  
+        - Handled automatically in software as long as your data is a random sample  
+    - The formula is completely specified as long as we know the prior information, the value of the predictor X, the mean vector, and covariance matrix.  
+    - All can be estimated from data.  
+    - LDA's Boundary: if we use a majority rules (probability of 0.5) reduces to a linear boundary mathematically ??  
+    - Outliers affect means and standard deviations; therefore they affect the classification boundary  
+    - The prior probabilities can affect the classification boundary.  
+    - Bayes' theorem can be extended to handle more than two classes.  
+    
+- Complexity of QDA  
+  - Creates more parameters to estimate in the model  
+    - The more predictors the more parameters, parameters increase at a greater rate (where LDA these increase at the same rate).  
+    - Increases the chances of overfitting. QDA overfitting dampens with increasing sample size.  
+    
+- LDA/QDA Pros  
+  - Parametric model that can predict when the training data observations are completely separated (logistic regression can't)  
+  - Uses the fact that predictors are potentially correlated (OK as long as not perfectly correlated)  
+  - Is the optimal method to use if the assumptions are met  
+  
+- LDA/QDA Cons  
+  - Suffers from the curse of dimensionality; will not predict well if you include too many unhelpful predictors  
+  - No built-in feature selection  
+  - Cannot utilize important categorical predictors since assumptions are MVN  
+  - Can be impacted by outliers  
+
+**Error Metrics for Classification Models**  
+- Error metrics can serve different purposes.  
+  - Assessing how well the predicted probabilities are to the true probabilities (scoring rules)  
+  - Assessing your decision rule to make classifications  
+
+- Log Loss Scoring Rule  
+  - Log loss is small when your predicted probabilities are closer to the truth (e.g. predicted prob is 0.9 when truth is yes)  
+  - Log loss increases, for example, when probabilities are in the middle and frequency of yes and no are not close to 50%.  
+
+- Brier Scoring Rule  
+  - (predicted probability subtracted from truth)^squared -> get sum of squares and take average  
+  - mimics the behavior of MSE  
+  
+- Scoring rules  
+  - Log loss (AKA entropy)   
+    - Nice mathematical properties that guarantee optimality in certain situations  
+    - Logistic regression and trees use it  
+  - Briar score  
+    - Intuitive like MSE  
+    - Decomposes into different sources of error  
+  - Ideal to use scoreing rules when:  
+    - Comparing models in feature selection  
+    - Optimizing tuning parameters (penalized regression, KNN, trees)
+    - Estimating regression coefficients in logistric regression  
+  - Scoring rules help tune your models, so the predicted probabilities are as close to the true probabilities as possible  
+  
+- Decision Rule Error Metrics  
+  - These metrics are computed by examining your classification decisions  
+  - All metrics are derived from a confusion matrix  
+  - Important to realize that all confusion matrices depend on the threshold that you pick  
+  - Used to compare models/optimize tuning parameters for techniques that do not produce a predicted probability  
+
+- Confusion Matrices  
+  - Aggregates and cross references how many times predictions were accurate and how many misclassifications were made using the thresholding strategy.  
+  - It will change when the threshold changes (depends on the threshold).  
+  - Metrics:  
+    - Misclassification error rate (MCR) - global error rate  
+      - $MCR = \frac{# Incorrect}{n}$  
+    - Accuracy is 1 - MCR or $\frac{# Correct}{n}$. 
+      - Accuracy is an unconditional metric; does not take into account any additional info about the classification rule  
+    - Conditional metrics compute accuracy with additional information  
+      - Sensitivity/specificity  
+      - Positive/negative predictive value  
+    - Sensitivity: conditions on the fact that you know the observation was a true positive  
+      - It is the accuracy of just the true positive class
+      - $Sens = \frac{true + correct}{total true +}$
+    - Specificity: conditions on the fact that you know the observation was a true negative  
+      - It is the accuracy of just the true negative class
+      - $Spec = \frac{true - correct}{total true -}$  
+    - Positive Predictive Value (PPV): conditions on the fact that you predicted the observation as positive  
+      - It is the accuracy among all positive predictions
+      - $PPV = \frac{true + correct}{total predicted +}$  
+    - Negative Predictive Value (NPV): conditions on the fact that you predicted the observation as negative  
+      - It is the accuracy among all negative predictions
+      - $NPV = \frac{true - correct}{total predicted -}$  
+
+- Why do we need so many metrics?  
+  - If we have a predictive model that predict the probability that person needs a high-risk surgery using clinical and genetic info  
+    - + class -> surgery, - class -> no surgery  
+    - sensitivity: patients who need surgery, predict 90%
+    - specificity: patients who don't need it, predict 90%  
+    - those metrics are conditioned on the fact that we know the truth  
+    - doc needs to assess if the prediction was positive, how much weight should I give it -> PPV
+    - PPV: patients who were predicted to need it, only 47% really did
+    - NPV: patients who were predicted to not need it, 98.9% really didn't
+    
+- Sensitivity and specificity don't take into account the *prevalence* of the +/- classes. Prevalence is the chance of being the + class with no predictor information.  
+
+- Changing the Threshold  
+  - Sometimes threshold is chosen to balance sensitivity and specificity.  
+  - With a higher threshold, there will be fewer positive predictions made.  
+
+- Takeaways    
+  - Thresholding changes the confusion matrix performance metrics  
+  - Must consider that the errors we make are not always equal  
+  - When it comes to model fitting  
+    - The focus should be on thorough EDA and fitting a good model that provides good predicted probability estimates  
+    - Once you have a good model, you can start thinking about what threshold to use to meet the needs of the problem
+  
