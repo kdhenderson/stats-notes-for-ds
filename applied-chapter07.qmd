@@ -84,73 +84,98 @@ Classification models work in two steps:
 - Negative class (−): The other possible outcome (in a binary response).  
 - These are mathematically arbitrary but can be practically important depending on the question you’re answering.  
     
+
+## Classification Boundaries
+
+### Parametric Models
+
+These models have always been of the **predictive probability** type:
+- Logistic Regression  
+- Linear Discriminant Analysis (LDA)  
+- Quadratic Discriminant Analysis (QDA)  
+- Naive Bayes  
+
+**Classification rule:**  
+- To convert a predictive probability model into a classification rule, apply a **threshold** (commonly 0.5):
+  $$
+  \hat{P}(Y = + \mid X) \geq 0.5 \Rightarrow \text{Classify as } +
+  $$
+- The threshold can be adjusted to account for the cost of making a mistake.
+
+
+### Nonparametric Models
+
+These models originally focused on making **classification decisions** (not probabilities):
+- Decision Trees  
+- Random Forests  
+- K-Nearest Neighbors (KNN)  
+
+To help standardize functions and workflows, software retroactively added predicted probabilities.
+
+**KNN Classification Rule:**
+- Record the response values of the $k$ nearest neighbors to $x_{\text{new}}$
+- Estimate: $\hat{P}(Y = + \mid x_{\text{new}}) = \frac{\text{# of } + \text{ neighbors}}{k}$  
+
+**Classification Boundary:**
+- Every model, once converted to a classification rule, defines a classification boundary.
+- Boundaries help visualize:
+  - Parametric vs. nonparametric behavior  
+  - Simpler vs. more complex models  
+  - Sensitivity to changes in thresholds
+
+
+## Discriminant Analysis (LDA & QDA)
+
+### Overview
+- Discriminant analysis is a parametric approach for classification
+- Applies only to numeric predictors.
+- Assumes predictors follow a multivariate normal (MVN) distribution within each class.
+  
+
+### Common Types
+- **Linear Discriminant Analysis (LDA)**:
+  - Decision boundaries are linear (hyperplanes)
+- **Quadratic Discriminant Analysis (QDA)**:
+  - Decision boundaries are conic sections (typically quadratic)
+
 ---
 
-**Classification Boundaries**  
-- Parametric models  
-  - Always have been of the "predictive probability" type  
-    - Logistic regression  
-    - LDA/QDA  
-    - Naive Bayes  
-  - To convert the "predictive probability" model into a classification rule, typically use a thresholding technique  
-    - Typically it is 0.5 (a 50/50 chance)  
-    - The 0.5 can be changed to incorporate the cost of making an incorrect decision.  
-- Nonparametric Models  
-  - Originally just made decisions (not probabilities)  
-    - Decision trees (classification trees)  
-    - Random forest  
-    - KNN  
-  - Retroactively added predicted probabilities in software to help standardize functions and workflows  
-- KNN Classification Formally  
-  - Record the response values of the $k$ nearest neighbors to the new explanatory variable $x_{new}$. 
-  - Predicted probabilities are computed as: $\hat{P}(Y = +class | x_{new}) = (# of times +class observed) / k$  
-- Every model, once converted to a classification rule, has an associated classification boundary.  
-- Classification boundaries are helpful in gaining intuition on:  
-  - parametric vs. non-parametric classification models  
-  - models with low/high complexity  
-  
-**Linear and Quadratic Discriminant Analysis (Discriminant Analysis**  
-- Parametric approach  
-  - Only uses numeric predictors (like KNN)  
-  - Predictors are assumed to be MVN for each response class  
-- Common Discriminant Analyses  
-  - Linear discriminant analysis  
-    - Linear (hyperplanes) decision boundaries  
-  - Quadratic discriminant analysis  
-    - Decision boundaries are conic sections  
-    - Typically reduce to quadratic boundaries  
-    - Little more flexibility than linear  
+### Assumptions
 
-- Assumptions  
-  - $X_+ = (X_1, X_2, ..., X_p)$ is a set of $p$ numeric predictors for the positive response class  
-  - $X_- = (X_1, X_2, ..., X_p)$ is a set of the same $p$ numeric predictors for the negative response class  
-  - LDA 
-    - assumptions on predictors (not error terms as in MLR)  
-    - $X_+ ~ MVN(\mu_+, \Sigma)$  
-    - $X_- ~ MVN(\mu_-, \Sigma)$  
-    - Predictor sets can have different mean vectors for each response, which is what we hope to see (to have separation between the classes) 
-    - Variance-covariance matrix is the same  
-      - The sigma symbol is the same in both the positive and negative class  
-      - The variables in each group should have the same variance and the same correlation between them  
-  - QDA  
-    - Relaxes the assumptions (sigma can be different between classes)  
-    - $X_+ ~ MVN(\mu_+, \Sigma_+)$  
-    - $X_- ~ MVN(\mu_-, \Sigma_-)$   
-    - Predictor sets can have different mean vectors for each response class  
-    - Allows for the variance-covariance matrix to be different for each response class  
+In discriminant analysis, the assumptions are on the predictors (not the error terms as in MLR).
+
+- $X_+ = (X_1, X_2, \dots, X_p)$ is a set of $p$ numeric predictors for the positive response class.  
+- $X_- = (X_1, X_2, \dots, X_p)$ is a set of the same $p$ numeric predictors for the negative response class.  
+
+- **LDA**: $X_+ \sim MVN(\mu_+, \Sigma), \quad X_- \sim MVN(\mu_-, \Sigma)$
+  - Equal variance-covariance matrices (same $\Sigma$), i.e. the predictors in each group should have the same variance and correlation.
+  - Allows different means, i.e. the predictor sets can have different mean vectors for each response. This is desirable for separation between the classes. 
+ 
+- **QDA**: $X_+ \sim MVN(\mu_+, \Sigma_+), \quad X_- \sim MVN(\mu_-, \Sigma_-)$
+  - Covariance matrices differ by class (relaxes assumptions, i.e. allows different $\Sigma$s). 
+  - More flexibility, more parameters  
+  - Also allows different means.
 
 - Technical Insights  
   - LDA/QDA uses Bayes' theorem to perform its predicted probabilities similar to naive Bayes.  
   - Bayes' theorem says, for events A and B: $P(A|B) = \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|A^C)P(A^C)}$  
     - Where $A^C$ is A compliment. If A represents the 'yes' group, then $A^C$ represents the 'no' group.  
     - Example: if we let A = + class and B = X (set of predictor variables), Bayes' theorem provides a predicted probability formula:
+## Bayes' Theorem & LDA/QDA
+
+Bayes' theorem for binary classification:
 $$
-P(+|X) = \frac{P(X|+)P(+)}{P(X|+)P(+) + P(X|-)P(-)}
+P(+ \mid X) = \frac{P(X \mid +)P(+)}{P(X \mid +)P(+) + P(X \mid -)P(-)}
 $$
-      - Based on the assumptions, we know that the predictors follow a MVN and update Bayes' formula.     
+      - Based on the assumptions, we know that the predictors follow a MVN and update Bayes' formula.
+Using MVN assumptions:
 $$
-P(+|X) = \frac{MVN(\mu_+, \Sigma)P(+)}{MVN(\mu_+, \Sigma)P(+) + MVN(\mu_-, \Sigma)P(-)}
-$$  
+P(+ \mid X) = \frac{MVN(\mu_+, \Sigma)P(+)}{MVN(\mu_+, \Sigma)P(+) + MVN(\mu_-, \Sigma)P(-)}
+$$
+- $P(+)$ and $P(-)$ are **prior probabilities** (i.e. class prevalence).
+- Classification boundary with threshold = 0.5 results in **linear** (LDA) or **quadratic** (QDA) boundary
+- Outliers and class imbalance affect boundaries
+
       - P(+) and P(-) are referred to a prior probabilities.  
         - Should reflect the frequency in which the two classes occur without any predictor information  
         - Handled automatically in software as long as your data is a random sample  
@@ -158,24 +183,38 @@ $$
     - All can be estimated from data.  
     - LDA's Boundary: if we use a majority rules (probability of 0.5) reduces to a linear boundary mathematically ??  
     - Outliers affect means and standard deviations; therefore they affect the classification boundary  
-    - The prior probabilities can affect the classification boundary.  
-    - Bayes' theorem can be extended to handle more than two classes.  
+    - The prior probabilities can affect the classification boundary. 
     
-- Complexity of QDA  
-  - Creates more parameters to estimate in the model  
-    - The more predictors the more parameters, parameters increase at a greater rate (where LDA these increase at the same rate).  
-    - Increases the chances of overfitting. QDA overfitting dampens with increasing sample size.  
-    
-- LDA/QDA Pros  
-  - Parametric model that can predict when the training data observations are completely separated (logistic regression can't)  
-  - Uses the fact that predictors are potentially correlated (OK as long as not perfectly correlated)  
-  - Is the optimal method to use if the assumptions are met  
-  
-- LDA/QDA Cons  
-  - Suffers from the curse of dimensionality; will not predict well if you include too many unhelpful predictors  
-  - No built-in feature selection  
-  - Cannot utilize important categorical predictors since assumptions are MVN  
-  - Can be impacted by outliers  
+### Multiclass Extension
+
+Bayes’ theorem can be extended for more than two classes.
+
+
+## Complexity of QDA
+
+- More parameters: each class gets its own covariance matrix
+- The more predictors the more parameters, parameters increase at a greater rate (where LDA these increase at the same rate). 
+- Greater risk of overfitting, especially with small sample sizes
+- Performs better with large sample sizes
+
+
+## Pros and Cons of LDA/QDA
+
+### Pros
+
+- Handles correlated predictors (i.e as long as the correlation isn't perfect).
+- Works when logistic regression fails due to separation
+  - Parametric model that can predict when the training data observations are completely separated (logistic regression can't) 
+- Optimal when assumptions are met
+
+### Cons
+
+- Sensitive to outliers.
+- Cannot handle categorical predictors (because of the MVN assumption).
+- No built-in feature selection.
+- Suffers from the **curse of dimensionality** (i.e. will not predict well with too many unhelpful predictors).  
+
+---
 
 **Error Metrics for Classification Models**  
 - Error metrics can serve different purposes.  
