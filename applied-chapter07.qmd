@@ -131,14 +131,11 @@ To help standardize functions and workflows, software retroactively added predic
 - Applies only to numeric predictors.
 - Assumes predictors follow a multivariate normal (MVN) distribution within each class.
   
-
 ### Common Types
 - **Linear Discriminant Analysis (LDA)**:
   - Decision boundaries are linear (hyperplanes)
 - **Quadratic Discriminant Analysis (QDA)**:
   - Decision boundaries are conic sections (typically quadratic)
-
----
 
 ### Assumptions
 
@@ -153,67 +150,71 @@ In discriminant analysis, the assumptions are on the predictors (not the error t
  
 - **QDA**: $X_+ \sim MVN(\mu_+, \Sigma_+), \quad X_- \sim MVN(\mu_-, \Sigma_-)$
   - Covariance matrices differ by class (relaxes assumptions, i.e. allows different $\Sigma$s). 
-  - More flexibility, more parameters  
+  - More flexibility, but more parameters to estimate 
   - Also allows different means.
 
 - Technical Insights  
-  - LDA/QDA uses Bayes' theorem to perform its predicted probabilities similar to naive Bayes.  
-  - Bayes' theorem says, for events A and B: $P(A|B) = \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|A^C)P(A^C)}$  
-    - Where $A^C$ is A compliment. If A represents the 'yes' group, then $A^C$ represents the 'no' group.  
-    - Example: if we let A = + class and B = X (set of predictor variables), Bayes' theorem provides a predicted probability formula:
+  - LDA/QDA uses Bayes' theorem to perform its predicted probabilities.
+  
+
 ## Bayes' Theorem & LDA/QDA
+
+Discriminant analysis (LDA/QDA) uses **Bayes’ theorem** to calculate predicted probabilities:
 
 Bayes' theorem for binary classification:
 $$
 P(+ \mid X) = \frac{P(X \mid +)P(+)}{P(X \mid +)P(+) + P(X \mid -)P(-)}
 $$
-      - Based on the assumptions, we know that the predictors follow a MVN and update Bayes' formula.
-Using MVN assumptions:
+
+Updated Bayes' theorem using MVN assumptions:
 $$
 P(+ \mid X) = \frac{MVN(\mu_+, \Sigma)P(+)}{MVN(\mu_+, \Sigma)P(+) + MVN(\mu_-, \Sigma)P(-)}
 $$
+
 - $P(+)$ and $P(-)$ are **prior probabilities** (i.e. class prevalence).
 - Classification boundary with threshold = 0.5 results in **linear** (LDA) or **quadratic** (QDA) boundary
 - Outliers and class imbalance affect boundaries
 
-      - P(+) and P(-) are referred to a prior probabilities.  
-        - Should reflect the frequency in which the two classes occur without any predictor information  
-        - Handled automatically in software as long as your data is a random sample  
-    - The formula is completely specified as long as we know the prior information, the value of the predictor X, the mean vector, and covariance matrix.  
-    - All can be estimated from data.  
-    - LDA's Boundary: if we use a majority rules (probability of 0.5) reduces to a linear boundary mathematically ??  
-    - Outliers affect means and standard deviations; therefore they affect the classification boundary  
-    - The prior probabilities can affect the classification boundary. 
-    
-### Multiclass Extension
+### Key Insights
+- Bayes’ formula is fully specified using:
+  - Prior probabilities
+  - Predictor value $X$
+  - Class-specific means and covariance matrices  
+  - All estimated from the training data
 
-Bayes’ theorem can be extended for more than two classes.
+- When using a threshold (e.g. 0.5), LDA’s boundary mathematically reduces to a linear boundary
+
+### Additional Notes on Classification Boundaries
+- Outliers affect sample means and variances $\rightarrow$ can distort the boundary.  
+- Prior probabilities affect boundary placement, especially when priors are unequal.
+- Bayes’ theorem generalizes easily to more than two classes.
 
 
 ## Complexity of QDA
 
 - More parameters: each class gets its own covariance matrix
-- The more predictors the more parameters, parameters increase at a greater rate (where LDA these increase at the same rate). 
-- Greater risk of overfitting, especially with small sample sizes
-- Performs better with large sample sizes
-
+- The more predictors, the more parameters:
+  - In binary classification with $p$ predictors:
+    - LDA estimates $p + 1$ parameters. Number of parameters increase at same rate as number of predictors. 
+    - QDA estimates $\frac{p(p + 3)}{2} + 1$ parameters  
+  - Number of parameters grows much faster than increase in number of predictors.  
+  - Greater risk of overfitting, especially with small sample sizes.  
+  - Overfitting is mitigated with larger datasets.
 
 ## Pros and Cons of LDA/QDA
 
 ### Pros
-
 - Handles correlated predictors (i.e as long as the correlation isn't perfect).
-- Works when logistic regression fails due to separation
-  - Parametric model that can predict when the training data observations are completely separated (logistic regression can't) 
+- Parametric model that works when logistic regression fails due to complete separation of classes in training data
 - Optimal when assumptions are met
 
 ### Cons
-
 - Sensitive to outliers.
-- Cannot handle categorical predictors (because of the MVN assumption).
+- Cannot handle categorical predictors due to the MVN assumption.
 - No built-in feature selection.
-- Suffers from the **curse of dimensionality** (i.e. will not predict well with too many unhelpful predictors).  
-
+- Suffers from the curse of dimensionality.
+  - Poor performance with many irrelevant predictors.
+  
 ---
 
 **Error Metrics for Classification Models**  

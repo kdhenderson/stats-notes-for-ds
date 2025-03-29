@@ -41,4 +41,6 @@ book:
           - applied-chapter04.qmd
           - applied-chapter05.qmd
           - applied-chapter06.qmd
-          #- applied-chapter07.qmd
+          - applied-chapter07.qmd
+          #- applied-chapter08.qmd
+          #- applied-chapter09.qmd
