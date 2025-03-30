@@ -7,7 +7,7 @@ format:
     theme: cosmo # Use a simple, clean theme for now
     toc: true    # Enable a table of contents
     toc-depth: 2 # Set the depth of the table of contents
-    number-sections: true # Number the sections
+    number-sections: false # true # Number the sections
     #chapter-level: 1  # Ensure chapters are properly numbered starting from "1"
     css: styles.css
 
@@ -33,6 +33,7 @@ book:
         - foundation-chapter11.qmd
         - foundation-chapter12.qmd
         - foundation-chapter13.qmd
+        - foundation-review-questions.qmd
     - part: "Applied Statistics"
       chapters:
           - applied-chapter01.qmd
