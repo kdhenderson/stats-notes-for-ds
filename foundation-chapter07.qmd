@@ -175,25 +175,54 @@ When conducting multiple tests, it is crucial to control the **familywise error 
 
 
 ::: {#contrastExample layout-ncol=2}
+![](images/notes_7_1_exHandicapContrast_1.png)
 
-![](images/notes_7_1_exHandicapContrast_1.png){}
-![](images/notes_7_2_exHandicapContrast_2.png){}
+![](images/notes_7_2_exHandicapContrast_2.png)
+:::
 
-![](images/notes_7_3_exHandicapContrast_3.png){}
-![](images/notes_7_4_exHandicapContrast_4.png){}
+---
 
-![](images/notes_7_5_exHandicapContrast_5.png){}
-![](images/notes_7_6_exHandicapContrast_6.png){}
+::: {#contrastExample layout-ncol=2}
+![](images/notes_7_3_exHandicapContrast_3.png)
 
-![](images/notes_7_7_exHandicapContrast_7.png){}
-![](images/notes_7_8_theoryOfBonferroni_1.png){}
+![](images/notes_7_4_exHandicapContrast_4.png)
+:::
 
-![](images/notes_7_9_exMultipleComparison_1.png){}
-![](images/notes_7_10_exMultipleComparison_2.png){}
+---
 
-![](images/notes_7_11_exMultipleComparison_3.png){}
-![](images/notes_7_12_exMultipleComparison_4.png){}
+::: {#contrastExample layout-ncol=2}
+![](images/notes_7_5_exHandicapContrast_5.png)
 
-![](images/notes_7_13_exMultipleComparison_5.png){}
+![](images/notes_7_6_exHandicapContrast_6.png)
+:::
+
+---
+
+::: {#contrastExample layout-ncol=2}
+![](images/notes_7_7_exHandicapContrast_7.png)
+
+![](images/notes_7_8_theoryOfBonferroni_1.png)
+:::
+
+---
+
+::: {#contrastExample layout-ncol=2}
+![](images/notes_7_9_exMultipleComparison_1.png)
+
+![](images/notes_7_10_exMultipleComparison_2.png)
+:::
+
+---
+
+::: {#contrastExample layout-ncol=2}
+![](images/notes_7_11_exMultipleComparison_3.png)
+
+![](images/notes_7_12_exMultipleComparison_4.png)
+:::
+
+---
+
+::: {#contrastExample layout-ncol=2}
+![](images/notes_7_13_exMultipleComparison_5.png)
 :::
 

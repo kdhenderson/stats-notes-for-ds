@@ -61,7 +61,8 @@ title: "Multiple Linear Regression"
 - **Interaction Model**: Different intercepts **and** slopes.
 
 
-![Multiple Linear Regression Model Examples](images/display_11_1.png){width=5in fig-align="left"} 
+![Multiple Linear Regression Model Examples](images/display_11_1.png){width=6in fig-align="left"}  
+Source: @ramsey2012statistical.
 
 
 ## Assumption of Constant Variance
@@ -79,7 +80,10 @@ title: "Multiple Linear Regression"
   - The **coefficient of each explanatory variable measures its effect at fixed values of the other**.
   - In the planar model, effects are the same at all levels of the explanatory variable.
 
-![Regression Plane](images/display_11_2.png){width=5in fig-align="left"} 
+![Regression Plane](images/display_11_2.png){width=6in fig-align="left"}  
+Source: @ramsey2012statistical.
+
+
 ## Parallel Lines Regression Model
 
 - **Indicator (dummy) variable**:  
@@ -121,6 +125,18 @@ title: "Multiple Linear Regression"
 
 ## Example: Gender, Salary, and Years Model
 
+::: {layout-ncol=2}
 ![](images/notes_11_1.png){width=5in fig-align="left"}  
+
 ![](images/notes_11_2.png){width=5in fig-align="left"}  
+:::
+
+---
+
+
+::: {layout-ncol=2}
 ![](images/notes_11_3.png){width=5in fig-align="left"}
+:::
+
+
+## References

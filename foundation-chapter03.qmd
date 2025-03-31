@@ -136,8 +136,13 @@ title: "Data Screening, Assumptions, and Transformations"
   - Wider CIs than expected (e.g. $> (1-\alpha) \%$), leading to fewer rejections of the null hypothesis.
   - Fewer rejections can increase the true capture rate of $\mu$ to $> (1-\alpha) \%$, resulting in rejection rates $< \alpha \%$.  
 
-![](images/display_3_4.png){width=5in fig-align="left"}^[Source: Ramsey and Schafer (2012).]  
+![](images/display_3_4.png){width=6in fig-align="left"}  
+Source: @ramsey2012statistical.
 
 - When sample sizes and standard deviations both differ, CIs can become either too narrow or too wide.  
 
-![](images/display_3_5.png){width=5in fig-align="left"}^[Source: Ramsey and Schafer (2012).]  
+![](images/display_3_5.png){width=6in fig-align="left"}  
+Source: @ramsey2012statistical.
+
+
+## References

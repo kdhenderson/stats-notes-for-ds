@@ -165,7 +165,8 @@ $$
 - Fix last, usually fixed with the above
 - Transform the data
 
-![Residual Patterns](images/notes_10_3_regression_patterns.png){width=5in fig-align="left"} 
+![Residual Patterns](images/notes_10_3_regression_patterns.png){width=6in fig-align="left"} 
+Source: @ramsey2012statistical.
 
 
 ## Log Transformation: They Work & Are Easy to Interpret
@@ -195,10 +196,18 @@ $$
   A doubling of $X$ is associated with a $2^{\beta_1}$ multiplicative change in the median of $Y|X$.
 - **Remember:** Logging $Y$ → median.
 
-![Log-Linear Transformation](images/notes_10_4_loglinear.png)
-![Linear-Log Transformation](images/notes_10_5_linearlog.png)
-![Log-Log Transformation](images/notes_10_6_loglog.png)
 
+::: {layout-ncol=2}
+![Log-Linear Transformation](images/notes_10_4_loglinear.png)
+
+![Linear-Log Transformation](images/notes_10_5_linearlog.png)
+:::
+
+---
+
+::: {layout-ncol=2}
+![Log-Log Transformation](images/notes_10_6_loglog.png)
+:::
 
 ## Formal Test for Lack of Fit
 - **Use:** different values of Y for replicated observations of X
@@ -252,12 +261,30 @@ run;
 
 ```
 
+
+::: {layout-ncol=2}
 ![](images/notes_10_7_sas1.png){width=5in fig-align="left"}
+
 ![](images/notes_10_8_sas2.png){width=5in fig-align="left"}
+:::
+
+---
+
+::: {layout-ncol=2}
 ![](images/notes_10_9_extrasumofsquares.png){width=5in fig-align="left"}
+
 ![](images/notes_10_10_sas3.png){width=5in fig-align="left"}
+:::
+
+---
+
+::: {layout-ncol=2}
 ![](images/notes_10_11_sas4.png){width=5in fig-align="left"}
+:::
 
 - $H_0$: Linear regression model has a good fit. (No lack of fit.)
 - $H_A$: The SMM fits better. (LRM is lacking fit.)
 - There is strong evidence to suggest the linear regression model has a lack of fit with respect to the separate means model. (It is not comparable with Messi.)
+
+
+## References

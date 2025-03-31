@@ -120,9 +120,17 @@ title: "Model Selection and Validation"
 
 ## Example: Alcohol Metabolism
 
-![](images/notes_13_2.png){width=5in fig-align="left"}  
-![](images/notes_13_3.png){width=5in fig-align="left"} 
-![](images/notes_13_4.png){width=5in fig-align="left"} 
+::: {layout-ncol=2}
+![](images/notes_13_2.png)
+
+![](images/notes_13_3.png) 
+:::
+
+---
+
+::: {layout-ncol=2}
+![](images/notes_13_4.png)
+:::
 
 
 ## Variable selection

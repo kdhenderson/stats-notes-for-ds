@@ -182,6 +182,7 @@ $$
 
 ::: {#R-hand-calculated layout-ncol=2}
 ![Pearson's R pg1](images/notes_8_1_pearsonsRbyhand_1.png)  
+
 ![Pearson's R pg2](images/notes_8_2_pearsonsRbyhand_2.png)
 :::
 *Figure 1: Hand-calculated Pearson's $r$.*  
@@ -204,6 +205,7 @@ The sample linear correlation coefficient $r$ is transformed into a $t$-distribu
 $$
 t = \frac{r\sqrt{n - 2}}{\sqrt{1 - r^2}} \sim t_{n-2}
 $$
+
 #### Substituting Values:
 $$
 t = \frac{0.8217 \cdot \sqrt{13 - 2}}{\sqrt{1 - (0.8217)^2}} = 4.71818
@@ -228,6 +230,7 @@ cor.test(StudyTime$StudyHours,StudyTime$ExamScore)
 
 ::: {#R-from-code layout-ncol=2}
 ![Pearson's R Code Output SAS](images/notes_8_3_pearsonsR_SAS.png) 
+
 ![Pearson's R Code Output R](images/notes_8_4_pearsonsR_R.png)
 :::
 *Figure 2: Outputs in SAS and R.*  
@@ -245,7 +248,7 @@ cor.test(StudyTime$StudyHours,StudyTime$ExamScore)
 - **Scope**:Because the students weren’t randomly assigned study hours, we cannot establish causation, only association. Additionally, because we do not know how the data were selected, we cannot generalize the result beyond the subjects in this study.
 
 
-![Least Squares Regression Line 1](images/notes_8_5_handCalculatedParameterEstimates.png)  
+![Least Squares Regression Line 1](images/notes_8_5_handCalculatedParameterEstimates.png){width=6in fig-align="left"}    
 
 ```{sas eval=FALSE}
 proc reg data = StudyTime;
@@ -262,7 +265,6 @@ run;
 
 ```
 
-![Least Squares Regression Line 2](images/notes_8_6_parameterEstimateTable_SAS.png) 
 
 ```{r eval=FALSE}
 #lm - linear model(response ~ explanatory, data)
@@ -271,23 +273,35 @@ summary(fit)
 
 ```
 
-![Least Squares Regression Line 2](images/notes_8_7_parameterEstimateTable_R.png) 
+:::{layout-ncol=2}
+![Least Squares Regression Line 2](images/notes_8_6_parameterEstimateTable_SAS.png)
 
+![Least Squares Regression Line 2](images/notes_8_7_parameterEstimateTable_R.png) 
+:::
 *Figure 4: Least Squares Regression Line*  
 
 Hypothesis testing for the intercept and slope
+
+:::{layout-ncol=2}
 ![](images/display_8_1.png)
+
 ![](images/display_8_2.png)
+
 ![](images/display_8_3.png)
+
 ![](images/display_8_4.png)
-Two T-Tests!!!
+:::
+
+Two T-Tests!!!  
 $H_0: \beta_0 = 0$
 $H_a: \beta_0 \neq 0$
 
 $H_0: \beta_1 = 0$
 $H_a: \beta_1 \neq 0$
 
+:::{layout-ncol=2}
 ![Study Hours Example](images/notes_8_8_studyHourExample.png)
+:::
 
 ### Putting It All Together
 1. Plot the data to visualize the relationship.

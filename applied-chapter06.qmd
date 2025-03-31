@@ -14,9 +14,9 @@ This chapter explores repeated measures, which allow us to relax the independenc
   
 ## What is Repeated Measures?  
 
-```{r out.width="60%", echo = FALSE}
-knitr::include_graphics("images/appCh06_familyTreeOfLinearModels.png")
-```
+::: {}
+![](images/appCh06_familyTreeOfLinearModels.png)
+:::
 
 ## Repeated Measures
 
@@ -162,13 +162,26 @@ Examples that don't involve time:
 
 ## Technical Details
 
-```{r out.width="60%", echo = FALSE}
-knitr::include_graphics("images/appCh06_technicalDetails_pg01.jpg")
-knitr::include_graphics("images/appCh06_technicalDetails_pg02.jpg")
-knitr::include_graphics("images/appCh06_technicalDetails_pg03.jpg")
-knitr::include_graphics("images/appCh06_technicalDetails_pg04.jpg")
-knitr::include_graphics("images/appCh06_technicalDetails_pg05.jpg")
-```  
+::: {layout-ncol=2}
+![](images/appCh06_technicalDetails_pg01.jpg)
+
+![](images/appCh06_technicalDetails_pg02.jpg)
+:::
+
+---
+
+::: {layout-ncol=2}
+![](images/appCh06_technicalDetails_pg03.jpg)
+
+![](images/appCh06_technicalDetails_pg04.jpg)
+:::
+
+---
+
+::: {layout-ncol=2}
+![](images/appCh06_technicalDetails_pg05.jpg)
+
+:::
 
 The general linear model relaxes the independence assumption and allows for any specification of correlation among error terms (with the matrix $R$).
 
@@ -188,10 +201,11 @@ Key idea: When correlation is accounted for, statistical inference is valid, and
 
 GLS can also be applied when independence holds but the assumption of constant variance is violated (i.e. heteroscedasticity).
 
-```{r out.width="60%", echo = FALSE}
-knitr::include_graphics("images/appCh06_weightedLeastSquares_pg01.jpg")
-knitr::include_graphics("images/appCh06_weightedLeastSquares_pg02.jpg")
-```
+::: {layout-ncol=2}
+![](images/appCh06_weightedLeastSquares_pg01.jpg)
+
+![](images/appCh06_weightedLeastSquares_pg02.jpg)
+:::
 
 You can only apply WLS if you know (or can estimate) the weights. There are numerous strategies for estimating the weights, but the basic strategy follows a theme. This is a common approach:
 

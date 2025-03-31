@@ -24,13 +24,15 @@ title: "Comparisons Among Several Samples"
   - $H_A$: At least one population mean differs from another.
 - ANOVA is a preliminary test; subsequent post-hoc tests identify which means differ.
 
+::: {layout-ncol=2}
 ![Equal Means vs. Separate Means Models](images/notes_6_1.jpg)  
 *Figure 1: Comparison of equal means and separate means models, illustrating residual differences.*  
 
 ![ANOVA Table](images/notes_6_2.jpg) 
 *Figure 2: ANOVA table showing degrees of freedom, sum of squares, mean squares, $F$-statistic, and $p$-value.*  
+:::
 
-![Detailed ANOVA Table Overview](images/notes_6_3.png) 
+![Detailed ANOVA Table Overview](images/notes_6_3.png){width=6in fig-align="left"}   
 *Figure 3: Detailed breakdown of ANOVA table components.*  
 
 
@@ -57,12 +59,13 @@ title: "Comparisons Among Several Samples"
 6. **Interpretation**:
    - Rejecting $H_0$ indicates evidence that at least one pair of group means is different.
 
-![SAS Output Table](notes_6_4.jpg)  
+::: {layout-ncol=2}
+![SAS Output Table](images/notes_6_4.jpg)  
 *Figure 4: SAS output showing $F$-statistic, $p$-value, and $R^2$ metrics.*  
 
-![R-Squared and Variance Explained](notes_6_5.jpg)  
+![R-Squared and Variance Explained](images/notes_6_5.jpg)  
 *Figure 5: Illustration of $R^2$, showing the proportion of total variance explained by the model.*  
-
+:::
 
 ## SAS code for ANOVA
 ```{sas eval=FALSE}

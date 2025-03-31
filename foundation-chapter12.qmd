@@ -79,9 +79,10 @@ title: "Inferences for Multiple Linear Regression"
   - $H_a$: At least one of the extra predictors has a nonzero slope.
 - Simultaneously tests whether additional predictors improve the model.
 
+::: {layout-ncol=2}
 ![Extra-Sum-of-Squares F-Test Example](images/notes_12_1.png)  
 *Figure: Extra sum of squares F-test example, including full and reduced models for log(cost) with and without age and gender, and interpretation.*
-
+:::
 
 ## Significance Tests for Each Predictor (t-tests)
 
@@ -101,6 +102,7 @@ title: "Inferences for Multiple Linear Regression"
     - $H_0$: Slopes are equal
     - $H_a$: Slopes are not equal
 
+::: {layout-ncol=2}
 ![Bat Echolocation Example](images/notes_12_2.png)  
 *Figure: Model setup and hypothesis for testing slope differences in echolocating and non-echolocating bats.*
 
@@ -109,6 +111,7 @@ title: "Inferences for Multiple Linear Regression"
 
 ![Bat Example - Full and Reduced Models](images/notes_12_3.png)  
 *Figure: SAS output tables for full and reduced models, testing slope differences in echolocating and non-echolocating bats.*
+:::
 
 - **Next Question of Interest:**  
   Are the intercepts for bat types different?  
@@ -116,8 +119,10 @@ title: "Inferences for Multiple Linear Regression"
     - $H_0$: Intercepts are equal
     - $H_a$: Intercepts are different
 
+::: {layout-ncol=2}
 ![Parameter Estimates for Bat Example](images/notes_12_4.png)  
 *Figure: Parameter estimate table with interpretation and p-value.*
+:::
 
 
 ## Confidence Intervals for Linear Combinations of Coefficients
@@ -131,8 +136,10 @@ title: "Inferences for Multiple Linear Regression"
     (\hat{\beta}_2 + \hat{\beta}_3) \pm t_{0.975, df} \times SE(\hat{\beta}_2 + \hat{\beta}_3)
     $$
 
+::: {layout-ncol=2}
 ![CIs for Linear Combinations of Coefficients](images/notes_12_6.png)  
 *Figure: Confidence interval calculations for linear combinations of coefficients, applied to the bat echolocation example.*
+:::
 
 
 ## Variance of Sum and Difference of Random Variables
@@ -140,8 +147,10 @@ title: "Inferences for Multiple Linear Regression"
 - Formula: $\text{Var}(aX + bY) = a^2 \text{Var}(X) + b^2 \text{Var}(Y) + 2ab \text{Cov}(X, Y)$
 - Used to compute the variance of estimates in regression.
 
+::: {layout-ncol=2}
 ![Variance of Sum and Difference of Random Variables](images/notes_12_5.png)  
 *Figure: Variance of sum and difference of random variables, discussing covariance and its use in confidence intervals.*
+:::
 
 
 ## Interpreting p-values in Regression Output
@@ -149,9 +158,10 @@ title: "Inferences for Multiple Linear Regression"
 - Example p-value interpretation for testing equality of mean energy expenditures:
   - $p = 0.7030$ suggests no significant difference.
 
+::: {layout-ncol=2}
 ![Parameter Estimate and Covariance Table](images/notes_12_7.png)  
 *Figure: Parameter estimate table and covariance table with interpretation for the bat echolocation example.*
-
+:::
 
 ## Prediction in MLR
 

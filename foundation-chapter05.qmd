@@ -64,8 +64,9 @@ title: "Alternatives to the T-Tools"
 
 
 ### Normal Approximation with Continuity Correction
-![Sampling distribution of the rank-sum statistic under the null hypothesis.](images/display_4_6.png)  
-![Illustration of the continuity correction for approximating p-values.](images/display_continuityCorrection.png)  
+![Sampling distribution of the rank-sum statistic under the null hypothesis.](images/display_4_6.png){width=6in fig-align="left"}   
+![Illustration of the continuity correction for approximating p-values.](images/display_continuityCorrection.png){width=5in fig-align="left"}   
+Source: @ramsey2012statistical.
 
 - $Z = \frac{T - \text{Mean}(T)}{\text{SD}(T)}$
 - $T$: Rank sum statistic.  
@@ -74,22 +75,6 @@ title: "Alternatives to the T-Tools"
 - $\text{Mean}(T)$ and $\text{SD}(T)$: Theoretical mean and standard deviation of the rank sum statistic under $H_0$.  
 - **p-value**: Proportion of values from a standard normal distribution more extreme than the observed Z-statistic ($Z$).
 
-
-## Alternatives to the paired t-test
-- Wilcoxon Signed-Rank Test - alternative to a paired t-test
-  - Null hypothesis: the mean difference is equal.
-  - For a one-sided test, be careful of the direction of the test, the sign of the difference.
-  - Compute difference in each pair.
-  - Ranks are done in absolute value.
-  - The signed-rank statistic is the sum of the positive ranks (all ranks from positive differences).
-  - Also, can do an exact test or a normal approximation.
-    - Normal:
-      - Mean(S) = n(n+1)/4
-      - SD(S) = sqrt[n(n+1)(2n+1)/24]
-      - Z-statistic = S – Mean(S) / SD(S)
-      - Lookup p-value (software, z-table)
-  - Resistant to outliers but maintains relative magnitude of the differences (unlike the sign test).
-![](images/notes_5_1.png)  
 
 ## Alternatives to the Paired t-Test
 
@@ -106,10 +91,13 @@ title: "Alternatives to the T-Tools"
        - $\text{Mean}(S) = \frac{n(n+1)}{4}$
        - $\text{SD}(S) = \sqrt{\frac{n(n+1)(2n+1)}{24}}$
        - $Z = \frac{S - \text{Mean}(S)}{\text{SD}(S)}$
-       - **p-Value**: Derived from software or Z-tables. 
+       - **$p$-Value**: Derived from software or Z-tables. 
 - **Notes**:
   - Resistant to outliers while preserving the relative magnitude of the differences, unlike the simpler sign test.
+  
+::: {layout-ncol=2}  
 ![Handwritten Example: Wilcoxon Signed-Rank Test Procedure.](images/notes_5_1.png)  
+:::
 
 ### Sign Test
 - **Purpose**:
@@ -281,3 +269,6 @@ var diff;
 run;
 
 ```
+
+
+## References

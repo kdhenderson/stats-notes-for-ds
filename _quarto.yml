@@ -2,13 +2,22 @@ project:
   type: book
   title: "Henderson's Statistics Notes for Data Science"
 
+bibliography: references.bib 
+biblio-title: References 
+link-citations: true
+link-bibliography: true
+# csl: apa-6th-edition.csl
+# license: "CC BY-SA"
+
 format:
   html:
     theme: cosmo # Use a simple, clean theme for now
     toc: true    # Enable a table of contents
     toc-depth: 2 # Set the depth of the table of contents
     number-sections: false # true # Number the sections
+    #number-depth: 3
     #chapter-level: 1  # Ensure chapters are properly numbered starting from "1"
+    code-fold: true
     css: styles.css
 
 book:
@@ -16,6 +25,9 @@ book:
     - name: "Kristin Henderson"
       affiliation: "SMU MSDS Program"
       orcid: "0000-0002-9265-7709"
+      email: kdhenderson@gmail.com
+      corresponding: true
+  date: last-modified
   chapters:
     - index.qmd  # Introduction or preface
     - part: "Statistical Foundations"

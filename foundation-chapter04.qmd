@@ -25,7 +25,7 @@ title: "Type I, Type II Error, and Power"
 - Failing to reject $H_0$ when it is false is a Type II error, with a probability equal to $\beta$.
 
 
-![Type I and II Errors Table](images/sketch_4_1.png){width=2.5in}  
+![Type I and II Errors Table](images/sketch_4_1.png){width=2in fig-align="left"}  
 *This table summarizes the outcomes of hypothesis testing, highlighting the probabilities of Type I error ($\alpha$), Type II error ($\beta$), and power ($1 - \beta$).*
 
 
@@ -42,7 +42,7 @@ title: "Type I, Type II Error, and Power"
 - Increasing the effect size increases power and decreases $\beta$, but it does not affect the critical value or $\alpha$.
 - Power and the probability of a Type II error will change depending on the actual value of $\mu$.
 
-![Sampling Distributions, Power, and Effect Size](images/sketch_4_2.png)  
+![Sampling Distributions, Power, and Effect Size](images/sketch_4_2.png){width=6in fig-align="left"}   
 *This diagram illustrates the relationship between effect size, critical values, power, and Type I and Type II errors. Narrower distributions from larger sample sizes improve the ability to detect true differences.*
 
 
