@@ -215,34 +215,51 @@ $$
 - Suffers from the curse of dimensionality.
   - Poor performance with many irrelevant predictors.
   
+  
+## Error Metrics for Classification
+
+### Two Types of Metrics
+
+1. **Scoring Rules**: Evaluate how close the predicted probabilities are to the true outcomes  
+2. **Decision Rule Metrics**: Assess the accuracy of classification decisions made using a threshold
+
+
+## Scoring Rules
+
+These assess the **probability estimates** of your model, not just the final classification.
+
+### Log Loss (a.k.a. Entropy)
+- Penalizes incorrect, confident predictions more heavily  
+- Increases when predicted probabilities are uncertain (e.g. near 0.5) but the true class is strongly skewed
+- Smaller when predicted probabilities are closer to the truth  
+  - e.g. predicted probability = 0.9 when the true class is 1
+- Formula: $\text{Log Loss} = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \log(\hat{p}_i) + (1 - y_i) \log(1 - \hat{p}_i) \right]$
+  - $y_i = 1$ if the true class is positive  
+  - $y_i = 0$ if the true class is negative  
+  - $\hat{p}_i$ = predicted probability of the positive class
+- Has nice mathematical properties that guarantee optimality in certain conditions  
+- Used in logistic regression, classification trees, and many other algorithms
+
+### Brier Score
+- Measures the **mean squared difference** between predicted probabilities and actual outcomes  
+- Formula: $\text{Brier} = \frac{1}{n} \sum_{i=1}^{n} (\hat{p}_i - y_i)^2$
+  - Like an MSE for probabilities
+  - Intuitive and interpretable
+  - Can be decomposed into different sources of error (e.g. calibration and refinement)
+ 
+### When to Use Scoring Rules
+
+Scoring rules are ideal for:
+- Comparing models in feature selection  
+- Tuning parameters (e.g. $k$ in KNN, penalty terms in regularized models, or pruning in trees)  
+- Estimating regression coefficients in logistic regression  
+
+They help ensure that:
+- Predicted probabilities are well-calibrated
+- Your model aligns well with the true underlying probabilities
+
 ---
 
-**Error Metrics for Classification Models**  
-- Error metrics can serve different purposes.  
-  - Assessing how well the predicted probabilities are to the true probabilities (scoring rules)  
-  - Assessing your decision rule to make classifications  
-
-- Log Loss Scoring Rule  
-  - Log loss is small when your predicted probabilities are closer to the truth (e.g. predicted prob is 0.9 when truth is yes)  
-  - Log loss increases, for example, when probabilities are in the middle and frequency of yes and no are not close to 50%.  
-
-- Brier Scoring Rule  
-  - (predicted probability subtracted from truth)^squared -> get sum of squares and take average  
-  - mimics the behavior of MSE  
-  
-- Scoring rules  
-  - Log loss (AKA entropy)   
-    - Nice mathematical properties that guarantee optimality in certain situations  
-    - Logistic regression and trees use it  
-  - Briar score  
-    - Intuitive like MSE  
-    - Decomposes into different sources of error  
-  - Ideal to use scoreing rules when:  
-    - Comparing models in feature selection  
-    - Optimizing tuning parameters (penalized regression, KNN, trees)
-    - Estimating regression coefficients in logistric regression  
-  - Scoring rules help tune your models, so the predicted probabilities are as close to the true probabilities as possible  
-  
 - Decision Rule Error Metrics  
   - These metrics are computed by examining your classification decisions  
   - All metrics are derived from a confusion matrix  
