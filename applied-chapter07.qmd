@@ -114,7 +114,7 @@ To help standardize functions and workflows, software retroactively added predic
 
 **KNN Classification Rule:**
 - Record the response values of the $k$ nearest neighbors to $x_{\text{new}}$
-- Estimate: $\hat{P}(Y = + \mid x_{\text{new}}) = \frac{\text{# of } + \text{ neighbors}}{k}$  
+- Estimate: $\hat{P}(Y = + \mid x_{\text{new}}) = \frac{\text{\# of } + \text{ neighbors}}{k}$  
 
 **Classification Boundary:**
 - Every model, once converted to a classification rule, defines a classification boundary.
@@ -260,56 +260,147 @@ They help ensure that:
 
 ---
 
-- Decision Rule Error Metrics  
-  - These metrics are computed by examining your classification decisions  
-  - All metrics are derived from a confusion matrix  
-  - Important to realize that all confusion matrices depend on the threshold that you pick  
-  - Used to compare models/optimize tuning parameters for techniques that do not produce a predicted probability  
+## Decision Rule Metrics
 
-- Confusion Matrices  
-  - Aggregates and cross references how many times predictions were accurate and how many misclassifications were made using the thresholding strategy.  
-  - It will change when the threshold changes (depends on the threshold).  
-  - Metrics:  
-    - Misclassification error rate (MCR) - global error rate  
-      - $MCR = \frac{# Incorrect}{n}$  
-    - Accuracy is 1 - MCR or $\frac{# Correct}{n}$. 
-      - Accuracy is an unconditional metric; does not take into account any additional info about the classification rule  
-    - Conditional metrics compute accuracy with additional information  
-      - Sensitivity/specificity  
-      - Positive/negative predictive value  
-    - Sensitivity: conditions on the fact that you know the observation was a true positive  
-      - It is the accuracy of just the true positive class
-      - $Sens = \frac{true + correct}{total true +}$
-    - Specificity: conditions on the fact that you know the observation was a true negative  
-      - It is the accuracy of just the true negative class
-      - $Spec = \frac{true - correct}{total true -}$  
-    - Positive Predictive Value (PPV): conditions on the fact that you predicted the observation as positive  
-      - It is the accuracy among all positive predictions
-      - $PPV = \frac{true + correct}{total predicted +}$  
-    - Negative Predictive Value (NPV): conditions on the fact that you predicted the observation as negative  
-      - It is the accuracy among all negative predictions
-      - $NPV = \frac{true - correct}{total predicted -}$  
+These metrics assess how well a model performs after applying a classification threshold to the predicted probabilities.
 
-- Why do we need so many metrics?  
-  - If we have a predictive model that predict the probability that person needs a high-risk surgery using clinical and genetic info  
-    - + class -> surgery, - class -> no surgery  
-    - sensitivity: patients who need surgery, predict 90%
-    - specificity: patients who don't need it, predict 90%  
-    - those metrics are conditioned on the fact that we know the truth  
-    - doc needs to assess if the prediction was positive, how much weight should I give it -> PPV
-    - PPV: patients who were predicted to need it, only 47% really did
-    - NPV: patients who were predicted to not need it, 98.9% really didn't
-    
-- Sensitivity and specificity don't take into account the *prevalence* of the +/- classes. Prevalence is the chance of being the + class with no predictor information.  
+They are derived from the **confusion matrix**, which compares predicted vs. actual classifications.
 
-- Changing the Threshold  
-  - Sometimes threshold is chosen to balance sensitivity and specificity.  
-  - With a higher threshold, there will be fewer positive predictions made.  
+### Confusion Matrix
 
-- Takeaways    
-  - Thresholding changes the confusion matrix performance metrics  
-  - Must consider that the errors we make are not always equal  
-  - When it comes to model fitting  
-    - The focus should be on thorough EDA and fitting a good model that provides good predicted probability estimates  
-    - Once you have a good model, you can start thinking about what threshold to use to meet the needs of the problem
+### Confusion Matrix
+
+|                          | **Actual Positive (+)** | **Actual Negative (–)** |
+|--------------------------|-------------------------|--------------------------|
+| **Predicted Positive**   | correctly predicted +   | incorrectly predicted + |
+| **Predicted Negative**   | incorrectly predicted – | correctly predicted –   |
+
+This matrix summarizes:
+- How often the model predicted correctly
+- How often the model made mistakes
+- The types of mistakes
+
+> Most software may label these as:  
+> - True Positive (TP), False Positive (FP)  
+> - False Negative (FN), True Negative (TN)  
+> These are helpful for shorthand but should be interpreted contextually.
+
+The threshold (e.g., 0.5) determines how probabilities are turned into class predictions, which in turn affects all metrics derived from this table.
+
+- Aggregates and cross references how many times predictions were accurate and how many misclassifications were made using the thresholding strategy.  
+- It will change when the threshold changes (depends on the threshold).  
+- Used to compare models/optimize tuning parameters for techniques that do not produce a predicted probability 
+  
+### Common Metrics
+
+#### Misclassification Rate (MCR)
+
+The proportion of all observations where the model's classification was wrong (i.e. the global error rate):
+
+$$
+\text{MCR} = \frac{\text{\# incorrect predictions}}{n} = \frac{\text{FP} + \text{FN}}{n}
+$$
+
+#### Accuracy
+
+The proportion of all observations where the model's classification was correct:
+
+$$
+\text{Accuracy} = \frac{\text{\# correct predictions}}{n} = \frac{\text{TP} + \text{TN}}{n} = 1 - \text{MCR}
+$$
+
+> Accuracy is an unconditional metric — it doesn’t distinguish between types of errors or account for class imbalance.
+
+### Conditional Metrics
+
+These metrics are **conditioned** on a known true class or prediction. These metrics evaluate accuracy within a subset of observations. They help when accuracy alone is misleading.
+
+#### Sensitivity (Recall / True Positive Rate)
+
+> *"Given that the true class is positive, how often did we predict positive?"*
+
+- Focuses on the **true +** group  
+- Measures how well the model identifies actual positives  
+$$
+\text{Sensitivity} = \frac{\text{correctly predicted +}}{\text{total true +}} = \frac{\text{TP}}{\text{TP} + \text{FN}}
+$$
+
+#### Specificity (True Negative Rate)
+
+> *"Given that the true class is negative, how often did we predict negative?"*
+
+- Focuses on the **true –** group  
+- Measures how well the model avoids false positives  
+$$
+\text{Specificity} = \frac{\text{correctly predicted –}}{\text{total true –}} = \frac{\text{TN}}{\text{TN} + \text{FP}}
+$$
+
+#### Positive Predictive Value (PPV / Precision)
+
+> *"Given that we predicted positive, how often was that correct?"*
+
+- Focuses on the **predicted +** group  
+- Measures trustworthiness of a positive prediction 
+$$
+\text{PPV} = \frac{\text{correctly predicted +}}{\text{total predicted +}} = \frac{\text{TP}}{\text{TP} + \text{FP}}
+$$
+
+ 
+#### Negative Predictive Value (NPV)
+
+> *"Given that we predicted negative, how often was that correct?"*
+
+- Focuses on the **predicted –** group  
+- Measures trustworthiness of a negative prediction  
+$$
+\text{NPV} = \frac{\text{correctly predicted –}}{\text{total predicted –}} = \frac{\text{TN}}{\text{TN} + \text{FN}}
+$$
+
+### Why So Many Metrics?
+
+Different metrics highlight different aspects of model performance and practical priorities, which can be especially helpful with imbalanced datasets.
+
+Example: Predicting whether a patient needs high-risk surgery  
+- + class = needs surgery  
+- – class = does not need surgery  
+
+Suppose:
+- Sensitivity = 90% → correctly detects 90% of patients who need surgery  
+- Specificity = 90% → correctly identifies 90% of those who don’t need surgery  
+- PPV = 47% → only 47% of patients predicted to need surgery actually do  
+- NPV = 98.9% → almost all patients predicted not to need it truly don’t  
+
+> Doctors need **PPV** to decide: "How much trust should I put in a positive prediction?"  
+> Even with high sensitivity and specificity, **prevalence** affects PPV and NPV.
+
+### Prevalence and Thresholding
+- **Prevalence**: The base rate of the + class in the population  
+  - e.g. 1 in 10 people need surgery → prevalence = 10%
+- Sensitivity and specificity do **not** depend on prevalence  
+- PPV and NPV **do** depend on prevalence
+
+
+## Changing the Threshold
+
+- Thresholding affects the confusion matrix and all related metrics  
+- A lower threshold → more positive predictions:
+  - Increases sensitivity, reduces specificity 
+- A higher threshold → fewer positive predictions:
+  - Increases specificity, reduces sensitivity   
+
+> Choose a threshold based on costs of different errors.
+
+
+## Takeaways
+
+- Scoring rules assess probability estimates
+- Decision rule metrics evaluate classifications
+- Confusion matrices and derived metrics:
+  - Depend on threshold
+  - Must reflect real-world context and costs 
+
+> Errors are not always equal. In many applications, the cost of a false positive is different from a false negative.
+
+Focus first on thorough EDA and building a model with good predicted probability estimates.  
+→ Then determine the threshold that best meets the needs of the problem.
   
