@@ -1,0 +1,266 @@
+---
+title: "2 x 2 Contingency Tables"
+---
+
+## Overview
+
+- Building towards logistic regression  
+- Metrics for comparing group proportions  
+- Fisher's exact test  
+- Chi-squared test  
+
+
+## Classification Tools
+
+- **LDA/QDA**
+- **KNN**
+- **Logistic Regression**
+  - Parametric, good interpretation
+  - Analogous to multiple linear regression for binary categorical response
+
+
+## Building Up to Multiple Linear Regression (MLR)
+
+| Explanatory Variable           | Method                        |
+|--------------------------------|-------------------------------|
+| One categorical variable       | t-tests (2 groups)            |
+|                                | ANOVA (3+ groups)             |
+| One numeric                    | Simple linear regression      |
+| Mix of categorical and numeric| Multiple linear regression    |
+
+
+## Building Up to Logistic Regression
+
+| Explanatory Variable           | Method                             |
+|--------------------------------|------------------------------------|
+| One categorical variable       | 2x2 contingency tables (2 groups)  |
+|                                | Logistic regression (3+ groups)    |
+| One numeric                    | Simple logistic regression         |
+| Mix of categorical and numeric| Multiple logistic regression       |
+
+
+## Understanding 2x2 Contingency Tables
+
+The main purpose is to compare the probability of a response outcome between two groups.  
+> Are smokers more likely to get cancer than non-smokers?  
+> - Explanatory: smoker/non-smoker  
+> - Response: cancer/not  
+
+There are three typical data collection designs:
+
+1. **Prospective**  
+2. **Retrospective**  
+3. **Completely observational**  
+
+### Prospective Studies
+- Populations for each level of the explanatory variable are determined in advance, and can occur naturally (e.g subjects are obese or not obese) or through random assignment.
+- Simple random samples are taken within each group.
+- **Row totals** are fixed in advance, i.e. we know what the sample size will be for each group.
+- Explanatory variable is fixed; we sample the response after some interval.
+- Example: Vitamin C and Colds study
+- Randomized experiments:
+  - Type of prospective study where subjects are randomly assigned
+  - Helps mitigate confounding variables
+  - Allows for causal inference
+  - In a randomized experiment, equal row totals usually indicate a prospective study.  
+  
+### Retrospective Studies
+- Reverse of prospective: **response variable is fixed**.
+- Sample is selected based on response status; **column totals** are fixed.
+- We then determine explanatory status.
+- Example: Cancer and smoking status study  
+  - Motivated by ethics or practicality (e.g. long timelines)
+- Observational studies:
+  - Grand total may be fixed or undefined
+  - Researcher has little control
+  - Potential for confounding effects
+  - May yield no clear response/predictor distinction  
+    - Appropriate for association tests     
+
+---
+
+- **2x2 Parameters**  
+  - The goal is to compare two groups.  
+    - For the t-test we had:  
+      - $\mu_1$: mean of the response for population 1  
+      - $\mu_2$: mean of the response for population 2  
+  - Testing and confidence intervals:  
+    - $H_o$: $\mu_1 = \mu_2$ vs. $\mu_1 \neq \mu_2$  
+    - 95% CI is for $\mu_1 - \mu_2$  
+    - 0 not in the interval suggests that $H_a$ is true  
+  - Difference in proportions:   
+    - $\pi_1$: proportion/probability of an event occuring for population 1  
+    - $\pi_2$: proportion/probability of an event occuring for population 2  
+  - Testing and confidence intervals:  
+    - $H_o$: $\pi_1 = \pi_2$ vs. $\pi_1 \neq \pi_2$  
+    - 95% CI is for $\pi_1 - \pi_2$  
+    - 0 not in the interval suggests that $H_a$ is true  
+    
+- **Problems with Proportions**  
+  - Sometimes small differences are really important  
+    - $\pi_1 - \pi_2 = 0.05 - 0.01 = 0.04$  
+      - So, a test of CI may suggest that the estimated difference is vary small.  
+      - The difference is a measure of absolute differenc.  
+    - It ignores the relative difference.  
+      - The larger proportion is 5x higher!  
+      
+- **Two additional metrics**  
+  1. Odds ratios  
+    - great for retrospective studies  
+    - is a relative difference  
+    - odds give some people trouble in terms of understanding  
+  2. Relative risk  
+    - another relative difference  
+    - provides an interpretation that is more easily understood  
+    - often mixed up with odds ratios  
+
+- **Odds Example**  
+  - Suppose the odds of getting cancer in your lifetime are 1 to 2.  
+    - Odds of getting cancer = 1/2 = 0.5  
+    - Odds are not a probability because the denominator is not the total.  
+    - Probability of getting cancer = 1/3 = 0.33  
+  - Compliment rule:  
+    - Probability of getting cancer = 3/8 = 0.375  
+    - Probability of not getting cancer = 5/8 = 1 - 3/8 = 0.625  
+  - Odds/Probability relationship  
+    - $\omega_c$: odds of getting cancer  
+    - $\pi_c$: probability of getting cancer  
+    - $\1 - pi_c$: probability of not getting cancer  
+    - $\omega_c = \frac{\pi_c}{1 - \pi_c}$  
+  - Facts about odds  
+    - Can't be a negative number  
+    - If $0 < \omega < 1$, odds are not in the events favor.  
+    - If $\omega = 1$, then it's a coin toss.  
+    - If $\omega > 1$, odds are in the events favor.  
+    - Parameters (referencing the population) / Statistics (calculated from dataset)  
+    
+| Metric                   | Parameter (population) | Statistics (sample) |  
+|--------------------------|------------------------|---------------------|  
+| Proportion / probability | $\pi$                          | $\hat{\pi}$         |  
+| Odds                     | $\omega$                       | $\hat{\omega}$      |  
+
+- Equivalent Hypothesis  
+  - If two populations have the same probability/proportion of an event occuring, then they must have the same odds.  
+  - The following hypotheses are all equivalent:  
+    - $H_o$: $\pi_1 = \pi_2$  
+    - $H_o$: $\pi_1 = \pi_2 = 0$  
+    - $H_o$: $\omega_1 = \omega_2$  
+    - $H_o$: $\omega_1 - \omega_2 = 0$  
+- Relative Hypotheses  
+  - The following hypothesis are all equivalent:  
+    - $H_o$: $\pi_1 = \pi_2$  
+    - $H_o$: $\frac{\pi_1}{\pi_2} = 1$  
+    - $H_o$: $\omega_1 = \omega_2$  
+    - $H_o$: $\frac{\omega_1}{\omega_2} = 1$ 
+    - $\frac{\omega_1}{\omega_2}$ is called the odds ratio  
+      - The odds ratio is always greater than 0.  
+      - If $\frac{\omega_1}{\omega_2} > 1$, then the odds of population 1 are higher than population 2.  
+      - If $\frac{\omega_1}{\omega_2} < 1$, then the odds of population 1 are lower than population 2.  
+      
+Odds are not probabilities! Don't use words like "chance" or "x times more likely" when interpreting an odds ratio.  
+
+- **Relative Risk**  
+  - $H_o$: $\frac{\pi_1}{\pi_2} = 1$ 
+  - $\frac{\pi_1}{\pi_2}$ is called the relative risk  
+  - Same general properties as odds ratios  
+  - Since it is a ratio of two probabilities, you can use words like "chance" or "more likely" when interpreting it  
+
+- Always put the biggest proportion or odds on the top of the ratio.  
+  - This keeps interpretation of the multiplier always greater than one.  
+- When using software:  
+  - Be aware that the "event" is done systematically and may not be the event you care about.  
+  - Verify with a quick hand/mental calculation that the output is what you expect it to be  
+  - Options can help get output exactly the way you want it.  
+  
+- Why so many metrics?  
+  - All are trying to tell us the same thing. Is there a difference in proportions between the two groups?  
+    1. Difference in proportions (absolute difference)  
+    2. Odds ratio (relative difference)  
+    3. Relative risk (relative difference)  
+
+- Study design implications  
+  - Retrospective studies  
+    - Differences in proportions and relative risk metrics are not valid metrics.  
+    - Estimates of direct proportions are biased.  
+    - The odds ratio metric is the only metric that is valid for retrospective studies  
+    
+- **Statistical Inference for 2x2 Tables**  
+ - Workflow example (conducting hypothesis testing)  
+   - There are numerous approaches to hypothesis testing and confidence intervals depending on a few general situations.  
+     - sample size  
+     - study design  
+     - degree of agreement between your test and interval  
+    - Analysis workflow  
+      1. Determine the design (prospective, retrospective^{*}, observational).  
+      2. Determine what metric you want to communicate (differences in proportions, relative risk, odds ratio^{*}).  
+        - Consider *difference in proportions* when:  
+          - events aren't rare  
+          - ease of interpretation for your audience  
+        - Consider *relative risk* when:  
+          - rare events  
+          - ease of interpretation for your audience  
+        - Consider *odds ratio* when:  
+          - all cases  
+          - retrospective studies (must use)
+      3. Define your hypotheses.  
+        - $H_o$: $\pi_1 = \pi_2$ (difference metric)  
+        - $H_o$: $\frac{\pi_1}{\pi_2} = 1$ (relative risk)  
+        - $H_o$: $\frac{\omega_1}{\omega_2} = 1$ (odds ratio)  
+        - If the design is completely observational, you may stat the hypothesis without using specific parameters. $H_o$: no association between the two variables  
+      4. Perform the test and obtain the CI.  
+        - Fisher's exact test for small to moderate sample sizes  
+        - CIs for small sample sizes: Fisher's bootstrap, small-sample corrected Wald (these add a single arbitrary count to each cell of your 2x2 table, Agresti-Coull intervals)
+        - Chi-square test for large sample sizes  
+        - Wald intervals for CIs for large sample sizes (can include "continuitiy corrections" that help the approximation, which will change the result slightly for moderate sample sizes) 
+        - Test statistic and interval are based on normal approximations that are only true for large sample sizes  
+      5. Interpret the results. (Writing conclusions.)  
+        - Similar to two-sample t-testing and rank sum procedures  
+        - One write-up to declare the decision of the test 
+          - Communicate what test you are using  
+        - Second write-up to explain the meaning of the confidence interval  
+          - Communicate what interval method you are using  
+          
+
+  - Workflow example    
+    - 1954 clinical trial to study the effects of the polio vaccine  
+    - Concern that polio vaccine would cause paralysis in young childern  
+    - 400K elementary school children randomly assigned to get vaccine or placebo  
+    - Follow ups to see if paralysis occured  
+    
+|                    | Infantile paralysis | No paralysis |  
+| Placebo            | 142                 | 199,858              |  
+| Salk polio vaccine | 56                  | 199,944              |  
+  
+  - Workflow decisions  
+    1. Design: prospective (randomized experiment), controlling for explanatory variable first and following up later to see what is going on with response variable  
+    2. Metric: difference in proportions (easy to explain), could use any of the metrics because prospective  
+    3. Hypothesis: $H_o$: $\pi_P = \pi_V$  
+    4. Sample size is very large, so perform chi-square test and Wald interval  
+    5. Write conclusion::
+      - get p-value and CI from code output  
+      - Using a chi-squared test, there is significant evidence to conclude that the chances of a child obtaining paralysis after the polio vaccine is different from that of a child taking a placebo (p-value = ...)  
+      - Using a Wald interval, we are 95% confident that the chances (in %) of child paralysis among childeren receiving the placebo is 0.029 to 0.0567% higher than children receiving the polio vaccine.  
+      
+```{r exampleCode, eval = F}
+
+prop.test(c(#events,#events),c(row1Total, row2Total), correct = FALSE) # events, total sample size, without continuity correction
+
+# example from relative risk approach
+epitab(polio, method = "riskratio", riskratio = "wald", rev = "b", pvalue = "chi2", verbose = T)
+
+```
+
+  - An alternative approach  
+    - Since these are rare events, a relative risk may help communicate things a little better than talking about very small changes in probability between the two groups.  
+    - P-value is the same, CI is different.  
+    - Testing conclusion is the same.  
+    - We are 95% confident that children taking a placebo are 1.86-3.45 times more likely to experience paralysis than children taking the polio vaccine.  
+  
+  - Be mindful of practical differences regarding the metrics used.  
+  
+  - Assumptions:  
+    - There are specific assumptions depending on the design; often not discussed because workflow approach is valid regardless.  
+    - Each observation (count in the table) should be independent.  
+      - No repeated measures  
+      - No collections over time  
+      
