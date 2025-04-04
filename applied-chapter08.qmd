@@ -77,32 +77,42 @@ There are three typical data collection designs:
   - May yield no clear response/predictor distinction  
     - Appropriate for association tests     
 
----
 
-- **2x2 Parameters**  
-  - The goal is to compare two groups.  
-    - For the t-test we had:  
-      - $\mu_1$: mean of the response for population 1  
-      - $\mu_2$: mean of the response for population 2  
-  - Testing and confidence intervals:  
-    - $H_o$: $\mu_1 = \mu_2$ vs. $\mu_1 \neq \mu_2$  
-    - 95% CI is for $\mu_1 - \mu_2$  
-    - 0 not in the interval suggests that $H_a$ is true  
-  - Difference in proportions:   
-    - $\pi_1$: proportion/probability of an event occuring for population 1  
-    - $\pi_2$: proportion/probability of an event occuring for population 2  
-  - Testing and confidence intervals:  
-    - $H_o$: $\pi_1 = \pi_2$ vs. $\pi_1 \neq \pi_2$  
-    - 95% CI is for $\pi_1 - \pi_2$  
-    - 0 not in the interval suggests that $H_a$ is true  
+## Parameters in 2x2 Tables
+
+Goal: Compare two groups.
+
+### Mean difference (t-tests)
+- Parameters:  
+  - $\mu_1$: mean of group 1  
+  - $\mu_2$: mean of group 2  
+- Hypotheses:  
+  - $H_0: \mu_1 = \mu_2$
+  - $H_a: \mu_1 \neq \mu_2$
+  - 95% CI: $\mu_1 - \mu_2$
+    - 0 not in the CI supports $H_a$  
+
+### Proportion difference
+- Parameters:  
+  - $\pi_1$: probability in group 1  
+  - $\pi_2$: probability in group 2  
+- Hypotheses:  
+  - $H_0: \pi_1 = \pi_2$  
+  - $H_a: \pi_1 \neq \pi_2$
+  - 95% CI: $\pi_1 - \pi_2$ 
+    - 0 not in the CI supports $H_a$
+
+  
+## Problems with Absolute Proportion Differences
+
+- Small differences can still be important:
+  - $\pi_1 - \pi_2 = 0.05 - 0.01 = 0.04$
+  - The CI may suggest a very small difference.
+  - It measures the absolute difference.
+  - But this ignores relative scale:
+    - 5% is 5 times larger than 1%!    
     
-- **Problems with Proportions**  
-  - Sometimes small differences are really important  
-    - $\pi_1 - \pi_2 = 0.05 - 0.01 = 0.04$  
-      - So, a test of CI may suggest that the estimated difference is vary small.  
-      - The difference is a measure of absolute differenc.  
-    - It ignores the relative difference.  
-      - The larger proportion is 5x higher!  
+--
       
 - **Two additional metrics**  
   1. Odds ratios  
