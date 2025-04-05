@@ -111,43 +111,42 @@ Goal: Compare two groups.
   - It measures the absolute difference.
   - But this ignores relative scale:
     - 5% is 5 times larger than 1%!    
-    
---
-      
-- **Two additional metrics**  
-  1. Odds ratios  
-    - great for retrospective studies  
-    - is a relative difference  
-    - odds give some people trouble in terms of understanding  
-  2. Relative risk  
-    - another relative difference  
-    - provides an interpretation that is more easily understood  
-    - often mixed up with odds ratios  
 
-- **Odds Example**  
-  - Suppose the odds of getting cancer in your lifetime are 1 to 2.  
-    - Odds of getting cancer = 1/2 = 0.5  
-    - Odds are not a probability because the denominator is not the total.  
-    - Probability of getting cancer = 1/3 = 0.33  
-  - Compliment rule:  
-    - Probability of getting cancer = 3/8 = 0.375  
-    - Probability of not getting cancer = 5/8 = 1 - 3/8 = 0.625  
-  - Odds/Probability relationship  
-    - $\omega_c$: odds of getting cancer  
-    - $\pi_c$: probability of getting cancer  
-    - $\1 - pi_c$: probability of not getting cancer  
-    - $\omega_c = \frac{\pi_c}{1 - \pi_c}$  
-  - Facts about odds  
-    - Can't be a negative number  
-    - If $0 < \omega < 1$, odds are not in the events favor.  
-    - If $\omega = 1$, then it's a coin toss.  
-    - If $\omega > 1$, odds are in the events favor.  
-    - Parameters (referencing the population) / Statistics (calculated from dataset)  
     
-| Metric                   | Parameter (population) | Statistics (sample) |  
-|--------------------------|------------------------|---------------------|  
-| Proportion / probability | $\pi$                          | $\hat{\pi}$         |  
-| Odds                     | $\omega$                       | $\hat{\omega}$      |  
+## Two Additional Metrics
+
+1. **Odds Ratio**
+   - Great for retrospective studies
+   - Captures relative difference
+   - Can be harder to interpret
+2. **Relative Risk**
+   - Also a relative difference metric   
+   - More intuitive to interpret
+   - Often confused with odds ratios
+
+### Odds Example
+- Suppose the odds of getting cancer = 1 to 2 → $\omega = \frac{1}{2} = 0.5$
+  - Odds are not a probability because the denominator is not the total. 
+- Probability of cancer = $\frac{1}{3} \approx 0.33$
+- Compliment rule:  
+  - Probability of getting cancer = 3/8 = 0.375  
+  - Probability of not getting cancer = 5/8 = 1 - 3/8 = 0.625  
+- Odds/Probability Relationship:
+  - Let $\omega_c$ = odds of cancer, $\pi_c$ = probability of cancer, $\1 - pi_c$: probability of no cancer
+  - $ \omega_c = \frac{\pi_c}{1 - \pi_c} $
+
+#### Odds Interpretation
+- $0 < \omega < 1$: not in favor
+  - Odds can't be a negative number
+- $\omega = 1$: 50/50  
+- $\omega > 1$: in favor  
+
+| Metric                   | Parameter (population) | Statistic (sample) |
+|--------------------------|------------------------|--------------------|
+| Proportion / Probability | $\pi$                  | $\hat{\pi}$        |
+| Odds                     | $\omega$               | $\hat{\omega}$     |
+    
+---
 
 - Equivalent Hypothesis  
   - If two populations have the same probability/proportion of an event occuring, then they must have the same odds.  
