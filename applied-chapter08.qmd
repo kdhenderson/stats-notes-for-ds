@@ -26,7 +26,7 @@ title: "2 x 2 Contingency Tables"
 | One categorical variable       | t-tests (2 groups)            |
 |                                | ANOVA (3+ groups)             |
 | One numeric                    | Simple linear regression      |
-| Mix of categorical and numeric| Multiple linear regression    |
+| Mix of categorical and numeric | Multiple linear regression    |
 
 
 ## Building Up to Logistic Regression
@@ -36,15 +36,15 @@ title: "2 x 2 Contingency Tables"
 | One categorical variable       | 2x2 contingency tables (2 groups)  |
 |                                | Logistic regression (3+ groups)    |
 | One numeric                    | Simple logistic regression         |
-| Mix of categorical and numeric| Multiple logistic regression       |
+| Mix of categorical and numeric | Multiple logistic regression       |
 
 
 ## Understanding 2x2 Contingency Tables
 
 The main purpose is to compare the probability of a response outcome between two groups.  
 > Are smokers more likely to get cancer than non-smokers?  
-> - Explanatory: smoker/non-smoker  
-> - Response: cancer/not  
+> - Explanatory variable: smoker/non-smoker  
+> - Response variable: cancer/no cancer  
 
 There are three typical data collection designs:
 
@@ -53,64 +53,68 @@ There are three typical data collection designs:
 3. **Completely observational**  
 
 ### Prospective Studies
-- Populations for each level of the explanatory variable are determined in advance, and can occur naturally (e.g subjects are obese or not obese) or through random assignment.
+- Populations for each level of the explanatory variable are determined in advance.
+  - This may happen naturally (e.g. subjects are obese or not obese) or through random assignment (e.g. placebo vs. treatment).
 - Simple random samples are taken within each group.
-- **Row totals** are fixed in advance, i.e. we know what the sample size will be for each group.
-- Explanatory variable is fixed; we sample the response after some interval.
+- **Row totals are fixed** in advance - we know what the sample size will be for each group.
+- The explanatory variable is fixed, and we sample the response after some follow-up period.
 - Example: Vitamin C and Colds study
-- Randomized experiments:
-  - Type of prospective study where subjects are randomly assigned
-  - Helps mitigate confounding variables
-  - Allows for causal inference
-  - In a randomized experiment, equal row totals usually indicate a prospective study.  
+- Randomized experiments are a special type of prospective study:
+  - Subjects are randomly assigned to predictor groups.
+  - Helps mitigate confounding.
+  - Allows for causal conclusions.
+  - Equal row totals often suggest a prospective study and randomized design.  
   
 ### Retrospective Studies
-- Reverse of prospective: **response variable is fixed**.
-- Sample is selected based on response status; **column totals** are fixed.
-- We then determine explanatory status.
+- Reverse of prospective: the **response variable is fixed** in advance.
+- Samples are selected based on response status; **column totals** are fixed.
+- We determine the explanatory variable after selecting individuals.
 - Example: Cancer and smoking status study  
-  - Motivated by ethics or practicality (e.g. long timelines)
-- Observational studies:
-  - Grand total may be fixed or undefined
-  - Researcher has little control
-  - Potential for confounding effects
-  - May yield no clear response/predictor distinction  
-    - Appropriate for association tests     
+
+This approach is often used when:
+- Ethical concerns prevent random assignment (e.g. assigning people to smoke).
+- Long follow-up periods are impractical.
+
+### Observational Studies
+- Only the grand total may be fixed — or no totals are fixed at all.
+- Researcher has little to no control over the sampling.
+- Potential for confounding.
+- There may be no clearly defined response or predictor, making the study more about **association** than group comparison.
 
 
 ## Parameters in 2x2 Tables
 
-Goal: Compare two groups.
+Goal: Compare two groups using either mean differences or proportion differences.
 
 ### Mean difference (t-tests)
 - Parameters:  
-  - $\mu_1$: mean of group 1  
-  - $\mu_2$: mean of group 2  
+  - $\mu_1$: mean of the response for group 1  
+  - $\mu_2$: mean of the response for group 2  
 - Hypotheses:  
   - $H_0: \mu_1 = \mu_2$
   - $H_a: \mu_1 \neq \mu_2$
   - 95% CI: $\mu_1 - \mu_2$
-    - 0 not in the CI supports $H_a$  
+    - If 0 is not in the interval, it supports $H_a$  
 
 ### Proportion difference
 - Parameters:  
-  - $\pi_1$: probability in group 1  
-  - $\pi_2$: probability in group 2  
+  - $\pi_1$: probability of event in group 1  
+  - $\pi_2$: probability of event in group 2  
 - Hypotheses:  
   - $H_0: \pi_1 = \pi_2$  
   - $H_a: \pi_1 \neq \pi_2$
   - 95% CI: $\pi_1 - \pi_2$ 
-    - 0 not in the CI supports $H_a$
+    - If 0 is not in the interval, it supports $H_a$ 
 
   
 ## Problems with Absolute Proportion Differences
 
-- Small differences can still be important:
-  - $\pi_1 - \pi_2 = 0.05 - 0.01 = 0.04$
-  - The CI may suggest a very small difference.
-  - It measures the absolute difference.
-  - But this ignores relative scale:
-    - 5% is 5 times larger than 1%!    
+- Even small absolute differences can be practically important:
+$$\pi_1 - \pi_2 = 0.05 - 0.01 = 0.04$$
+- The confidence interval may suggest a small estimated difference.
+- This is an absolute difference.
+- But it ignores relative scale:
+  - A 5% event rate is 5 times higher than a 1% event rate!   
 
     
 ## Two Additional Metrics
@@ -118,28 +122,33 @@ Goal: Compare two groups.
 1. **Odds Ratio**
    - Great for retrospective studies
    - Captures relative difference
-   - Can be harder to interpret
+   - Can be harder to understand intuitively and interpret
 2. **Relative Risk**
    - Also a relative difference metric   
    - More intuitive to interpret
    - Often confused with odds ratios
 
 ### Odds Example
-- Suppose the odds of getting cancer = 1 to 2 → $\omega = \frac{1}{2} = 0.5$
+- Suppose the odds of getting cancer are 1 to 2 → $\omega = \frac{1}{2} = 0.5$
   - Odds are not a probability because the denominator is not the total. 
 - Probability of cancer = $\frac{1}{3} \approx 0.33$
-- Compliment rule:  
+- Another example with the Compliment Rule:  
   - Probability of getting cancer = 3/8 = 0.375  
   - Probability of not getting cancer = 5/8 = 1 - 3/8 = 0.625  
-- Odds/Probability Relationship:
-  - Let $\omega_c$ = odds of cancer, $\pi_c$ = probability of cancer, $\1 - pi_c$: probability of no cancer
-  - $ \omega_c = \frac{\pi_c}{1 - \pi_c} $
+  
+### Odds/Probability Relationship
+- Let
+  - $\omega_c$ = odds of cancer
+  - $\pi_c$ = probability of cancer
+  - $1 - \pi_c$: probability of not getting cancer
+Then:
+$$\omega_c = \frac{\pi_c}{1 - \pi_c}$$
 
 #### Odds Interpretation
-- $0 < \omega < 1$: not in favor
-  - Odds can't be a negative number
-- $\omega = 1$: 50/50  
-- $\omega > 1$: in favor  
+- $0 < \omega < 1$: odds are not in the event’s favor
+- $\omega = 1$: 50/50 chance 
+- $\omega > 1$: odds favor the event 
+- Odds cannot be negative
 
 | Metric                   | Parameter (population) | Statistic (sample) |
 |--------------------------|------------------------|--------------------|
