@@ -177,110 +177,106 @@ If two populations have the same probability of an event, then they have the sam
       
 Note: Odds are not probabilities! Avoid words like "chance" or phrases like "x times more likely" when interpreting an odds ratio.  
 
----
 
-- **Relative Risk**  
-  - $H_o$: $\frac{\pi_1}{\pi_2} = 1$ 
-  - $\frac{\pi_1}{\pi_2}$ is called the relative risk  
-  - Same general properties as odds ratios  
-  - Since it is a ratio of two probabilities, you can use words like "chance" or "more likely" when interpreting it  
+## Relative Risk
 
-- Always put the biggest proportion or odds on the top of the ratio.  
-  - This keeps interpretation of the multiplier always greater than one.  
+- $H_0$: $\frac{\pi_1}{\pi_2} = 1$ 
+- Relative risk is easier to interpret
+- Since it is a ratio of two probabilities, you can use words like "chance" or "more likely" when interpreting it.  
+- Put the larger proportion on the top of the ratio to keep the interpretation of the multiplier always greater than one.  
 - When using software:  
   - Be aware that the "event" is done systematically and may not be the event you care about.  
   - Verify with a quick hand/mental calculation that the output is what you expect it to be  
   - Options can help get output exactly the way you want it.  
-  
-- Why so many metrics?  
-  - All are trying to tell us the same thing. Is there a difference in proportions between the two groups?  
-    1. Difference in proportions (absolute difference)  
-    2. Odds ratio (relative difference)  
-    3. Relative risk (relative difference)  
 
-- Study design implications  
-  - Retrospective studies  
-    - Differences in proportions and relative risk metrics are not valid metrics.  
-    - Estimates of direct proportions are biased.  
-    - The odds ratio metric is the only metric that is valid for retrospective studies  
-    
-- **Statistical Inference for 2x2 Tables**  
- - Workflow example (conducting hypothesis testing)  
-   - There are numerous approaches to hypothesis testing and confidence intervals depending on a few general situations.  
-     - sample size  
-     - study design  
-     - degree of agreement between your test and interval  
-    - Analysis workflow  
-      1. Determine the design (prospective, retrospective^{*}, observational).  
-      2. Determine what metric you want to communicate (differences in proportions, relative risk, odds ratio^{*}).  
-        - Consider *difference in proportions* when:  
-          - events aren't rare  
-          - ease of interpretation for your audience  
-        - Consider *relative risk* when:  
-          - rare events  
-          - ease of interpretation for your audience  
-        - Consider *odds ratio* when:  
-          - all cases  
-          - retrospective studies (must use)
-      3. Define your hypotheses.  
-        - $H_o$: $\pi_1 = \pi_2$ (difference metric)  
-        - $H_o$: $\frac{\pi_1}{\pi_2} = 1$ (relative risk)  
-        - $H_o$: $\frac{\omega_1}{\omega_2} = 1$ (odds ratio)  
-        - If the design is completely observational, you may stat the hypothesis without using specific parameters. $H_o$: no association between the two variables  
-      4. Perform the test and obtain the CI.  
-        - Fisher's exact test for small to moderate sample sizes  
-        - CIs for small sample sizes: Fisher's bootstrap, small-sample corrected Wald (these add a single arbitrary count to each cell of your 2x2 table, Agresti-Coull intervals)
-        - Chi-square test for large sample sizes  
-        - Wald intervals for CIs for large sample sizes (can include "continuitiy corrections" that help the approximation, which will change the result slightly for moderate sample sizes) 
-        - Test statistic and interval are based on normal approximations that are only true for large sample sizes  
-      5. Interpret the results. (Writing conclusions.)  
-        - Similar to two-sample t-testing and rank sum procedures  
-        - One write-up to declare the decision of the test 
-          - Communicate what test you are using  
-        - Second write-up to explain the meaning of the confidence interval  
-          - Communicate what interval method you are using  
-          
 
-  - Workflow example    
-    - 1954 clinical trial to study the effects of the polio vaccine  
-    - Concern that polio vaccine would cause paralysis in young childern  
-    - 400K elementary school children randomly assigned to get vaccine or placebo  
-    - Follow ups to see if paralysis occured  
-    
-|                    | Infantile paralysis | No paralysis |  
-| Placebo            | 142                 | 199,858              |  
-| Salk polio vaccine | 56                  | 199,944              |  
+## Why So Many Metrics?
+
+All aim to detect group difference in proportions between groups: 
+    1. Difference in proportions (absolute)  
+    2. Odds ratio (relative)  
+    3. Relative risk (relative)  
+
+
+## Study Design Matters
+
+- **Retrospective studies**:
+  - Only **odds ratio** is valid
+  - Proportion and relative risk estimates are biased and are not valid metrics.
+
+
+## Statistical Inference for 2x2 Tables
+
+- There are numerous approaches to hypothesis testing and confidence intervals depending on a few general situations.  
+  - sample size  
+  - study design  
+  - degree of agreement between your test and interval 
+
+### Analysis (Hypothesis Testing) Workflow   
+
+1. **Identify design**: prospective, retrospective\*, observational  
+2. **Choose metric**:
+   - Difference in proportions: event isn't rare, easy to interpret  
+   - Relative risk: rare events, clear interpretation  
+   - Odds ratio\*: **always valid**, required for retrospective
+3. **State hypotheses**:
+   - $H_0$: $\pi_1 = \pi_2$ (difference metric)  
+   - $H_0$: $\frac{\pi_1}{\pi_2} = 1$ (relative risk)  
+   - $H_0$: $\frac{\omega_1}{\omega_2} = 1$ (odds ratio)  
+   - For observational, state without specifying parameters: $H_0$: no association
+4. **Run test and CI**:
+   - Fisher’s exact test for small/moderate n  
+   - Chi-squared test for large n  
+   - Wald intervals for large n  
+     - Use continuity correction if needed  
+   - Fisher's bootstrap or Agresti-Coull, CIs for small n      
+5. **Interpret results**:
+   - Report test and p-value 
+     - State the test used
+   - Report interval and what it means
+     - State the interval method
   
-  - Workflow decisions  
-    1. Design: prospective (randomized experiment), controlling for explanatory variable first and following up later to see what is going on with response variable  
-    2. Metric: difference in proportions (easy to explain), could use any of the metrics because prospective  
-    3. Hypothesis: $H_o$: $\pi_P = \pi_V$  
-    4. Sample size is very large, so perform chi-square test and Wald interval  
-    5. Write conclusion::
-      - get p-value and CI from code output  
-      - Using a chi-squared test, there is significant evidence to conclude that the chances of a child obtaining paralysis after the polio vaccine is different from that of a child taking a placebo (p-value = ...)  
-      - Using a Wald interval, we are 95% confident that the chances (in %) of child paralysis among childeren receiving the placebo is 0.029 to 0.0567% higher than children receiving the polio vaccine.  
-      
+### Workflow Example
+
+**Polio Vaccine Study (1954)**  
+- Randomized: vaccine vs. placebo  
+- 400,000 children  
+- Concern: paralysis side effect          
+
+|                     | Paralysis | No paralysis |
+|---------------------|-----------|--------------|
+| Placebo             | 142       | 199,858      |
+| Salk Vaccine        | 56        | 199,944      |
+    
+#### Decisions:
+1. **Design**: prospective (randomized)  
+2. **Metric**: difference in proportions for easy interpretation (any are valid)  
+3. **Hypothesis**: $H_0: \pi_P = \pi_V$  
+4. **Large n** → chi-square + Wald interval  
+5. **Conclusion**:
+> Using a chi-squared test, there is significant evidence that the chances of a child obtaining paralysis differ between placebo and vaccine groups (p-value = ...).  
+> Using a Wald interval, we are 95% confident that the chance of paralysis is 0.029% to 0.0567% higher in the placebo group.
+
 ```{r exampleCode, eval = F}
 
-prop.test(c(#events,#events),c(row1Total, row2Total), correct = FALSE) # events, total sample size, without continuity correction
+prop.test(c(#eventsRow1,#eventsRow2),c(row1Total, row2Total), correct = FALSE) # events, total sample size, without continuity correction
+prop.test(c(142, 56), c(200000, 200000), correct = FALSE)
 
-# example from relative risk approach
-epitab(polio, method = "riskratio", riskratio = "wald", rev = "b", pvalue = "chi2", verbose = T)
+# Relative risk example
+epitab(polio, method = "riskratio", riskratio = "wald", rev = "b", pvalue = "chi2", verbose = TRUE)
 
 ```
 
-  - An alternative approach  
-    - Since these are rare events, a relative risk may help communicate things a little better than talking about very small changes in probability between the two groups.  
-    - P-value is the same, CI is different.  
-    - Testing conclusion is the same.  
-    - We are 95% confident that children taking a placebo are 1.86-3.45 times more likely to experience paralysis than children taking the polio vaccine.  
+#### Alternative Framing  
+- Since events are rare, relative risk may communicate results better (very small changes in probability between the two groups).  
+  - P-value is the same, CI is different.  
+  - Testing conclusion is the same.  
+  - We are 95% confident that children in the placebo group are 1.86 to 3.45 times more likely to experience paralysis than those in the vaccine group. 
   
   - Be mindful of practical differences regarding the metrics used.  
   
-  - Assumptions:  
-    - There are specific assumptions depending on the design; often not discussed because workflow approach is valid regardless.  
-    - Each observation (count in the table) should be independent.  
-      - No repeated measures  
-      - No collections over time  
+#### Assumptions  
+- Design dependant assumptions:  
+    - Counts in 2x2 tables should be independent.  
+    - No repeated measures or time-based collections 
       
