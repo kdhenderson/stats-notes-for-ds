@@ -162,20 +162,22 @@ If two populations have the same probability of an event, then they have the sam
 
 - The following hypotheses are all equivalent:  
   - $H_0$: $\pi_1 = \pi_2$  
-  - $H_0$: $\pi_1 = \pi_2 = 0$  
+  - $H_0$: $\pi_1 - \pi_2 = 0$  
   - $H_0$: $\omega_1 = \omega_2$  
   - $H_0$: $\omega_1 - \omega_2 = 0$  
 
 ### Relative Hypotheses 
 - The following hypothesis are all equivalent:  
+  - $H_0$: $\pi_1 = \pi_2$  
   - $H_0$: $\frac{\pi_1}{\pi_2} = 1$  
+  - $H_0$: $\omega_1 = \omega_2$ 
   - $H_0$: $\frac{\omega_1}{\omega_2} = 1$ 
-- Where $\frac{\omega_1}{\omega_2}$ = odds ratio  
+- Where $\frac{\omega_1}{\omega_2}$ is the odds ratio.  
   - The odds ratio is always greater than 0.  
   - If $> 1$, the odds are higher in group 1   
   - If $< 1$, the odds are lower in group 1  
       
-Note: Odds are not probabilities! Avoid words like "chance" or phrases like "x times more likely" when interpreting an odds ratio.  
+Note: Odds are not probabilities! Avoid words like "chance" or phrases like "x times more likely" when interpreting an odds ratio. Instead, say "the odds are x times higher."
 
 
 ## Relative Risk
@@ -183,11 +185,12 @@ Note: Odds are not probabilities! Avoid words like "chance" or phrases like "x t
 - $H_0$: $\frac{\pi_1}{\pi_2} = 1$ 
 - Relative risk is easier to interpret
 - Since it is a ratio of two probabilities, you can use words like "chance" or "more likely" when interpreting it.  
-- Put the larger proportion on the top of the ratio to keep the interpretation of the multiplier always greater than one.  
-- When using software:  
-  - Be aware that the "event" is done systematically and may not be the event you care about.  
-  - Verify with a quick hand/mental calculation that the output is what you expect it to be  
-  - Options can help get output exactly the way you want it.  
+- Place the larger proportion in the numerator.  
+  - This keeps the relative risk greater than 1, making interpretation more intuitive.
+- When using software:
+  - Be aware that the definition of the “event” is often handled automatically, and may not match the event you care about.
+  - Double-check the output with a quick mental or hand calculation.
+  - Many functions offer options to change the reference group or event — use them to make the output match your interpretation.
 
 
 ## Why So Many Metrics?
@@ -197,20 +200,24 @@ All aim to detect group difference in proportions between groups:
     2. Odds ratio (relative)  
     3. Relative risk (relative)  
 
+> Use difference in proportions when events are common and you need a simple story.  
+> Use relative risk for rare events.  
+> Use odds ratio when working with retrospective studies.
+
 
 ## Study Design Matters
 
 - **Retrospective studies**:
-  - Only **odds ratio** is valid
+  - Only the **odds ratio** is valid.
   - Proportion and relative risk estimates are biased and are not valid metrics.
 
 
 ## Statistical Inference for 2x2 Tables
 
 - There are numerous approaches to hypothesis testing and confidence intervals depending on a few general situations.  
-  - sample size  
-  - study design  
-  - degree of agreement between your test and interval 
+  - Sample size  
+  - Study design  
+  - Degree of agreement between your test and interval 
 
 ### Analysis (Hypothesis Testing) Workflow   
 
@@ -224,12 +231,14 @@ All aim to detect group difference in proportions between groups:
    - $H_0$: $\frac{\pi_1}{\pi_2} = 1$ (relative risk)  
    - $H_0$: $\frac{\omega_1}{\omega_2} = 1$ (odds ratio)  
    - For observational, state without specifying parameters: $H_0$: no association
-4. **Run test and CI**:
-   - Fisher’s exact test for small/moderate n  
-   - Chi-squared test for large n  
-   - Wald intervals for large n  
-     - Use continuity correction if needed  
-   - Fisher's bootstrap or Agresti-Coull, CIs for small n      
+4. **Run test and obtain CI**:
+   - For large sample sizes:
+     - Use a chi-squared test for hypothesis testing.
+     - Use a Wald interval for confidence intervals.
+       - A continuity correction may improve approximation.
+   - For small to moderate sample sizes:
+     - Use Fisher’s exact test for hypothesis testing.
+     - Use a Fisher’s, bootstrap, or small-sample corrected Wald interval (e.g. Agresti-Coull) for the confidence interval.
 5. **Interpret results**:
    - Report test and p-value 
      - State the test used
