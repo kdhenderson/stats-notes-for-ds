@@ -155,27 +155,29 @@ $$\omega_c = \frac{\pi_c}{1 - \pi_c}$$
 | Proportion / Probability | $\pi$                  | $\hat{\pi}$        |
 | Odds                     | $\omega$               | $\hat{\omega}$     |
     
----
 
-- Equivalent Hypothesis  
-  - If two populations have the same probability/proportion of an event occuring, then they must have the same odds.  
-  - The following hypotheses are all equivalent:  
-    - $H_o$: $\pi_1 = \pi_2$  
-    - $H_o$: $\pi_1 = \pi_2 = 0$  
-    - $H_o$: $\omega_1 = \omega_2$  
-    - $H_o$: $\omega_1 - \omega_2 = 0$  
-- Relative Hypotheses  
-  - The following hypothesis are all equivalent:  
-    - $H_o$: $\pi_1 = \pi_2$  
-    - $H_o$: $\frac{\pi_1}{\pi_2} = 1$  
-    - $H_o$: $\omega_1 = \omega_2$  
-    - $H_o$: $\frac{\omega_1}{\omega_2} = 1$ 
-    - $\frac{\omega_1}{\omega_2}$ is called the odds ratio  
-      - The odds ratio is always greater than 0.  
-      - If $\frac{\omega_1}{\omega_2} > 1$, then the odds of population 1 are higher than population 2.  
-      - If $\frac{\omega_1}{\omega_2} < 1$, then the odds of population 1 are lower than population 2.  
+## Equivalent Hypotheses
+
+If two populations have the same probability of an event, then they have the same odds:
+
+- The following hypotheses are all equivalent:  
+  - $H_0$: $\pi_1 = \pi_2$  
+  - $H_0$: $\pi_1 = \pi_2 = 0$  
+  - $H_0$: $\omega_1 = \omega_2$  
+  - $H_0$: $\omega_1 - \omega_2 = 0$  
+
+### Relative Hypotheses 
+- The following hypothesis are all equivalent:  
+  - $H_0$: $\frac{\pi_1}{\pi_2} = 1$  
+  - $H_0$: $\frac{\omega_1}{\omega_2} = 1$ 
+- Where $\frac{\omega_1}{\omega_2}$ = odds ratio  
+  - The odds ratio is always greater than 0.  
+  - If $> 1$, the odds are higher in group 1   
+  - If $< 1$, the odds are lower in group 1  
       
-Odds are not probabilities! Don't use words like "chance" or "x times more likely" when interpreting an odds ratio.  
+Note: Odds are not probabilities! Avoid words like "chance" or phrases like "x times more likely" when interpreting an odds ratio.  
+
+---
 
 - **Relative Risk**  
   - $H_o$: $\frac{\pi_1}{\pi_2} = 1$ 
