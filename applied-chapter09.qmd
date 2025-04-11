@@ -1,0 +1,177 @@
+---
+title: "Logistic Regression"
+---
+
+## Overview
+
+- Binary response recap  
+- Simple logistic model  
+- Interpreting regression coefficients (numeric and categorical predictor cases)  
+- Revisiting 2x2 tables 
+
+
+## Simple Logistic Regression Model
+
+### Classification
+- The main distinction from linear regression: the **response variable is categorical**
+  - Binary classification examples:
+    - Cancer or not  
+    - Clicked advertisement or not  
+    - Defaulted on payment or not  
+
+### Predictive Models
+- Continuous response: $Y = f(x)$  
+- Categorical response: $P(Y = \text{'Default'} \mid X) = f(X)$  
+- With categorical responses, we predict the **probability** of the response, not the value itself  
+- We often write $f(X)$ as $p(X)$ to emphasize that it's a probability given predictors $X$.
+- Though still a function, it describes how the probabilities are changing rather than the response directly.
+
+### The Linearity Problem
+- A linear equation for $p(X)$ doesn't make sense:
+  - Linear functions range over $(-\infty, \infty)$
+  - Probabilities must stay between 0 and 1   
+
+### Visualizing $p(X)$
+- Bin a continuous predictor into categories  
+- Calculate the proportion of the response for each bin  
+
+### The Path to Linearity
+- Scales and transformations:
+  - $p(X)$: range $(0,1)$  
+  - Odds: $\dfrac{p(X)}{1 - p(X)}$: range $(0, \infty)$  
+  - **Log odds (logit)**: $\ln\left(\dfrac{p(X)}{1 - p(X)}\right)$: range $(-\infty, \infty)$  
+- The **logit function** maps probabilities to the full real number line  
+- This transformation enables linear modeling, because probabilities on the logit scale tend to be more linear with the predictor.  
+  
+###  Model Statement
+- Logistic regression models the log odds as a linear function:  
+  $$
+  \ln\left(\frac{p(X)}{1 - p(X)}\right) = \beta_0 + \beta_1X
+  $$ 
+  
+### Parameter Estimation
+- **Multiple Linear Regression (MLR):**
+  - Estimates minimize the residual sum of squares  
+  - Closed-form solution exists (matrix algebra)
+- **Logistic Regression:**
+  - Estimates minimize the **log loss** error function
+  - No closed-form solution, i.e. cannot use matrix multiplication to find the answer — optimization (minimizing the log loss) is done **numerically**  
+
+### Hypothesis Testing
+- $H_0: \beta_1 = 0$ vs. $H_A: \beta_1 \ne 0$
+  - To understand the relationship between a predictor and the response, we should investigate the slope coefficient on the predictor.
+- Test statistic (z-score / z-statistic): $Z = \frac{\hat{\beta}_1 - 0}{SE(\hat{\beta}_1)}$
+- 95% Confidence interval: $\hat{\beta}_1 \pm z_{\alpha/2} \cdot SE(\hat{\beta}_1)$
+- Null distribution: $\text{standard normal distribution} = Z \sim N(0, 1)$ is used to calculate the p-value
+  - Some software may report a chi-square test (equivalent p-value from $Z^2$, squares the z-statisic and using a chi-square rather than a z distribution to calculate the p-value).  
+    
+### Predicted Probabilities
+- Model transformations:
+  $$\ln\left(\frac{p(X)}{1 - p(X)}\right) = \beta_0 + \beta_1X$$
+  $$\frac{p(X)}{1 - p(X)} = e^{\beta_0 + \beta_1X}$$
+  $$p(X) = \frac{e^{\beta_0 + \beta_1X}}{1 + e^{\beta_0 + \beta_1X}}$$
+
+---
+
+**Interpreting Regression Coefficient: Continuous Case**  
+
+- Coefficient Interpretation  
+  - Advantage of logistic regression is the coefficients have good interpretational value.  
+  - The interpretation allows for us to explain the effect of the predictor through an odds ratio.  
+  - Interpretation is slightly different depending on whether the predictor is numeric or categorical.  
+- Numeric Predictor Case  
+  - Using the logistric regression equation, we can easily predict the odds of the event occurring.  
+  $$Odds(X) = \frac{p(X)}{1-p(X)} = e^{\beta_0 + \beta_1X}$$  
+  - A new observation has an X = 500; the odds of the event occurring are:  
+  $$Odds(X = 500) = e^{\beta_0 + \beta_1(500)}$$  
+  - And another new observation has an X = 501:   
+  $$Odds(X = 501) = e^{\beta_0 + \beta_1(501)}$$  
+  - The odds ratio (the odds at X = 501 relative to the odds at X = 500) comparing the two is:  
+  $$OR = \frac{e^{\beta_0 + \beta_1(501)}}{e^{\beta_0 + \beta_1(500)}} = e^{(\beta_0 + \beta_1(501)) - (\beta_0 + \beta_1(500)) = e^{(\beta_1(501) - (\beta_1(500))} =  e^{(\beta_1(501 - 500))} = e^{\beta_1}$$  
+  - For a 1-unit increase in the predictor X, the odds of the event occurring increase/decrease by a factor of $e^{\beta_1}$.  
+  
+- Interpretation Factos for the Simple Logistic Case  
+  - The interpretation does not depend on the values of X.  
+  - You do not have to communicate in 1-unit increases.  
+    - For any $\Delta$-unit increase, the odds of the event occurring will increase/decrease by a factor of $e^{\Delta\beta_1}$.  
+    
+- Interpretation example:  
+  - A $500 increase in the balance will increase the odds of defaulting by a factor of 15.64.  
+  - or also appropriate: The odds of a person defaulting with a credit card balance of, say, $1,000 is 15.64 times higher than someone with a balance of \$500. 
+
+- Additional Notes and Advice  
+  - Like in the 2x2 contingency tables, odds ratios are relative.  
+    - They do not reflect how likely the event is to occur.  
+    - Examine the predicted probabilities themselves for that.  
+  - When interpreting the odds ratio, sometimes a good strategy is to pick two scenarios for the predictor variable and directly state the odds ratio interpretation using those special cases.  
+
+
+**Interpreting Regression Coefficient: Categorical Case**  
+
+- Categorical Predictors  
+  - Like with MLR, categorical predictors are dummytized.  
+  - Regression output will have an intercept and one or more coefficients labels with the levels of the categorical predictor.  
+  - Each level is present, except for one.  
+    - The one missing is the reference level, which is associated with the intercept.  
+    - Odds ratio interpretation is always with respect to the reference level.  
+    
+- Categorical Case Example with 2 Levels  
+  - Using the default data set, suppose we wished to analyze the categorical variable "student".  
+    - Yes: They are a student (X = 1).  
+    - No: They aren't a student (X = 0).  
+  - The Odds Ratio  
+    - The odds of defaulting if you are a student are e^{\beta_0 + \beta_1(1)}. 
+    - The odds of defaulting if you are not a student are e^{\beta_0 + \beta_1(0)} =  e^{\beta_0}.  
+    - The odds ratio comparing the two is:  
+    $$OR = \frac{e^{\beta_0 + \beta_1(1)}}{e^{\beta_0}} = e^{\beta_1}$$  
+    - The odds of defaulting for a student are $e^{\beta_1}$ times higher/lower than for a nonstudent.  
+- Confidence Levels Revisited  
+  - Confidence intervals are readily available in software for any regression coefficient.  
+  $$\hat{\beta_1} \pm z_{\alpha/2}SE(\hat{\beta_1})$$  
+  - Most software simply exponentiates the lower and upper limits to obtain intervals for the odds ratio.  
+  - Confidence interval for the odds ratio:  
+  $$(e^{\hat{\beta_1} - z_{\alpha/2}SE(\hat{\beta_1})}, e^{\hat{\beta_1} + z_{\alpha/2}SE(\hat{\beta_1})})$$  
+  - Interpretation is provided for the point estimate (coefficient); the confidence interval is reported to reflect sampling error, but without andy lengthy worded interpretation.  
+
+
+**General Workflow and Considerations**  
+
+- Simple Logistric Regression Requirements  
+  - Each observation is independent.  
+  - The continuous predictor is linearly related to the conditional log odds of the response variable.  
+  - There are no lurking variables or confounding factors.  
+  
+- Residual Plots  
+  - They don't provide much intuition into your model fit. No checking constant variance; variances are meant to change in a binary situation. There will be patterns, but it doesn't signal anything is wrong.  
+  - To access fit  
+    - Do your estimates (the interpretation of them) make sense with your EDA?  
+    - Hosmer-Lemeshow test ($H_0$: Model Fits vs $H_A$: Lack of Fit)  
+
+- When Dealing with a Poor Fit  
+  - Exotic trends in EDA (won't strictly increase or decrease)  
+    - Linear at log odds is suspect  
+    - Consider polynomial terms (multiple logistic) 
+    - Consider lurking variables / getting more data (multiple logistic)  
+  - The Hosmer-Lemeshow test is rejected.  
+    - May not be a problem  
+    - Overly sensitive in large data sets  
+    - Consider previous solutions above  
+    
+- General Workflow  
+   1. Perform EDA  
+     - Scatterplot LOESS curve (continuous predictor)  
+     - Mosaic plot or comparison of proportions (Categorical predictor)  
+   2. Fit the logistic regression model  
+     - Check the adequacy of the fit  
+   3. Perform inference on coefficient (z-statistic to determine if coefficient is relevant or is 0)
+     - Interpret the coefficient as an odds ratio  
+     - Provide a CI  
+     - Consider the unit of increase based on summary statistics (cont.)  
+     
+- Getting Ready for Multiple Logistic  
+  - Like MLR, most settings require the use of multiple predictors.  
+  - The key skill set from this unit that will be discussed in further detail includes:  
+    - The key role the logit function plays in logistic regression  
+    - Interpreting coefficients via odds ratios  
+    - Basic exploratory data analysis. 
+     
