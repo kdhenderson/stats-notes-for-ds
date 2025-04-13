@@ -71,25 +71,22 @@ title: "Logistic Regression"
   $$\frac{p(X)}{1 - p(X)} = e^{\beta_0 + \beta_1X}$$
   $$p(X) = \frac{e^{\beta_0 + \beta_1X}}{1 + e^{\beta_0 + \beta_1X}}$$
 
+
+## Interpreting Coefficients: Continuous Predictors
+
+### Odds and Odds Ratios
+
+- Logistic regression coefficients have good interpretational value.  
+- Whether the predictor is numeric or categorical determines interpretation.
+- Logistic regression coefficients are interpreted via odds ratios
+- Odds: $\text{Odds}(X) = \frac{p(X)}{1 - p(X)} = e^{\beta_0 + \beta_1X}$
+- Example: $\text{Odds}(X = 500) = e^{\beta_0 + \beta_1 \cdot 500}$, $\text{Odds}(X = 501) = e^{\beta_0 + \beta_1 \cdot 501}$
+- Odds ratio (OR), i.e.the odds at X = 501 relative to the odds at X = 500: $\frac{e^{\beta_0 + \beta_1 \cdot 501}}{e^{\beta_0 + \beta_1 \cdot 500}} = e^{\beta_1}$
+
+- Interpretation: For a 1-unit increase in $X$, the odds of the event occurring change by a factor of $e^{\beta_1}$
+
 ---
 
-**Interpreting Regression Coefficient: Continuous Case**  
-
-- Coefficient Interpretation  
-  - Advantage of logistic regression is the coefficients have good interpretational value.  
-  - The interpretation allows for us to explain the effect of the predictor through an odds ratio.  
-  - Interpretation is slightly different depending on whether the predictor is numeric or categorical.  
-- Numeric Predictor Case  
-  - Using the logistric regression equation, we can easily predict the odds of the event occurring.  
-  $$Odds(X) = \frac{p(X)}{1-p(X)} = e^{\beta_0 + \beta_1X}$$  
-  - A new observation has an X = 500; the odds of the event occurring are:  
-  $$Odds(X = 500) = e^{\beta_0 + \beta_1(500)}$$  
-  - And another new observation has an X = 501:   
-  $$Odds(X = 501) = e^{\beta_0 + \beta_1(501)}$$  
-  - The odds ratio (the odds at X = 501 relative to the odds at X = 500) comparing the two is:  
-  $$OR = \frac{e^{\beta_0 + \beta_1(501)}}{e^{\beta_0 + \beta_1(500)}} = e^{(\beta_0 + \beta_1(501)) - (\beta_0 + \beta_1(500)) = e^{(\beta_1(501) - (\beta_1(500))} =  e^{(\beta_1(501 - 500))} = e^{\beta_1}$$  
-  - For a 1-unit increase in the predictor X, the odds of the event occurring increase/decrease by a factor of $e^{\beta_1}$.  
-  
 - Interpretation Factos for the Simple Logistic Case  
   - The interpretation does not depend on the values of X.  
   - You do not have to communicate in 1-unit increases.  
