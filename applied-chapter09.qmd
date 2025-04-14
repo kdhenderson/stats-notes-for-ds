@@ -97,35 +97,30 @@ title: "Logistic Regression"
 - Use predicted probabilities to assess absolute likelihood.   
 - Using meaningful values of $X$ and stating the odds ratio using those values is way to provide clear interpretations. 
 
----
+  
+## Interpreting Coefficients: Categorical Predictors
 
-**Interpreting Regression Coefficient: Categorical Case**  
+### Dummy Variables
 
-- Categorical Predictors  
-  - Like with MLR, categorical predictors are dummytized.  
-  - Regression output will have an intercept and one or more coefficients labels with the levels of the categorical predictor.  
-  - Each level is present, except for one.  
-    - The one missing is the reference level, which is associated with the intercept.  
-    - Odds ratio interpretation is always with respect to the reference level.  
-    
-- Categorical Case Example with 2 Levels  
-  - Using the default data set, suppose we wished to analyze the categorical variable "student".  
-    - Yes: They are a student (X = 1).  
-    - No: They aren't a student (X = 0).  
-  - The Odds Ratio  
-    - The odds of defaulting if you are a student are e^{\beta_0 + \beta_1(1)}. 
-    - The odds of defaulting if you are not a student are e^{\beta_0 + \beta_1(0)} =  e^{\beta_0}.  
-    - The odds ratio comparing the two is:  
-    $$OR = \frac{e^{\beta_0 + \beta_1(1)}}{e^{\beta_0}} = e^{\beta_1}$$  
-    - The odds of defaulting for a student are $e^{\beta_1}$ times higher/lower than for a nonstudent.  
-- Confidence Levels Revisited  
-  - Confidence intervals are readily available in software for any regression coefficient.  
-  $$\hat{\beta_1} \pm z_{\alpha/2}SE(\hat{\beta_1})$$  
-  - Most software simply exponentiates the lower and upper limits to obtain intervals for the odds ratio.  
-  - Confidence interval for the odds ratio:  
-  $$(e^{\hat{\beta_1} - z_{\alpha/2}SE(\hat{\beta_1})}, e^{\hat{\beta_1} + z_{\alpha/2}SE(\hat{\beta_1})})$$  
-  - Interpretation is provided for the point estimate (coefficient); the confidence interval is reported to reflect sampling error, but without andy lengthy worded interpretation.  
+- Categorical variables are dummytized
+- One coefficient is created for the intercept and for all levels of the categorical predictor minus one.
+- One level is omitted → reference category, which is associated with the intercept
+- Coefficients are interpreted as odds ratios relative to the reference
 
+### Example: Student Status
+- Variable: `student`  
+  - Yes (1), No (0)  
+- Odds if student: $e^{\beta_0 + \beta_1 \cdot 1}$
+- Odds if not a student: $e^{\beta_0 + \beta_1 \cdot 0} = e^{\beta_0}$
+- Odds ratio:$OR = \frac{e^{\beta_0 + \beta_1}}{e^{\beta_0}} = e^{\beta_1}$
+  - The odds of defaulting for a student are $e^{\beta_1}$ times higher/lower than for a nonstudent.  
+
+### Confidence Intervals for ORs
+- 95% CI for $\beta_1$: $\hat{\beta}_1 \pm z_{\alpha/2} \cdot SE(\hat{\beta}_1)$
+- Exponentiate endpoints to get CI for the odds ratio: $\left( e^{\hat{\beta}_1 - z_{\alpha/2}SE(\hat{\beta}_1)}, e^{\hat{\beta}_1 + z_{\alpha/2}SE(\hat{\beta}_1)} \right)$
+- Interpretation is provided for the point estimate (coefficient); the confidence interval is reported to reflect sampling error, but without andy lengthy worded interpretation.  
+
+--- 
 
 **General Workflow and Considerations**  
 
