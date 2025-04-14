@@ -85,23 +85,19 @@ title: "Logistic Regression"
 
 - Interpretation: For a 1-unit increase in $X$, the odds of the event occurring change by a factor of $e^{\beta_1}$
 
+### Generalized Interpretation
+- Interpretation does not depend on the actual value of $X$  
+- For a $\Delta$-unit increase: $\text{Odds change by } e^{\Delta \cdot \beta_1}$
+- Example:  
+  - A \$500 increase in the balance increases the odds of default by a factor of 15.64.  
+  - The odds of defaulting with a \$1,000 balance are 15.64 times higher than with \$500.  
+
+### Tips
+- Odds ratios are relative, not absolute  
+- Use predicted probabilities to assess absolute likelihood.   
+- Using meaningful values of $X$ and stating the odds ratio using those values is way to provide clear interpretations. 
+
 ---
-
-- Interpretation Factos for the Simple Logistic Case  
-  - The interpretation does not depend on the values of X.  
-  - You do not have to communicate in 1-unit increases.  
-    - For any $\Delta$-unit increase, the odds of the event occurring will increase/decrease by a factor of $e^{\Delta\beta_1}$.  
-    
-- Interpretation example:  
-  - A $500 increase in the balance will increase the odds of defaulting by a factor of 15.64.  
-  - or also appropriate: The odds of a person defaulting with a credit card balance of, say, $1,000 is 15.64 times higher than someone with a balance of \$500. 
-
-- Additional Notes and Advice  
-  - Like in the 2x2 contingency tables, odds ratios are relative.  
-    - They do not reflect how likely the event is to occur.  
-    - Examine the predicted probabilities themselves for that.  
-  - When interpreting the odds ratio, sometimes a good strategy is to pick two scenarios for the predictor variable and directly state the odds ratio interpretation using those special cases.  
-
 
 **Interpreting Regression Coefficient: Categorical Case**  
 
