@@ -120,14 +120,15 @@ title: "Logistic Regression"
 - Exponentiate endpoints to get CI for the odds ratio: $\left( e^{\hat{\beta}_1 - z_{\alpha/2}SE(\hat{\beta}_1)}, e^{\hat{\beta}_1 + z_{\alpha/2}SE(\hat{\beta}_1)} \right)$
 - Interpretation is provided for the point estimate (coefficient); the confidence interval is reported to reflect sampling error, but without andy lengthy worded interpretation.  
 
---- 
+  
+## General Workflow and Considerations
 
-**General Workflow and Considerations**  
+### Assumptions
+- Observations are independent  
+- The **log odds** are linearly related to continuous predictors  
+- No unaccounted confounders  
 
-- Simple Logistric Regression Requirements  
-  - Each observation is independent.  
-  - The continuous predictor is linearly related to the conditional log odds of the response variable.  
-  - There are no lurking variables or confounding factors.  
+---
   
 - Residual Plots  
   - They don't provide much intuition into your model fit. No checking constant variance; variances are meant to change in a binary situation. There will be patterns, but it doesn't signal anything is wrong.  
