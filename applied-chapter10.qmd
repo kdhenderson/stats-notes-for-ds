@@ -1,0 +1,151 @@
+---
+title: "Multiple Logistic Regression"
+---
+
+## Overview
+
+This chapter introduces multiple logistic regression as both a classification tool and a method for statistical inference. We will discuss modeling strategies, communication strategies, and the general workflow for using multiple logistic regression in applied settings.
+
+
+## Motivations for Multiple Logistic Regression
+
+### Simple vs. Multiple Logistic Regression
+- **Simple logistic regression**:
+  - Assumes no confounders
+  - Estimates the effect of a single predictor, ignoring all others
+- **Multiple logistic regression**:
+  - Adjusts for other variables while estimating the effect of one predictor
+  - Allows for both numerical and categorical predictors  
+
+### Simpson’s Paradox
+- An example of a confounding variable distorting the association between predictors and response
+- **Crane/Eagle Math/Physics Example**:
+  - You are more likely to pass if you are a math student versus a physics student.
+  - Almost all Eagles students were math students.
+  - Crane had an even distribution of math and physics students.
+  - A single 2x2 table ignores this confounding info.
+  - Logistic regression allows for comparison of schools while holding department fixed.
+  - Interaction effects between predictors (e.g. school × department) can also be assessed.
+
+### Prediction vs. Explanation
+- Determining important health factors is a statistical inference problem (explanation).
+  - Not only identifying importance but quantifying it
+- Clinicians are also interested in predicting disease probability.
+
+--- 
+   
+**The Multiple Logistic Regression Model**  
+
+- For multiple predictors $X = (X_1, X_2, X_p)$, the general logistic regression model takes the form:  
+$$log \Big( \frac{p(X)}{(1-p(X))}\Big)= \beta_0 + \beta_1X_1 + \beta_2X_2 + ... + \beta_1X_p$$  
+- Additive Interpretation  
+  - When each predictor shows up only once in the model:  
+    - $e^{\hat{\beta}}$ has an odds ratio interpretation  
+    - Add the caveat, "holding the other variables fixed"  
+- Complex Interpretation  
+  - Logistic model has complexity  
+    - Interaction terms  
+    - Polynomial terms  
+  - Odds ratios can still be used to explain  
+    - Must carefully consider the regression formula (like in MLR)  
+    - Common approach is to use effects plots (graphical assessment of logistic regression model)  
+- Additive Classification Boundaries  
+  - Classification boundaries are linear (numeric only)  
+  - Similar to LDA but does not require predictors to be normally distributed  
+- Complex Boundaries  
+  - Interaction terms behave similarly to MLR  
+    - Categ/categ: N/A  
+    - Categ/cont: unique boundary for each categorical level  
+    - Cont/cont or polynomial: creates nonlinear boundaries, can have multiple boundaries  
+
+    
+**Feature Selection**  
+
+- Penalized logistic regression  
+  - GLM-NET can be utilized for feature selection  
+  - Just specify family = "binomial" for logistic  
+- Stepwise feature selection also exists  
+  - Forward, backward, stepwise  
+  - Best subset  
+  - Compare using AIC or logLoss/Brier scores on a validataion set or K-fold  
+  
+- The Separability Problem  
+  - Occasionally, training data can be perfectly separated.  
+  - This is a good thing!  
+  - It indicates your predictors are important.  
+  - Which logistic curve fits the best?  
+    - The regression coefficient that minimizes the logLoss is actually $\hat{\beta} = \infty$.  
+    - Software will return an error or not run at all.  
+      - Probabilities are exactly 0 or 1.  
+      - No interpretation can be made, estimates, confidence intervals.  
+    - Software may return warnings when you are nearly separable.  
+    - Solutions to the separability problem  
+      - For explaining: penalization technique, Firth's logistic regression  
+      - For predicting:  
+        - Firth's logistic regression  
+        - Penalized logistic (GLM-NET)  
+        - Another method (LDA, etc.)  
+
+- Complex Logistic Models  
+  - When including higher-order interaction terms:  
+    - Include all lower-order interaction terms  
+      - Ex. if you have an interaction with three predictors, include the pairwise interactions too.  
+    - Examine ANOVA style tests to assess for significance at each level of complexity  
+      - assess the interaction globally (ex. if you have categorical variables with several levels, use ANOVA to see if it is needed globally)  
+    - If higher-order interaction is not significant, remove and reassess  
+    - Rinse and repeat  
+    - You can examine the Hosmer-Lemeshow test or compare models via validation or K-fold  
+
+- Interpreting Coefficients in Complex Logistic Models  
+  - The approach is the same as MLR  
+    - Determine the appropriate contrast to combine regression coefficients to estimate specific comparison or trend based on the significant interactions  
+    - Exponentiate the estimate/CI to obtain the odds ratio interpretation  
+  - For highly complex interactions or polynomials:  
+    - Analyst typically gets away from direct interpretation and provides "effects" plots  
+    
+- Effects Plots  
+  - Basic premise is to provide predicted probabilities from your model accross typically one, two or three variables.  
+  - The remaining variables are held fixed.  
+    - What value is selected to stay fixed is software-dependent.  
+    - Some use the reference level for categorical.  
+    - Average is typically used for numeric variables.  
+    
+
+**General Workflow for Multiple Logistic Regression**  
+
+- Workflow follows similar themes as MLR  
+- Logistic regression can be used to:  
+  - Build a model to explain  
+  - Classify future observations  
+  
+- Basic Workflow  
+   1. Determine the primary question(s) and predictors needed  
+   2. Consider additional variables for which you want to account  
+   3. Perform EDA and data cleaning  
+     - Graphics and summary stats  
+     - Explore potential interactions  
+   4. Fit models  
+     - Based on EDA  
+     - ANOVA tests as well as feature selection can be used to determine if interactions are required  
+     - Feature selection when applicable  
+   5. Assess the fit  
+     - Hosmer-Lemeshow test  
+     - Can compare error metrics on validation set or K-fold  
+   6. Interpret finalized model  
+     - Additive models can be easily explained through odds ratios  
+     - Complex models with interactions can be interpreted as well, as long as care is taken with contrasts  
+     - Effects plots should be used to help interpret  
+     
+- Considerations for classification  
+  - Consider multiple classification tools (try non-parametric)  
+    - Compare error metrics  
+  - Determine appropriate threshold  
+    - Consider costs of misclassifications  
+  - Should validate your model and thresholding  
+    - Entirely new data set  
+    - Test set  
+  - Monitor strategy  
+    - Additional checks over time  
+    - Data collection / Algorithm dynamics  
+    
+    
