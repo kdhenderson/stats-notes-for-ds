@@ -97,7 +97,7 @@ title: "Logistic Regression"
 - Use predicted probabilities to assess absolute likelihood.   
 - Using meaningful values of $X$ and stating the odds ratio using those values is way to provide clear interpretations. 
 
-  
+
 ## Interpreting Coefficients: Categorical Predictors
 
 ### Dummy Variables
@@ -128,39 +128,38 @@ title: "Logistic Regression"
 - The **log odds** are linearly related to continuous predictors  
 - No unaccounted confounders  
 
----
-  
-- Residual Plots  
-  - They don't provide much intuition into your model fit. No checking constant variance; variances are meant to change in a binary situation. There will be patterns, but it doesn't signal anything is wrong.  
-  - To access fit  
-    - Do your estimates (the interpretation of them) make sense with your EDA?  
-    - Hosmer-Lemeshow test ($H_0$: Model Fits vs $H_A$: Lack of Fit)  
+### Model Fit
+- Residual plots are less useful — binary outcome means variance changes are expected  
+- Instead:
+  - Compare predicted probabilities to observed proportions, i.e. does the interpretation of the estimates make sense with the EDA?   
+  - Hosmer-Lemeshow test:
+    - $H_0$: model fits  
+    - $H_A$: model does not fit  
 
-- When Dealing with a Poor Fit  
-  - Exotic trends in EDA (won't strictly increase or decrease)  
-    - Linear at log odds is suspect  
-    - Consider polynomial terms (multiple logistic) 
-    - Consider lurking variables / getting more data (multiple logistic)  
-  - The Hosmer-Lemeshow test is rejected.  
-    - May not be a problem  
-    - Overly sensitive in large data sets  
-    - Consider previous solutions above  
-    
-- General Workflow  
-   1. Perform EDA  
-     - Scatterplot LOESS curve (continuous predictor)  
-     - Mosaic plot or comparison of proportions (Categorical predictor)  
-   2. Fit the logistic regression model  
-     - Check the adequacy of the fit  
-   3. Perform inference on coefficient (z-statistic to determine if coefficient is relevant or is 0)
-     - Interpret the coefficient as an odds ratio  
-     - Provide a CI  
-     - Consider the unit of increase based on summary statistics (cont.)  
-     
-- Getting Ready for Multiple Logistic  
-  - Like MLR, most settings require the use of multiple predictors.  
-  - The key skill set from this unit that will be discussed in further detail includes:  
-    - The key role the logit function plays in logistic regression  
-    - Interpreting coefficients via odds ratios  
-    - Basic exploratory data analysis. 
+### If Fit Is Poor
+- Strange trends in EDA → linear log odds assumption may be violated  
+  - Try polynomial terms or additional predictors  
+- Rejected Hosmer-Lemeshow test may not always imply a problem (especially in large samples)
+
+### Recommended Workflow
+
+1. EDA  
+   - LOESS curve for continuous predictors  
+   - Mosaic plots or comparison of proportions for categorical predictors      
+2. Fit model  
+   - Check fit via diagnostic tests  
+3. Inference  
+   - z-test for coefficient relevance, i.e. not zero  
+   - Interpret coefficient as odds ratio  
+   - Provide confidence interval  
+   - Choose a sensible unit change based on context  
+ 
+   
+## Looking Ahead: Multiple Logistic Regression
+
+- Like MLR, most applications require multiple predictors
+- Key skills from this chapter:
+  - Understanding the logit function  
+  - Interpreting coefficients using odds ratios  
+  - Conducting EDA before modeling  
      
