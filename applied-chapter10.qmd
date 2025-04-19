@@ -32,32 +32,35 @@ This chapter introduces multiple logistic regression as both a classification to
   - Not only identifying importance but quantifying it
 - Clinicians are also interested in predicting disease probability.
 
---- 
-   
-**The Multiple Logistic Regression Model**  
 
-- For multiple predictors $X = (X_1, X_2, X_p)$, the general logistic regression model takes the form:  
-$$log \Big( \frac{p(X)}{(1-p(X))}\Big)= \beta_0 + \beta_1X_1 + \beta_2X_2 + ... + \beta_1X_p$$  
-- Additive Interpretation  
-  - When each predictor shows up only once in the model:  
-    - $e^{\hat{\beta}}$ has an odds ratio interpretation  
-    - Add the caveat, "holding the other variables fixed"  
-- Complex Interpretation  
-  - Logistic model has complexity  
-    - Interaction terms  
-    - Polynomial terms  
-  - Odds ratios can still be used to explain  
-    - Must carefully consider the regression formula (like in MLR)  
-    - Common approach is to use effects plots (graphical assessment of logistic regression model)  
-- Additive Classification Boundaries  
-  - Classification boundaries are linear (numeric only)  
-  - Similar to LDA but does not require predictors to be normally distributed  
-- Complex Boundaries  
-  - Interaction terms behave similarly to MLR  
-    - Categ/categ: N/A  
-    - Categ/cont: unique boundary for each categorical level  
-    - Cont/cont or polynomial: creates nonlinear boundaries, can have multiple boundaries  
+## The Multiple Logistic Regression Model
 
+For multiple predictors $X = (X_1, X_2, \ldots, X_p)$, the general logistic regression model is:
+$$
+\log\left( \frac{p(X)}{1 - p(X)} \right) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p
+$$
+  
+### Interpretation
+
+- **Additive models**:
+  - Each predictor appears only once in the model.
+  - $e^{\hat{\beta}}$ can be interpreted as an odds ratio
+  - Interpretation assumes "holding all other variables fixed"
+
+- **Complex models**:
+  - Include interaction and/or polynomial terms
+  - Odds ratios are still interpretable but require careful consideration of the regression formula
+  - **Effects plots** are often used for graphical interpretation 
+
+### Classification Boundaries
+- **Additive**: linear boundaries (only numeric predictors)
+  - Similar to LDA but does not require predictors to be normally distributed
+- **Complex**: nonlinear boundaries arise from:
+  - Categorical × continuous interactions (unique boundary per level)
+  - Continuous × continuous or polynomial terms (curved/multiple boundaries)
+  - Categorical × categorical: N/A
+
+---
     
 **Feature Selection**  
 
