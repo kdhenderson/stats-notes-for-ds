@@ -1,0 +1,792 @@
+---
+title: "Appendix A: R Code Examples for Statistical Foundations"
+appendix: true
+format: html
+execute:
+  eval: false
+---
+
+::: {.appendix}
+
+## 1. Importing and Summary
+
+```{r}
+library(tidyverse)
+
+# import the dataset
+dataset = read.csv(file.choose(), header = TRUE, stringsAsFactors = TRUE)
+
+# view the dataset
+str(dataset)
+head(dataset)
+
+# summary statistics
+dataset %>% group_by(explanatory) %>% 
+  summarize(n = n(), mean = mean(response), sd = sd(response))
+
+```
+
+
+## 2. Visualization and Assumption Checks
+
+```{r}
+# simple base R plots for checking assumptions
+hist(dataset$numericalColumn)
+qqnorm(dataset$numericalColumn)
+boxplot(dataset$numericalColumn, horizontal = TRUE)
+
+
+# make plots using ggplot2 and patchwork
+library(patchwork)
+
+# make a histogram for each treatment group
+hist = dataset %>% 
+  group_by(explanatory) %>% 
+  ggplot(aes(x = response)) +
+  geom_histogram(bins = 15) + 
+  # facet_wrap(~explanatory, scales = "free_y") +
+  facet_wrap(~explanatory) +
+  ggtitle("Histogram of ResponseVariable") +
+  theme_bw()
+
+# make a qqplot for each treatment group
+qq = dataset %>%
+  group_by(explanatory) %>% 
+  ggplot(aes(sample = response)) +
+  geom_qq() +
+  facet_wrap(~explanatory) +
+  ggtitle("QQ Plots of ResponseVariable") +
+  theme_bw()
+
+# make a boxplot for each treatment group
+box = dataset %>% 
+  group_by(explanatory) %>% 
+  ggplot(aes(y = response, x = explanatory)) +
+  geom_boxplot() +
+  ggtitle("Boxplot of ResponseVariable") +
+  theme_bw()
+
+# arrange histogram above qqplot, then next to boxplot using patchwork
+(hist / qq) | box
+
+
+# simpler way for subset of data
+par(mfrow=c(2,2))
+hist(subset(dataset, explanatory==level1)$response, xlab='Response, Level 1', main='Level 1')
+box()
+hist(subset(dataset, explanatory==level2)$response, xlab='Response, Level 2', main='Level 2')
+box()
+qqnorm(subset(dataset, explanatory==level1)$response)
+qqnorm(subset(dataset, explanatory==level2)$response)
+
+```
+
+
+## 3. Permutation Test
+
+```{r}
+
+# calculate the observed difference in means
+xbars = dataset %>% group_by(explanatory) %>% summarize(mean = mean(response))
+xbarGrp1minusGrp2 = xbars[2,2] - xbars[1,2] # observed difference xbarGrp1 - xbarGrp2 = fillInValue
+xbarGrp1minusGrp2
+
+# build the distribution
+xbarDiffHolder = numeric(10000)
+
+for (i in 1:10000){
+  scrambledLabels = sample(dataset$explanatory, nGrp1+nGrp2); # change the n (total observations) shuffle the Labels
+  
+  datasetTemp = dataset
+  datasetTemp$explanatory = scrambledLabels
+  
+  xbars = datasetTemp %>% group_by(explanatory) %>% summarize(mean = mean(response))
+  xbarGrp1minusGrp2 = xbars[2,2] - xbars[1,2] # observed difference xbarGrp1 - xbarGrp2 = fillInValue
+  xbarGrp1minusGrp2
+  xbarDiffHolder[i] = xbarGrp1minusGrp2$mean
+}
+
+df = data.frame(xbarDiffs = xbarDiffHolder)
+
+df %>% ggplot(mapping = aes(x = xbarDiffs)) + 
+  geom_histogram(bins = 25, fill = "cornflowerblue", linewidth = 0.1) +
+  ggtitle("Permutation Distribution of the Difference of Sample Means") +
+  xlab("xbarGrp1 - xbarGrp2")
+
+# calculate the p-value
+num_more_extreme = sum((abs(xbarDiffHolder)) >= abs(xbarGrp1minusGrp2))
+
+pvalue = num_more_extreme / 10000
+pvalue
+
+```
+
+
+## 4. t-tests and Power Analysis
+
+```{r}
+# critical value for two-sided, two-sample test
+qt(0.975, df-2)
+
+# one-sample t-test (df-1)
+t.test(x=dataset, mu = underTheNull, conf.int = "TRUE", alternative = "two.sided")
+
+# paired (one-sample) t-test (df-1)
+t.test(x = dataset$explantoryGrp2, y = dataset$explantoryGrp1, paired = TRUE) # this is probably easiest
+#OR
+t.test(response ~ explanatory, data = dataset, paired = TRUE) # alternative = "two-sided", mu = 0, conf.level = 0.95, var.equal(doesn't apply, one-sample)
+# see the order of the treatment groups
+levels(dataset$explanatory)
+
+# two-sample t-test with equal variance
+results = t.test(response ~ explanatory, data = dataset, var.equal = TRUE, alternative = "two.sided")
+results
+
+# two-sample t-test with unequal variance - Welch's
+results = t.test(response ~ explanatory, data = dataset, var.equal = FALSE, alternative = "two.sided")
+results
+
+# find a two-sided p-value
+pt(abs(tstat), df,lower.tail = FALSE) * 2
+
+# get the degrees of freedom
+results = t.test()
+df = results$parameter
+
+
+# COMPUTE POWER OF A T-TEST
+power.t.test(n = nPerGrp, delta = effectSize, sd = sd, sig.level = alpha, power = NULL, 
+             type = "one.sample", alternative = "one.sided")
+# or "two.sample", can also just leave power (or unknown variable off)
+
+# Find sample size to get 80% power (leave n blank)
+power.t.test(n = , delta = effectSize, power = .8, sd = s, sig.level = .05,
+             type = "one.sample",alternative = "one.sided")
+
+# What if you have different sample sizes in each of two samples? (uses Cohen's D)
+library(pwr)
+pwr.t2n.test(n1 = n1, n2 = n2, d = effectSize/stdev, sig.level = 0.05, alternative = "two.sided") # alternative = "greater"
+
+# an example for power calculation with unequal sd
+power.welch.t.test(n = n, delta = effectSize, power = , sd1 = s1, sd2 = s2, alternative = "two-sided")
+
+
+# MAKE A POWER CURVE
+# Loop to calculate power for sample sizes from nlower to nhigher
+powerholder = c()
+samplesizes = seq(nlower, nhigher, by = 1)
+
+for(i in 1:length(samplesizes))
+{
+  powerholder[i] = power.t.test(n = samplesizes[i], delta = effectSize, sd = s, sig.level = .05,
+                                type = "one.sample", alternative = "one.sided")$power
+}
+
+# Create a data frame
+powerdf = data.frame(samplesizes, powerholder)
+
+# Create the power curve
+powerdf %>% ggplot(aes(x = samplesizes, y = powerholder)) +
+  geom_line(color = "blue3", linewidth = 1.5) +
+  ggtitle("Power Curve") +
+  ylab("Power") +
+  xlab("Sample Sizes") +
+  ylim(0.75, 1.0) +
+  theme_bw()
+```
+
+
+---
+## 5. One-Way ANOVA and Extra Sum of Squares
+
+```{r anova}
+# one-way ANOVA (make sure groups is a factor variable)
+fit = aov(response ~ groups, data = dataset)
+summary(fit)
+
+# find critical value for f-distribution (one-way test)
+# critical_value = qf(alpha, dfn, dfd, lower.tail = FALSE)
+qf(0.05, dfn, dfd, lower.tail = FALSE)
+
+```
+
+```{r extra_sum_of_squares}
+# one-way ANOVA first (make sure groups is a factor variable)
+fit = aov(response ~ groups, data = dataset)
+summary(fit)
+
+# run an extra sum of squares comparing CTRL and D
+#full model: CTRL, A, B, C, D, E
+fit_full = aov(response ~ explanatory, data = dataset)
+sum_fit_full = summary(fit_full)
+sum_fit_full
+# extract the degrees of freedom for the error
+dfd = sum_fit_full[[1]]["Residuals", "Df"]
+# extract the sum of squares for the error
+ssFull = sum_fit_full[[1]]["Residuals", "Sum Sq"]
+
+#reduced model: O, O, A, B, C, E (combine CTRL & D)
+fit_reduce = aov(response ~ explanatoryReduced, data = dataset)
+sum_fit_reduce = summary(fit_reduce)
+sum_fit_reduce
+# extract the degrees of freedom for the error
+dfTotal = sum_fit_reduce[[1]]["Residuals", "Df"]
+# extract the sum of squares for the error
+ssRed = sum_fit_reduce[[1]]["Residuals", "Sum Sq"]
+
+# BYOA table calculations
+alpha = 0.05 
+dfn = dfTotal - dfd
+ssModel = ssRed - ssFull
+mse = ssFull / dfd
+msModel = ssModel / dfn
+fstat = msModel / mse
+fstat
+
+# Calculate the p-value for a one-tailed test
+p_value = pf(fstat, dfn, dfd, lower.tail = FALSE)
+p_value
+
+# Calculate the critical value for a one-tailed test
+critical_value = qf(alpha, dfn, dfd, lower.tail = FALSE)
+critical_value
+
+# Print results
+cat("alpha:", alpha, "\n")
+cat("dfTotal (reduced):", dfTotal, "\n")
+cat("dfd (full):", dfd, "\n")
+cat("dfn:", dfn, "\n")
+cat("Sum of Squares for Reduced Model:", ssRed, "\n")
+cat("Sum of Squares for Error (Full):", ssFull, "\n")
+cat("Sum of Squares for Model (SS explained):", ssModel, "\n")
+cat("Mean Square Error:", mse, "\n")
+cat("Mean Square Model (MS explained):", msModel, "\n")
+cat("Critical Value:", critical_value, "\n")
+cat("F-Statistic:", fstat, "\n")
+cat("p-Value F-test:", p_value, "\n")
+```
+
+```{r multipleComparisons}
+
+# conduct a pairwise comparison with Tukey-Kramer multiple comparison correction
+library(multcomp)
+gfit = glht(fit, linfct = mcp(groups = "Tukey")) # put groups variable in
+summary(gfit)
+
+# extract confidence intervals
+confint_gfit = confint(gfit)
+confint_gfit
+
+# different way to extract half_width
+library(agricolae)
+tukey_half = HSD.test(fit, 'groups') # put groups variable in
+tukey_half$statistics$MSD
+
+# this will also give you the adjusted CIs and p-values
+tukey_result = TukeyHSD(fit)
+tukey_result
+```
+
+```{r contrasts}
+# contrast of the average of the mean of 2 groups of 2
+
+library(emmeans)
+
+unique(dataset$groups) # find the order of the groups/levels for assigning contrast coefficients
+
+fit = lm(response ~ groups, data = dataset)
+leastsquare = lsmeans(fit, "groups") # put groups variable in
+
+Contrasts = list(Grp1and2vsGrp3and4 = c(.5, .5, -.5, -.5)) # adjust contrast coefficients
+
+contrastResultsCorr = contrast(leastsquare, Contrasts, adjust = "sidak") # slightly less conservative than bonferroni
+sum_contrastResultsCorr = summary(contrastResultsCorr)
+sum_contrastResultsCorr
+
+contrastResults = contrast(leastsquare, Contrasts) # no adjustment
+sum_contrastResults = summary(contrastResults)
+sum_contrastResults
+
+# get the critical value
+criticalVal = qt(0.975, df)
+criticalVal
+
+#CI = estimate ± criticalValue*SE (estimate is the difference of means from the original t-test)
+CIlower = sum_contrastResultsCorr$estimate - criticalVal*sum_contrastResultsCorr$SE
+CIupper = sum_contrastResultsCorr$estimate + criticalVal*sum_contrastResultsCorr$SE
+CIlower
+CIupper
+```
+
+```{r nonParametricTests}
+
+# RANK-SUM TEST (for two samples)
+
+# get the EXACT p-value (one-sided test)
+wilcox.test(response ~ explanatory, data = dataset, alternative = "less", exact = TRUE)
+# get the exact matching CI (note it is not alpha, it is conf.level)
+# ‘conf.int’ option provides the HL confidence limits (like SAS)
+wilcox.test(response ~ explanatory, data = dataset, alternative = "two.sided", exact = TRUE, conf.level = 0.90, conf.int = TRUE)
+
+# get the NORMAL APPROXIMATION p-value (with continuity correction)
+wilcox.test(response ~ explanatory, data = dataset, alternative = "less", exact = FALSE, correct = TRUE)
+# get the normal approximation matching CI
+wilcox.test(response ~ explanatory, data = dataset, alternative = "two.sided", exact = FALSE, correct = TRUE, conf.level = 0.90, conf.int = TRUE)
+
+
+# SIGNED-RANK TEST (for paired samples)
+
+# Get the critical value
+critVal = qnorm(0.95)
+critVal
+
+# Run the paired test
+signedRank = wilcox.test(dataset$before, dataset$after, paired = TRUE, alternative = "greater", exact = FALSE, correct = TRUE)
+signedRank
+
+# Get the 90% matching CI
+signedRankCI = wilcox.test(dataset$before, dataset$after, paired = TRUE,alternative = "two.sided", exact = FALSE, correct = TRUE, conf.level = 0.90, conf.int = TRUE)
+signedRankCI
+
+# This is extra code for the by hand calculations.
+# Extract the test statistic (S)
+S = signedRank$statistic
+S
+# Calculate n
+n = length(dataset$before)
+n
+# Calculate the expected value (mean) of S under the null hypothesis
+mean_S = n * (n + 1) / 4
+mean_S
+# Calculate the standard deviation of S under the null hypothesis
+sd_S = sqrt(n * (n + 1) * (2 * n + 1) / 24)
+sd_S
+# Calculate the Z-statistic with continuity correction
+CC = ifelse(S > meanS, -0.5, 0.5)
+CC
+Z = (S + CC - mean_S) / sd_S
+Z
+# Get the p-value for a one-tailed test (upper tail)
+p_value_one_tailed = 1 - pnorm(Z)
+p_value_one_tailed
+
+```
+
+```{r linearCorrelation}
+# FIND PEARSON'S R
+dataset = data.frame(response = c(1,2,3,4,5), explanatory = c(1,2,3,4,5))
+
+# make a scatter plot of the data first
+plot(dataset$explanatory, dataset$response, xlab = "explanatory", ylab = "response", main = "analysis", pch = 15)
+
+# or without making a dataframe
+plot(response, explanatory)
+
+# get the correlation coefficient
+cor(dataset)
+
+# or
+cor (y = response, x = explanatory)
+
+
+# HYPOTHESIS TEST (t-test) FOR PEARSON'S R
+
+# get the critical value
+qt(0.975,n-2) # df = n-2
+
+# get r, the test statistic, p-value, and confidence interval
+cor.test(dataset$explanatory, dataset$response)
+
+```
+
+```{r simpleLinearRegression}
+# HYPOTHESIS TEST (t-test) FOR REGRESSION
+# lm - linear model(response ~ explanatory, data)
+fit = lm(response ~ explanatory, data = dataset)
+summary(fit)
+
+# plot the fitted values
+plot(dataset$explanatory, dataset$response, xlab = "explanatory", ylab = "response", main = "analysis", pch = 15)
+lines(dataset$explanatory, fit$fitted.values)
+
+
+# ANOVA FOR REGRESSION
+anova(fit)
+
+
+# PLOT THE RESIDUALS
+plot(fit)
+
+dataset$residuals = residuals(fit)
+dataset$fittedVals = fitted(fit)
+dataset %>% ggplot(aes(x = fittedVals, y = residuals)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
+  ggtitle("Residuals Plot") +
+  theme_bw()
+
+# create a QQ plot for the residuals
+residuals = residuals(fit)
+qqnorm(residuals)
+qqline(residuals, col = "black")
+
+
+# CONFIDENCE INTERVALS FOR THE PARAMETER ESTIMATES (SLOPE AND INTERCEPT)
+fit = lm(response ~ explanatory, data = dataset)
+summary(fit)
+confint(fit)
+confint(fit, "explanatory") # if you just want the CI for the slope
+confint(fit, level = 0.99) # if you want to change alpha
+
+
+# CONFIDENCE INTERVALS AROUND A PREDICTION
+
+# Create new data for prediction
+new_data = data.frame(response = NA, explanatory = 2.5)
+
+# Predict with 95% confidence interval (CI estimating the mean value of y expected at value of x)
+predictionCI = predict(fit, newdata = new_data, interval = "confidence")
+predictionCI
+
+# Predict with 95% prediction interval (CI estimating the individual value of y expected at value of x, more error)
+predictionPI = predict(fit, newdata = new_data, interval = "prediction")
+predictionPI
+
+
+# PLOT THE 95% CONFIDENCE AND PREDICTION INTERVALS
+predictions = predict(fit, interval = "confidence", level = 0.95, se.fit = TRUE)
+prediction_intervals = predict(fit, interval = "prediction", level = 0.95)
+
+movies = movies %>%
+  mutate(fit = predictions$fit,
+         lwr_conf = predictions$fit[, "lwr"],
+         upr_conf = predictions$fit[, "upr"],
+         lwr_pred = prediction_intervals[, "lwr"],
+         upr_pred = prediction_intervals[, "upr"])
+
+ggplot(data, aes(x = explanatory, y = response)) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  geom_ribbon(aes(ymin = lwr_conf, ymax = upr_conf), alpha = 0.5, fill = "lightblue") +
+  geom_line(aes(y = lwr_pred), linetype = "dashed", color = "black") +
+  geom_line(aes(y = upr_pred), linetype = "dashed", color = "black") +
+  geom_hline(yintercept = 210, color = "darkred") +
+  geom_point() +
+  labs(title = "Regression Line with 95% Confidence and Prediction Intervals",
+       x = "Explanatory", y = "Response") +
+  theme_bw()
+
+
+# CALIBRATION INTERVALS FOR ESTIMATING VALUES OF X FROM DESIRED Y VALUES
+
+library(investr)
+
+# calibration interval for the mean budget
+calibrate(fit,y0 = 210, interval = "Wald", mean.response = TRUE, limit = FALSE)
+
+# calibration interval for a single movie budget
+calibrate(fit,y0 = 210, interval = "Wald", mean.response = FALSE, limit = FALSE)
+
+
+# FIND AND INTERPRET R-SQUARED
+# R-squared = measure of the proportion of variation in the response that is accounted for by the explanatory variable
+# Get the summary of the model
+summary_fit = summary(fit)
+
+# Extract R-squared
+R_squared = summary_fit$r.squared
+
+# Interpretation
+cat("The R-squared value is", R_squared, "\n")
+cat("This means that", round(R_squared * 100, 2), "% of the variability in Response is explained by Explanatory.")
+
+```
+
+```{r residualPlots}
+library(car) # for rstudent(), studentized residuals
+
+# Fit a linear model on the data
+fit = lm(Response ~ Explanatory, data = dataset)
+
+# log transform the data if needed
+dataset = dataset %>% mutate(
+  log_explanatory = log(explanatory),
+  log_response = log(response)
+)
+
+# Add residuals, studentized residuals, fitted values to the cleaned data frame
+dataset$residuals = residuals(fit)
+dataset$studentized_residuals = rstudent(fit) #car library
+dataset$fittedVals = fitted(fit)
+
+# Another way to get studentized residuals
+library(MASS)
+# Calculate studentized residuals (external studentized: ti=ei/σhati*sqrt(1−hii))
+dataset$StudentizedResiduals = rstudent(fit)
+plot(fit)
+
+
+# RESIDUAL PLOTS
+# to get a residual scatterplot, QQ plot, sqrt of standardized residuals and cook's distance plot 
+plot(fit)
+
+# SCATTERPLOT of residuals with ggplot
+ggplot(data = dataset, aes(x = fittedVals, y = residuals)) +
+  geom_point() +
+  geom_hline(yintercept = 0, color = "blue") +
+  labs(x = "Fitted Values", y = "Residuals", title = "Scatterplot of Residuals") + 
+  theme_bw()
+
+
+# DIFFERENT WAYS TO DO QQ-PLOTS
+# QQ plot of residuals using car library
+qqPlot(dataset$residuals, main = "QQ Plot of Residuals") #car library
+
+# QQ plot using base R
+qqnorm(residuals(fit), main = "QQ Plot of Residuals")
+qqline(residuals(fit), col = "blue")
+
+# QQ plot using ggplot2
+ggplot(dataset, aes(sample = residuals)) +
+  stat_qq() +
+  stat_qq_line(col = "blue") +
+  labs(title = "QQ Plot of Residuals", x = "Theoretical Quantiles", y = "Sample Quantiles") + 
+  theme_bw()
+
+
+# DIFFERENT WAYS TO DO HISTOGRAMS
+# Histogram of residuals with a normal distribution line
+ggplot(data = dataset, aes(x = residuals)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 15, fill = "lightblue", color = "gray30") +
+  stat_function(fun = dnorm, args = list(mean = mean(dataset$residuals), sd = sd(dataset$residuals)), color = "blue") +
+  labs(x = "Residuals", y = "Density", title = "Histogram of Residuals with Normal Distribution Line") + 
+  theme_bw()
+
+# Create histogram with normal distribution line
+hist(residuals(fit), breaks = 15, probability = TRUE, col = "lightblue", border = "gray30", main = "Histogram of Residuals with Normal Distribution Line", xlab = "Residuals")
+curve(dnorm(x, mean = mean(residuals(fit)), sd = sd(residuals(fit))), col = "blue", lwd = 2, add = TRUE)
+
+```
+
+```{r plotRegressionLine}
+
+# PLOT THE REGRESSION LINE
+
+# BASE R PLOT
+# Plot the data
+plot(dataset$explanatory, dataset$response, 
+     xlab = "Explanatory", ylab = "Response", 
+     main = "Linear Regression of Response & Explanatory", pch = 16)
+# Add the regression line
+abline(fit, col = "blue", lwd = 2)
+
+# GGPLOT VERSION
+# Plot the data with regression line using ggplot2
+ggplot(dataset, aes(x = explanatory, y = response)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(x = "Explanatory", y = "Response", 
+       title = "Linear Regression of Response & Explanatory") +
+  theme_bw()
+
+
+# PLOT THE REGRESSION LINE WITH CONFIDENCE AND PREDICTION INTERVALS
+# and optional highlighting of selected data points of interest
+
+# Find the data of interest
+dataToHighlight = dataset %>%
+  filter(columnName == "Value") %>% 
+  select("col1", "col2", "col3")
+dataToHighlight
+
+# Add confidence and prediction intervals
+# Create a new data frame for prediction with confidence and prediction intervals
+new_data = data.frame(logGDP = InfantVGDP_clean$logGDP, logInfantMort = InfantVGDP_clean$logInfantMort)
+confInt = predict(fitLogLog, newdata = new_data, interval = "confidence")
+predInt = predict(fitLogLog, newdata = new_data, interval = "predict")
+new_data$fit = confInt[, "fit"]
+new_data$lwr_conf = confInt[, "lwr"]
+new_data$upr_conf = confInt[, "upr"]
+new_data$lwr_pred = predInt[, "lwr"]
+new_data$upr_pred = predInt[, "upr"]
+
+# Plot the data with regression line, CI, PI, and highlighted point using ggplot2
+ggplot(dataset, aes(x = explanatory, y = response)) +
+  geom_ribbon(data = new_data, aes(ymin = lwr_pred, ymax = upr_pred), alpha = 0.3, fill = "gray70") +
+  geom_ribbon(data = new_data, aes(ymin = lwr_conf, ymax = upr_conf), alpha = 0.6, fill = "lightblue") +
+  geom_point() +
+  geom_point(data = dataToHighlight, aes(x = explanatory, y = response), color = "red3", size = 4, stroke = 1.25, shape = 21) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(x = "Explanatory", y = "Response", 
+       title = "Linear Regression of Reponse & Explanatory") +
+  theme_bw()
+
+```
+
+```{r backTransformation}
+
+# Extract regression parameters
+intercept = coef(fitLogLog)[1]
+slope = coef(fitLogLog)[2]
+
+
+# LOG-LOG BACK-TRANSFORM THE SLOPE AND INTERPRET WITH CONFIDENCE INTERVAL
+# Extract confidence intervals for the slope
+conf_intervals = confint(fit)
+slope_conf_lower = conf_intervals["log_explanatory", 1]
+slope_conf_upper = conf_intervals["log_explanatory", 2]
+
+# Back-transform the slope and its confidence intervals
+back_transformed_slope = 2^slope
+back_transformed_conf_lower = 2^slope_conf_lower
+back_transformed_conf_upper = 2^slope_conf_upper
+
+# Calculate the percentage increase/decrease
+percentage_change = (1 - back_transformed_slope) * 100
+percentage_change_conf_lower = (1 - back_transformed_conf_lower) * 100
+percentage_change_conf_upper = (1 - back_transformed_conf_upper) * 100
+
+# Display the results
+cat("Slope:", slope, "\n")
+cat("Back-transformed Slope (2^b1):", back_transformed_slope, "\n")
+cat("Percentage Increase/Decrease:", percentage_change, "%\n")
+cat("Confidence Interval for Slope: (", slope_conf_lower, ", ", slope_conf_upper, ")\n")
+cat("Back-transformed Confidence Interval for Slope: (", back_transformed_conf_lower, ", ", back_transformed_conf_upper, ")\n")
+cat("Percentage Increase/Decrease Confidence Interval: (", percentage_change_conf_lower, "%, ", percentage_change_conf_upper, "%)\n")
+
+
+# LOG-LOG BACK-TRANSFORM THE INTERCEPT AND CI
+# Extract confidence intervals for the intercept
+intercept_conf_lower = conf_intervals["(Intercept)", 1]
+intercept_conf_upper = conf_intervals["(Intercept)", 2]
+
+# Back-transform the intercept and its confidence intervals
+back_transformed_intercept = exp(intercept)
+back_transformed_intercept_conf_lower = exp(intercept_conf_lower)
+back_transformed_intercept_conf_upper = exp(intercept_conf_upper)
+
+# Display the results
+cat("Intercept:", intercept, "\n")
+cat("Back-transformed Intercept (e^b0):", back_transformed_intercept, "\n")
+cat("Confidence Interval for Intercept: (", intercept_conf_lower, ", ", intercept_conf_upper, ")\n")
+cat("Back-transformed Confidence Interval for Intercept: (", back_transformed_intercept_conf_lower, ", ", back_transformed_intercept_conf_upper, ")\n\n")
+
+
+# COMPARE PREDICTED VALUE TO OBSERVED VALUE
+
+# Calculate estimate of log(Y)
+est_log_response = intercept + slope * dataset$explanatory
+est_response = exp(est_log_response)
+
+# Display results
+cat("Estimated Log(Response) from model:", est_log_response, "\n")
+cat("Estimated Response from model:", est_response, "\n")
+cat("Actual Log(Response):", dataset$obs_log_response, "\n")
+cat("Actual Response:", dataset$obs_response, "\n")
+
+
+# LACK OF FIT TEST
+
+# find the critical value
+qf(1-alpha, dfn, dfd)
+# find p-value for f-distribution
+pf(fstat, dfn, dfd, lower.tail = FALSE)
+
+# H0: Linear regression model has good fit. (No lack of fit.)
+# HA: The SMM fits better. (LRM is lacking fit.)
+# There is BLANK evidence at the alpha = 0.05 level of significance to suggest that the linear regression model has a lack of fit compared to the separate means model (p- value = XYZ from an extra-sum-of-squares F-test for lack of fit).
+
+
+# MULTIPLE LINEAR REGRESSION - ONLY NUMERICAL VARIABLES, SAME SLOPES
+
+# subset the dataframe for only the columns of interest
+subset_scores = scores[ , c("science", "math", "read")]
+
+# make a matrix scatterplot with base R
+plot(subset_scores,
+     main = "Matrix Scatterplot", 
+     pch = 19, # point character
+     col = "darkblue")
+
+# make a matrix scatterplot with GGpairs
+library(GGally)
+ggpairs(subset_scores,
+        title = "Matrix Scatterplot")
+
+# fit the model
+fit = lm(science ~ math + read, data = scores)
+summary(fit)
+confint(fit)
+
+# plot the residuals to check assumptions
+plot(fit)
+
+
+# MULTIPLE LINEAR REGRESSION - INDICATOR VARIABLES, SAME SLOPES
+# plot the data and check assumptions
+dataset %>% ggplot(aes(x = explanatoryNum, y = response, color = explanatoryCat)) +
+  geom_point() + 
+  labs(
+    title = "Regression Analysis of Response, Explanatory1, Explanatory2",
+    x = "ExplanatoryNum",
+    y = "Response",
+    color = "ExplanatoryCat") +
+  theme_bw()
+
+# might need to convert explanatory to categorical not numerical
+scores$ses = as.factor(scores$ses)
+
+# fit the model, set reference level if necessary
+fit = lm(response ~ explanatoryNum + relevel(explanatoryCat, ref = "3"), data = dataset)
+summary(fit)
+confint(fit)
+vcov(fit) # get the covariance matrix (though don't understand this right now!)
+
+# plot the residuals to check assumptions
+plot(fit)
+
+
+# MULTIPLE LINEAR REGRESSION - INDICATOR VARIABLES, INTERACTION VARIABLES - DIFFERENT SLOPES
+# fit the model
+fit = lm(response ~ explanatoryNum * relevel(factor(explanatoryCat), ref = "3"), data = dataset) # can convert to factor here instead
+summary(fit)
+confint(fit)
+
+# equivalent to above
+fit2 = lm(response ~ 
+            explanatoryNum + 
+            relevel(factor(explanatoryCat), ref = "3") + 
+            explanatoryNum*relevel(factor(explanatoryCat), ref = "3"), 
+          data = dataset)
+summary(fit2)
+confint(fit2)
+
+# plot the residuals to check assumptions
+plot(fit)
+
+
+# VARIABLE SELECTION
+# install.packages("olsrr")
+library(olsrr)
+ 
+# WITH SIGNIFICANCE LEVEL
+fit = lm(response ~ ., data = dataset)
+a = ols_step_forward_p(fit, p_val = 0.15, details = TRUE)
+b = ols_step_backward_p(fit, p_val = 0.15, details = TRUE) # bigger p-remove, more variables in the model; smaller, fewer
+c = ols_step_both_p(fit, p_enter = 0.15, p_remove = 0.15, details = TRUE) # stepwise selection
+
+# WITH AIC
+fit = lm(response ~ ., data = dataset)
+d = ols_step_forward_aic(fit, details = TRUE)
+
+# 2-way Interactions
+fit = lm(response ~ .^2, data = dataset)
+
+# define training control
+train_control = trainControl(method="LOOCV")
+# train the model 
+model = train(response ~ explanatory1 + explanatory2 + explanatory3 + explanatory4 + explanatory5, data = dataset, trControl = train_control, method = "lm")
+model
+
+```
+
+:::

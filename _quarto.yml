@@ -59,3 +59,7 @@ book:
           - applied-chapter09.qmd
           - applied-chapter10.qmd
           #- applied-chapter11.qmd
+    - part: "Appendices"
+      chapters:
+          - appendix-r-code.qmd
+          #- appendix-sas-code.qmd

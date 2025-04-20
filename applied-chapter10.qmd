@@ -60,34 +60,31 @@ $$
   - Continuous × continuous or polynomial terms (curved/multiple boundaries)
   - Categorical × categorical: N/A
 
----
-    
-**Feature Selection**  
 
-- Penalized logistic regression  
-  - GLM-NET can be utilized for feature selection  
-  - Just specify family = "binomial" for logistic  
-- Stepwise feature selection also exists  
-  - Forward, backward, stepwise  
-  - Best subset  
-  - Compare using AIC or logLoss/Brier scores on a validataion set or K-fold  
-  
-- The Separability Problem  
-  - Occasionally, training data can be perfectly separated.  
-  - This is a good thing!  
-  - It indicates your predictors are important.  
-  - Which logistic curve fits the best?  
-    - The regression coefficient that minimizes the logLoss is actually $\hat{\beta} = \infty$.  
-    - Software will return an error or not run at all.  
-      - Probabilities are exactly 0 or 1.  
-      - No interpretation can be made, estimates, confidence intervals.  
-    - Software may return warnings when you are nearly separable.  
-    - Solutions to the separability problem  
-      - For explaining: penalization technique, Firth's logistic regression  
-      - For predicting:  
-        - Firth's logistic regression  
-        - Penalized logistic (GLM-NET)  
-        - Another method (LDA, etc.)  
+## Feature Selection
+
+### Penalized Logistic Regression
+- Use `glmnet` with `family = "binomial"` for logistic regression
+- Useful for regularization and feature selection
+    
+### Stepwise Selection
+- Forward, backward, and stepwise approaches
+- Best subset selection
+- Compare models using:
+  - AIC
+  - LogLoss or Brier Score on validation set or K-fold cross-validation
+ 
+### Separability Problem
+- When training data is perfectly separated:
+  - A good thing! Indicates strong, important predictors
+  - However, maximum likelihood estimates, i.e. the regression coefficient that minimizes the logLoss is $\hat{\beta} = \infty$
+  - Software may fail or issue warnings
+  - Resulting predicted probabilities are exactly 0 or 1 → no interpretation can be made, and no estimates or confidence intervals are possible  
+- **Solutions**:
+  - For explanation: penalization, Firth’s logistic regression
+  - For prediction: Firth’s logistic, penalized logistic (GLM-NET), or alternative models (e.g. LDA)
+
+---
 
 - Complex Logistic Models  
   - When including higher-order interaction terms:  
