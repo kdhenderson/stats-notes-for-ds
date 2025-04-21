@@ -32,6 +32,12 @@ This chapter introduces multiple logistic regression as both a classification to
   - Not only identifying importance but quantifying it
 - Clinicians are also interested in predicting disease probability.
 
+#### Case Study Examples
+- **CAD Study**: Predicting coronary artery disease using sex, age, and ECG.
+  - Questions: Is sex a risk factor after accounting for age and ECG? Are there interactions?
+- **Titanic**: Survival prediction using ticket class, age, and sex.
+  - Questions: What contributed most to survival? Do the effects depend on each other?
+
 
 ## The Multiple Logistic Regression Model
 
@@ -84,68 +90,66 @@ $$
   - For explanation: penalization, Firth’s logistic regression
   - For prediction: Firth’s logistic, penalized logistic (GLM-NET), or alternative models (e.g. LDA)
 
----
 
-- Complex Logistic Models  
-  - When including higher-order interaction terms:  
-    - Include all lower-order interaction terms  
-      - Ex. if you have an interaction with three predictors, include the pairwise interactions too.  
-    - Examine ANOVA style tests to assess for significance at each level of complexity  
-      - assess the interaction globally (ex. if you have categorical variables with several levels, use ANOVA to see if it is needed globally)  
-    - If higher-order interaction is not significant, remove and reassess  
-    - Rinse and repeat  
-    - You can examine the Hosmer-Lemeshow test or compare models via validation or K-fold  
+## Complex Logistic Models
 
-- Interpreting Coefficients in Complex Logistic Models  
-  - The approach is the same as MLR  
-    - Determine the appropriate contrast to combine regression coefficients to estimate specific comparison or trend based on the significant interactions  
-    - Exponentiate the estimate/CI to obtain the odds ratio interpretation  
-  - For highly complex interactions or polynomials:  
-    - Analyst typically gets away from direct interpretation and provides "effects" plots  
-    
-- Effects Plots  
-  - Basic premise is to provide predicted probabilities from your model accross typically one, two or three variables.  
-  - The remaining variables are held fixed.  
-    - What value is selected to stay fixed is software-dependent.  
-    - Some use the reference level for categorical.  
-    - Average is typically used for numeric variables.  
-    
-
-**General Workflow for Multiple Logistic Regression**  
-
-- Workflow follows similar themes as MLR  
-- Logistic regression can be used to:  
-  - Build a model to explain  
-  - Classify future observations  
+### Modeling Strategy
+- When including high-order interaction terms:
+  - Also include lower-order interactions
+    - e.g. if modeling a 3-way interaction, also include all 2-way interactions
+  - Use ANOVA-style tests to assess overall significance at each level of complexity
+  - Remove non-significant higher-order interactions and re-assess
+  - Compare models using:
+    - Hosmer-Lemeshow test
+    - Validation or cross-validation metrics
   
-- Basic Workflow  
-   1. Determine the primary question(s) and predictors needed  
-   2. Consider additional variables for which you want to account  
-   3. Perform EDA and data cleaning  
-     - Graphics and summary stats  
-     - Explore potential interactions  
-   4. Fit models  
-     - Based on EDA  
-     - ANOVA tests as well as feature selection can be used to determine if interactions are required  
-     - Feature selection when applicable  
-   5. Assess the fit  
-     - Hosmer-Lemeshow test  
-     - Can compare error metrics on validation set or K-fold  
-   6. Interpret finalized model  
-     - Additive models can be easily explained through odds ratios  
-     - Complex models with interactions can be interpreted as well, as long as care is taken with contrasts  
-     - Effects plots should be used to help interpret  
-     
-- Considerations for classification  
-  - Consider multiple classification tools (try non-parametric)  
-    - Compare error metrics  
-  - Determine appropriate threshold  
-    - Consider costs of misclassifications  
-  - Should validate your model and thresholding  
-    - Entirely new data set  
-    - Test set  
-  - Monitor strategy  
-    - Additional checks over time  
-    - Data collection / Algorithm dynamics  
-    
-    
+### Coefficient Interpretation
+- Follow similar strategy as in MLR:
+  - Determine the appropriate contrast to combine regression coefficients to estimate specific comparison or trend based on the significant interactions
+  - Exponentiate to obtain odds ratio interpretation
+
+- For highly complex models:
+  - Interpretation becomes difficult
+  - Use effects plots for visualization
+  
+### Effects Plots
+- Show predicted probabilities across 1–3 variables
+- Other variables are held fixed:
+  - Categorical: reference level (usually, depends on software)
+  - Continuous: mean or median (depends on software)    
+
+> **Note**: Effects plots are not part of EDA; they visualize predictions from your fitted model. They can look simple or complex, depending on model structure—not the underlying raw data.
+  
+ 
+## General Workflow
+
+The general workflow for multiple logistic regression is similar to that of multiple linear regression.
+
+### Modeling Steps
+
+1. Define primary question(s) and predictor(s)
+2. Identify potential confounders and covariates, i.e. additional variables for which you want to account
+3. Perform EDA and data cleaning:
+   - Summary statistics and plots
+   - Explore possible interactions
+4. Fit candidate models:
+   - Based on insights from EDA
+   - Use ANOVA tests or feature selection to decide on complexity
+5. Assess model fit:
+   - Hosmer-Lemeshow test
+   - Evaluate metrics on validation or K-fold CV
+6. Interpret final model:
+   - Odds ratios (additive models)
+     - Complex models with interactions can also be interpreted, taking care with contrasts 
+   - Effects plots (complex models)
+   
+### Classification Considerations
+
+- Try multiple classification tools (e.g. non-parametric approaches) comparing error metrics
+- Choose threshold based on context (e.g. cost of misclassification types)
+- Validate both model and threshold using:
+  - Independent test set
+  - Entirely new dataset
+- Set up a monitoring strategy:
+  - Regular checks on prediction accuracy
+  - Adapt to changes in data collection or algorithm dynamics
