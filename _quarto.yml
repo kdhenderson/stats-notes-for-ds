@@ -58,7 +58,8 @@ book:
           - applied-chapter08.qmd
           - applied-chapter09.qmd
           - applied-chapter10.qmd
-          #- applied-chapter11.qmd
+          - applied-chapter11.qmd
+        #- applied-chapter12.qmd
     - part: "Appendices"
       chapters:
           - appendix-r-code.qmd

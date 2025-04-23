@@ -41,16 +41,17 @@ This chapter introduces **Principal Component Analysis (PCA)**—a foundational 
   - Hierarchical  
   - *k*-means
 
----
+
+## PCA and Data Reduction
+
+### Motivation for Data Reduction
+- Too many variables → Hard to analyze, visualize, or model
+- Goal: reduce the number of variables while preserving the “information”
+  - Creates a new data set
+- "Information" depends on algorithm 
+  - "Information" can be defined in terms of **variability**
     
-- Data Reduction  
-  - Dealing with large number of variables  
-    - Difficult to perform EDA  
-    - Bogs down some analyses  
-  - Objective: create new data set  
-    - Smaller number of variables  
-    - Retains most of the "information" from the original data set  
-    - "Information" depends on algorithm  
+---
 
 - PCA's New Data  
   - First variable, $Z_1$, is the "first principal component"  
