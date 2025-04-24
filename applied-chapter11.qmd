@@ -51,39 +51,38 @@ This chapter introduces **Principal Component Analysis (PCA)**—a foundational 
 - "Information" depends on algorithm 
   - "Information" can be defined in terms of **variability**
     
+### Principal Components
+- New variables $Z_1, Z_2, \dots, Z_p$ are called **principal components**.
+- Each new variable, $Z_j$ is a **linear combination** of the original $X_i$ variables:
+  - Coefficients change for each principal component.
+
+$$
+Z_1 = \phi_{11}X_1 + \phi_{12}X_2 + \dots + \phi_{1p}X_p \\
+Z_2 = \phi_{21}X_1 + \phi_{22}X_2 + \dots + \phi_{2p}X_p \\
+\vdots \\
+Z_p = \phi_{p1}X_1 + \phi_{p2}X_2 + \dots + \phi_{pp}X_p
+$$
+- PCA creates the same number of principal components as variables in the original data set.  
+  - Where is the reduction? Should we:  
+    - Keep only a few?, How many?, Which ones? What criterion? 
+
+### Properties of Principal Components
+- **Uncorrelated** with each other
+- **Ordered by variance**: $\text{Var}(Z_1) > \text{Var}(Z_2) > \dots > \text{Var}(Z_p)$
+- Total variance is preserved: $\sum_{i=1}^p \text{Var}(X_i) = \sum_{i=1}^p \text{Var}(Z_i)$
+
+### Reducing Dimensions
+- Because $\text{Var}(Z_1) > \text{Var}(Z_2) > \dots > \text{Var}(Z_p)$  
+  - Some variables will essentially have 0 variance  
+  - Drop low-variance components since all the values in the column are about the same, those components aren't useful.
+  - Left with $k < p$ variables.  
+- Total variability is preserved:
+$$
+\sum_{i=1}^p \text{Var}(X_i) \approx \sum_{i=1}^k \text{Var}(Z_i), \quad \text{where } k < p
+$$
+
 ---
 
-- PCA's New Data  
-  - First variable, $Z_1$, is the "first principal component"  
-  - Second variable, $Z_2$, is the "second principal component"  
-  - $p^{th}$ variable, $Z_p$, is the "$p^{th}$ principal component"  
-  - PCA creates the same number of principal components as variables in the original data set  
-    - Where is the reduction?  
-      - Keep only a few?, How many?, Which ones? What criterion?  
-      
-- PCA Theme  
-  - Preserve variability (preserve the variability information)  
-  - New variables are linear combinations from the original variables:  
-  $Z_1 = \phi_{11}X_1 + \phi_{12}X_2 + ... + \phi_{1p}X_p$,
-  $Z_2 = \phi_{21}X_1 + \phi_{22}X_2 + ... + \phi_{2p}X_p$,  
-  to
-  $Z_p = \phi_{p1}X_1 + \phi_{p2}X_2 + ... + \phi_{pp}X_p$
-    - Coefficients change for each principal component
-    
-- Properties of PCs (the new variables)  
-  - Uncorrelated  
-  - Ranking based on variability: $Var(Z_1) > Var(Z_2) > ... > Var(Z_p)$  
-  - Total variability is the same (important for preserving variability)  
-    - $\Sigma^p_{i=1}Var(X_i) = \Sigma^p_{i=1}Var(Z_i)$  
-
-- Data Reduction  
-  - Because of: $Var(Z_1) > Var(Z_2) > ... > Var(Z_p)$  
-    - Some variables will essentially have 0 variance  
-    - Drop the lowest varying variables (b/c it is not useful, all the values in the column are ~ the same)  
-    - Left with just $k < p$ variables  
-  - Total variability is preserved  
-    - $\Sigma^p_{i=1}Var(X_i) \cong \Sigma^k_{i=1}Var(Z_i)$  
-    
 - Performing PCA  
   - Need to estimate all the coefficients (loadings). 
     - $\phi_{11}, \phi_{21}, \phi_{pp}$  
