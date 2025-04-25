@@ -81,50 +81,39 @@ $$
 \sum_{i=1}^p \text{Var}(X_i) \approx \sum_{i=1}^k \text{Var}(Z_i), \quad \text{where } k < p
 $$
 
----
 
-- Performing PCA  
-  - Need to estimate all the coefficients (loadings). 
-    - $\phi_{11}, \phi_{21}, \phi_{pp}$  
-  - Need to know the variances  
-    - For making the reduction  
-  - All estimates are obtained from either  
-    - The covariance matrix  
-    - The correlation matrix (SOP)  
-  - Covariance matrix  
-    - Data are centered by not scaled (subtracting mean from each value)  
-  - Correlation matrix  
-    - Data are centered and scaled (analysis on essentially the z-scores)  
-  - From the correlation or covariance matrix, we can obtain its:  
-    - Eigenvectors (p total)  
-    - Eigenvalues (p total)  
-    - Each eigen value has an associated eigenvector  
+## Performing PCA
 
-- Eigenvectors  
-  - Each eigenvector contains the coefficients for their corresponding PC variable  
-  - Example:  
-    - $1^{st}$ Eigenvector will be ($\phi_{11}, \phi_{21}, ..., \phi_{pp}$)  
-    - Used to create $Z_1 = \phi_{11}X_1 + \phi_{12}X_2 + ... + \phi_{1p}X_p$  
-  - Eigenvector Matrix: Provides all the coefficients for all of the PC's (columnwise)  
-    - Transpose loading matrix and matrix multiply by old variables --> get p rows  
-    
-- Eigenvalues  
-  - Provide the variances of the new variables  
-  - Sometimes expressed in matrix form  
-  -*p* eigenvalues total  
-  
-- Scree Plots  
-  - Since eigenvalues are the variances:  
-    - Plot the eigenvalues in order  
-    - or Plot the eigenvalues over the sum of the eigenvalues  
-      - Proportion of variance for each PC  
-      - Plot cumulative proportion of variance
+### From Data to Components
+- PCA requires:
+  - Centering (and possibly scaling) the data
+    - Data is centered by subtracting the mean from each value.
+  - Computing either:
+    - Covariance matrix (if unscaled)
+    - Correlation matrix (if standardized, this is 'standard operating procedure')
+      - Scaling leads to analysis essentially on the z-scores.
+- From the matrix, extract:
+  - **Eigenvectors**: the weights (loadings) used to compute $Z_i$
+  - **Eigenvalues**: the variance of each $Z_i$
+  - Each eigenvalue has an associated eigenvector. There are $p$ of each.
 
-- Common Strategies for Reduction  
-  - Keep components up to a cumulative percentage threshold (80-90%, sometimes arbitraily picked)  
-  - Keep just the first three or four to visualize in EDA  
-  - Look for "elbow" in the scree plot  
-  
+### Matrix View
+- Eigenvector for $Z_1$ is $(\phi_{11}, \phi_{12}, \dots, \phi_{1p})$
+- **Eigenvector matrix** contains all loading coefficients. Eigenvectors are arranged columnwise.
+  - Transpose loading matrix and matrix multiply by old variables to get $p$ rows 
+- **Eigenvalues** quantify the variance of each principal component. Sometimes they are expressed in matrix form.
+
+### Scree Plots and Component Selection
+- Scree plots
+  - Plot eigenvalues arranged in order
+  - Plot variance proportions ($\frac{\text{eigenvalue}_i}{\text{sum of eigenvalues}}$) arranged in order
+  - Plot cumulative proportion of variance
+- Strategies for reduction:
+  - Keep enough PCs to explain ~80–90% of the variance (may be arbitraily picked)
+  - Keep first 3–4 for visualization in EDA
+  - Look for an “elbow” in the scree plot
+
+--- 
 
 **PCA Applications**  
 
