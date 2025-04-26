@@ -113,60 +113,52 @@ $$
   - Keep first 3–4 for visualization in EDA
   - Look for an “elbow” in the scree plot
 
---- 
+ 
+## Applications of PCA
 
-**PCA Applications**  
+### Simplify Regression and Classification
+- Use PCA on predictors only
+- New predictors are uncorrelated (no multicollinearity)
+- Reduces dimensionality (i.e data reduction, fewer predictors)
+- Sometimes confusing:
+  - PCA is unsupervised!
+  - PCs may not align with response variable better than the original variables.
+  - Can be thought of as a processing step rather than a predictive tool.
 
-- Simplify regression and classification problems  
-  - Only apply PCA to the predictors  
-  - No multicollinearity, since new variables are uncorrelated    
-  - Fewer predictors (data reduction)   
-- Source of confusion  
-  - PCA is not supervised (but used within)
-  - Can be thought of as a processing step (not a predictive tool)  
-  - No guaranteee that PCs will correlate to the response better than the original variables  
-  
-- PCA in Classification EDA (gives you a sense if your predictors will work well at all)  
-  - Not used in the model itself  
-  - What if project requires use of original predictors (e.g. you need to interpret)  
+### PCA for EDA in Classification
+
+#### Purpose
+- To get a sense if the predictors will work well, not for use in the model itself.
+- When to use feature selection instead:
+  - If project requires use of original predictors (e.g. must be interpretable)  
   - Large number of predictors  
-  - Feature selection is the plan  
-  - Strategy  
-    - Plot first few PCs in a scatter plot  
-    - Examine if separation occurs  
-    - Sanity check when assessing models later (can help you determine if you expect to see good prediction accuracy or not in the model with your original predictors)  
-    - When no separation occurs  
-      - Indicates predictors are not relevant OR predictors may still be important (nonlinear boundaries)  
-    - Consider nonlinear data reduction (not PCA, which is linear)  
-      - Add complexity if separation is seen
 
-- PCA Image Compression  
-  - Data are too big to transfer (send over email, etc.)  
-  - Want to make the image smaller  
-    - Maintain resolution  
-  - Data reduction solves this  
-    - Need to convert reduced data set back to original scale  
-  - Data reconstruction  
-  
-- Common Pitfalls / Concerns  
-  - Regression  
-    - Accidentally using the response in the PCA  
-    - Results will be bogus  
-  - MLR and logistic regression  
-    - Interpretation coefficients are difficult  
-    - Use eigenvectors to summarize  
-    - There are strategies  
-  - PCA is effected by outliers  
-  - Really shouldn't include categorical variables  
-    - Arbitrary process if converting categorical to numeric  
-  - Computational time  
-    - Can be slow when variables are extremely high  
-    - Fast versions that compute first few  
-  - "Information" preservation is variance only  
-    - No other information is used  
-    - Allows to visualize "global" structure of data (linear separation)  
-    - Data points closer together in the PC space does not imply that they are close in the original space  
-    
+#### Strategy
+- Plot PCs to visualize group separation
+- If separation exists, your predictors may work well
+- If not:
+  - Predictors may be irrelevant
+  - Or, nonlinear methods may be required
+    - Use nonlinear data reduction or add complexity
+- Use as a sanity check for assessing models. Should good prediction accuracy be expected from those variables.
+
+### Image Compression
+- Reduce the number of pixels (variables)
+- PCA compresses the data
+- Reconstruct image from fewer components
+
+### Common Pitfalls
+
+- Do **not** use the response variable in PCA
+- Coefficient interpretation is difficult
+  - Strategies exist. Use eigenvectors to summarize. 
+- PCA is sensitive to **outliers**
+- Categorical variables are problematic
+- Only **variance** is preserved  
+  - Allows to visualize "global" structure of data (i.e. linear separation)  
+  - When data points are closer together in PC space, it does not imply that they are close in the original space  
+
+---    
     
 **Nonlinear Data Reduction**  
 
