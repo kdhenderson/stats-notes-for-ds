@@ -72,57 +72,55 @@ Within-cluster metric:
   - Mahalanobis distance
   - Manhattan distance
 
----
 
-**Hierarchical Clustering**  
+## Hierarchical Clustering
 
-- Does not require specifying $k$ in advance  
-- Starts by assuming each observation is a cluster  
-- Fuses observations together to create more "coarse" clusters  
-- Provides dendrogram tree to visualize. 
+- Does not require specifying $k$ in advance.
+- Begins with each observation as its own cluster.
+- Fuses observations to create progressively coarser clusters.
+- Outputs a dendrogram tree to visualize clustering.
 
-- Linkage  
-  - Distance is used as dissimilarity metric for observations  
-  - Dendrogram fuses  
-    - Two points  
-    - One cluster / one point  
-    - Two clusters  
-  - Dissimilarity metric needed for clusters called "linkage"  
+### Linkage
+- Distance (dissimilarity) metric is used between observations.
+- Clusters can fuse:
+  - Two points
+  - One cluster and one point
+  - Two clusters
+- Dissimilarity metric between clusters is called linkage.
+
+### Common Linkage Types
+1. Complete  
+2. Single  
+3. Average  
+4. Centroid  
+
+#### Complete Linkage
+- Maximal inter-cluster dissimilarity.
+- Compute all pairwise distances between cluster A and cluster B.
+- Record the **largest** pairwise distance between the clusters.
+- Merge clusters with the **smallest maximum** distance (i.e. smallest dissimilarity).
+ 
+#### Single Linkage
+- Minimal inter-cluster dissimilarity.
+- Compute all pairwise distances between cluster A and cluster B.
+- Record the **smallest pairwise** distance between the clusters.
+- Merge clusters with the **smallest minimum** distance (i.e. smallest dissimilarity). 
+- Can produce trailing dendrograms with single observations (i.e. many single observations fused with clusters). 
+
+#### Average Linkage
+- Mean inter-cluster dissimilarity.
+- Compute all pairwise distances between cluster A and cluster B.
+- Record the **mean** distance between clusters.
+- Repeat for all pairwise clusters available.
+- Merge clusters with the **smallest average**. 
   
-- Four Common Linkage Types  
-   1. Complete  
-   2. Single  
-   3. Average  
-   4. Centroid  
-
-- Complete Linkage  
-  - Maximal intercluster dissimilarity  
-  - Compute all pairwise distances between cluster A and cluster B  
-  - Record the largest pairwise distance between the clusters  
-  - Repeat for all pairwise clusters available  
-  - Merge clusters with smallest dissimilarity  
-
-- Single Linkage  
-  - Minimal intercluster dissimilarity  
-  - Compute all pairwise distances between cluster A and cluster B  
-  - Record the smallest pairwise distance between the clusters  
-  - Repeat for all pairwise clusters available  
-  - Merge clusters with smallest dissimilarity  
-  - Can produce many single observation fused with clusters (trailing dendrogram)  
+#### Centroid Linkage
+- Mean intercluster dissimilarity
+- Distance between cluster centroids.
+- Compute centroids of each cluster.
+- Merge clusters whose centroids are **closest** (i.e. have the smallest distance). 
   
-- Average Linkage  
-  - Mean intercluster dissimilarity  
-  - Compute all pairwise distances between cluster A and cluster B  
-  - Record the mean distance between clusters  
-  - Repeat for all pairwise clusters available  
-  - Merge clusters with the smallest average  
-  
-- Centroid Linkage  
-  - Mean intercluster dissimilarity  
-  - Compute centroids for each cluster  
-  - Calculates distances between centroids   
-  - Merge clusters with the smallest distance  
-  
+---  
   
 **Considerations for Either Tool**   
 
