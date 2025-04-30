@@ -119,44 +119,42 @@ Within-cluster metric:
 - Distance between cluster centroids.
 - Compute centroids of each cluster.
 - Merge clusters whose centroids are **closest** (i.e. have the smallest distance). 
+ 
   
----  
-  
-**Considerations for Either Tool**   
+## Considerations for Either Tool
 
-- Key Considerations  
-  - Distance or something else?  
-  - Standardize?  
-  - Linkage type? (hierarchical)  
-  - Number of clusters?  
+### Key Considerations
+- Which dissimilarity metric? (distance or correlation)
+- Should variables be standardized?
+- Which linkage type? (for hierarchical)
+- How many clusters? 
   
-- Correlation Dissimilarity (versus distance metric)  
-  - Observations 1 and 2 are far apart in distance  
-  - Observations 1 and 2 are "close" in terms of correlation 
-    - Pattern is similar  
-  - Shopper example: distance -> heavy vs light shoppers, correlation -> similar items  
+### Correlation vs. Distance
+- Observations may be far apart by distance but close in terms of **correlation**.
+- Example:
+  - Distance metric: heavy vs. light shoppers.
+  - Correlation metric: shoppers buying similar items. 
   
-- Standarization  
-  - If left unstandardized:  
-    - Large scale variables influence clustering more  
-  - If standardized:  
-    - Variables have more equal influence  
-    - Recommend unless strong reason not to  
+### Standardization
+- Without standardization: variables with large scales dominate clustering.
+- With standardization: each variable contributes equally.
+- Recommendation: Standardize unless there is a strong reason not to.
+
+### Choice of Linkage
+- Results vary by linkage choice.
+- **Complete** and **average linkage**:
+  - Commonly used.
+  - Easier-to-read dendrograms.
+- **Single linkage**:
+  - Good for finding outliers.
+  - Clusters may be loosely connected, i.e. observations within clusters may be less similar that you would like. 
+      
+### Choosing the Number of Clusters
+- Apply clustering with different values of $k$.
+- Compute cluster validity metrics.
+- Plot metric vs. cluster size to guide decision.
     
-- Choice of Linkage  
-  - Results will vary  
-  - Complete and average  
-    - Commonly used  
-    - Easier to read dendrograms  
-  - Single linkage  
-    - Consider when searching for outliers  
-    - Observations within clusters may be less similar that you would like  
-    
-- How many clusters?  
-  - General strategy  
-    - Apply clustering tool multiple times with different $k$  
-    - Compute a cluster validity metric  
-    - Plot validity metric vs. cluster size  
+--- 
     
 - Cluster Validity Metrics  
   - Internal cluster validity  
