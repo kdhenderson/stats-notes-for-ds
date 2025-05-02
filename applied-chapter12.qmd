@@ -153,33 +153,42 @@ Within-cluster metric:
 - Apply clustering with different values of $k$.
 - Compute cluster validity metrics.
 - Plot metric vs. cluster size to guide decision.
+   
     
---- 
-    
-- Cluster Validity Metrics  
-  - Internal cluster validity  
-    - No ground truth is available  
-    - Estimate within- vs. between-cluster variation  
-  - Common metrics  
-    - Silhouette statistic  
-    - Dunn index  
-    - Cubic clustering criterion (SAS)  
+## Cluster Validity Metrics
 
-- Silhouette Statistic  
-  - for each obs, calculate avg dissimilarity within cluster  
-  - for each obs, calculate min avg similarity between a cluster  
-  - statistic is calculated on each of the $i$ observations  
-    - subtracts within from between divided by the max
-  - average silhouette values for a general score for the clustering assignment  
+### Internal Cluster Validity
+- No ground truth available.
+- Estimate within-cluster vs. between-cluster variation.
+    
+### Common Metrics
+- Silhouette statistic
+- Dunn index
+- Cubic clustering criterion (SAS)
+
+#### Silhouette Statistic
+For each observation:
+- Calculate average dissimilarity **within** its cluster.
+- Calculate the minimum average dissimilarity (my notes said similarity) to a **different** cluster.
+- Silhouette value for observation $i$:
+  $$
+  \text{Silhouette}_i = \frac{\text{between} - \text{within}}{\max(\text{between}, \text{within})}
+  $$
+- Average silhouette values summarize overall clustering quality.
+
+#### Dunn Index
+- Ratio:
+  $$
+  \frac{\text{minimum distance between points in different clusters}}{\text{maximum distance between points within the same cluster}}
+  $$
+- Higher Dunn index indicates stronger cluster separation.  
+
+### Additional Metrics
+- Davies-Bouldin index (DB)
+- Maulik-Bandyopadhyay index (MB)
+- Saitta score function (SF)  
   
-- Dunn Index  
-  - creates a ratio: shortest distance b/t 2 points not in same cluster / longest distance b/t 2 points in the same cluster  
-  - like silhouette, the larger the value, the stronger the evidence of well defined clusters  
-  
-- Additional Metrics  
-  - Davies-Bouldin index (DB)  
-  - Maulik-Bandyopadhyay index (MB)  
-  - Saitta score function (SF)  
+---
   
 - The Clustering Challenge  
   - Results will vary based on your choices  
