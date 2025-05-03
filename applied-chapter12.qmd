@@ -187,15 +187,16 @@ For each observation:
 - Davies-Bouldin index (DB)
 - Maulik-Bandyopadhyay index (MB)
 - Saitta score function (SF)  
+ 
+  
+## The Clustering Challenge
+
+- Results depend on choices made (distance, standardization, linkage).
+- No perfect method for determining cluster size.
+- Avoid interpreting a single result as absolute truth.
+- Examine multiple clustering solutions for general themes.
   
 ---
-  
-- The Clustering Challenge  
-  - Results will vary based on your choices  
-  - No one method is perfect for determining cluster size  
-  - Should never interpret one result as the absolute truth  
-  - Consider examining multiple results (for general theme) before making a decision  
-  
 
 **Heatmaps**  
   
