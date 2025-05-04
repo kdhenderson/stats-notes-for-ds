@@ -196,28 +196,34 @@ For each observation:
 - Avoid interpreting a single result as absolute truth.
 - Examine multiple clustering solutions for general themes.
   
----
 
-**Heatmaps**  
-  
-- Need for Heatmaps  
-  - Dendrogram and cluster assignments  
-    - No information on the data used  
-  - Helpful to see the data in addition  
-    - Great sanity check  
+## Heatmaps
 
-- A plot of raw or standardized numeric variables  
-  - Data matrix of observations  
-  - Summary matrix (means correlations)  
-- Plot is a grid of rectangles color coded by the numeric value  
-- Clustering (hierarchical) can be applied to the rows and columns to investigate  
+### Motivation
+- Dendrograms and cluster assignments do not show the underlying data.
+- Heatmaps offer a visual check and help interpret clusters.
 
-- Clustering in Practice  
-  - Main purpose is to identify observations that are closer together (distance or correlation)  
-    - "Observation" can be defined in many ways  
-  - Ideas  
-    - cluster correlation statistics
-    - clustering variables (clustering on the columns instead of rows, by transposing dataset). 
-  
-  
+### Heatmap Details
+- Plot of raw or standardized numeric variables.
+- Can represent:
+  - Data matrices of observations.
+  - Summary matrices (e.g. means, correlations).
+- Grid of rectangles colored by numeric values.
+
+
+### Heatmaps with Clustering
+- Hierarchical clustering can be applied to rows and/or columns.
+- Helps investigate patterns among:
+  - Observations (rows)
+  - Variables (columns) 
+
+
+## Clustering in Practice
+
+- Goal: identify groups that are closer together (distance or correlation).
+- Definition of 'observation' varies depending on context.
+
+Possible uses:
+- Clustering correlation statistics.
+- Clustering variables (i.e. clustering on the columns instead of rows by transposing the data matrix).
       
