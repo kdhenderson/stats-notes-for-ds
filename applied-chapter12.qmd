@@ -50,6 +50,8 @@ Within-cluster metric:
 
 - The goal is to minimize the overall within-cluster variability.
 - Note: Within-cluster variability can be arbitrarily minimized.
+> ⚠️ *Note: Within-cluster variability can always be minimized by increasing $k$, so the big question is: how many clusters are actually present?*
+
  
 ### Challenges in Minimizing $W(C_k)$
 - Large number of possible assignments.
@@ -169,7 +171,7 @@ Within-cluster metric:
 #### Silhouette Statistic
 For each observation:
 - Calculate average dissimilarity **within** its cluster.
-- Calculate the minimum average dissimilarity (my notes said similarity) to a **different** cluster.
+- Calculate the minimum average dissimilarity to a **different** cluster.
 - Silhouette value for observation $i$:
   $$
   \text{Silhouette}_i = \frac{\text{between} - \text{within}}{\max(\text{between}, \text{within})}
@@ -191,10 +193,12 @@ For each observation:
   
 ## The Clustering Challenge
 
-- Results depend on choices made (distance, standardization, linkage).
-- No perfect method for determining cluster size.
-- Avoid interpreting a single result as absolute truth.
-- Examine multiple clustering solutions for general themes.
+- Results depend on choices made (distance metric, standardization, linkage type).
+- No single method is perfect for determining the number of clusters.
+- Avoid interpreting any one result as absolute truth.
+- Examine multiple clustering solutions to identify general patterns.
+- Simulation studies show clustering performance depends on cluster separation, noise, and structure.
+- Issues like sub-clusters or overlapping groups can lead to incorrect $k$ estimates or misleading assignments.
   
 
 ## Heatmaps
@@ -225,5 +229,7 @@ For each observation:
 
 Possible uses:
 - Clustering correlation statistics.
-- Clustering variables (i.e. clustering on the columns instead of rows by transposing the data matrix).
+- Clustering variables (i.e., treating variables as the observations by transposing the data matrix).
+  - Variables often cluster based on strong positive correlations.
+
       
