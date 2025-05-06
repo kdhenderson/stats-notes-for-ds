@@ -290,9 +290,9 @@ tukey_result = TukeyHSD(fit)
 tukey_result
 ```
 
----
 
-```{r contrasts}
+## 7. Contrasts
+```{r}
 # contrast of the average of the mean of 2 groups of 2
 
 library(emmeans)
@@ -323,7 +323,9 @@ CIlower
 CIupper
 ```
 
-```{r nonParametricTests}
+
+## 8. Non-Parametric Tests
+```{r}
 
 # RANK-SUM TEST (for two samples)
 
@@ -377,7 +379,11 @@ p_value_one_tailed
 
 ```
 
-```{r linearCorrelation}
+
+## 9. Correlation and Simple Linear Regression
+
+### Correlation
+```{r}
 # FIND PEARSON'S R
 dataset = data.frame(response = c(1,2,3,4,5), explanatory = c(1,2,3,4,5))
 
@@ -391,7 +397,7 @@ plot(response, explanatory)
 cor(dataset)
 
 # or
-cor (y = response, x = explanatory)
+cor(y = response, x = explanatory)
 
 
 # HYPOTHESIS TEST (t-test) FOR PEARSON'S R
@@ -404,7 +410,8 @@ cor.test(dataset$explanatory, dataset$response)
 
 ```
 
-```{r simpleLinearRegression}
+### Simple Linear Regression
+```{r}
 # HYPOTHESIS TEST (t-test) FOR REGRESSION
 # lm - linear model(response ~ explanatory, data)
 fit = lm(response ~ explanatory, data = dataset)
@@ -506,7 +513,9 @@ cat("This means that", round(R_squared * 100, 2), "% of the variability in Respo
 
 ```
 
-```{r residualPlots}
+
+## 10. Residual Analysis
+```{r}
 library(car) # for rstudent(), studentized residuals
 
 # Fit a linear model on the data
@@ -572,7 +581,7 @@ curve(dnorm(x, mean = mean(residuals(fit)), sd = sd(residuals(fit))), col = "blu
 
 ```
 
-```{r plotRegressionLine}
+```{r}
 
 # PLOT THE REGRESSION LINE
 
@@ -627,7 +636,9 @@ ggplot(dataset, aes(x = explanatory, y = response)) +
 
 ```
 
-```{r backTransformation}
+
+## 11. Back-Transformation and Prediction
+```{r}
 
 # Extract regression parameters
 intercept = coef(fitLogLog)[1]
@@ -699,8 +710,11 @@ pf(fstat, dfn, dfd, lower.tail = FALSE)
 # H0: Linear regression model has good fit. (No lack of fit.)
 # HA: The SMM fits better. (LRM is lacking fit.)
 # There is BLANK evidence at the alpha = 0.05 level of significance to suggest that the linear regression model has a lack of fit compared to the separate means model (p- value = XYZ from an extra-sum-of-squares F-test for lack of fit).
+```
 
 
+## 12. Multiple Linear Regression
+```{r}
 # MULTIPLE LINEAR REGRESSION - ONLY NUMERICAL VARIABLES, SAME SLOPES
 
 # subset the dataframe for only the columns of interest
@@ -768,8 +782,10 @@ confint(fit2)
 # plot the residuals to check assumptions
 plot(fit)
 
+```
 
-# VARIABLE SELECTION
+## 13. Variable Selection
+```{r}
 # install.packages("olsrr")
 library(olsrr)
  
