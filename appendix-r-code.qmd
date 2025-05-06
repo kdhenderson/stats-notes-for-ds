@@ -196,10 +196,10 @@ powerdf %>% ggplot(aes(x = samplesizes, y = powerholder)) +
 ```
 
 
----
 ## 5. One-Way ANOVA and Extra Sum of Squares
 
-```{r anova}
+### ANOVA
+```{r}
 # one-way ANOVA (make sure groups is a factor variable)
 fit = aov(response ~ groups, data = dataset)
 summary(fit)
@@ -210,7 +210,8 @@ qf(0.05, dfn, dfd, lower.tail = FALSE)
 
 ```
 
-```{r extra_sum_of_squares}
+### Extra Sum of Squares
+```{r}
 # one-way ANOVA first (make sure groups is a factor variable)
 fit = aov(response ~ groups, data = dataset)
 summary(fit)
@@ -266,7 +267,9 @@ cat("F-Statistic:", fstat, "\n")
 cat("p-Value F-test:", p_value, "\n")
 ```
 
-```{r multipleComparisons}
+
+## 6. Multiple Comparisons
+```{r}
 
 # conduct a pairwise comparison with Tukey-Kramer multiple comparison correction
 library(multcomp)
@@ -286,6 +289,8 @@ tukey_half$statistics$MSD
 tukey_result = TukeyHSD(fit)
 tukey_result
 ```
+
+---
 
 ```{r contrasts}
 # contrast of the average of the mean of 2 groups of 2
