@@ -6,9 +6,24 @@ execute:
   eval: false
 ---
 
+Quick Navigation:
+- [1. Data Import & Summary Statistics](#1-data-import--summary-statistics)
+- [2. Visualization & Assumption Checks](#2-visualization--assumption-checks)
+- [3. Permutation Test](#3-permutation-test)
+- [4. t-Tests & Power Analysis](#4-t-tests--power-analysis)
+- [5. ANOVA & Extra Sum of Squares](#5-anova--extra-sum-of-squares)
+- [6. Multiple Comparisons](#6-multiple-comparisons)
+- [7. Contrasts](#7-contrasts)
+- [8. Non-Parametric Tests](#8-non-parametric-tests)
+- [9. Correlation & Simple Regression](#9-correlation--simple-regression)
+- [10. Residual Analysis](#10-residual-analysis)
+- [11. Log-Log Models & Back-Transformation](#11-log-log-models--back-transformation)
+- [12. Multiple Linear Regression (MLR)](#12-multiple-linear-regression-mlr)
+- [13. Variable Selection](#13-variable-selection)
+
 ::: {.appendix}
 
-## 1. Importing and Summary
+## 1. Data Import & Summary Statistics
 
 ```{r}
 library(tidyverse)
@@ -27,57 +42,71 @@ dataset %>% group_by(explanatory) %>%
 ```
 
 
-## 2. Visualization and Assumption Checks
+## 2. Visualization & Assumption Checks
 
+### 2A. Base R Plots
 ```{r}
-# simple base R plots for checking assumptions
-hist(dataset$numericalColumn)
-qqnorm(dataset$numericalColumn)
-boxplot(dataset$numericalColumn, horizontal = TRUE)
+# Quick checks of normality and spread
+hist(dataset$numericalColumn, main = "Histogram", xlab = "Numerical Variable")
+qqnorm(dataset$numericalColumn, main = "QQ Plot")
+qqline(dataset$numericalColumn)
+boxplot(dataset$numericalColumn, horizontal = TRUE, main = "Boxplot")
 
 
-# make plots using ggplot2 and patchwork
+# Subset Comparison by Group
+
+# Replace `level1` and `level2` with actual values
+level1 = "A"
+level2 = "B"
+
+par(mfrow = c(2, 3))  # 2 rows, 3 columns
+
+hist(subset(dataset, explanatory == level1)$response, main = paste("Histogram -", level1), xlab = "Response")
+boxplot(subset(dataset, explanatory == level1)$response, main = paste("Boxplot -", level1), horizontal = TRUE)
+qqnorm(subset(dataset, explanatory == level1)$response, main = paste("QQ Plot -", level1))
+qqline(subset(dataset, explanatory == level1)$response)
+
+hist(subset(dataset, explanatory == level2)$response, main = paste("Histogram -", level2), xlab = "Response")
+boxplot(subset(dataset, explanatory == level2)$response, main = paste("Boxplot -", level2), horizontal = TRUE)
+qqnorm(subset(dataset, explanatory == level2)$response, main = paste("QQ Plot -", level2))
+qqline(subset(dataset, explanatory == level2)$response)
+
+```
+
+### 2B. ggplot2 + Patchwork
+```{r}
+# library(ggplot2) # in tidyverse package
 library(patchwork)
 
-# make a histogram for each treatment group
+# Histogram faceted by group
 hist = dataset %>% 
-  group_by(explanatory) %>% 
+  group_by(explanatory) %>%  # this line may not be needed
   ggplot(aes(x = response)) +
   geom_histogram(bins = 15) + 
   # facet_wrap(~explanatory, scales = "free_y") +
   facet_wrap(~explanatory) +
-  ggtitle("Histogram of ResponseVariable") +
+  ggtitle("Histogram of Response by Group") +
   theme_bw()
 
-# make a qqplot for each treatment group
+# QQ plots by group
 qq = dataset %>%
-  group_by(explanatory) %>% 
+  group_by(explanatory) %>%  # may not need
   ggplot(aes(sample = response)) +
   geom_qq() +
   facet_wrap(~explanatory) +
-  ggtitle("QQ Plots of ResponseVariable") +
+  ggtitle("QQ Plots of Response by Group") +
   theme_bw()
 
-# make a boxplot for each treatment group
+# Boxplot by group
 box = dataset %>% 
-  group_by(explanatory) %>% 
+  group_by(explanatory) %>%  # may not need
   ggplot(aes(y = response, x = explanatory)) +
   geom_boxplot() +
-  ggtitle("Boxplot of ResponseVariable") +
+  ggtitle("Boxplot of Response by Group") +
   theme_bw()
 
-# arrange histogram above qqplot, then next to boxplot using patchwork
+# Combine plots using patchwork (arrange histogram above qqplot, then next to boxplot)
 (hist / qq) | box
-
-
-# simpler way for subset of data
-par(mfrow=c(2,2))
-hist(subset(dataset, explanatory==level1)$response, xlab='Response, Level 1', main='Level 1')
-box()
-hist(subset(dataset, explanatory==level2)$response, xlab='Response, Level 2', main='Level 2')
-box()
-qqnorm(subset(dataset, explanatory==level1)$response)
-qqnorm(subset(dataset, explanatory==level2)$response)
 
 ```
 
