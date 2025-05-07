@@ -115,12 +115,12 @@ box = dataset %>%
 
 ```{r}
 
-# calculate the observed difference in means
+# Observed difference in means
 xbars = dataset %>% group_by(explanatory) %>% summarize(mean = mean(response))
-xbarGrp1minusGrp2 = xbars[2,2] - xbars[1,2] # observed difference xbarGrp1 - xbarGrp2 = fillInValue
+xbarGrp1minusGrp2 = xbars[2,2] - xbars[1,2]
 xbarGrp1minusGrp2
 
-# build the distribution
+# Permutation loop to build the distribution
 xbarDiffHolder = numeric(10000)
 
 for (i in 1:10000){
@@ -135,6 +135,7 @@ for (i in 1:10000){
   xbarDiffHolder[i] = xbarGrp1minusGrp2$mean
 }
 
+# Plot permutation distribution
 df = data.frame(xbarDiffs = xbarDiffHolder)
 
 df %>% ggplot(mapping = aes(x = xbarDiffs)) + 
@@ -142,7 +143,7 @@ df %>% ggplot(mapping = aes(x = xbarDiffs)) +
   ggtitle("Permutation Distribution of the Difference of Sample Means") +
   xlab("xbarGrp1 - xbarGrp2")
 
-# calculate the p-value
+# Calculate p-value
 num_more_extreme = sum((abs(xbarDiffHolder)) >= abs(xbarGrp1minusGrp2))
 
 pvalue = num_more_extreme / 10000
@@ -151,64 +152,70 @@ pvalue
 ```
 
 
-## 4. t-tests and Power Analysis
+## 4. $t$-Tests and Power Analysis
 
+### 4A. Basic $t$-Tests
 ```{r}
-# critical value for two-sided, two-sample test
+# Find the critical value for two-sided, two-sample test
 qt(0.975, df-2)
 
-# one-sample t-test (df-1)
+# One-sample t-test (df-1)
 t.test(x=dataset, mu = underTheNull, conf.int = "TRUE", alternative = "two.sided")
 
-# paired (one-sample) t-test (df-1)
+# Paired (one-sample) t-test (df-1)
 t.test(x = dataset$explantoryGrp2, y = dataset$explantoryGrp1, paired = TRUE) # this is probably easiest
 #OR
 t.test(response ~ explanatory, data = dataset, paired = TRUE) # alternative = "two-sided", mu = 0, conf.level = 0.95, var.equal(doesn't apply, one-sample)
 # see the order of the treatment groups
 levels(dataset$explanatory)
 
-# two-sample t-test with equal variance
+# Two-sample t-test with equal variance
 results = t.test(response ~ explanatory, data = dataset, var.equal = TRUE, alternative = "two.sided")
 results
 
-# two-sample t-test with unequal variance - Welch's
+# Two-sample t-test with unequal variance - Welch's
 results = t.test(response ~ explanatory, data = dataset, var.equal = FALSE, alternative = "two.sided")
 results
 
-# find a two-sided p-value
-pt(abs(tstat), df,lower.tail = FALSE) * 2
-
-# get the degrees of freedom
-results = t.test()
+# Extract test statistic and degrees of freedom
+results = t.test(response ~ explanatory, data = dataset)
+tstat = results$statistic
 df = results$parameter
 
+# Manual two-sided p-value
+pt(abs(tstat), df,lower.tail = FALSE) * 2
 
-# COMPUTE POWER OF A T-TEST
-power.t.test(n = nPerGrp, delta = effectSize, sd = sd, sig.level = alpha, power = NULL, 
-             type = "one.sample", alternative = "one.sided")
+```
+
+### 4B. Power Analysis
+```{r}
+
+# Compute the power of a t-test
+power.t.test(n = nPerGrp, delta = effectSize, sd = sd, sig.level = alpha, power = NULL, type = "one.sample", alternative = "one.sided")
 # or "two.sample", can also just leave power (or unknown variable off)
 
 # Find sample size to get 80% power (leave n blank)
-power.t.test(n = , delta = effectSize, power = .8, sd = s, sig.level = .05,
-             type = "one.sample",alternative = "one.sided")
+power.t.test(n = , delta = effectSize, power = .8, sd = s, sig.level = .05, type = "one.sample",alternative = "one.sided")
 
 # What if you have different sample sizes in each of two samples? (uses Cohen's D)
 library(pwr)
 pwr.t2n.test(n1 = n1, n2 = n2, d = effectSize/stdev, sig.level = 0.05, alternative = "two.sided") # alternative = "greater"
 
-# an example for power calculation with unequal sd
+# Power calculation with unequal sd
 power.welch.t.test(n = n, delta = effectSize, power = , sd1 = s1, sd2 = s2, alternative = "two-sided")
 
+```
 
-# MAKE A POWER CURVE
+### 4C. Power Curve
+```{r}
+
 # Loop to calculate power for sample sizes from nlower to nhigher
 powerholder = c()
 samplesizes = seq(nlower, nhigher, by = 1)
 
 for(i in 1:length(samplesizes))
 {
-  powerholder[i] = power.t.test(n = samplesizes[i], delta = effectSize, sd = s, sig.level = .05,
-                                type = "one.sample", alternative = "one.sided")$power
+  powerholder[i] = power.t.test(n = samplesizes[i], delta = effectSize, sd = s, sig.level = .05, type = "one.sample", alternative = "one.sided")$power
 }
 
 # Create a data frame
@@ -222,8 +229,10 @@ powerdf %>% ggplot(aes(x = samplesizes, y = powerholder)) +
   xlab("Sample Sizes") +
   ylim(0.75, 1.0) +
   theme_bw()
+
 ```
 
+---
 
 ## 5. One-Way ANOVA and Extra Sum of Squares
 
