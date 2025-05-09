@@ -232,11 +232,10 @@ powerdf %>% ggplot(aes(x = samplesizes, y = powerholder)) +
 
 ```
 
----
 
 ## 5. One-Way ANOVA and Extra Sum of Squares
 
-### ANOVA
+### 5A. One-Way ANOVA
 ```{r}
 # one-way ANOVA (make sure groups is a factor variable)
 fit = aov(response ~ groups, data = dataset)
@@ -248,7 +247,7 @@ qf(0.05, dfn, dfd, lower.tail = FALSE)
 
 ```
 
-### Extra Sum of Squares
+### 5B. Extra Sum of Squares Test
 ```{r}
 # one-way ANOVA first (make sure groups is a factor variable)
 fit = aov(response ~ groups, data = dataset)
@@ -273,7 +272,7 @@ dfTotal = sum_fit_reduce[[1]]["Residuals", "Df"]
 # extract the sum of squares for the error
 ssRed = sum_fit_reduce[[1]]["Residuals", "Sum Sq"]
 
-# BYOA table calculations
+# BYOA table calculations (F-test)
 alpha = 0.05 
 dfn = dfTotal - dfd
 ssModel = ssRed - ssFull
@@ -303,12 +302,14 @@ cat("Mean Square Model (MS explained):", msModel, "\n")
 cat("Critical Value:", critical_value, "\n")
 cat("F-Statistic:", fstat, "\n")
 cat("p-Value F-test:", p_value, "\n")
+
 ```
 
 
 ## 6. Multiple Comparisons
 ```{r}
 
+# Tukey using multcomp
 # conduct a pairwise comparison with Tukey-Kramer multiple comparison correction
 library(multcomp)
 gfit = glht(fit, linfct = mcp(groups = "Tukey")) # put groups variable in
@@ -318,6 +319,7 @@ summary(gfit)
 confint_gfit = confint(gfit)
 confint_gfit
 
+# Tukey using agricolae
 # different way to extract half_width
 library(agricolae)
 tukey_half = HSD.test(fit, 'groups') # put groups variable in
@@ -326,8 +328,13 @@ tukey_half$statistics$MSD
 # this will also give you the adjusted CIs and p-values
 tukey_result = TukeyHSD(fit)
 tukey_result
+
+# Base R version (I haven't used this before, so confirm it is the correct function.)
+TukeyHSD(fit)
+
 ```
 
+---
 
 ## 7. Contrasts
 ```{r}
