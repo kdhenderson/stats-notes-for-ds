@@ -337,56 +337,85 @@ TukeyHSD(fit)
 ---
 
 ## 7. Contrasts
+
+> Only use planned contrasts **after** a significant ANOVA result.
+
+### 7A. Setup and Specifying Contrasts
 ```{r}
-# contrast of the average of the mean of 2 groups of 2
+
+# Contrast of the average of the mean of 2 groups of 2
 
 library(emmeans)
 
-unique(dataset$groups) # find the order of the groups/levels for assigning contrast coefficients
+# Check the order of factor levels - for assigning contrast coefficients
+unique(dataset$groups)
 
 fit = lm(response ~ groups, data = dataset)
 leastsquare = lsmeans(fit, "groups") # put groups variable in
 
-Contrasts = list(Grp1and2vsGrp3and4 = c(.5, .5, -.5, -.5)) # adjust contrast coefficients
+# Define contrast weights: compare (A+B) vs (C+D)
+Contrasts = list(Grp1and2vsGrp3and4 = c(.5, .5, -.5, -.5))
 
+```
+
+### 7B. Run Contrast Tests
+```{r}
+
+# With adjustment
 contrastResultsCorr = contrast(leastsquare, Contrasts, adjust = "sidak") # slightly less conservative than bonferroni
 sum_contrastResultsCorr = summary(contrastResultsCorr)
 sum_contrastResultsCorr
 
+# Without adjustment
 contrastResults = contrast(leastsquare, Contrasts) # no adjustment
 sum_contrastResults = summary(contrastResults)
 sum_contrastResults
 
-# get the critical value
+```
+
+### 7C. Manual Confidence Interval from Estimate
+```{r}
+
+# Find critical value for 95% CI (df from ANOVA)
 criticalVal = qt(0.975, df)
 criticalVal
 
-#CI = estimate ± criticalValue*SE (estimate is the difference of means from the original t-test)
-CIlower = sum_contrastResultsCorr$estimate - criticalVal*sum_contrastResultsCorr$SE
-CIupper = sum_contrastResultsCorr$estimate + criticalVal*sum_contrastResultsCorr$SE
-CIlower
-CIupper
+# CI = estimate ± criticalValue*SE (estimate is the difference of means from the original t-test)
+# Estimate ± margin of error
+estimate = sum_contrastResultsCorr$estimate
+SE = sum_contrastResultsCorr$SE
+
+CI_lower = estimate - criticalVal * SE
+CI_upper = estimate + criticalVal * SE
+
+CI_lower
+CI_upper
+
 ```
 
 
 ## 8. Non-Parametric Tests
+
+### 8A. Wilcoxon Rank-Sum Test (Mann-Whitney)
 ```{r}
 
-# RANK-SUM TEST (for two samples)
+# RANK-SUM TEST (for two independent samples)
 
-# get the EXACT p-value (one-sided test)
+# Get the EXACT p-value (one-sided test)
 wilcox.test(response ~ explanatory, data = dataset, alternative = "less", exact = TRUE)
-# get the exact matching CI (note it is not alpha, it is conf.level)
+# Get the exact matching CI (note it is not alpha, it is conf.level)
 # ‘conf.int’ option provides the HL confidence limits (like SAS)
 wilcox.test(response ~ explanatory, data = dataset, alternative = "two.sided", exact = TRUE, conf.level = 0.90, conf.int = TRUE)
 
-# get the NORMAL APPROXIMATION p-value (with continuity correction)
+# Get the NORMAL APPROXIMATION p-value (with continuity correction)
 wilcox.test(response ~ explanatory, data = dataset, alternative = "less", exact = FALSE, correct = TRUE)
-# get the normal approximation matching CI
+# Get the normal approximation matching CI
 wilcox.test(response ~ explanatory, data = dataset, alternative = "two.sided", exact = FALSE, correct = TRUE, conf.level = 0.90, conf.int = TRUE)
 
+```
 
-# SIGNED-RANK TEST (for paired samples)
+### 8B. Signed-Rank Test (Paired Samples)
+```{r}
 
 # Get the critical value
 critVal = qnorm(0.95)
@@ -399,6 +428,11 @@ signedRank
 # Get the 90% matching CI
 signedRankCI = wilcox.test(dataset$before, dataset$after, paired = TRUE,alternative = "two.sided", exact = FALSE, correct = TRUE, conf.level = 0.90, conf.int = TRUE)
 signedRankCI
+
+```
+
+### 8C. Manual Z-Approximation for Signed-Rank
+```{r}
 
 # This is extra code for the by hand calculations.
 # Extract the test statistic (S)
@@ -424,6 +458,7 @@ p_value_one_tailed
 
 ```
 
+---
 
 ## 9. Correlation and Simple Linear Regression
 
