@@ -458,13 +458,13 @@ p_value_one_tailed
 
 ```
 
----
 
 ## 9. Correlation and Simple Linear Regression
 
-### Correlation
+### 9A. Pearson Correlation
 ```{r}
-# FIND PEARSON'S R
+
+# Get Pearson's r
 dataset = data.frame(response = c(1,2,3,4,5), explanatory = c(1,2,3,4,5))
 
 # make a scatter plot of the data first
@@ -478,6 +478,7 @@ cor(dataset)
 
 # or
 cor(y = response, x = explanatory)
+cor(dataset$response, dataset$explanatory)
 
 
 # HYPOTHESIS TEST (t-test) FOR PEARSON'S R
@@ -485,19 +486,22 @@ cor(y = response, x = explanatory)
 # get the critical value
 qt(0.975,n-2) # df = n-2
 
+# Test for significance + CI
 # get r, the test statistic, p-value, and confidence interval
-cor.test(dataset$explanatory, dataset$response)
+cor.test(dataset$response, dataset$explanatory)
 
 ```
 
-### Simple Linear Regression
+### 9B. Simple Linear Regression
+Fit and Interpret Linear Model
 ```{r}
+
 # HYPOTHESIS TEST (t-test) FOR REGRESSION
 # lm - linear model(response ~ explanatory, data)
 fit = lm(response ~ explanatory, data = dataset)
-summary(fit)
+summary(fit) # slope, intercept, R²
 
-# plot the fitted values
+# Plot the fitted values
 plot(dataset$explanatory, dataset$response, xlab = "explanatory", ylab = "response", main = "analysis", pch = 15)
 lines(dataset$explanatory, fit$fitted.values)
 
@@ -522,8 +526,12 @@ residuals = residuals(fit)
 qqnorm(residuals)
 qqline(residuals, col = "black")
 
+```
 
-# CONFIDENCE INTERVALS FOR THE PARAMETER ESTIMATES (SLOPE AND INTERCEPT)
+### 9C. Confidence & Prediction Intervals
+```{r}
+
+# Confidence interval for the parameter estimates (slope and intercept)
 fit = lm(response ~ explanatory, data = dataset)
 summary(fit)
 confint(fit)
@@ -533,8 +541,10 @@ confint(fit, level = 0.99) # if you want to change alpha
 
 # CONFIDENCE INTERVALS AROUND A PREDICTION
 
-# Create new data for prediction
+# Prediction at a new x value
 new_data = data.frame(response = NA, explanatory = 2.5)
+# or
+# new_data = data.frame(explanatory = 2.5)
 
 # Predict with 95% confidence interval (CI estimating the mean value of y expected at value of x)
 predictionCI = predict(fit, newdata = new_data, interval = "confidence")
@@ -593,6 +603,7 @@ cat("This means that", round(R_squared * 100, 2), "% of the variability in Respo
 
 ```
 
+---
 
 ## 10. Residual Analysis
 ```{r}
