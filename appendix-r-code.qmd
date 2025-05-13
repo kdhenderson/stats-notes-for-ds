@@ -464,64 +464,70 @@ p_value_one_tailed
 ### 9A. Pearson Correlation
 ```{r}
 
-# Get Pearson's r
-dataset = data.frame(response = c(1,2,3,4,5), explanatory = c(1,2,3,4,5))
+# Create a sample dataset
+dataset = data.frame(response = c(1, 2, 3, 4, 5), 
+                     explanatory = c(1, 2, 3, 4, 5))
 
-# make a scatter plot of the data first
-plot(dataset$explanatory, dataset$response, xlab = "explanatory", ylab = "response", main = "analysis", pch = 15)
+# Make a scatter plot to visualize the relationship
+plot(dataset$explanatory, dataset$response, 
+     xlab = "Explanatory", ylab = "Response", 
+     main = "Scatterplot of Response vs. Explanatory", pch = 15)
 
-# or without making a dataframe
+# Alternatively, without making a dataframe
 plot(response, explanatory)
 
-# get the correlation coefficient
-cor(dataset)
-
-# or
-cor(y = response, x = explanatory)
+# Get Pearson correlation coefficient (three ways)
+cor(dataset) # returns correlation matrix
 cor(dataset$response, dataset$explanatory)
+cor(x = explanatory, y = response)
 
 
-# HYPOTHESIS TEST (t-test) FOR PEARSON'S R
-
-# get the critical value
-qt(0.975,n-2) # df = n-2
-
-# Test for significance + CI
-# get r, the test statistic, p-value, and confidence interval
+# Hypothesis test for correlation (t-test)
+# Get r, the test statistic, p-value, and confidence interval
 cor.test(dataset$response, dataset$explanatory)
+
+# Get the critical value
+qt(0.975,n-2) # df = n-2, for 95% two-sided test
 
 ```
 
-### 9B. Simple Linear Regression
-Fit and Interpret Linear Model
+### 9B. Simple Linear Regression: Fitting and Diagnostics
 ```{r}
 
-# HYPOTHESIS TEST (t-test) FOR REGRESSION
-# lm - linear model(response ~ explanatory, data)
+# Fit the linear model
 fit = lm(response ~ explanatory, data = dataset)
-summary(fit) # slope, intercept, R²
-
-# Plot the fitted values
-plot(dataset$explanatory, dataset$response, xlab = "explanatory", ylab = "response", main = "analysis", pch = 15)
-lines(dataset$explanatory, fit$fitted.values)
+summary(fit)  # Shows coefficients, t-tests, R-squared
 
 
-# ANOVA FOR REGRESSION
+# Plot data and fitted line (base R)
+plot(dataset$explanatory, dataset$response, 
+     xlab = "Explanatory", ylab = "Response", 
+     main = "Linear Regression", pch = 15)
+lines(dataset$explanatory, fit$fitted.values, col = "blue")
+
+
+# ANOVA for regression model
 anova(fit)
 
 
-# PLOT THE RESIDUALS
-plot(fit)
+### Residual Diagnostics ###
 
+# Plot residuals and check assumptions
+plot(fit)  # Residuals vs Fitted, QQ Plot, etc.
+
+# Save residuals and fitted values for custom plots
 dataset$residuals = residuals(fit)
 dataset$fittedVals = fitted(fit)
-dataset %>% ggplot(aes(x = fittedVals, y = residuals)) +
+
+# ggplot residual plot
+dataset %>% 
+  ggplot(aes(x = fittedVals, y = residuals)) +
   geom_point() +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black") +
-  ggtitle("Residuals Plot") +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  ggtitle("Residuals vs Fitted Values") +
   theme_bw()
 
-# create a QQ plot for the residuals
+# QQ plot of residuals (base R)
 residuals = residuals(fit)
 qqnorm(residuals)
 qqline(residuals, col = "black")
@@ -531,34 +537,46 @@ qqline(residuals, col = "black")
 ### 9C. Confidence & Prediction Intervals
 ```{r}
 
-# Confidence interval for the parameter estimates (slope and intercept)
+### Confidence Intervals for Model Coefficients ###
+
 fit = lm(response ~ explanatory, data = dataset)
 summary(fit)
+
+# Confidence interval for the parameter estimates (intercept and slope)
 confint(fit)
-confint(fit, "explanatory") # if you just want the CI for the slope
-confint(fit, level = 0.99) # if you want to change alpha
+
+# CI for just the slope
+confint(fit, "explanatory")
+
+# CI at different confidence level
+confint(fit, level = 0.99) # to change alpha
 
 
-# CONFIDENCE INTERVALS AROUND A PREDICTION
+### Confidence & Prediction for New Observations ###
 
-# Prediction at a new x value
+# Add a new data point
 new_data = data.frame(response = NA, explanatory = 2.5)
 # or
-# new_data = data.frame(explanatory = 2.5)
+new_data = data.frame(explanatory = 2.5)
 
-# Predict with 95% confidence interval (CI estimating the mean value of y expected at value of x)
+# Confidence interval (mean response at x)
+# 95% CI estimating the mean value of y expected at value of x
 predictionCI = predict(fit, newdata = new_data, interval = "confidence")
 predictionCI
 
-# Predict with 95% prediction interval (CI estimating the individual value of y expected at value of x, more error)
+# Prediction interval (individual response at x)
+# 95% CI estimating the individual value of y expected at value of x, more error
 predictionPI = predict(fit, newdata = new_data, interval = "prediction")
 predictionPI
 
 
-# PLOT THE 95% CONFIDENCE AND PREDICTION INTERVALS
+### Plot CI and PI Around Fitted Line ###
+
+# Predicted values + intervals (for the full dataset)
 predictions = predict(fit, interval = "confidence", level = 0.95, se.fit = TRUE)
 prediction_intervals = predict(fit, interval = "prediction", level = 0.95)
 
+# Add columns to original data for plotting
 movies = movies %>%
   mutate(fit = predictions$fit,
          lwr_conf = predictions$fit[, "lwr"],
@@ -566,6 +584,7 @@ movies = movies %>%
          lwr_pred = prediction_intervals[, "lwr"],
          upr_pred = prediction_intervals[, "upr"])
 
+# Plot with ribbons and lines
 ggplot(data, aes(x = explanatory, y = response)) +
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
   geom_ribbon(aes(ymin = lwr_conf, ymax = upr_conf), alpha = 0.5, fill = "lightblue") +
@@ -578,19 +597,21 @@ ggplot(data, aes(x = explanatory, y = response)) +
   theme_bw()
 
 
-# CALIBRATION INTERVALS FOR ESTIMATING VALUES OF X FROM DESIRED Y VALUES
+### Calibration Intervals (Reverse Prediction) ###
+# For estimating values of x from desired y
 
 library(investr)
 
-# calibration interval for the mean budget
+# Calibration interval for the mean budget (Estimate x for a given y0, mean response)
 calibrate(fit,y0 = 210, interval = "Wald", mean.response = TRUE, limit = FALSE)
 
-# calibration interval for a single movie budget
+# Calibration interval for a single movie budget (estimate x for an individual response)
 calibrate(fit,y0 = 210, interval = "Wald", mean.response = FALSE, limit = FALSE)
 
 
-# FIND AND INTERPRET R-SQUARED
+### R-squared Interpretation ###
 # R-squared = measure of the proportion of variation in the response that is accounted for by the explanatory variable
+
 # Get the summary of the model
 summary_fit = summary(fit)
 
