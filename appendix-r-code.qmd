@@ -624,16 +624,16 @@ cat("This means that", round(R_squared * 100, 2), "% of the variability in Respo
 
 ```
 
----
 
 ## 10. Residual Analysis
+
+### 10A. Fit Model and Add Residuals
 ```{r}
-library(car) # for rstudent(), studentized residuals
 
-# Fit a linear model on the data
-fit = lm(Response ~ Explanatory, data = dataset)
+# Fit a linear model
+fit = lm(response ~ explanatory, data = dataset)
 
-# log transform the data if needed
+# Log transform the data if needed
 dataset = dataset %>% mutate(
   log_explanatory = log(explanatory),
   log_response = log(response)
@@ -644,69 +644,87 @@ dataset$residuals = residuals(fit)
 dataset$studentized_residuals = rstudent(fit) #car library
 dataset$fittedVals = fitted(fit)
 
+# Add residuals, fitted values, and studentized residuals to the dataset
+dataset$residuals = residuals(fit)
+dataset$fittedVals = fitted(fit)
+
+# Studentized residuals (internal)
+library(car)  # for rstudent(), studentized residuals
+dataset$studentized_residuals = rstudent(fit) 
+
 # Another way to get studentized residuals
 library(MASS)
 # Calculate studentized residuals (external studentized: ti=ei/σhati*sqrt(1−hii))
 dataset$StudentizedResiduals = rstudent(fit)
 plot(fit)
 
+```
 
-# RESIDUAL PLOTS
-# to get a residual scatterplot, QQ plot, sqrt of standardized residuals and cook's distance plot 
+### 10B. Residual Plots
+```{r}
+
+# Base R: full residual diagnostics (residuals vs fitted, QQ, sqrt(std residuals), Cook’s)
 plot(fit)
 
-# SCATTERPLOT of residuals with ggplot
+# ggplot: residuals vs fitted scatterplot
 ggplot(data = dataset, aes(x = fittedVals, y = residuals)) +
   geom_point() +
   geom_hline(yintercept = 0, color = "blue") +
   labs(x = "Fitted Values", y = "Residuals", title = "Scatterplot of Residuals") + 
   theme_bw()
 
+```
 
-# DIFFERENT WAYS TO DO QQ-PLOTS
-# QQ plot of residuals using car library
-qqPlot(dataset$residuals, main = "QQ Plot of Residuals") #car library
+### 10C. Normality Checks for Residuals
+```{r}
 
-# QQ plot using base R
+# Base R: QQ plot of residuals
 qqnorm(residuals(fit), main = "QQ Plot of Residuals")
 qqline(residuals(fit), col = "blue")
+# or
+qqnorm(dataset$residuals, main = "QQ Plot of Residuals")
+qqline(dataset$residuals, col = "blue")
 
-# QQ plot using ggplot2
+# car package: Enhanced QQ plot
+library(car)
+qqPlot(dataset$residuals, main = "QQ Plot (car::qqPlot)")
+
+# ggplot2 version
 ggplot(dataset, aes(sample = residuals)) +
   stat_qq() +
   stat_qq_line(col = "blue") +
   labs(title = "QQ Plot of Residuals", x = "Theoretical Quantiles", y = "Sample Quantiles") + 
   theme_bw()
 
+```
 
-# DIFFERENT WAYS TO DO HISTOGRAMS
-# Histogram of residuals with a normal distribution line
+### 10D. Histogram of Residuals
+```{r}
+
+# ggplot2 histogram with normal curve
 ggplot(data = dataset, aes(x = residuals)) +
   geom_histogram(aes(y = after_stat(density)), bins = 15, fill = "lightblue", color = "gray30") +
   stat_function(fun = dnorm, args = list(mean = mean(dataset$residuals), sd = sd(dataset$residuals)), color = "blue") +
-  labs(x = "Residuals", y = "Density", title = "Histogram of Residuals with Normal Distribution Line") + 
+  labs(x = "Residuals", y = "Density", title = "Histogram of Residuals with Normal Curve") + 
   theme_bw()
 
-# Create histogram with normal distribution line
-hist(residuals(fit), breaks = 15, probability = TRUE, col = "lightblue", border = "gray30", main = "Histogram of Residuals with Normal Distribution Line", xlab = "Residuals")
+# Base R version with overlaid normal curve
+hist(residuals(fit), breaks = 15, probability = TRUE, col = "lightblue", border = "gray30", main = "Histogram of Residuals with Normal Curve", xlab = "Residuals")
 curve(dnorm(x, mean = mean(residuals(fit)), sd = sd(residuals(fit))), col = "blue", lwd = 2, add = TRUE)
 
 ```
 
+### 10E. Regression Line with Confidence & Prediction Intervals
 ```{r}
 
-# PLOT THE REGRESSION LINE
-
-# BASE R PLOT
-# Plot the data
+# Base R scatterplot and regression line
 plot(dataset$explanatory, dataset$response, 
      xlab = "Explanatory", ylab = "Response", 
      main = "Linear Regression of Response & Explanatory", pch = 16)
 # Add the regression line
 abline(fit, col = "blue", lwd = 2)
 
-# GGPLOT VERSION
-# Plot the data with regression line using ggplot2
+# ggplot2 scatterplot + regression line
 ggplot(dataset, aes(x = explanatory, y = response)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
@@ -714,40 +732,47 @@ ggplot(dataset, aes(x = explanatory, y = response)) +
        title = "Linear Regression of Response & Explanatory") +
   theme_bw()
 
+# Optional: Add Intervals and Highlighted Points
 
-# PLOT THE REGRESSION LINE WITH CONFIDENCE AND PREDICTION INTERVALS
-# and optional highlighting of selected data points of interest
-
-# Find the data of interest
+# Identify specific data points to highlight
 dataToHighlight = dataset %>%
   filter(columnName == "Value") %>% 
   select("col1", "col2", "col3")
 dataToHighlight
 
-# Add confidence and prediction intervals
-# Create a new data frame for prediction with confidence and prediction intervals
+# Build prediction data frame (example using log-log model structure)
 new_data = data.frame(logGDP = InfantVGDP_clean$logGDP, logInfantMort = InfantVGDP_clean$logInfantMort)
+
+# Generate confidence and prediction intervals using log-log model fit
 confInt = predict(fitLogLog, newdata = new_data, interval = "confidence")
 predInt = predict(fitLogLog, newdata = new_data, interval = "predict")
+
+# Add intervals to new_data
 new_data$fit = confInt[, "fit"]
 new_data$lwr_conf = confInt[, "lwr"]
 new_data$upr_conf = confInt[, "upr"]
 new_data$lwr_pred = predInt[, "lwr"]
 new_data$upr_pred = predInt[, "upr"]
 
-# Plot the data with regression line, CI, PI, and highlighted point using ggplot2
+# Final Plot with CI, PI, and Highlighted Points
 ggplot(dataset, aes(x = explanatory, y = response)) +
+  # Prediction interval ribbon (widest)
   geom_ribbon(data = new_data, aes(ymin = lwr_pred, ymax = upr_pred), alpha = 0.3, fill = "gray70") +
+  # Confidence interval ribbon (narrower)
   geom_ribbon(data = new_data, aes(ymin = lwr_conf, ymax = upr_conf), alpha = 0.6, fill = "lightblue") +
+  # Raw data points
   geom_point() +
+  # Highlighted point(s)
   geom_point(data = dataToHighlight, aes(x = explanatory, y = response), color = "red3", size = 4, stroke = 1.25, shape = 21) +
+  # Regression line
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
   labs(x = "Explanatory", y = "Response", 
-       title = "Linear Regression of Reponse & Explanatory") +
+       title = "Linear Regression with 95% CI, PI, and Highlighted Points") +
   theme_bw()
 
 ```
 
+---
 
 ## 11. Back-Transformation and Prediction
 ```{r}
