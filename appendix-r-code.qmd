@@ -9,13 +9,13 @@ execute:
 Quick Navigation:
 - [1. Data Import & Summary Statistics](#1-data-import--summary-statistics)
 - [2. Visualization & Assumption Checks](#2-visualization--assumption-checks)
-- [3. Permutation Test](#3-permutation-test)
+- [3. Permutation Test](#3-permutation-test-generate-permutation-distribution-for-group-mean-difference)
 - [4. t-Tests & Power Analysis](#4-t-tests--power-analysis)
-- [5. ANOVA & Extra Sum of Squares](#5-anova--extra-sum-of-squares)
+- [5. One-Way ANOVA & Extra Sum of Squares](#5-one-way-anova--extra-sum-of-squares)
 - [6. Multiple Comparisons](#6-multiple-comparisons)
 - [7. Contrasts](#7-contrasts)
 - [8. Non-Parametric Tests](#8-non-parametric-tests)
-- [9. Correlation & Simple Regression](#9-correlation--simple-regression)
+- [9. Correlation & Simple Linear Regression](#9-correlation--simple-linear-regression)
 - [10. Residual Analysis](#10-residual-analysis)
 - [11. Log-Log Models & Back-Transformation](#11-log-log-models--back-transformation)
 - [12. Multiple Linear Regression (MLR)](#12-multiple-linear-regression-mlr)
@@ -694,12 +694,7 @@ dataset = dataset %>% mutate(
   log_response = log(response)
 )
 
-# Add residuals, studentized residuals, fitted values to the cleaned data frame
-dataset$residuals = residuals(fit)
-dataset$studentized_residuals = rstudent(fit) #car library
-dataset$fittedVals = fitted(fit)
-
-# Add residuals, fitted values, and studentized residuals to the dataset
+# Add residuals and fitted values to the dataframe
 dataset$residuals = residuals(fit)
 dataset$fittedVals = fitted(fit)
 
@@ -707,11 +702,11 @@ dataset$fittedVals = fitted(fit)
 library(car)  # for rstudent(), studentized residuals
 dataset$studentized_residuals = rstudent(fit) 
 
-# Another way to get studentized residuals
+# Another way to get studentized residuals (studentized deleted residuals)
+# External: excluding the data point being tested. More accurate for identifying outliers or influential points, because the data point doesn't bias its own standard error.
 library(MASS)
 # Calculate studentized residuals (external studentized: ti=ei/σhati*sqrt(1−hii))
 dataset$StudentizedResiduals = rstudent(fit)
-plot(fit)
 
 ```
 
@@ -736,15 +731,16 @@ ggplot(data = dataset, aes(x = fittedVals, y = residuals)) +
 # Base R: QQ plot of residuals
 qqnorm(residuals(fit), main = "QQ Plot of Residuals")
 qqline(residuals(fit), col = "blue")
-# or
+
+# or using residuals saved to dataset
 qqnorm(dataset$residuals, main = "QQ Plot of Residuals")
 qqline(dataset$residuals, col = "blue")
 
-# car package: Enhanced QQ plot
+# car package: enhanced QQ plot
 library(car)
 qqPlot(dataset$residuals, main = "QQ Plot (car::qqPlot)")
 
-# ggplot2 version
+# ggplot2 QQ plot
 ggplot(dataset, aes(sample = residuals)) +
   stat_qq() +
   stat_qq_line(col = "blue") +
@@ -787,7 +783,8 @@ ggplot(dataset, aes(x = explanatory, y = response)) +
        title = "Linear Regression of Response & Explanatory") +
   theme_bw()
 
-# Optional: Add Intervals and Highlighted Points
+
+# --- Optional: Add Intervals and Highlighted Points ---
 
 # Identify specific data points to highlight
 dataToHighlight = dataset %>%
@@ -809,7 +806,7 @@ new_data$upr_conf = confInt[, "upr"]
 new_data$lwr_pred = predInt[, "lwr"]
 new_data$upr_pred = predInt[, "upr"]
 
-# Final Plot with CI, PI, and Highlighted Points
+# Plot CI and PI with highlighted point(s)
 ggplot(dataset, aes(x = explanatory, y = response)) +
   # Prediction interval ribbon (widest)
   geom_ribbon(data = new_data, aes(ymin = lwr_pred, ymax = upr_pred), alpha = 0.3, fill = "gray70") +
@@ -827,7 +824,6 @@ ggplot(dataset, aes(x = explanatory, y = response)) +
 
 ```
 
----
 
 ## 11. Log-Log Models & Back-Transformation
 
@@ -886,7 +882,7 @@ cat("Back-transformed CI: (", back_transformed_intercept_conf_lower, ", ", back_
 ### 11C. Compare Predicted vs Observed Values
 ```{r}
 
-# Estimate log(Y) and then back-transform
+# Estimate log(Y) and then back-transform to original scale
 est_log_response = intercept + slope * dataset$explanatory
 est_response = exp(est_log_response)
 
@@ -996,6 +992,7 @@ confint(fit2)
 plot(fit)
 
 ```
+
 
 ## 13. Variable Selection
 

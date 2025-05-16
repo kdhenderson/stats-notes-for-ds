@@ -1,0 +1,877 @@
+---
+title: "Appendix B: SAS Code Examples for Statistical Foundations"
+appendix: true
+format: html
+execute:
+  eval: false
+---
+
+Quick Navigation:
+- [1. Data Import & Summary Statistics](#1-data-import--summary-statistics)
+- [2. Visualization & Assumption Checks](#2-visualization--assumption-checks)
+- [3. Permutation Test](#3-permutation-test)
+- [4. t-Tests & Power Analysis](#4-t-tests--power-analysis)
+- [5. ANOVA & Extra Sum of Squares](#5-anova--extra-sum-of-squares)
+- [6. Multiple Comparisons](#6-multiple-comparisons)
+- [7. Contrasts](#7-contrasts)
+- [8. Non-Parametric Tests](#8-non-parametric-tests)
+- [9. Correlation & Simple Regression](#9-correlation--simple-regression)
+- [10. Residual Analysis](#10-residual-analysis)
+- [11. Log-Log Models & Back-Transformation](#11-log-log-models--back-transformation)
+- [12. Multiple Linear Regression (MLR)](#12-multiple-linear-regression-mlr)
+- [13. Variable Selection](#13-variable-selection)
+
+::: {.appendix}
+
+## 1. Data Import & Summary Statistics
+
+> Most SAS procedures require your dataset to be sorted by group for grouped analysis or plotting.
+> You can either import data from a file or create a dataset manually for small examples.
+
+### 1A. Import or Create a Dataset
+```{sas}
+
+/* OPTION 1: Import a CSV from your SAS Studio home directory */
+
+%web_drop_table(WORK.mydata);
+
+filename reffile '/home/your-username/path-to-your-data.csv';
+
+proc import datafile=reffile
+    dbms=csv
+    out=WORK.mydata
+    replace;
+    getnames=yes;
+run;
+
+/* View structure and preview the dataset */
+proc contents data=WORK.mydata;
+run;
+
+%web_open_table(WORK.mydata);
+    
+    
+/* OPTION 2: Manually create a small dataset column-wise (each row = one observation) */
+
+data mydata;
+    input variable1 variable2;
+    datalines;
+    1 A
+    2 B
+    3 C
+    4 D
+    5 E
+    ;
+run;
+
+proc print data = mydata;
+run;
+
+
+/* OPTION 3: Create a row-wise dataset (data entered horizontally using @@) */
+data mydata;
+    input variable @@;
+    datalines;
+    1 2 3 4 5 6
+    ;
+run;
+    
+proc print data = mydata;
+run;
+    
+```
+
+### 1B. Summary View & Sorting
+```{sas}
+
+/* Preview the data */
+proc print data = dataset;
+run;
+
+/* Sort data by explanatory variable (required for some procedures) */
+proc sort data = dataset;
+    by explanatory;
+run;
+
+```
+
+### 1C. Summary Statistics
+```{sas}
+
+/* Summary stats: n, mean, sd, min, max */
+proc means data = dataset;
+    var response;
+run;
+
+/* Medians by group */
+proc means data = dataset median;
+    class explanatory;
+    var response;
+run;
+
+/* Manual p-value from t-statistic (two-sided) */
+data mypval;
+    pv = 2 * (1 - cdf("t", tstat, df));
+run;
+proc print data = mypval;
+run;
+
+```
+
+### 1D. Log Transformation & Filtering
+```{sas}
+
+/* Create a log-transformed version of response */
+data ldataset;
+    set dataset;
+    logResponse = log(response);
+run;
+
+/* Remove outlier (e.g., filter response < 1200) */
+data datasetNoOutlier;
+    set dataset;
+    where response < 1200;
+run;
+
+/* Scatter plot without outlier */
+proc sgplot data = datasetNoOutlier;
+    scatter x = explanatory y = response;
+run;
+
+```
+
+### 1E. Categorical Recoding & Viewing Subsets
+```{sas}
+
+/* Create ordinal version of categorical variable */
+
+data educMultiGrp;
+    set educMultiGrp;
+    if Educ = '<12' then EO = 1;
+    else if Educ = '12' then EO = 2;
+    else if Educ = '13-15' then EO = 3;
+    else if Educ = '16' then EO = 4;
+    else if Educ = '>16' then EO = 5;
+run;
+
+/* Create a column to collapse levels */
+data educMultiGrp;
+    set educMultiGrp;
+    if Educ = "<12" then Combine = "<12";
+    else if Educ = "12" then Combine = "12";
+    else if Educ = "13-15" then Combine = "13-15";
+    else if Educ in ("16", ">16") then Combine = "16+";
+run;
+
+/* View first 50 rows of a dataset */
+proc print data = lIncome5Grps(obs=50);
+run;
+
+```
+
+## 8. /* USEFUL FUNCTIONS */
+
+* to get pvalues (2-sided);
+data mypval;
+pv = 2*(1-cdf(“t”, tstat, df));
+run;
+proc print data = mypval;
+run;
+
+
+## 1. /* plots for assumptions */
+
+* Sorting may be required for histograms and qqplots.;
+proc sort data = dataset;
+    by explanatory;
+run;
+proc print data = dataset;
+run;
+
+* proc univariate can plot both histograms and qqplots;
+proc univariate data = dataset;
+    class explanatory;
+    var response;
+    histogram response;
+    qqplot response;
+run;
+
+* Histograms;
+proc univariate data = dataset;
+	by explanatory;
+	histogram respones;
+run;
+
+proc sgplot data = dataset;
+	* title "Histogram by ";
+    by explanatory;
+    histogram response / transparency=0.5;
+    density response; * with a normal distribution curve;
+run;
+
+* QQ Plots;
+proc univariate data = dataset;
+    * title "QQ Plot by ";
+    by explantory;
+    qqplot response / normal(mu=est sigma=est);
+run;
+
+
+* Boxplots;
+proc sgplot data=dataset;
+    * title "Boxplot of";
+    vbox response / category=explanatory;
+run;
+
+* Scatterplot;
+proc sgplot data=dataset;
+	scatter x=explanatory y=response;
+	* title "Scatterplot of ";
+run;
+
+/* Turn off the title */
+title;
+
+* Can also use proc ttest just for histograms (with boxplots) and qqplots;
+* generate histograms and qqplots;
+proc ttest data = dataset;
+class explanatory;
+var response;
+run;
+
+* Histograms using PROC UNIVARIATE to adjust to same scale;
+proc univariate data=dataset noprint;
+    by explanatory;
+    histogram response / endpoints=0 to 1000 by 50 normal;  * Adjust the range and bin width as needed;
+    inset n mean std / pos=ne;
+run;
+
+
+## 2. /* SAS code summary */
+
+/* PERMUTATION TEST */
+
+* plot histograms;
+proc univariate data = data;
+class group;
+histogram variable;
+run;
+
+* get difference of means (needed for permutation comparison);
+proc ttest data = data;
+class group;
+var variable;
+run;
+
+
+* permutation test;
+ods output off;
+ods exclude all; 
+
+*borrowed code from internet ... randomizes observations and creates a matrix ... one row per randomization ;                                                                                                                
+proc iml;                                                                                                                                                                                                                    
+use data;                        * change data set name here to match your data set name above;                                                                                                                              
+read all var{group variable} into x;   *change variable names here ... make sure it is class then var ... in that order.;                                                                                                  
+p = t(ranperm(x[,2],10000));    *Note that the "1000" here is the number of permutations. ;                                                                                                                                    
+paf = x[,1]||p;                                                                                                                                                                                                              
+create newds from paf;                                                                                                                                                                                                       
+append from paf;                                                                                                                                                                                                             
+quit;         
+                  
+*calculates differences and creates a histogram;                                                                                                                                                                             
+ods output conflimits=diff;                                                                                                                                                                                                  
+proc ttest data=newds plots=none;                                                                                                                                                                                            
+  class col1;                                                                                                                                                                                                                
+  var col2 - col10001;                                                                                                                                                                                                        
+run; 
+
+ods output on;
+ods exclude none;     
+                  
+proc univariate data=diff;                                                                                                                                                                                                   
+  where method = "Pooled";                                                                                                                                                                                                   
+  var mean;                                                                                                                                                                                                                  
+  histogram mean;                                                                                                                                                                                                            
+run;  
+
+*The code below calculates the number of randomly generated differences that are as extreme or more extreme thant the one observed (divide this number by 1000 you have the pvalue);                                         
+*check the log to see how many observations are in the data set.... divide this by 1000 (or however many permutations you generated) and that is the (one sided)p-value;                                                     
+data numdiffs;                                                                                                                                                                                                               
+set diff;                                                                                                                                                                                                                    
+where method = "Pooled";                                                                                                                                                                                                     
+if abs(mean) >= abs(diffOfMeans);   *you will need to put the observed difference you got from t test above here.  note if you have a one or two tailed test.;                                                                           
+run;                                                                                                                                                                                                                         
+* just a visual of the rows produced ... you can get the number of obersvations from the last data step and the Log window.;                                                                                                 
+proc print data = numdiffs;                                                                                                                                                                                                  
+where method = "Pooled";                                                                                                                                                                                                     
+run;
+
+
+## 3. /* SAS code summary */
+
+/* T-CRITICAL VALUE */
+data criticalvalue;
+critval = quantile("T", 0.975, df);
+;
+proc print data = criticalvalue;
+run;
+
+
+/* ONE-SAMPLE T-TEST */
+* proc ttest outputs histogram, boxplot and qqplot;
+proc ttest data = dataset h0=muUnderNull sides=2 alpha=0.05;
+run;
+
+
+/* PAIRED T-TEST (mu(2-1)) */
+proc ttest data = dataset;
+   paired explanatory2*explanatory1;
+run;
+
+
+/* TWO-SAMPLE T-TEST (pooled is with pooled st.dev. and satterthwaite is with welch's) */
+proc ttest data = dataset h0=0 sides=2 alpha=0.05;                                                                                                                                                    
+		class explanatory;                                                                                                                                                
+	var response;                                                                                                                                                                                                                                                                                                                                                                                  
+run;
+
+
+/* EQUALITY OF VARIANCES F-TEST (runs with proc ttest) */
+/* Requires assumption of normal population distributions;
+We can use the F-Test to provide secondary evidence if the visual is inconclusive.;
+The null hypothesis is of equality of variances.; */
+
+/* EQUALITY OF VARIANCES BROWN-FORSYTHE TEST (doesn't require normality) */
+proc glm data = dataset;
+	class exploratory;
+	model response = exploratory;
+	means exploratory / hovtest = bf;
+run;
+
+
+/* POWER for a one-sample t-test */
+proc power;
+	onesamplemeans
+		sides = 1
+		alpha = .05
+		nullmean = 0
+		mean = xbar
+		stddev = s
+		ntotal = n
+		power = .;
+run;
+
+
+/* POWER for a two-sample t-test */
+
+proc power; 
+*can specify mean for each (nullmean) and ntotal;
+	twosamplemeans
+		sides=1
+		alpha=.05
+		meandiff=effectSize
+		stddev=s
+		npergroup=n1
+		power=.;
+run;
+
+*FLS unit4 creativity question;
+proc power;
+	twosamplemeans
+		sides=1
+		alpha=0.05
+		nulldiff=0
+		meandiff=3
+		stddev=4.5
+		ntotal=47 /* First group has 24 observations, second group has 23 */
+		power=.;
+run;
+
+
+/* POWER CURVES for one or two-sample t-test (power vs. sample size or effect size */
+
+*make a power curve, reactivity (one-sample) exp, sample sizes;
+ods graphics on;
+
+proc power;
+	onesamplemeans
+		sides=1
+		alpha=.05
+		nullmean=0
+		ntotal=60 80
+		mean=.07
+		stddev=.2
+		power = .;
+		plot x=n min=60 max=80;
+run;
+
+ods graphics off;
+
+*make a power curve, creativity exp, effect sizes;
+ods graphics on;
+
+proc power;
+	twosamplemeans
+		sides=1
+		alpha=.05
+		nulldiff=0
+		meandiff=3 to 5 by 0.1 
+		ntotal=47
+		stddev=4.5
+		power = .;
+		plot x=effect min=3 max=5;
+run;
+
+ods graphics off;
+
+
+## 4. /* SAS code summary */
+
+/* ANOVA - MULTIPLE COMPARISONS - LINEAR CONTRASTS */
+
+
+/* ANOVA */
+/* QOI 1: Are any of the means different?
+First run an anova for EMM and SMM(Full) to test if any pair has difference of means
+And run Brown-Forsythe test as further evidence of equal variance */
+proc glm data=dataset;
+class explanatory;
+model response = explanatory;
+means explanatory / hovtest=bf; *homogeneity of variance - brown forsythe test;
+run;
+
+* Find the critical value;
+data critical_value;
+    set calculations;
+    critical_value = finv(1-alpha, dfn, dfd); *1-alpha for right-tail;
+run;
+
+/* MULTIPLE (PAIRWISE) COMPARISONS */
+/* QOI 2: Run every pairwise t-test and 
+perform the appropriate multiple comparison adjustment */
+/*  Adjustment for Multiple Comparisons: Tukey example Tukey */
+proc glm data=playersHeight;
+    class Sport;
+    model Height = Sport;
+    means Sport / hovtest=bf;          /* Brown-Forsythe test for homogeneity of variances */
+    lsmeans Sport / pdiff adjust=tukey cl;  /* Pairwise comparisons with Tukey adjustment */
+run;
+
+proc glm data = playersHeight;
+class Sport;
+model Height = Sport;
+means Sport / hovtest = bf tukey cldiff;
+run;
+/* change the cl option to cldiff to obtain confidence intervals
+ for the differences in both directions (i.e., A-B and B-A). 
+ The cl option provides confidence intervals for the means, 
+ while cldiff provides confidence intervals for the differences between means. */
+
+
+/* LINEAR CONTRASTS (on sum and avg) */
+/* QOI 3: Create a contrast to test to see if there is evidence that
+the mean height of group1 is significantly different than
+the average of the mean heights of the other 4 groups
+(as an alternative to the extra sum of squares test). */
+
+/* didn't state order = data so groups are in alphabetical order;
+order = data; keeps the data in the order it came in: proc glm data = Handicap order = data;
+contrast gives you the sum of squares
+estimate gives you the estimate of the gamma */
+proc glm data = dataset;
+class explanatory;
+model response = explanatory;
+means explanatory;
+Contrast 'Grp1 vs Sum of Other 4 Groups' Sport 4 -1 -1 -1 -1;
+Estimate 'Grp1 vs Sum of Other 4 Groups' Sport 4 -1 -1 -1 -1;
+Estimate 'Grp1 vs Averge of Other 4 Groups' Sport 4 -1 -1 -1 -1 / DIVISOR = 4;
+Contrast 'Contrast Grp1 vs Grp2' Sport 1 -1 0 0 0;
+Estimate 'Estimate Grp1 vs Grp2' Sport 1 -1 0 0 0;
+run;
+
+/* to get 95% CI for the difference in averages of above
+point estimate +- multiplier * standard error */
+* to get multiplier for 95% CI;
+data quantile;
+quant = quantile("t", 0.975, sf=n-groups);
+run;
+proc print data = quantile;
+run;
+
+
+/* QOI 4: Use the Bonferroni method to construct
+simultaneous confidence intervals for mu2-mu3, mu2-mu5, and mu3-mu5.
+k = 3 b/c there are 3 pairs being compared */
+proc glm data = dataset order=data;
+    class explanatory;
+    model response = explanatory;
+    means explanatory;
+    lsmeans explanatory / pdiff cl;
+    * specific comparisons of interest;
+    * use estimate to get g and SE(g), for CI;
+    estimate 'mu2 - mu3' explanatory 0 1 -1 0 0;
+    estimate 'mu2 - mu5' explanatory 0 1 0 0 -1;
+    estimate 'mu3 - mu5' explanatory 0 0 1 0 -1;
+run;
+
+/* to get 95% CI for the difference in averages of above
+point estimate +- multiplier * standard error */
+* to get multiplier for adjusted CI, two-tailed;
+data quantile;
+quant = quantile("t", 1-0.05/K/2(tails), df=n-totalgrps);
+run;
+proc print data = quantile;
+run;
+
+
+/* COMMANDS FOR ALL THE DIFFERENT MULTIPLE COMPARISON ADJUSTMENT TYPES */
+/* When deciding multiple comparison correction:
+• Were the comparisons planned before looking at the data or unplanned? If planned, no need to make multiple comparison correction. We can use LSD.
+• Are the groups being compared to a single control or reference group? If so, use Dunnett’s.
+• Are the groups normally distributed with equal standard deviation? If so, use Tukey-Kramer.
+• If we are doing some or all unplanned pairwise comparisons, without a reference/control group and without the assumption of normality or equal variance,
+use Bonferroni.
+*/
+
+* LSD w/ CI half-width;
+proc glm data=Handicap order=data;
+    class Handicap;
+    model Score = Handicap;
+    means Handicap / lsd; * means returns the half-width;
+    lsmeans Handicap / pdiff cl;
+run;
+
+* Dunnett;
+proc glm data=Handicap order=data;
+    class Handicap;
+    model Score = Handicap;
+    means Handicap / dunnett('None');
+    lsmeans Handicap / pdiff=control('None') adjust=dunnett cl;
+run;
+/* Calculate the half-widths: HalfWidth = (UpperCL - LowerCL) / 2 */
+
+* Tukey-Kramer w/ CI half-width;
+proc glm data=Handicap order=data;
+    class Handicap;
+    model Score = Handicap;
+    means Handicap / tukey;
+    lsmeans Handicap / pdiff adjust = tukey cl;
+run;
+
+* Bonferroni w/ CI half-width;
+proc glm data=Handicap order=data;
+    class Handicap;
+    model Score = Handicap;
+    means Handicap / bon;
+    lsmeans Handicap / pdiff adjust = bon cl;
+run;
+
+* code from Jaren;
+proc glm data = Handicap;
+	class Handicap;
+	model Score = Handicap;
+	means Handicap / lsd tukey dunnett bon scheffe;
+run;
+
+
+## 5. /* SAS code summary */
+
+/* ANOVA - EXTRA SUM OF SQUARES */
+
+* conduct an anova (explanatory=group);
+proc glm data = data;
+class explanatory;
+model response = explanatory;
+run;
+
+* get p-value from f-statistic (extra sum-of-squares);
+data f_test;
+p_value = 1 - probf(fstat, dfn, dfd); *1- for right tail;
+run;
+proc print data=f_test;
+run;
+
+* another way to get p-value;
+data quantile;
+myquant = 1-CDF('F', fstat, dfn, dfd)
+run;
+proc print data = quantile;
+run;
+
+
+/* EXTRA SUM OF SQUARES */
+/* Do the BYOA calculations. */
+data calculations;
+    alpha = 0.05;  
+    dftotal = 2580;
+    dfd = 2579;
+    dfn = dftotal - dfd;
+    ssred = 2234.10;
+    ssfull = 2232.12;
+    ssmodel = ssred - ssfull;
+    mse = ssfull / dfd;
+    msmodel = ssmodel / dfn;
+    fstat = msmodel / mse;
+run;
+* Find the critical value for the above hypothesis test;
+data critical_value;
+    set calculations;
+    critical_value = finv(1-alpha, dfn, dfd); *1-alpha for right-tail;
+run;
+* Find the p-value from F, dfn, dfd;
+data f_test;
+	set critical_value;
+	p_value = 1 - probf(fstat, dfn, dfd); *1-probf for right-tail;
+run;
+
+/* CHECK THE RESULTS WITH A CONTRAST */
+proc glm data = dataset;
+class explanatory;
+model response = explanatory;
+means explanatory;
+Contrast 'Contrast Grp1 vs. Grp2' explanatory 0 0 0 1 -1 0;
+Estimate 'Estimate Grp1 vs. Grp2' explanatory 0 0 0 1 -1 0;
+run;
+
+
+/* WELCH'S ANOVA (for normal distributions, but unequal variance) */
+proc glm data = dataset;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / welch;
+run;
+
+data critical_value;
+    critical_value = finv(1-0.05, 4, 706.2); *1-alpha for right-tail;
+run;
+proc print data = critical_value;
+run;
+
+
+/* KRUSKAL-WALLIS TEST */
+/* This is appropriate especially in the case of unequal variances
+when there is significant deviations from normality
+especially in the case of very small sample size (no CLT)
+and is appropriate when you want inference on the median (skewed data)
+it is basically doing an ANOVA on the ranked data */
+/* If following up with a comparison of specific groups, must use rank-sum. */
+
+proc npar1way data = dataset Wilcoxon;
+	class explanatory;
+	var response;
+run;
+
+
+## 6. /* Non-Parametric Tests (note that the permutation test is also a non-parametric test */
+
+/* RANK-SUM TEST (for inference on the median of two-samples) */
+
+/* Rank-Sum Test: EXACT Test
+note: the bigger the sample size the exact test might run too many permutations */
+proc npar1way data = dataset wilcoxon;
+class explanatory;
+var response;
+exact HL wilcoxon; *will give us exact p-values and HL for CI;
+run;
+
+/* To get the CI to match a one-sided alpha 0.5 test,
+specify the exact HL option alpha 0.1 for the CI. 
+HL = Hodges-Lehmann Estimation for confidence intervals */
+proc npar1way data = dataset wilcoxon alpha = 0.1;
+class explanatory;
+var response;
+exact HL wilcoxon;
+run;
+
+/* Rank-Sum Test: NORMAL Approximation
+the larger the sample size, you can use the z approximation
+the smaller, the more conservative, choose the t approximation */
+proc npar1way data = dataset wilcoxon;
+class explanatory;
+var response;
+run;
+
+/* To get the CI to match a one-sided alpha 0.5 test, specify alpha = 0.1
+specify the HL option (asymptotic is for the normal approximation) */
+proc npar1way data = dataset wilcoxon HL alpha = 0.1;
+class explanatory;
+var response;
+run;
+
+/* To get the one sided critical value for a z-distribution (normal approximation) */
+data critval;
+cv = quantile("normal", 0.95); *alpha for left, 1-alpha for right;
+run;
+proc print data = critval;
+run;
+
+
+/* SIGNED-RANK TEST (for paired data) */
+
+* Add a diff column;
+data dataset;
+    set dateset;
+    diff = before - after;
+run;
+
+proc print data = dataset;
+run;
+
+* Run the Wilcoxon signed-rank test;
+* this seems to give an incorrect output for S, but close for 2-sided p-value;
+proc univariate data = dataset;
+var diff;
+run;
+
+* get the critical value (one-sided z-distribution);
+data critval;
+cv = quantile("normal", 0.95); *alpha for left, 1-alpha for right;
+run;
+
+proc print data = critval;
+run;
+
+
+* This is extra code for the by hand calculations;
+* Calculate the absolute differences and rank them;
+data ranked;
+    set dataset;
+    abs_diff = abs(diff);
+run;
+
+proc rank data=ranked out=ranked ties=mean;
+    var abs_diff;
+    ranks rank_abs_diff;
+run;
+
+* Sum the ranks of the positive differences;
+data stats;
+    set ranked;
+    if diff > 0 then S = rank_abs_diff;
+    else S = 0;
+run;
+
+proc means data=stats sum noprint;
+    var S;
+    output out=sums sum(S)=sum_S n=n_obs;
+run;
+
+* Calculate expected mean, standard deviation, and Z statistic;
+data final;
+    set sums;
+    mean_S = n_obs * (n_obs + 1) / 4;
+    sd_S = sqrt(n_obs * (n_obs + 1) * (2 * n_obs + 1) / 24);
+    Z_statistic = (sum_S - 0.5 - mean_S) / sd_S;
+run;
+
+* Print the results;
+proc print data=final;
+    var sum_S mean_S sd_S Z_statistic;
+run;
+
+*To find a one-sided p-value associated with a z-statistic;
+data pvalue;
+pv = 1-probnorm(zStat);
+run;
+
+proc print data = pvalue;
+run;
+
+
+/* KRUSKAL-WALLIS TEST (for inference on the median of three or more samples) */
+* 𝑇𝑒𝑠𝑡 𝑆𝑡𝑎𝑡𝑖𝑠𝑡𝑖𝑐: 𝜒2 (chi-square);
+proc npar1way data = dataset;
+	class explanatory;
+	var response;
+run;
+
+
+## 7. /* SAS code summary */
+
+
+/* PEARSON'S R CORRELATION COEFFICIENT */
+
+* visualize a scatterplot of the data;
+proc sgscatter data = dataset;
+plot response*explanatory / markerattrs=(symbol=circlefilled);
+title "Analysis";
+run;
+
+* get the t-critical value;
+data criticalvalue;
+critval = quantile("t", 0.975, n-2);
+run;
+proc print data = criticalvalue;
+run;
+
+* find the correlation coefficient and p-value;
+proc corr data = dataset;
+run;
+
+
+/* SIMPLE LINEAR REGRESSION */
+
+* get the parameter estimate table with slope and intercept;
+proc reg data = dataset;
+model response = explanatory;
+run;
+
+* if you want to change alpha and get the parameter estimate table including confidence intervals;
+proc reg data = dataset alpha = 0.01;
+model response = explanatory / clb;
+run;
+
+
+* another way to get the parameter estimate table;
+proc glm data = dataset;
+* solution -> regression: parameter estimate table;
+model response = explanatory / solution;
+run;
+
+* if you want to change alpha and get a confidence interval for the parameters;
+proc glm data = dataset alpha = 0.01;
+model respons = explanatory / solution clparm;
+run;
+
+
+/* CONFIDENCE AND PREDICTION INTERVALS FOR NEW DATA POINTS */
+
+* add new data;
+data dataset;
+input explanatory response;
+datalines;
+62 65
+90 64
+50 48
+35 57
+200 601
+100 146
+90 47
+95 .
+200 .
+;
+
+proc reg data = dataset;
+model response = explanatory / clm;
+* clm = CI for mean;
+run;
+
+proc reg data = dataset;
+model response = explanatory / cli;
+* cli = PI for individual;
+run;
+
+/* OR */
+
+proc glm data = dataset;
+model response = explanatory / solution clm;
+* clm = CI for mean;
+run;
+
+proc glm data = dataset;
+model response = explanatory / solution cli;
+* cli = PI for individual;
+run;
+
+
+:::
