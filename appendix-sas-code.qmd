@@ -169,38 +169,62 @@ run;
 
 ```
 
-## 8. /* USEFUL FUNCTIONS */
 
-* to get pvalues (2-sided);
-data mypval;
-pv = 2*(1-cdf(“t”, tstat, df));
+## 2. Visualization & Assumption Checks
+
+> Use `proc univariate`, `proc sgplot`, and `proc ttest` to visualize distributions and assess assumptions of normality and variance.  
+> Many visualizations require sorting your dataset by the grouping variable.
+
+### 2A. Univariate Plots (No Grouping)
+```{sas}
+
+/* Histogram and QQ plot (ungrouped) */
+proc univariate data = dataset;
+    var response;
+    histogram response;
+    qqplot response;
 run;
-proc print data = mypval;
+
+/* Boxplot (ungrouped) */
+proc sgplot data = dataset;
+    vbox response;
 run;
 
+/* Scatterplot of response vs explanatory */
+proc sgplot data = dataset;
+    scatter x = explanatory y = response;
+    * title "Scatterplot of ";
+run;
 
-## 1. /* plots for assumptions */
+/* Turn off the title */
+title;
+run;
 
-* Sorting may be required for histograms and qqplots.;
+```
+
+### 2B. Histograms and QQ Plots by Group
+```{sas}
+
+/* Sort by grouping variable (required for BY statement) */
 proc sort data = dataset;
     by explanatory;
 run;
 proc print data = dataset;
 run;
 
-* proc univariate can plot both histograms and qqplots;
+/* Histograms grouped by explanatory */
 proc univariate data = dataset;
-    class explanatory;
-    var response;
+    by explanatory;
     histogram response;
-    qqplot response;
 run;
 
-* Histograms;
+/* QQ plots grouped by explanatory */
 proc univariate data = dataset;
-	by explanatory;
-	histogram respones;
+    * title "QQ Plot by ";
+    by explanatory;
+    qqplot response / normal(mu=est sigma=est);
 run;
+
 
 proc sgplot data = dataset;
 	* title "Histogram by ";
@@ -209,43 +233,50 @@ proc sgplot data = dataset;
     density response; * with a normal distribution curve;
 run;
 
-* QQ Plots;
-proc univariate data = dataset;
-    * title "QQ Plot by ";
-    by explantory;
-    qqplot response / normal(mu=est sigma=est);
-run;
+```
 
+### 2C. Boxplots and Density Plots by Group
+```{sas}
 
-* Boxplots;
+/* Boxplot by group */
 proc sgplot data=dataset;
     * title "Boxplot of";
     vbox response / category=explanatory;
 run;
 
-* Scatterplot;
-proc sgplot data=dataset;
-	scatter x=explanatory y=response;
-	* title "Scatterplot of ";
-run;
-
-/* Turn off the title */
-title;
-
-* Can also use proc ttest just for histograms (with boxplots) and qqplots;
-* generate histograms and qqplots;
-proc ttest data = dataset;
-class explanatory;
-var response;
-run;
-
-* Histograms using PROC UNIVARIATE to adjust to same scale;
-proc univariate data=dataset noprint;
+/* Histogram with overlaid normal curve by group */
+proc sgplot data = dataset;
     by explanatory;
-    histogram response / endpoints=0 to 1000 by 50 normal;  * Adjust the range and bin width as needed;
-    inset n mean std / pos=ne;
+    histogram response / transparency = 0.5;
+    density response;  /* Normal curve */
 run;
 
+```
+
+### 2D. Visualizations from proc ttest
+```{sas}
+
+/* `proc ttest` also generates histogram, QQ plot, and boxplot (grouped) */
+proc ttest data = dataset;
+    class explanatory;
+    var response;
+run;
+
+```
+
+### 2E. Custom Histogram with Set Bin Width
+```{sas}
+
+/* Adjust histogram range and bin width */
+proc univariate data = dataset noprint;
+    by explanatory;
+    histogram response / endpoints = 0 to 1000 by 50 normal; /* Adjust as needed */
+    inset n mean std / pos = ne;
+run;
+
+```
+
+---
 
 ## 2. /* SAS code summary */
 
@@ -873,5 +904,12 @@ model response = explanatory / solution cli;
 * cli = PI for individual;
 run;
 
+## 8. /* USEFUL FUNCTIONS */
 
+* to get pvalues (2-sided);
+data mypval;
+pv = 2*(1-cdf(“t”, tstat, df));
+run;
+proc print data = mypval;
+run;
 :::
