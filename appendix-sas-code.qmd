@@ -276,67 +276,96 @@ run;
 
 ```
 
----
 
-## 2. /* SAS code summary */
+## 3. Permutation Test
 
-/* PERMUTATION TEST */
+### 3A. Observed Difference in Means
+```{sas}
 
-* plot histograms;
-proc univariate data = data;
-class group;
-histogram variable;
+/* Use proc ttest to compute observed difference between groups */
+proc ttest data = dataset;
+    class group;
+    var response;
 run;
 
-* get difference of means (needed for permutation comparison);
-proc ttest data = data;
-class group;
-var variable;
-run;
+```
 
+### 3B. Generate Permutations with proc iml
+```{sas}
 
-* permutation test;
+/* Shuffle response values across group labels using IML */
+
+/* Borrowed code from internet: randomizes observations and creates a matrix with one row per permutation */
+
+/* NOTE: Replace `dataset`, `group` and `response` with your actual variable names */
+
+proc iml;
+    use dataset;
+    read all var {group response} into x;  /* Make sure to specify class variable first */
+    
+      nPerms = 10000;                 /* Number of permutations */
+    permuted = t(ranperm(x[,2], nPerms));  /* Create permuted response matrix */
+    combined = x[,1] || permuted;   /* Combine original group column with each permuted column */
+
+    create newds from combined;
+    append from combined;
+quit;
+
+```
+
+### 3C. Build Permutation Distribution
+```{sas}
+
+/* Use proc ttest to calculate mean differences for each permutation */
+
 ods output off;
-ods exclude all; 
+ods exclude all;   /* Suppress output */
+  
+/* The ods output line below is optional if you want to capture confidence intervals */
+/* ods output conflimits=diff; */
 
-*borrowed code from internet ... randomizes observations and creates a matrix ... one row per randomization ;                                                                                                                
-proc iml;                                                                                                                                                                                                                    
-use data;                        * change data set name here to match your data set name above;                                                                                                                              
-read all var{group variable} into x;   *change variable names here ... make sure it is class then var ... in that order.;                                                                                                  
-p = t(ranperm(x[,2],10000));    *Note that the "1000" here is the number of permutations. ;                                                                                                                                    
-paf = x[,1]||p;                                                                                                                                                                                                              
-create newds from paf;                                                                                                                                                                                                       
-append from paf;                                                                                                                                                                                                             
-quit;         
-                  
-*calculates differences and creates a histogram;                                                                                                                                                                             
-ods output conflimits=diff;                                                                                                                                                                                                  
-proc ttest data=newds plots=none;                                                                                                                                                                                            
-  class col1;                                                                                                                                                                                                                
-  var col2 - col10001;                                                                                                                                                                                                        
-run; 
+proc ttest data = newds plots = none;
+    class col1;
+    var col2 - col10001;
+run;
 
 ods output on;
-ods exclude none;     
-                  
-proc univariate data=diff;                                                                                                                                                                                                   
-  where method = "Pooled";                                                                                                                                                                                                   
-  var mean;                                                                                                                                                                                                                  
-  histogram mean;                                                                                                                                                                                                            
-run;  
+ods exclude none;
 
-*The code below calculates the number of randomly generated differences that are as extreme or more extreme thant the one observed (divide this number by 1000 you have the pvalue);                                         
-*check the log to see how many observations are in the data set.... divide this by 1000 (or however many permutations you generated) and that is the (one sided)p-value;                                                     
-data numdiffs;                                                                                                                                                                                                               
-set diff;                                                                                                                                                                                                                    
-where method = "Pooled";                                                                                                                                                                                                     
-if abs(mean) >= abs(diffOfMeans);   *you will need to put the observed difference you got from t test above here.  note if you have a one or two tailed test.;                                                                           
-run;                                                                                                                                                                                                                         
-* just a visual of the rows produced ... you can get the number of obersvations from the last data step and the Log window.;                                                                                                 
-proc print data = numdiffs;                                                                                                                                                                                                  
-where method = "Pooled";                                                                                                                                                                                                     
+```
+
+### 3D. Plot Permutation Histogram & Calculate p-value
+```{sas}
+                                                                    
+/* Plot the distribution of permuted mean differences (Pooled method only) */
+proc univariate data = diff;
+    where method = "Pooled";
+    var mean;
+    histogram mean;
 run;
 
+/* Count number of permuted differences as or more extreme than observed */
+/* Replace `obsDiff` with your observed test statistic from 3A */
+/* Adjust for one-tailed or two-tailed test accordingly */
+data numdiffs;
+    set diff;
+    where method = "Pooled";
+    if abs(mean) >= abs(obsDiff);
+run;
+
+/* Print matching rows (just for visual check) */
+proc print data = numdiffs;
+    where method = "Pooled";
+run;    
+
+/* Manual Step:
+   - Check the number of rows in `numdiffs` (from the log or output)
+   - Divide that by the total number of permutations (e.g., 10000)
+   - This gives your p-value */
+
+```
+
+---
 
 ## 3. /* SAS code summary */
 
@@ -912,4 +941,12 @@ pv = 2*(1-cdf(“t”, tstat, df));
 run;
 proc print data = mypval;
 run;
+
+from permuation section
+* plot histograms;
+proc univariate data = data;
+class group;
+histogram variable;
+run;
+
 :::
