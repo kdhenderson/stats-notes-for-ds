@@ -365,125 +365,136 @@ run;
 
 ```
 
----
 
-## 3. /* SAS code summary */
+## 4. $t$-Tests and Power Analysis
 
-/* T-CRITICAL VALUE */
+> This section includes basic $t$-test syntax, F-tests for equal variances, and power analysis using `proc power`.
+
+### 4A. Basic $t$-Tests and Critical Values
+```{sas}
+
+/* Compute critical t-value for two-sided test at α = 0.05 */
 data criticalvalue;
-critval = quantile("T", 0.975, df);
-;
+    critval = quantile("T", 0.975, df);
+run;
 proc print data = criticalvalue;
 run;
 
-
-/* ONE-SAMPLE T-TEST */
-* proc ttest outputs histogram, boxplot and qqplot;
-proc ttest data = dataset h0=muUnderNull sides=2 alpha=0.05;
+/* One-sample t-test (H0: mean = muUnderNull) */
+/* * proc ttest outputs histogram, boxplot and qqplot */
+proc ttest data = dataset h0 = muUnderNull sides = 2 alpha = 0.05;
+    var response;
 run;
 
-
-/* PAIRED T-TEST (mu(2-1)) */
+/* Paired t-test (H0: mean difference = 0, computed as Group2 - Group1) */
 proc ttest data = dataset;
-   paired explanatory2*explanatory1;
+    paired explanatory2*explanatory1;
 run;
 
-
-/* TWO-SAMPLE T-TEST (pooled is with pooled st.dev. and satterthwaite is with welch's) */
-proc ttest data = dataset h0=0 sides=2 alpha=0.05;                                                                                                                                                    
-		class explanatory;                                                                                                                                                
-	var response;                                                                                                                                                                                                                                                                                                                                                                                  
+/* Two-sample t-test (equal variance and Welch's handled together) */
+/* Pooled uses pooled st.dev. and Satterthwaite uses Welch's */
+proc ttest data = dataset h0 = 0 sides = 2 alpha = 0.05;
+    class explanatory;
+    var response;
 run;
 
+```
 
-/* EQUALITY OF VARIANCES F-TEST (runs with proc ttest) */
-/* Requires assumption of normal population distributions;
-We can use the F-Test to provide secondary evidence if the visual is inconclusive.;
-The null hypothesis is of equality of variances.; */
+### 4B. Equality of Variances Tests
+```{sas}
 
-/* EQUALITY OF VARIANCES BROWN-FORSYTHE TEST (doesn't require normality) */
+/* F-test for equality of variances is run automatically as part of proc ttest */
+/* The F-test (default in proc ttest) assumes normal distributions. It's useful as secondary evidence for variance equality if visuals are inconclusive. Null: population variances are equal. */
+
+/* Brown-Forsythe test does not require normality assumptions */
 proc glm data = dataset;
-	class exploratory;
-	model response = exploratory;
-	means exploratory / hovtest = bf;
-run;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / hovtest = bf;  /* Brown-Forsythe test */
+run;  
 
+```
 
-/* POWER for a one-sample t-test */
+### 4C. Power Analysis (One- and Two-Sample)
+```{sas}
+
+/* Power for one-sample t-test */
 proc power;
-	onesamplemeans
-		sides = 1
-		alpha = .05
-		nullmean = 0
-		mean = xbar
-		stddev = s
-		ntotal = n
-		power = .;
+    onesamplemeans
+        sides = 1
+        alpha = 0.05
+        nullmean = 0
+        mean = xbar
+        stddev = s
+        ntotal = n
+        power = .;
 run;
 
-
-/* POWER for a two-sample t-test */
-
-proc power; 
-*can specify mean for each (nullmean) and ntotal;
-	twosamplemeans
-		sides=1
-		alpha=.05
-		meandiff=effectSize
-		stddev=s
-		npergroup=n1
-		power=.;
-run;
-
-*FLS unit4 creativity question;
+/* Power for two-sample t-test */
 proc power;
-	twosamplemeans
-		sides=1
-		alpha=0.05
-		nulldiff=0
-		meandiff=3
-		stddev=4.5
-		ntotal=47 /* First group has 24 observations, second group has 23 */
-		power=.;
+    twosamplemeans
+        sides = 1
+        alpha = 0.05
+        meandiff = effectSize
+        stddev = s
+        npergroup = n1
+        power = .; /* specify a dot or omit this line to solve for the unknown parameter */
+
 run;
 
+/* Example: specify total sample size and mean for each using `nullmean and meandiff` */
+proc power;
+    twosamplemeans
+        sides = 1
+        alpha = 0.05
+        nulldiff = 0
+        meandiff = 3
+        stddev = 4.5
+        ntotal = 47;  /* e.g. 24 in group 1, 23 in group 2 */
+run;
 
-/* POWER CURVES for one or two-sample t-test (power vs. sample size or effect size */
+```
 
-*make a power curve, reactivity (one-sample) exp, sample sizes;
+### 4D. Power Curve Plots
+```{sas}
+
+/* Power vs. sample size (one-sample) */
 ods graphics on;
 
 proc power;
-	onesamplemeans
-		sides=1
-		alpha=.05
-		nullmean=0
-		ntotal=60 80
-		mean=.07
-		stddev=.2
-		power = .;
-		plot x=n min=60 max=80;
+    onesamplemeans
+        sides = 1
+        alpha = 0.05
+        nullmean = 0
+        ntotal = 60 80
+        mean = 0.07
+        stddev = 0.2
+        power = .;
+    plot x = n min = 60 max = 80;
 run;
 
 ods graphics off;
 
-*make a power curve, creativity exp, effect sizes;
+/* Power vs. effect size (two-sample) */
 ods graphics on;
 
 proc power;
-	twosamplemeans
-		sides=1
-		alpha=.05
-		nulldiff=0
-		meandiff=3 to 5 by 0.1 
-		ntotal=47
-		stddev=4.5
-		power = .;
-		plot x=effect min=3 max=5;
+    twosamplemeans
+        sides = 1
+        alpha = 0.05
+        nulldiff = 0
+        meandiff = 3 to 5 by 0.1
+        ntotal = 47
+        stddev = 4.5
+        power = .;
+    plot x = effect min = 3 max = 5;
 run;
 
 ods graphics off;
+		
+```
 
+---
 
 ## 4. /* SAS code summary */
 
