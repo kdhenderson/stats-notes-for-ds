@@ -518,33 +518,34 @@ run;
 
 ```
 
----
 
 ### 5B. Multiple Comparisons (Tukey + Pairwise Tests)
 ```{sas}
 
-/* MULTIPLE (PAIRWISE) COMPARISONS */
-/* QOI 2: Run every pairwise t-test and 
-perform the appropriate multiple comparison adjustment */
-/*  Adjustment for Multiple Comparisons: Tukey example Tukey */
-proc glm data=playersHeight;
+/* Example: pairwise t-tests with Tukey adjustment and confidence intervals */
+proc glm data = playersHeight;
     class Sport;
     model Height = Sport;
-    means Sport / hovtest=bf;          /* Brown-Forsythe test for homogeneity of variances */
-    lsmeans Sport / pdiff adjust=tukey cl;  /* Pairwise comparisons with Tukey adjustment */
+    means Sport / hovtest = bf;
+    lsmeans Sport / pdiff adjust = tukey cl;
 run;
 
+/* Optionally show differences both directions (A–B and B–A) */
 proc glm data = playersHeight;
-class Sport;
-model Height = Sport;
-means Sport / hovtest = bf tukey cldiff;
+    class Sport;
+    model Height = Sport;
+    means Sport / hovtest = bf tukey cldiff;
 run;
-/* change the cl option to cldiff to obtain confidence intervals
- for the differences in both directions (i.e., A-B and B-A). 
- The cl option provides confidence intervals for the means, 
- while cldiff provides confidence intervals for the differences between means. */
 
+/* The cl option provides CIs for the means, 
+ while cldiff provides CIs for the differences between means. */
 
+```
+
+---
+
+### 5C. Linear Contrasts
+```{sas}
 /* LINEAR CONTRASTS (on sum and avg) */
 /* QOI 3: Create a contrast to test to see if there is evidence that
 the mean height of group1 is significantly different than
