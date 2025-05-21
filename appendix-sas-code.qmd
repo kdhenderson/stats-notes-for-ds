@@ -494,28 +494,34 @@ ods graphics off;
 		
 ```
 
----
 
-## 4. /* SAS code summary */
+## 5. ANOVA and Extra Sum of Squares
 
-/* ANOVA - MULTIPLE COMPARISONS - LINEAR CONTRASTS */
+> This section includes one-way ANOVA, multiple comparisons, linear contrasts, and extra sum of squares tests for nested or grouped comparisons.
 
+### 5A. One-Way ANOVA with Variance Checks
+```{sas}
 
-/* ANOVA */
-/* QOI 1: Are any of the means different?
-First run an anova for EMM and SMM(Full) to test if any pair has difference of means
-And run Brown-Forsythe test as further evidence of equal variance */
-proc glm data=dataset;
-class explanatory;
-model response = explanatory;
-means explanatory / hovtest=bf; *homogeneity of variance - brown forsythe test;
+/* One-way ANOVA: for EMM and SMM (full), tests if any group means differ (i.e. any pair has difference of means) */
+/* Brown-Forsythe test is included to check equal variance assumption (does not require normality) */
+proc glm data = dataset;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / hovtest = bf;  /* Brown-Forsythe test (homogeneity of variance) */
 run;
 
-* Find the critical value;
+/* Manually compute F critical value */
 data critical_value;
     set calculations;
-    critical_value = finv(1-alpha, dfn, dfd); *1-alpha for right-tail;
+    critical_value = finv(1 - alpha, dfn, dfd);  /* right-tailed (1-alpha) */
 run;
+
+```
+
+---
+
+### 5B. Multiple Comparisons (Tukey + Pairwise Tests)
+```{sas}
 
 /* MULTIPLE (PAIRWISE) COMPARISONS */
 /* QOI 2: Run every pairwise t-test and 
