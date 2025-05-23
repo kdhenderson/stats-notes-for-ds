@@ -542,7 +542,6 @@ run;
 
 ```
 
----
 
 ### 5C. Linear Contrasts
 ```{sas}
@@ -552,31 +551,41 @@ the mean height of group1 is significantly different than
 the average of the mean heights of the other 4 groups
 (as an alternative to the extra sum of squares test). */
 
+/* Test linear contrasts using CONTRAST and ESTIMATE */
+/* These compare one group mean to a linear combination of others */
+
 /* didn't state order = data so groups are in alphabetical order;
 order = data; keeps the data in the order it came in: proc glm data = Handicap order = data;
 contrast gives you the sum of squares
-estimate gives you the estimate of the gamma */
+estimate gives you the estimate of the gamma */  
+  
 proc glm data = dataset;
-class explanatory;
-model response = explanatory;
-means explanatory;
-Contrast 'Grp1 vs Sum of Other 4 Groups' Sport 4 -1 -1 -1 -1;
-Estimate 'Grp1 vs Sum of Other 4 Groups' Sport 4 -1 -1 -1 -1;
-Estimate 'Grp1 vs Averge of Other 4 Groups' Sport 4 -1 -1 -1 -1 / DIVISOR = 4;
-Contrast 'Contrast Grp1 vs Grp2' Sport 1 -1 0 0 0;
-Estimate 'Estimate Grp1 vs Grp2' Sport 1 -1 0 0 0;
-run;
+    class explanatory;
+    model response = explanatory;
+    means explanatory;
 
-/* to get 95% CI for the difference in averages of above
-point estimate +- multiplier * standard error */
-* to get multiplier for 95% CI;
+    /* Grp1 vs sum or average of others (assuming 5 groups) */
+    contrast 'Grp1 vs Sum of Other 4 Groups' explanatory 4 -1 -1 -1 -1;
+    estimate 'Grp1 vs Sum of Other 4 Groups' explanatory 4 -1 -1 -1 -1;
+    estimate 'Grp1 vs Avg of Other 4 Groups' explanatory 4 -1 -1 -1 -1 / divisor = 4;
+
+    /* Grp1 vs Grp2 */
+    contrast 'Grp1 vs Grp2' explanatory 1 -1 0 0 0;
+    estimate 'Estimate Grp1 vs Grp2' explanatory 1 -1 0 0 0;
+run;  
+  
+
+/* To compute a 95% CI manually for the difference in averages of above (point estimate +- multiplier * standard error): critical t-value (multiplier for 95% CI) */
 data quantile;
-quant = quantile("t", 0.975, sf=n-groups);
+    quant = quantile("t", 0.975, df=n-groups);
 run;
 proc print data = quantile;
 run;
 
+```
 
+### 5D. Bonferroni Adjustment for Selected Comparisons
+```{sas}
 /* QOI 4: Use the Bonferroni method to construct
 simultaneous confidence intervals for mu2-mu3, mu2-mu5, and mu3-mu5.
 k = 3 b/c there are 3 pairs being compared */
