@@ -586,31 +586,38 @@ run;
 
 ### 5D. Bonferroni Adjustment for Selected Comparisons
 ```{sas}
-/* QOI 4: Use the Bonferroni method to construct
-simultaneous confidence intervals for mu2-mu3, mu2-mu5, and mu3-mu5.
-k = 3 b/c there are 3 pairs being compared */
-proc glm data = dataset order=data;
+
+/* Simultaneous CIs for selected differences (e.g. μ2–μ3, μ2–μ5, μ3–μ5) */
+/* k=3 (comparing 3 pairs) */
+
+proc glm data = dataset order = data;
     class explanatory;
     model response = explanatory;
     means explanatory;
     lsmeans explanatory / pdiff cl;
-    * specific comparisons of interest;
-    * use estimate to get g and SE(g), for CI;
+
+    /* ESTIMATE used to extract estimate and SEs for CI construction */
     estimate 'mu2 - mu3' explanatory 0 1 -1 0 0;
     estimate 'mu2 - mu5' explanatory 0 1 0 0 -1;
     estimate 'mu3 - mu5' explanatory 0 0 1 0 -1;
 run;
 
+
 /* to get 95% CI for the difference in averages of above
 point estimate +- multiplier * standard error */
-* to get multiplier for adjusted CI, two-tailed;
+/* Bonferroni multiplier: 1 - α/(2k) for two-tailed test with k comparisons; df=n-totalgrps */
 data quantile;
-quant = quantile("t", 1-0.05/K/2(tails), df=n-totalgrps);
+    quant = quantile("t", 1 - 0.05/6, df);  /* adjust denominator for # comparisons and tails */
 run;
 proc print data = quantile;
 run;
 
+```
 
+---
+
+### 5E. Summary: Choosing a Multiple Comparison Adjustment
+```{sas}
 /* COMMANDS FOR ALL THE DIFFERENT MULTIPLE COMPARISON ADJUSTMENT TYPES */
 /* When deciding multiple comparison correction:
 • Were the comparisons planned before looking at the data or unplanned? If planned, no need to make multiple comparison correction. We can use LSD.
