@@ -617,60 +617,62 @@ run;
 ---
 
 ### 5E. Summary: Choosing a Multiple Comparison Adjustment
+
+- When deciding multiple comparison correction:
+  - Were the comparisons planned before looking at the data or unplanned? If planned, no need to make multiple comparison correction. Can use LSD.
+  - Are the groups being compared to a single control or reference group? If so, use Dunnett’s.
+  - Are the groups normally distributed with equal standard deviation? If so, use Tukey-Kramer.
+  - If we are doing some or all unplanned pairwise comparisons, without a reference/control group and without the assumption of normality or equal variance, use Bonferroni.
 ```{sas}
-/* COMMANDS FOR ALL THE DIFFERENT MULTIPLE COMPARISON ADJUSTMENT TYPES */
-/* When deciding multiple comparison correction:
-• Were the comparisons planned before looking at the data or unplanned? If planned, no need to make multiple comparison correction. We can use LSD.
-• Are the groups being compared to a single control or reference group? If so, use Dunnett’s.
-• Are the groups normally distributed with equal standard deviation? If so, use Tukey-Kramer.
-• If we are doing some or all unplanned pairwise comparisons, without a reference/control group and without the assumption of normality or equal variance,
-use Bonferroni.
-*/
 
-* LSD w/ CI half-width;
-proc glm data=Handicap order=data;
-    class Handicap;
-    model Score = Handicap;
-    means Handicap / lsd; * means returns the half-width;
-    lsmeans Handicap / pdiff cl;
+/* Commands for various multiple comparison methods */
+
+* LSD (Least Significant Difference, use when comparisons are planned) with CI half-width;
+proc glm data = dataset order = data;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / lsd;  * means returns the half-width;
+    lsmeans explanatory / pdiff cl;
 run;
 
-* Dunnett;
-proc glm data=Handicap order=data;
-    class Handicap;
-    model Score = Handicap;
-    means Handicap / dunnett('None');
-    lsmeans Handicap / pdiff=control('None') adjust=dunnett cl;
-run;
+* Dunnett (compare each group to a control/reference group);
+proc glm data = dataset order = data;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / dunnett('Control');
+    lsmeans explanatory / pdiff = control('Control') adjust = dunnett cl;
+run;  
 /* Calculate the half-widths: HalfWidth = (UpperCL - LowerCL) / 2 */
 
-* Tukey-Kramer w/ CI half-width;
-proc glm data=Handicap order=data;
-    class Handicap;
-    model Score = Handicap;
-    means Handicap / tukey;
-    lsmeans Handicap / pdiff adjust = tukey cl;
+* Tukey-Kramer (assumes normality + equal variance; unplanned all-pairwise) with CI half-width;
+proc glm data = dataset order = data;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / tukey;
+    lsmeans explanatory / pdiff adjust = tukey cl;
 run;
 
-* Bonferroni w/ CI half-width;
-proc glm data=Handicap order=data;
-    class Handicap;
-    model Score = Handicap;
-    means Handicap / bon;
-    lsmeans Handicap / pdiff adjust = bon cl;
+* Bonferroni (safest if assumptions are not met or comparisons are partially unplanned) with CI half-width;
+proc glm data = dataset order = data;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / bon;
+    lsmeans explanatory / pdiff adjust = bon cl;
 run;
 
-* code from Jaren;
-proc glm data = Handicap;
-	class Handicap;
-	model Score = Handicap;
-	means Handicap / lsd tukey dunnett bon scheffe;
+* View all options together (Jaren’s code);
+proc glm data = dataset;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / lsd tukey dunnett bon scheffe;
 run;
 
+```
 
-## 5. /* SAS code summary */
+----
 
-/* ANOVA - EXTRA SUM OF SQUARES */
+### 5F. Extra Sum of Squares F-Test
+```{sas}
 
 * conduct an anova (explanatory=group);
 proc glm data = data;
