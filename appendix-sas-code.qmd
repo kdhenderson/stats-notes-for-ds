@@ -545,13 +545,9 @@ run;
 
 ### 5C. Linear Contrasts
 ```{sas}
-/* LINEAR CONTRASTS (on sum and avg) */
-/* QOI 3: Create a contrast to test to see if there is evidence that
-the mean height of group1 is significantly different than
-the average of the mean heights of the other 4 groups
-(as an alternative to the extra sum of squares test). */
 
 /* Test linear contrasts using CONTRAST and ESTIMATE */
+/* CONTRAST is used to test hypotheses (gives SS, F-statistic), while ESTIMATE provides point estimate and SE (used to construct confidence intervals). */
 /* These compare one group mean to a linear combination of others */
 
 /* didn't state order = data so groups are in alphabetical order;
@@ -577,7 +573,7 @@ run;
 
 /* To compute a 95% CI manually for the difference in averages of above (point estimate +- multiplier * standard error): critical t-value (multiplier for 95% CI) */
 data quantile;
-    quant = quantile("t", 0.975, df=n-groups);
+    quant = quantile("t", 0.975, df); * where df=n-groups;
 run;
 proc print data = quantile;
 run;
@@ -613,8 +609,6 @@ proc print data = quantile;
 run;
 
 ```
-
----
 
 ### 5E. Summary: Choosing a Multiple Comparison Adjustment
 
@@ -669,34 +663,17 @@ run;
 
 ```
 
-----
-
 ### 5F. Extra Sum of Squares F-Test
 ```{sas}
 
-* conduct an anova (explanatory=group);
+/* Conduct an anova (explanatory=group) */
 proc glm data = data;
 class explanatory;
 model response = explanatory;
 run;
 
-* get p-value from f-statistic (extra sum-of-squares);
-data f_test;
-p_value = 1 - probf(fstat, dfn, dfd); *1- for right tail;
-run;
-proc print data=f_test;
-run;
-
-* another way to get p-value;
-data quantile;
-myquant = 1-CDF('F', fstat, dfn, dfd)
-run;
-proc print data = quantile;
-run;
-
-
-/* EXTRA SUM OF SQUARES */
-/* Do the BYOA calculations. */
+/* Extra-sum-of-squares */
+/* Compare full and reduced models using BYOA-style calculations */
 data calculations;
     alpha = 0.05;  
     dftotal = 2580;
@@ -709,27 +686,41 @@ data calculations;
     msmodel = ssmodel / dfn;
     fstat = msmodel / mse;
 run;
-* Find the critical value for the above hypothesis test;
+
+/* Compute critical F and p-value for the above hypothesis test. */
 data critical_value;
     set calculations;
-    critical_value = finv(1-alpha, dfn, dfd); *1-alpha for right-tail;
+    critical_value = finv(1 - alpha, dfn, dfd); *1-alpha for right-tail;
 run;
-* Find the p-value from F, dfn, dfd;
+
 data f_test;
-	set critical_value;
-	p_value = 1 - probf(fstat, dfn, dfd); *1-probf for right-tail;
+    set critical_value;
+    p_value = 1 - probf(fstat, dfn, dfd); *1-probf for right-tail;
+run;
+proc print data = f_test;
 run;
 
-/* CHECK THE RESULTS WITH A CONTRAST */
+/* another way to get p-value */
+data quantile;
+    myquant = 1-CDF('F', fstat, dfn, dfd)
+run;
+proc print data = quantile;
+run;
+
+/* You can check against a contrast if relevant */
 proc glm data = dataset;
-class explanatory;
-model response = explanatory;
-means explanatory;
-Contrast 'Contrast Grp1 vs. Grp2' explanatory 0 0 0 1 -1 0;
-Estimate 'Estimate Grp1 vs. Grp2' explanatory 0 0 0 1 -1 0;
+    class explanatory;
+    model response = explanatory;
+    means explanatory;
+    contrast 'Contrast Grp1 vs. Grp2' explanatory 0 0 0 1 -1 0;
+    estimate 'Estimate Grp1 vs. Grp2' explanatory 0 0 0 1 -1 0;
 run;
 
+```
 
+---
+
+```
 /* WELCH'S ANOVA (for normal distributions, but unequal variance) */
 proc glm data = dataset;
     class explanatory;
