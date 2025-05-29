@@ -720,7 +720,6 @@ run;
 
 ---
 
-```
 /* WELCH'S ANOVA (for normal distributions, but unequal variance) */
 proc glm data = dataset;
     class explanatory;
@@ -748,51 +747,66 @@ proc npar1way data = dataset Wilcoxon;
 	var response;
 run;
 
+---
 
-## 6. /* Non-Parametric Tests (note that the permutation test is also a non-parametric test */
 
-/* RANK-SUM TEST (for inference on the median of two-samples) */
+## 6. Non-Parametric Tests
 
-/* Rank-Sum Test: EXACT Test
-note: the bigger the sample size the exact test might run too many permutations */
+> Note: The permutation test (Section 3) is also a non-parametric method.
+
+### 6A. Wilcoxon Rank-Sum Test (Mann–Whitney U Test)
+
+> Used for inference on the median of two independent samples. 
+
+```{sas}
+
+/* Exact Wilcoxon Rank-Sum Test (with Hodges-Lehmann CI) */
+/* Best for small samples. Computationally intensive for large samples. */
 proc npar1way data = dataset wilcoxon;
-class explanatory;
-var response;
-exact HL wilcoxon; *will give us exact p-values and HL for CI;
+    class explanatory;
+    var response;
+    exact HL wilcoxon;
 run;
 
-/* To get the CI to match a one-sided alpha 0.5 test,
-specify the exact HL option alpha 0.1 for the CI. 
-HL = Hodges-Lehmann Estimation for confidence intervals */
-proc npar1way data = dataset wilcoxon alpha = 0.1;
-class explanatory;
-var response;
-exact HL wilcoxon;
+/* For one-sided alpha = 0.05, specify alpha = 0.10 to match CI to one-sided test */
+/* HL = Hodges-Lehmann estimator of the median difference for confidence intervals. */
+proc npar1way data = dataset wilcoxon alpha = 0.10;
+    class explanatory;
+    var response;
+    exact HL wilcoxon;
 run;
+
 
 /* Rank-Sum Test: NORMAL Approximation
 the larger the sample size, you can use the z approximation
 the smaller, the more conservative, choose the t approximation */
+/* Normal approximation for large samples */
+/* z-approximation used when sample size is large. Choose t-approximation for smaller samples or to be more conservative. */
 proc npar1way data = dataset wilcoxon;
-class explanatory;
-var response;
+    class explanatory;
+    var response;
 run;
 
-/* To get the CI to match a one-sided alpha 0.5 test, specify alpha = 0.1
-specify the HL option (asymptotic is for the normal approximation) */
-proc npar1way data = dataset wilcoxon HL alpha = 0.1;
-class explanatory;
-var response;
+/* CI using normal approximation with HL estimator (asymptotic CI version) */
+/* To get the CI to match a one-sided alpha = 0.5, set alpha = 0.1 */
+proc npar1way data = dataset wilcoxon HL alpha = 0.10;
+    class explanatory;
+    var response;
 run;
 
-/* To get the one sided critical value for a z-distribution (normal approximation) */
+/* One-sided critical value from normal (Z) distribution */
 data critval;
-cv = quantile("normal", 0.95); *alpha for left, 1-alpha for right;
+    cv = quantile("normal", 0.95); alpha for left, 1-alpha for right;
 run;
 proc print data = critval;
 run;
 
+```
 
+---
+
+### 6B. Wilcoxon Signed-Rank Test (Paired Samples)
+```{sas}
 /* SIGNED-RANK TEST (for paired data) */
 
 * Add a diff column;
