@@ -839,28 +839,34 @@ run;
 
 ```
 
----
-
 ### 6C. Manual Z-Approximation for Signed-Rank
 ```{sas}
+
+/* Step 1: Calculate absolute differences */
+data ranked;
+    set dataset;
+    abs_diff = abs(diff);
+run;
+
+/* Step 2: Rank the absolute differences */
 proc rank data=ranked out=ranked ties=mean;
     var abs_diff;
     ranks rank_abs_diff;
 run;
 
-* Sum the ranks of the positive differences;
+/* Step 3: Identify and sum ranks for positive differences */
 data stats;
     set ranked;
     if diff > 0 then S = rank_abs_diff;
     else S = 0;
 run;
 
-proc means data=stats sum noprint;
+proc means data = stats sum noprint;
     var S;
     output out=sums sum(S)=sum_S n=n_obs;
 run;
 
-* Calculate expected mean, standard deviation, and Z statistic;
+/* Step 4: Calculate expected mean, standard deviation, and Z-statistic */
 data final;
     set sums;
     mean_S = n_obs * (n_obs + 1) / 4;
@@ -868,30 +874,40 @@ data final;
     Z_statistic = (sum_S - 0.5 - mean_S) / sd_S;
 run;
 
-* Print the results;
-proc print data=final;
+proc print data = final;
     var sum_S mean_S sd_S Z_statistic;
 run;
 
-*To find a one-sided p-value associated with a z-statistic;
+/* Step 5: Compute p-value for one-sided test */
 data pvalue;
-pv = 1-probnorm(zStat);
+    set final; /* not sure if this line is needed */
+    pv = 1 - probnorm(Z_statistic);
 run;
 
 proc print data = pvalue;
 run;
 
+```
 
-/* KRUSKAL-WALLIS TEST (for inference on the median of three or more samples) */
-* 𝑇𝑒𝑠𝑡 𝑆𝑡𝑎𝑡𝑖𝑠𝑡𝑖𝑐: 𝜒2 (chi-square);
-proc npar1way data = dataset;
-	class explanatory;
-	var response;
+---
+
+### 6D. Kruskal–Wallis Test (For Inference on the Median of 3+ Groups)
+```{sas}
+
+/* Appropriate when normality or equal variance assumptions are violated,
+   or when analyzing medians across three or more groups */
+/* Test statistic: X^2 (chi-square) */
+proc npar1way data = dataset wilcoxon;
+    class explanatory;
+    var response;
 run;
 
+```
+
+---
 
 ## 7. /* SAS code summary */
-
+```{sas}
 
 /* PEARSON'S R CORRELATION COEFFICIENT */
 
