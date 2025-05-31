@@ -807,31 +807,28 @@ run;
 
 ### 6B. Wilcoxon Signed-Rank Test (Paired Samples)
 ```{sas}
-/* SIGNED-RANK TEST (for paired data) */
 
-* Add a diff column;
+/* Create difference column for paired data */
 data dataset;
-    set dateset;
+    set dataset;
     diff = before - after;
 run;
 
 proc print data = dataset;
 run;
 
-* Run the Wilcoxon signed-rank test;
-* this seems to give an incorrect output for S, but close for 2-sided p-value;
+/* Run Wilcoxon Signed-Rank test using diff */
+/* This seems to give an incorrect output for S, but close for 2-sided p-value */
 proc univariate data = dataset;
-var diff;
+    var diff;
 run;
 
-* get the critical value (one-sided z-distribution);
+/* Critical value for normal approximation (one-sided z-distribution) */
 data critval;
-cv = quantile("normal", 0.95); *alpha for left, 1-alpha for right;
+    cv = quantile("normal", 0.95);  /* alpha for left, 1-alpha for right */
 run;
-
 proc print data = critval;
 run;
-
 
 * This is extra code for the by hand calculations;
 * Calculate the absolute differences and rank them;
@@ -840,6 +837,12 @@ data ranked;
     abs_diff = abs(diff);
 run;
 
+```
+
+---
+
+### 6C. Manual Z-Approximation for Signed-Rank
+```{sas}
 proc rank data=ranked out=ranked ties=mean;
     var abs_diff;
     ranks rank_abs_diff;
