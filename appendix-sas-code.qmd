@@ -904,97 +904,106 @@ run;
 
 ```
 
----
 
-## 7. /* SAS code summary */
+## 7. Correlation & Simple Regression
+
+> This section includes Pearson correlation, simple linear regression, and options for confidence and prediction intervals.
+
+### 7A. Pearson Correlation
 ```{sas}
 
-/* PEARSON'S R CORRELATION COEFFICIENT */
+/* Pearson's R Correlation Coefficient */
 
-* visualize a scatterplot of the data;
+/* Scatterplot of response vs. explanatory */
 proc sgscatter data = dataset;
-plot response*explanatory / markerattrs=(symbol=circlefilled);
-title "Analysis";
+    plot response * explanatory / markerattrs = (symbol = circlefilled);
+    title "Scatterplot: Response vs. Explanatory";
 run;
 
-* get the t-critical value;
+/* T-Critical value (two-sided t-test) */
 data criticalvalue;
-critval = quantile("t", 0.975, n-2);
+    critval = quantile("T", 0.975, df = n - 2);
 run;
 proc print data = criticalvalue;
 run;
 
-* find the correlation coefficient and p-value;
+/* Correlation coefficient and p-value */
 proc corr data = dataset;
+    var response explanatory; /* not sure if this line is needed */
 run;
 
+```
 
-/* SIMPLE LINEAR REGRESSION */
+### 7B. Simple Linear Regression: Coefficients and Fit
+```{sas}
 
-* get the parameter estimate table with slope and intercept;
+/* Linear regression: parameter estimates and summary stats */
 proc reg data = dataset;
-model response = explanatory;
+    model response = explanatory;
 run;
 
-* if you want to change alpha and get the parameter estimate table including confidence intervals;
+/* Optional: set alpha to change significance level and CI width (e.g., 99%) */
 proc reg data = dataset alpha = 0.01;
-model response = explanatory / clb;
+    model response = explanatory / clb;  /* clb = confidence limits for betas */
 run;
 
-
-* another way to get the parameter estimate table;
+/* Alternate method to get the parameter estimate table using proc glm */
 proc glm data = dataset;
-* solution -> regression: parameter estimate table;
-model response = explanatory / solution;
+    model response = explanatory / solution;  /* shows estimate table */
 run;
 
-* if you want to change alpha and get a confidence interval for the parameters;
+/* Add confidence intervals for coefficients (alternative way) */
 proc glm data = dataset alpha = 0.01;
-model respons = explanatory / solution clparm;
+    model response = explanatory / solution clparm;
 run;
 
+```
 
-/* CONFIDENCE AND PREDICTION INTERVALS FOR NEW DATA POINTS */
+### 7C. Confidence & Prediction Intervals for New Observations
+```{sas}
 
-* add new data;
+/* Example dataset with missing response values for prediction */
+/* Add new data */
 data dataset;
-input explanatory response;
-datalines;
-62 65
-90 64
-50 48
-35 57
-200 601
-100 146
-90 47
-95 .
-200 .
-;
-
-proc reg data = dataset;
-model response = explanatory / clm;
-* clm = CI for mean;
+    input explanatory response;
+    datalines;
+    62 65
+    90 64
+    50 48
+    35 57
+    200 601
+    100 146
+    90 47
+    95 .
+    200 .
+    ;
 run;
 
+/* CI for mean response (CLM = confidence limits for mean) */
 proc reg data = dataset;
-model response = explanatory / cli;
-* cli = PI for individual;
+    model response = explanatory / clm;
 run;
 
-/* OR */
+/* PI for individual response (CLI = confidence limits for individual) */
+proc reg data = dataset;
+    model response = explanatory / cli;
+run;    
+
+/* Optionally using proc glm */
+proc glm data = dataset;
+    model response = explanatory / solution clm;  /* confidence interval for mean */
+run;
 
 proc glm data = dataset;
-model response = explanatory / solution clm;
-* clm = CI for mean;
+    model response = explanatory / solution cli;  /* prediction interval for individual */
 run;
 
-proc glm data = dataset;
-model response = explanatory / solution cli;
-* cli = PI for individual;
-run;
+```
+
+---
 
 ## 8. /* USEFUL FUNCTIONS */
-
+```{sas}
 * to get pvalues (2-sided);
 data mypval;
 pv = 2*(1-cdf(“t”, tstat, df));
