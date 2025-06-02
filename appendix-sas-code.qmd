@@ -10,16 +10,11 @@ Quick Navigation:
 - [1. Data Import & Summary Statistics](#1-data-import--summary-statistics)
 - [2. Visualization & Assumption Checks](#2-visualization--assumption-checks)
 - [3. Permutation Test](#3-permutation-test)
-- [4. t-Tests & Power Analysis](#4-t-tests--power-analysis)
-- [5. ANOVA & Extra Sum of Squares](#5-anova--extra-sum-of-squares)
-- [6. Multiple Comparisons](#6-multiple-comparisons)
-- [7. Contrasts](#7-contrasts)
-- [8. Non-Parametric Tests](#8-non-parametric-tests)
-- [9. Correlation & Simple Regression](#9-correlation--simple-regression)
-- [10. Residual Analysis](#10-residual-analysis)
-- [11. Log-Log Models & Back-Transformation](#11-log-log-models--back-transformation)
-- [12. Multiple Linear Regression (MLR)](#12-multiple-linear-regression-mlr)
-- [13. Variable Selection](#13-variable-selection)
+- [4. t-Tests & Power Analysis](#4-t-tests-and-power-analysis)
+- [5. ANOVA and Extra Sum of Squares](#5-anova-and-extra-sum-of-squares)
+- [6. Non-Parametric Tests](#6-non-parametric-tests)
+- [7. Correlation & Simple Regression](#7-correlation--simple-regression)
+- [8. Residual Analysis](#8-residual-analysis)
 
 ::: {.appendix}
 
@@ -1000,22 +995,103 @@ run;
 
 ```
 
----
 
-## 8. /* USEFUL FUNCTIONS */
+## 8. Residual Analysis
+
+> This section focuses on residual diagnostics to evaluate model assumptions such as linearity, homoscedasticity, and outliers.
+
+### 8A. Residual Plots & Diagnostics
+
+> SAS automatically produces residual plots (and other diagnostics) with `proc reg` if ODS graphics are enabled.
+
 ```{sas}
-* to get pvalues (2-sided);
-data mypval;
-pv = 2*(1-cdf(“t”, tstat, df));
-run;
-proc print data = mypval;
+
+ods graphics on;
+
+proc reg data = dataset;
+    model response = explanatory;
 run;
 
-from permuation section
-* plot histograms;
-proc univariate data = data;
-class group;
-histogram variable;
+ods graphics off;
+
+/* If you need customized residual plots (e.g. residuals vs. predicted), use proc sgplot after outputting residuals: */
+
+/* Save residuals and predicted values */
+proc reg data = dataset;
+    model response = explanatory;
+    output out = diagnostics r = residual p = predicted;
 run;
+
+/* Residuals vs. Fitted Values */
+proc sgplot data = diagnostics;
+    scatter x = predicted y = residual;
+    refline 0 / axis = y;
+run;
+
+/* Residuals vs. Explanatory Variable */
+proc sgplot data = diagnostics;
+    scatter x = explanatory y = residual;
+    refline 0 / axis = y;
+run;
+
+```
+
+### 8B. Studentized Residuals
+
+> Studentized residuals help detect outliers by standardizing residuals using their estimated standard errors.
+
+```{sas}
+
+/* Use PROC REG to compute studentized residuals */
+proc reg data = dataset;
+    model response = explanatory;
+    output out = diagnostics
+        rstudent = studentized_resid  /* Studentized residuals */
+        h = leverage;                 /* Leverage values (optional) */
+run;
+
+proc print data = diagnostics;
+    var response explanatory studentized_resid leverage;
+run;
+
+/* Optional: plot studentized residuals */
+proc sgplot data = diagnostics;
+    scatter x = explanatory y = studentized_resid;
+    refline 0 / axis = y;
+run;
+
+```
+
+### 8C. Influence Diagnostics
+
+> Influence diagnostics help identify observations that have an unusually large effect on the model. These include leverage, Cook's distance, and DFFITS.
+
+```{sas}
+
+/* Influence statistics from PROC REG */
+ods graphics on;
+
+proc reg data = dataset;
+    model response = explanatory;
+    output out = influence_out
+        rstudent = studentized_resid
+        cookd = cooks_d
+        dffits = dffits_val
+        h = leverage;
+run;
+
+ods graphics off;
+
+proc print data = influence_out;
+    var response explanatory studentized_resid cooks_d dffits_val leverage;
+run;
+
+/* Visualize Cook’s Distance for all observations */
+proc sgplot data = influence_out;
+    scatter x = _N_ y = cooks_d;
+    refline 4 / axis = y;  /* Optional threshold line (e.g. rule of thumb for large values) */
+run;
+
+```
 
 :::
