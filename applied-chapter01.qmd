@@ -15,13 +15,10 @@ title: "Multiple Linear Regression (MLR) Revisited"
 
 ## Key Terms
 
-- Response Variable vs. Explanatory Variables  
-  - The **response variable** (dependent variable) is what we aim to explain or predict.  
-  - **Explanatory variables** (independent variables) are the factors that may influence the response.
-
-- Regression vs. Classification 
-  - **Regression**: The response is a continuous numeric variable (e.g. predicting car mileage).  
-  - **Classification**: The response variable is categorical and can have two (binary) or more than two levels (e.g. predicting where a car was made: North America, Asia, or Europe).
+- The **response variable** (dependent variable) is what we aim to explain or predict.  
+- **Explanatory variables** (independent variables) are the factors that may influence the response.
+- **Regression**: The response is a continuous numeric variable (e.g. predicting car mileage).  
+- **Classification**: The response variable is categorical and can have two (binary) or more than two levels (e.g. predicting where a car was made: North America, Asia, or Europe).
 
 
 ### Example: Regression Problem - MPG Dataset  
@@ -58,8 +55,7 @@ A regression problem occurs when the response variable is continuous. The goal c
    - Focused on accuracy, not interpretation  
    - More complex models can be used
 
-To determine the appropriate approach, ask:
-What is the primary goal—explanation, prediction, or both?
+To determine the appropriate approach, ask what is the primary goal—explanation, prediction, or both?
 
 
 ## Parametric vs. Nonparametric Regression Tools
@@ -71,8 +67,8 @@ The regression model follows:
 $$
 Y = f(X) + \varepsilon
 $$
+where: 
 
-where:  
 - $X = (x_1, x_2, ..., x_p)$ represents the explanatory variables.  
 - $f(X)$ is the deterministic component.  
 - $\varepsilon$ is the random error.  
@@ -84,13 +80,16 @@ where:
 ### Estimating $f$: Parametric vs. Nonparametric Approaches  
 
 There are two primary approaches for estimating $f$:  
-1. **Parametric** 
-2. **Nonparametric**
+
+1. Parametric  
+2. Nonparametric  
 
 The choice depends on how the response and predictor variables relate mathematically.  
+
 For example:  
-- A numeric predictor like horsepower may follow a quadratic function.  
-- A categorical predictor like cylinders may follow a piecewise function.  
+
+  - A numeric predictor like horsepower may follow a quadratic function.  
+  - A categorical predictor like cylinders may follow a piecewise function.  
 
 ### Parametric Approach
 - Requires specifying the functional form of $f(X)$.  
@@ -118,6 +117,7 @@ For example:
 1. Specifying highly complex forms of $f(X)$ is difficult.  
 2. For large datasets, nonparametric models often perform as well or better.  
 3. Additional diagnostic checks are required, such as:  
+
    - Checking model assumptions (linearity, normality, independence).  
    - Addressing multicollinearity and influential points.  
 
@@ -131,15 +131,16 @@ Y = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p + \varepsilon
 $$
 
 where:  
+
 - $Y$ is the response variable.  
 - $X_1, X_2, ..., X_p$ are the explanatory variables.  
 - $\varepsilon$ is the random error term.
 
 ### Assumptions of MLR
-1. **Linearity** – The relationship between predictors and response is linear.  
-2. **Independence** – Errors are independent.  
-3. **Homoscedasticity** – Errors have constant variance.  
-4. **Normality** – Errors follow a normal distribution. 
+- **Linearity**: The relationship between predictors and response is linear.  
+- **Independence**: Errors are independent.  
+- **Homoscedasticity**: Errors have constant variance.  
+- **Normality**: Errors follow a normal distribution. 
   
 ### Residual Diagnostic Checks  
 These checks help assess whether assumptions hold:  
@@ -148,14 +149,15 @@ These checks help assess whether assumptions hold:
 - **Q-Q Plot and/or Histogram** – Assesses whether residuals follow a normal distribution.  
 - **Variance Inflation Factor (VIF)** – Identifies multicollinearity among predictors.  
 - **Data Collection Process Review** – Ensures independence.  
-  - Violations often occur in repeated measures on the same subject or in time series data.  
+- Violations often occur in repeated measures on the same subject or in time series data.  
 
 ### Basic Interpretations
+When each predictor is included in the model only once, interpretations follow these general rules:  
 
-- When each predictor is included in the model only once, interpretations follow these general rules:  
-  - **Continuous predictors**: A one-unit increase in $X$ results in a change of $\beta$ in $Y$, holding all other variables constant. 
-  - **Categorical variables**: Represented using dummy variables. 
-**Example:** Suppose $X_1$ is categorical with three levels (A, B, C), while $X_2$ and $X_3$ are continuous. The model:  
+- **Continuous predictors**: A one-unit increase in $X$ results in a change of $\beta$ in $Y$, holding all other variables constant. 
+- **Categorical variables**: Represented using dummy variables. 
+
+Example: Suppose $X_1$ is categorical with three levels (A, B, C), while $X_2$ and $X_3$ are continuous. The model:  
 
 $$
 Y = \beta_0 + \beta_1\text{LevelB} + \beta_2\text{LevelC} + \beta_3X_2 + \beta_4X_3
@@ -169,6 +171,7 @@ $$
 A key advantage of MLR is its ability to **control for confounding variables**.  
 
 Example: **Sex discrimination in pay**  
+
 - If we suspect a gender-based wage gap, we should control for factors like position level, education, and job role.  
 - A more precise interpretation:  
   *"A male with the same IQ and education level (instead of generically 'holding all other variables constant') is estimated to earn $28,463 more than a female counterpart."* 
@@ -177,7 +180,8 @@ Example: **Sex discrimination in pay**
 ## Adding Model Complexity
 
 ### Transformations
-When to transform variables:
+When to transform variables:  
+
 - **Non-constant variance** → Transform $Y$.
 - **Nonlinear trends in residual plots** → Transform $X$ or add polynomial or interaction terms.
 
@@ -187,7 +191,7 @@ When to transform variables:
 - Log transformations retain interpretability.  
 - More complex transformations may hinder interpretation (less of a concern for predictive models).  
 
-**Example:** Polynomial regression
+Example: Polynomial regression
 ```{r eval=FALSE}
 lm(y ~ poly(x1, 3), data=mydata) # poly(predictor, degree)
 ```
@@ -198,9 +202,11 @@ lm(y ~ poly(x1, 3), data=mydata) # poly(predictor, degree)
 - **Adding predictors one at a time**: Results in an additive model where the intercept changes, but the slope remains the same.
 - **Adding interactions**: Results in a non-additive model where both the intercept and slope change depending on another variable.
 
+
 ## Interactions in MLR
 
 If $X_1$ is numeric and $X_2$ is categorical with two levels:
+
 - **Reference group** (where $X_2=0$): $Y = \beta_0 + \beta_1 X_1$
 - **Non-reference group** (where $X_2=1$): $Y = (\beta_0 + \beta_2) + (\beta_1 + \beta_3)X_1$
 
@@ -215,26 +221,26 @@ $$
 
 
 ## Multicollinearity
+Multicollinearity occurs when two or more explanatory variables are highly correlated, leading to:
 
-- Multicollinearity occurs when two or more explanatory variables are highly correlated, leading to:
-  - Difficulty in holding other variables fixed.
-  - Increased uncertainty in coefficient estimates (wider intervals, larger p-values)..
-  - Drastic changes in conclusions when variables are added or removed.
+- Difficulty in holding other variables fixed.
+- Increased uncertainty in coefficient estimates (wider intervals, larger p-values)..
+- Drastic changes in conclusions when variables are added or removed.
 
 ### Variance Inflation Factor (VIF)
-
 VIF measures how much a predictor is correlated with other predictors:
-- **Higher correlation** between predictors results in a **higher VIF** and **larger standard errors** ($SE(\beta)$).
-- $SE(\beta)$ is a function of the relationship between the variability of the response, predictors, and the VIF.
 
+- Higher correlation between predictors results in a higher VIF and larger standard errors ($SE(\beta)$).
+- $SE(\beta)$ is a function of the relationship between the variability of the response, predictors, and the VIF.
 - **VIF $\approx$ 1**: No collinearity.
 - **$5 < \text{VIF} < 10$**: Mild collinearity, investigate further.
 - **VIF > 10**: Severe collinearity, investigate adjustments.
 
 High VIFs are not always concerning.
-  - Expected with polynomial terms and interaction terms.
-  - Common for categorical variables with with more than two levels.
-  - If interpreting only one coefficient, and it has a low VIF, multicollinearity may not be an issue (i.e. if you are just accounting for the other variables).
+
+- Expected with polynomial terms and interaction terms.
+- Common for categorical variables with with more than two levels.
+- If interpreting only one coefficient, and it has a low VIF, multicollinearity may not be an issue (i.e. if you are just accounting for the other variables).
 
   
 ## Addressing Multicollinearity
@@ -254,6 +260,6 @@ High VIFs are not always concerning.
 - Use model selection techniques to minimize collinearity.
 
 ### Scenario 3: Predictive Modeling
-- Multicollinearity is **not a concern** when the goal is pure prediction.
+- Multicollinearity is **not** a concern when the goal is pure prediction.
 - It only affects coefficient standard errors ($SE$) and the hypothesis testing framework.
 - The focus is on model performance, not coefficient interpretation.
