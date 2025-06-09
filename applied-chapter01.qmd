@@ -17,8 +17,8 @@ title: "Multiple Linear Regression (MLR) Revisited"
 
 - The **response variable** (dependent variable) is what we aim to explain or predict.  
 - **Explanatory variables** (independent variables) are the factors that may influence the response.
-- **Regression**: The response is a continuous numeric variable (e.g. predicting car mileage).  
-- **Classification**: The response variable is categorical and can have two (binary) or more than two levels (e.g. predicting where a car was made: North America, Asia, or Europe).
+- **Regression**: The response is a continuous numeric variable (e.g., predicting car mileage).  
+- **Classification**: The response variable is categorical and can have two (binary) or more than two levels (e.g., predicting where a car was made: North America, Asia, or Europe).
 
 
 ### Example: Regression Problem - MPG Dataset  
@@ -36,7 +36,7 @@ When analyzing a regression problem, we typically follow these steps:
 
 2. Key Questions to Consider  
    - Which variables explain `mpg`, and how strong are these relationships?  
-   - Are there specific hypotheses to test (e.g. does a car's origin significantly impact `mpg`)?  
+   - Are there specific hypotheses to test (e.g., does a car's origin significantly impact `mpg`)?  
    - Can we use this model to predict the `mpg` of a new car?
 
 
@@ -197,7 +197,7 @@ lm(y ~ poly(x1, 3), data=mydata) # poly(predictor, degree)
 ```
 
 ### Ways to Increase Model Complexity
-- **Modeling nonlinear trends**: Introducing higher-order terms (with multiple coefficients) for a single predictor (e.g. $X^2$ or $X^3$).
+- **Modeling nonlinear trends**: Introducing higher-order terms (with multiple coefficients) for a single predictor (e.g., $X^2$ or $X^3$).
 - **Multiple linear trends by category**: Using interaction terms to model relationships (between multiple predictors) that vary by group.
 - **Adding predictors one at a time**: Results in an additive model where the intercept changes, but the slope remains the same.
 - **Adding interactions**: Results in a non-additive model where both the intercept and slope change depending on another variable.
@@ -240,7 +240,7 @@ High VIFs are not always concerning.
 
 - Expected with polynomial terms and interaction terms.
 - Common for categorical variables with with more than two levels.
-- If interpreting only one coefficient, and it has a low VIF, multicollinearity may not be an issue (i.e. if you are just accounting for the other variables).
+- If interpreting only one coefficient, and it has a low VIF, multicollinearity may not be an issue (i.e., if you are just accounting for the other variables).
 
   
 ## Addressing Multicollinearity

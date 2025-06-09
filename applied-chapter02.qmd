@@ -67,7 +67,7 @@ where:
 - $\text{Var}(\epsilon)$ is the irreducible error due to natural variation (variation around true trend line).
 
 ### Scenarios:
-1. **High Bias / Low Variance:** Simple models (e.g. linear regression on a cubic relationship) consistently make errors (bias) but are stable across datasets.
+1. **High Bias / Low Variance:** Simple models (e.g., linear regression on a cubic relationship) consistently make errors (bias) but are stable across datasets.
 2. **Moderate Bias / Moderate Variance:** Quadratic fits for a cubid relationship still have bias but are more stable (fits are consistent).
 3. **Low Bias / Low Variance:** Cubic fits (the true model) perform well and are stable.
 4. **No Bias / Moderate Variance:** Overly complex models predict well on average but vary significantly across datasets. Poor generalization results in poor accuracy. 
@@ -184,7 +184,7 @@ where $\alpha$, the mixing parameter, determines the mix between Ridge ($\alpha=
   - Treat feature selection as part of the train/validation process, which reduces sample size and raises the threshold for significance.
     - Use the training set for feature selection.
     - Fit the model and report p-values using the validation set.
-  - Use specialized inference methods (e.g. R package **`selectionInference`** for LASSO).
+  - Use specialized inference methods (e.g., R package **`selectionInference`** for LASSO).
 
 ### Final Considerations
 - Feature selection is a tool that improves model interpretability.
