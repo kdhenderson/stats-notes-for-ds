@@ -6,16 +6,16 @@ title: "Matrices"
 
 This chapter explores fundamental matrix concepts, including operations, applications in summarizing data, and their role in multiple linear regression.
 
-- Review of matrix operations  
-- Special cases of matrix multiplication  
-- Summarizing multiple variables (multivariate normal distribution)  
-- Revisiting multiple linear regression (MLR) 
+- Review fundamental matrix operations and properties.  
+- Understand special cases of matrix multiplication.  
+- Apply matrix concepts to summarize multivariate data (e.g., multivariate normal distribution).  
+- Explore how matrix algebra supports multiple linear regression (MLR).
 
 
 ## Review of Matrix Operations
 
 ### Symmetric Matrices  
-- A symmetric matrix has the same number of rows and columns (i.e a square matrix).  
+- A symmetric matrix has the same number of rows and columns (i.e, a square matrix).  
 
 ### Vectors  
 - A vector is a matrix with a single column.  
@@ -31,8 +31,7 @@ This chapter explores fundamental matrix concepts, including operations, applica
 - Operations are performed elementwise. 
  
 ### Matrix Multiplication  
-
-- Not all matrices can be multiplied—matrix multiplication is only defined if the number of columns in the first matrix matches the number of rows in the second matrix.  
+- Not all matrices can be multiplied---matrix multiplication is only defined if the number of columns in the first matrix matches the number of rows in the second matrix.  
 - If $A$ is an $m \times n$ matrix and $B$ is an $n \times p$ matrix, then the product $AB$ is an $m \times p$ matrix.  
 - Each element in $AB$ is obtained by computing the dot product of a row from $A$ and a column from $B$.  
 
@@ -58,7 +57,7 @@ A =
 \end{bmatrix}
 $$
 ($2 \times 3$ matrix)
-
+and  
 $$
 B =
 \begin{bmatrix}
@@ -110,13 +109,13 @@ $$
   - All diagonal elements of **1**  
   - All off-diagonal elements of **0** 
 - The identity matrix behaves like **1** in scalar multiplication:  
-  - If $A$ is an $r \times c$ matrix and $I$ is a $c \times c$ identity matrix, then $AI = A$.  
-  - If $I$ is an $r \times r$ identity matrix, then $IA = A$.  
+- If $A$ is an $r \times c$ matrix and $I$ is a $c \times c$ identity matrix, then $AI = A$.
+- If $I$ is an $r \times r$ identity matrix, then $IA = A$.
 
 ### Matrix Inverses  
 - If a matrix is square and meets certain conditions, an inverse matrix exists.  
 - The inverse of $A$ is denoted as $A^{-1}$.  
-- The property: $ AA^{-1} = A^{-1}A = I $  
+- The property: $AA^{-1} = A^{-1}A = I$
 - Inverse operations are matrix equivalents of division.  
   
 ### Tips for Reading Matrix Formulas  
@@ -218,66 +217,75 @@ This shows that $Y' Y$ computes the **sum of squares** of $Y$ using matrix multi
 This section describes how to summarize numerical data when working with multiple variables, leading up to the **multivariate normal distribution (MVN)** and how to estimate its parameters.
 
 ### One-Variable Summaries 
-- Basic summaries for individual variables:
-  - Mean and standard deviation  (if normally distributed).  
-  - Five-number summary: Min, 1st quartile, Median, 3rd quartile, Max. 
+Basic summaries for individual variables:
+
+- Mean and standard deviation  (if normally distributed)  
+- Five-number summary: Min, 1st quartile, Median, 3rd quartile, Max 
 
 ### Multiple Variables  
-- When working with multiple variables:
-  - Compute the mean and standard deviation for each variable.  
-  - Some variables may be correlated.  
-  - Matrices provide a structured way to organize this information. 
+When working with multiple variables:.
+
+- Compute the mean and standard deviation for each variable  
+- Some variables may be correlated  
+- Matrices provide a structured way to organize this information 
 
 ### Parameters for Two Variables  
 For two variables $X_1$ and $X_2$:
 
-- $X_1$  
-  - Mean: $\mu_1$  
-  - Standard deviation: $\sigma_1$  
-- $X_2$  
-  - Mean: $\mu_2$  
-  - Standard deviation: $\sigma_2$  
+$X_1$  
+
+- Mean: $\mu_1$  
+- Standard deviation: $\sigma_1$  
+
+$X_2$  
+
+- Mean: $\mu_2$  
+- Standard deviation: $\sigma_2$  
 
 In addition to individual means and standard deviations, we also measure **covariance** ($\sigma_{12}$), which describes how the two variables vary together. Covariance is directly related to **correlation**.
 
   
 ## Matrix Representation
+
 Matrices provide a compact way to represent the relationships between multiple variables.
 
-- $X_1$ and $X_2$ follow a **multivariate normal distribution (MVN)**:
-  - **Mean vector**:
-    $$
-    \mu =
-    \begin{bmatrix}
-    \mu_1 \\
-    \mu_2
-    \end{bmatrix}
-    $$
-  - **Covariance matrix**:
-    $$
-    \Sigma =
-    \begin{bmatrix}
-    \sigma_1^2 & \sigma_{12} \\
-    \sigma_{12} & \sigma_2^2
-    \end{bmatrix}
-    $$
-  - The diagonal elements are variances, while off-diagonal elements represent covariances.
-  - The covariance matrix must be symmetric.
+$X_1$ and $X_2$ follow a **multivariate normal distribution (MVN)**:  
+
+- **Mean vector**:
+  $$
+  \mu =
+  \begin{bmatrix}
+  \mu_1 \\
+  \mu_2
+  \end{bmatrix}
+  $$
+- **Covariance matrix**:
+  $$
+  \Sigma =
+  \begin{bmatrix}
+  \sigma_1^2 & \sigma_{12} \\
+  \sigma_{12} & \sigma_2^2
+  \end{bmatrix}
+  $$
+- The diagonal elements are variances, while off-diagonal elements represent covariances
+- The covariance matrix must be symmetric
 
 
 ## Covariance and Correlation
+
 - **Covariance ($\sigma_{12}$)** measures how two variables move together but depends on scale.
-- **Correlation** is the standardized version of covariance:
+- **Correlation** is the standardized version of covariance.
   $$
   \text{COR}(X_1,X_2) = \frac{\text{COV}(X_1, X_2)}{\sigma_1 \sigma_2}
   $$
-- Properties:
+- Properties:.
   - Covariance has units, correlation does not.
   - A covariance of zero means the variables are not linearly related.
   - Correlation ranges from -1 to 1, making it easier to interpret.
 
 
 ## Multivariate Normal Distribution (MVN)  
+
 A multivariate normal distribution (MVN) extends the normal distribution to multiple variables, describing their relationships through both their individual distributions and their dependencies. It is defined by:  
 
 - A mean vector, which gives the expected values of the variables.  
@@ -291,39 +299,43 @@ A multivariate normal distribution (MVN) extends the normal distribution to mult
 
 
 ## Estimating Parameters from Data
+
 In practice, we estimate MVN parameters from a sample:
 
-- **Sample Mean Vector**:  
-  $$
-  \bar{X} =
-  \begin{bmatrix}
-  \bar{X}_1 \\
-  \bar{X}_2
-  \end{bmatrix}
-  $$
-- **Sample Covariance Matrix**:
-  $$
-  S =
-  \begin{bmatrix}
-  s_1^2 & s_{12} \\
-  s_{12} & s_2^2
-  \end{bmatrix}
-  $$
-  where:
-  - $s_1^2$ and $s_2^2$ are **sample variances**.
-  - $s_{12}$ is the **sample covariance**.
+**Sample Mean Vector**:
+$$
+\bar{X} =
+\begin{bmatrix}
+\bar{X}_1 \\
+\bar{X}_2
+\end{bmatrix}
+$$
+**Sample Covariance Matrix**:
+$$
+S =
+\begin{bmatrix}
+s_1^2 & s_{12} \\
+s_{12} & s_2^2
+\end{bmatrix}
+$$
+
+where:
+
+- $s_1^2$ and $s_2^2$ are **sample variances**.
+- $s_{12}$ is the **sample covariance**.
 
    
 ## Assessing Multivariate Normality 
+
 To check if data follows an MVN distribution:
 
-- Each variable should be normally distributed  
-  - Density plots should be bell-shaped.  
-  - QQ plots (e.g. `mqqnorm(dataset)`) should be linear with slight tail deviations.  
-- Check scatterplot matrices for pairwise relationships  
-  - Start with these visualizations.  
-  - Patterns should be elliptical or circular, denser in the middle.  
-  - Linear relationships suggest MVN, while unusual trends indicate deviations.  
+- Each variable should be normally distributed.  
+- Density plots should be bell-shaped.
+- QQ plots (e.g., `mqqnorm(dataset)`) should be linear with slight tail deviations.
+- Check scatterplot matrices for pairwise relationships.  
+- Start with these visualizations.
+- Patterns should be elliptical or circular, and denser in the middle.
+- Linear relationships suggest MVN, while unusual trends indicate deviations.
 - Perform hypothesis tests where the null is MVN:  
   - Royston’s test
   - Mardia’s test
@@ -331,10 +343,11 @@ To check if data follows an MVN distribution:
   
 
 ## Applications of MVN
+
 The multivariate normal distribution is widely used in statistics and machine learning:
 
 - Classification:
-  - Discriminant analysis.
+  - Discriminant analysis
 - Regression:
   - Multiple linear regression (MLR) assumes MVN.
   - Hypothesis testing in regression uses MVN properties.
@@ -346,8 +359,8 @@ The multivariate normal distribution is widely used in statistics and machine le
 How does linear regression use matrix operations and MVN assumptions?
 
 ### Simple Linear Regression  
-- Model: $y = \beta_0 + \beta_1x + \epsilon$  
-- This relationship is assumed to hold for *each observation*, meaning the model consists of $n$ equations. For $n$ observations:  
+- Model: $y = \beta_0 + \beta_1x + \epsilon$
+- This relationship is assumed to hold for *each observation*, meaning the model consists of $n$ equations. For $n$ observations:
   $$
   \begin{aligned}
   y_1 &= \beta_0 + \beta_1x_1 + \epsilon_1 \\
@@ -355,7 +368,7 @@ How does linear regression use matrix operations and MVN assumptions?
   y_n &= \beta_0 + \beta_1x_n + \epsilon_n
   \end{aligned}
   $$
-- Assumptions:  
+- Assumptions:.
   - Errors $\epsilon_i$ are independent, normally distributed, and have constant variance.  
   - The error terms form a vector $\epsilon$ that follows a multivariate normal distribution.  
 - These equations can be rewritten in matrix form.
