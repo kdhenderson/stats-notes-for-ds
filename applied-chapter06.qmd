@@ -6,17 +6,46 @@ title: "Repeated Measures"
 
 This chapter explores repeated measures, which allow us to relax the independence assumption.
 
-- Understand when repeated measures are appropriate  
-- Learn about correlation structures, how to visualize them, and select the appropriate structure  
-- Explore generalized least squares (GLS) and weighted least squares (WLS)  
-- Follow a repeated measures workflow to structure analysis  
+- Understand when repeated measures are appropriate.  
+- Learn about correlation structures, how to visualize them, and select the appropriate structure.  
+- Explore generalized least squares (GLS) and weighted least squares (WLS).  
+- Follow a repeated measures workflow to structure analysis.  
   
   
 ## What is Repeated Measures?  
 
+### Family Tree of Linear Models
+
 ::: {}
-![](images/appCh06_familyTreeOfLinearModels.png)
+```{mermaid}
+
+flowchart TD
+  A["Linear models<br>(constant variance,<br>normality assumptions)"] --> B["Errors are<br>independent"]
+  B --> D["t-tests"]
+  B --> E["ANOVA"]
+  B --> F["SLR"]
+  A --> C["Errors are<br>correlated"]
+  C --> G["Time series"]
+  C --> H["Repeated measures"]
+
+  %% Arrow styling
+  linkStyle default stroke:#333,stroke-width:1.5px;
+
+  %% Node styling
+  style A fill:#d1c4e9,stroke:#512da8,stroke-width:1.25px,color:#000
+  style B fill:#bbdefb,stroke:#1976d2,stroke-width:1.25px,color:#000
+  style C fill:#ffcdd2,stroke:#c62828,stroke-width:1.25px,color:#000
+
+  style D fill:#e3f2fd,stroke:#64b5f6,stroke-width:1.25px,color:#000
+  style E fill:#e3f2fd,stroke:#64b5f6,stroke-width:1.25px,color:#000
+  style F fill:#e3f2fd,stroke:#64b5f6,stroke-width:1.25px,color:#000
+
+  style G fill:#ffebee,stroke:#ef5350,stroke-width:1.25px,color:#000
+  style H fill:#ffebee,stroke:#ef5350,stroke-width:1.25px,color:#000
+
+```
 :::
+
 
 ## Repeated Measures
 
@@ -25,14 +54,14 @@ This chapter explores repeated measures, which allow us to relax the independenc
 - When errors are correlated:
   - Examples: time series, repeated measures  
   - Ignoring correlation can produce misleading $p$-values and confidence intervals.  
-  - We need to model the correlation among errors (i.e. include additional parameters in the model) for valid inference and better predictions. 
-- Repeated measurse refers to multiple measurements on the same subject (i.e. dependent observations).
+  - We need to model the correlation among errors (i.e., include additional parameters in the model) for valid inference and better predictions. 
+- Repeated measures refers to multiple measurements on the same subject (i.e., dependent observations).
   - For example, if a subject starts with high (or conversely low) values, their measurements tend to remain high (or low) over time.  
 
 ### Common Hypotheses in Repeated Measures:
 
-- Compare every time point to a baseline (i.e. control), for each group (e.g. asymptomatic vs. symptomatic).
-- Compare each time point between groups (baseline may not differ, but other time points might)
+- Compare every time point to a baseline (i.e., control), for each group (e.g., asymptomatic vs. symptomatic).
+- Compare each time point between groups. (Baseline may not differ, but other time points might.)
 
 ### Regression Perspective
 
@@ -42,12 +71,12 @@ $$
 Y = \text{Time} + \text{Status} + \text{Time} \times \text{Status} + \varepsilon
 $$
 
-- Include an interaction since trends depend on status  
-- Regression and contrasts help compare groups—we just need to model correlated errors
+- Include an interaction since trends depend on status.  
+- Regression and contrasts help compare groups---we just need to model correlated errors.
 
 ### Identifying Repeated Measures
 
-- Ask how the data were collected  
+- Ask how the data were collected.  
 - Repeated measures can apply to:
   - Repeated measures one-way ANOVA
   - Repeated measures MLR
@@ -61,65 +90,60 @@ $$
 - Similar tools exist for repeated measures, but they aren't as commonly used.
 - The key idea is to explain how residuals are correlated using a correlation structure.
 
-### Correlogram (pseudo-code approach):
+#### Correlogram (pseudo-code approach)
 
 1. Obtain residuals from a regular MLR (some from the same subject).
 2. For residuals that are one unit apart in time:
    - Create a scatterplot (earlier time point on the $x$-axis, later time point on the $y$-axis).
    - Compute the correlation, and store the result.
-3. Repeat for residuals that are two, three, four, ..., $k$ units apart.
-4. Plot the correlation values against the time lag
+3. Repeat for residuals that are two, three, four, $\dots, k$ units apart.
+4. Plot the correlation values against the time lag.
 
-**Takeaway**:  
+#### Takeaway 
 Correlation tends to decrease as the distance between residuals increases and eventually levels off. Large correlations at short time lags are a clear indication of correlated errors.
   
 ### Correlogram Interpretation
 
-- Observations closer in time are more similar (i.e. more correlated).
+- Observations closer in time are more similar (i.e., more correlated).
 - Observations farther apart in time may still be mildly correlated.
 
 ### Common Correlation Structures
 
-Correlation structures are theoretical models that describe the expected trend in the correlogram:
+Correlation structures are theoretical models that describe the expected trend in the correlogram.
 
-- **Compound symmetry (CS)**:
-  - Correlation is constant (i.e. flat, horizontal line), regardless of time.
-  - Often used when time ordering is not meaningful (e.g. students within the same school).
+#### Compound symmetry (CS)
+- Correlation is constant (i.e., flat, horizontal line) regardless of time.
+- Often used when time ordering is not meaningful (e.g., students within the same school).
 
-- **Autoregressive (AR(1))**:
-  - High correlation for nearby time points.
-  - Correlation decreases as time lag increases.
-  - Eventually approaches zero (like independent errors).
+#### Autoregressive (AR(1))
+- High correlation for nearby time points.
+- Correlation decreases as time lag increases.
+- Eventually approaches zero (like independent errors).
 
-- **Gaussian**:
-  - Similar to AR(1), but the drop-off in correlation is even faster.
-  - Often used when time is continuous.
+#### Gaussian
+- Similar to AR(1), but the drop-off in correlation is even faster.
+- Often used when time is continuous.
   
 ### Generalized Least Squares (GLS)
-
 - GLS generalizes OLS technique for MLR to handle correlated errors.
 - You specify:
   - A model with response and predictors
   - A correlation structure (parameters estimated by software)
-
-GLS updates both:
-- Regression coefficients
-- Standard errors
-
-These estimates are more reliable than standard MLR if the chosen correlation structure is approximately correct.
+- GLS updates both:
+  - Regression coefficients
+  - Standard errors
+- These estimates are more reliable than standard MLR if the chosen correlation structure is approximately correct.
 
 ### Estimating Correlation in Practice
-
 - Variograms and semivariograms (often used in spatial models) can be used as visual alternatives to correlograms.
 - In practice, repeated measures datasets may be too small to visualize correlation clearly through the high variability.
 - Analysts typically:
   - Use theoretical justification for choosing a structure.
   - Fit multiple structures and compare using AIC (like feature selection).
   - Use correlograms as a visual guide.
-
-Instructor note (Turner’s experience):
-- Compound symmetry works well for biological or human-based data.
-- Use structures with rapid decay (e.g. Gaussian) sparingly unless time points are equally spaced and numerous.
+- Instructor note (Turner’s experience):  
+  - Compound symmetry works well for biological or human-based data.  
+  - Use structures with rapid decay (e.g., Gaussian) sparingly unless time points are equally spaced and numerous.  
 
    
 ## Repeated Measures Workflow
@@ -143,24 +167,64 @@ Instructor note (Turner’s experience):
 
 ## Additional Notes on Correlation Structures
 
-
 - Some correlation structures **require a time component**:
   - Autoregressive (AR; exponential decay)
   - Gaussian
   - Linear
   - Spherical
-  - Matérn (a general class that includes AR and Gaussian as special cases; more flexible but may overfit)
-
+  - Matérn (A general class that includes AR and Gaussian as special cases; more flexible but may overfit.)
 - Some correlation structures **do not require a time component**:
   - Compound symmetry (CS)
   - Variance components
-
-Examples that don't involve time:
-- Texas STAR exam: multiple test scores from the same schools/school districts
-- Hereditary studies: family studies where siblings or parents/offspring are clustered
+- Examples that don't involve time:
+  - Texas STAR exam: multiple test scores from the same schools/school districts
+  - Hereditary studies: family studies where siblings or parents/offspring are clustered
 
 
 ## Technical Details
+
+### Matrix Representation of MLR
+
+$$
+Y = X\beta + \varepsilon
+$$
+
+where:
+
+- $Y$ is the response vector.
+- $X$ is the design matrix.
+- $\beta$ is the regression coefficient vector.
+- $\varepsilon$ is the error vector.
+
+The model assumes properties of the errors:
+
+$$
+\varepsilon \sim \mathcal{N}(0, \sigma^2 I)
+$$
+
+that is:
+
+- $\varepsilon$ is multivariate normal
+- where, $\mathcal{N} = \text{multivariate normal distribution (MVN)}$
+- Mean vector = $0$, a $n x 1$ matrix of $0$s
+- Covariance matrix = $\sigma^2 I$
+
+The covariance matrix:
+
+$$
+\Sigma = \begin{bmatrix}
+\sigma^2 & 0 & 0 \\
+0 & \sigma^2 & 0 \\
+0 & 0 & \sigma^2 \\
+\end{bmatrix} = \sigma^2I
+$$
+
+Interpretation:
+
+- Each individual error has the same variance $\sigma^2$
+- Traditional multiple linear regression (MLR) assumptions:
+  - Errors are independent, which implies they are also uncorrelated, so all off-diagonal covariances are 0.
+
 
 ::: {layout-ncol=2}
 ![](images/appCh06_technicalDetails_pg01.jpg)
@@ -185,8 +249,7 @@ Examples that don't involve time:
 
 The general linear model relaxes the independence assumption and allows for any specification of correlation among error terms (with the matrix $R$).
 
-- This includes multiple linear regression (MLR) as a special case when the correlation structure is: $R = I$
-
+- This includes multiple linear regression (MLR) as a special case when the correlation structure is $R = I$.
 - The generalization comes from recognizing that MLR can be written as a special case of generalized least squares (GLS).
 - The correlation structure determines what the matrix $R$ looks like mathematically.
 - You still estimate:
@@ -199,7 +262,7 @@ Key idea: When correlation is accounted for, statistical inference is valid, and
 
 ## Weighted Least Squares (WLS)
 
-GLS can also be applied when independence holds but the assumption of constant variance is violated (i.e. heteroscedasticity).
+GLS can also be applied when independence holds, but the assumption of constant variance is violated (i.e., heteroscedasticity).
 
 ::: {layout-ncol=2}
 ![](images/appCh06_weightedLeastSquares_pg01.jpg)
@@ -214,7 +277,7 @@ You can only apply WLS if you know (or can estimate) the weights. There are nume
    - One of your predictors that you suspect may explain the changing variance, or  
    - The predicted values from your model  
    Look for a pattern or trend in the spread of the residuals.
-3. Fit a regression model to the absolute value of the residuals to estimate the mean behavior (i.e. trend) of the variability.
+3. Fit a regression model to the absolute value of the residuals to estimate the mean behavior (i.e., trend) of the variability.
 4. Use the predicted values from that model to compute weights: $w_i = \frac{1}{(\widehat{\text{predicted}})^2}$
 
 ```{r eval = FALSE}
@@ -236,4 +299,4 @@ wls.model = lm(y~x, data1, weights=wts)
 
 ### Additional Notes
 - Raw residual vs. fitted plots may look the same for OLS and WLS.
-  - Use studentized residuals to check whether the variance has been stabilized
+- Use studentized residuals to check whether the variance has been stabilized.
