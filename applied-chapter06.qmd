@@ -205,7 +205,7 @@ $$
 that is:
 
 - $\varepsilon$ is multivariate normal
-- where, $\mathcal{N} = \text{multivariate normal distribution (MVN)}$
+- where $\mathcal{N}$ denotes the multivariate normal distribution (MVN)
 - Mean vector = $0$, a $n x 1$ matrix of $0$s
 - Covariance matrix = $\sigma^2 I$
 
@@ -225,6 +225,68 @@ Interpretation:
 - Traditional multiple linear regression (MLR) assumptions:
   - Errors are independent, which implies they are also uncorrelated, so all off-diagonal covariances are 0.
 
+### Generalized Least Squares (GLS) and Correlated Errors
+
+In repeated measures models, we no longer assume that errors are uncorrelated.
+
+To account for correlated errors, we extend the standard MLR assumptions using **generalized least squares (GLS)**. This involves specifying a more flexible error structure.
+
+We now assume:
+
+$$
+\varepsilon \sim \mathcal{N}(0, \sigma^2 R)
+$$
+
+Where:
+
+- $\varepsilon$ is multivariate normal with mean zero.
+- $\sigma^2 R$ is the **variance–covariance matrix** of the errors.
+- $R$ is the **correlation matrix**, which specifies how errors are related (e.g., through time, subject grouping, etc.).
+- When $R = I$, we recover the standard MLR case with independent errors.
+
+This updated formulation allows us to model within-subject correlation (e.g., repeated observations) by directly encoding the assumed pattern of correlation into $R$.
+
+### Visualizing the Correlation Structure in $\sigma^2 R$
+
+We can visualize the error term in repeated measures models as:
+
+$$
+Y = X\beta + \varepsilon, \quad \varepsilon \sim \mathcal{N}(0, \sigma^2 R)
+$$
+
+Each row in $\varepsilon$ corresponds to a specific subject and time point:
+
+| Subject | Time | Error Term |
+|---------|------|------------|
+| 1       | T1   | $\varepsilon_1$ |
+| 1       | T2   | $\varepsilon_2$ |
+| 1       | T3   | $\varepsilon_3$ |
+| 2       | T1   | $\varepsilon_4$ |
+| 2       | T2   | $\varepsilon_5$ |
+| 2       | T3   | $\varepsilon_6$ |
+
+The corresponding variance–covariance matrix $\sigma^2 R$ has a **block-diagonal structure** and might look like this:
+
+$$
+\sigma^2 R = \sigma^2 \begin{bmatrix}
+1 & \rho_{12} & \rho_{13} & 0 & 0 & 0 \\
+\rho_{12} & 1 & \rho_{23} & 0 & 0 & 0 \\
+\rho_{13} & \rho_{23} & 1 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & \rho_{45} & \rho_{46} \\
+0 & 0 & 0 & \rho_{45} & 1 & \rho_{56} \\
+0 & 0 & 0 & \rho_{46} & \rho_{56} & 1 \\
+\end{bmatrix}
+$$
+
+Key points:
+
+- The **upper-left 3×3 block** corresponds to Subject 1 and correlations among $\varepsilon_1$, $\varepsilon_2$, $\varepsilon_3$.
+- The **lower-right 3×3 block** corresponds to Subject 2 and correlations among $\varepsilon_4$, $\varepsilon_5$, $\varepsilon_6$
+- **Off-diagonal correlations exist within subjects** (e.g., $\rho_{12}, \rho_{13}, \rho_{23}$ for subject 1).
+- **Between-subject correlations are zero**, indicated by the block-diagonal structure.
+- The values of the $\rho$ terms are determined by the assumed **correlation structure** (e.g., compound symmetry, AR(1), etc.).
+
+This block structure is how repeated measures models encode dependency **within subjects** but maintain **independence between subjects**.
 
 ::: {layout-ncol=2}
 ![](images/appCh06_technicalDetails_pg01.jpg)
