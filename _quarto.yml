@@ -63,4 +63,4 @@ book:
     - part: "Appendices"
       chapters:
           - appendix-r-code.qmd
-          #- appendix-sas-code.qmd
+          - appendix-sas-code.qmd
