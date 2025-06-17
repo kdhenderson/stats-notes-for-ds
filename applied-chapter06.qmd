@@ -226,7 +226,6 @@ Interpretation:
   - Errors are independent, which implies they are also uncorrelated, so all off-diagonal covariances are 0.
 
 ### Generalized Least Squares (GLS) and Correlated Errors
-
 In repeated measures models, we no longer assume that errors are uncorrelated.
 
 To account for correlated errors, we extend the standard MLR assumptions using **generalized least squares (GLS)**. This involves specifying a more flexible error structure.
@@ -247,7 +246,6 @@ Where:
 This updated formulation allows us to model within-subject correlation (e.g., repeated observations) by directly encoding the assumed pattern of correlation into $R$.
 
 ### Visualizing the Correlation Structure in $\sigma^2 R$
-
 We can visualize the error term in repeated measures models as:
 
 $$
@@ -288,38 +286,92 @@ Key points:
 
 This block structure is how repeated measures models encode dependency **within subjects** but maintain **independence between subjects**.
 
-::: {layout-ncol=2}
-![](images/appCh06_technicalDetails_pg01.jpg)
+### Correlation Structure Matrices
+Different correlation structures determine the form of the matrix $R$ in the repeated measures model.
 
-![](images/appCh06_technicalDetails_pg02.jpg)
-:::
+#### Autoregressive (AR(1))
+This structure assumes correlation decreases with increasing time lag:
 
----
+$$
+\sigma^2 \begin{bmatrix}
+1 & \rho & \rho^2 & \rho^3 \\
+\rho & 1 & \rho & \rho^2 \\
+\rho^2 & \rho & 1 & \rho \\
+\rho^3 & \rho^2 & \rho & 1 \\
+\end{bmatrix}
+$$
 
-::: {layout-ncol=2}
-![](images/appCh06_technicalDetails_pg03.jpg)
+- High correlation for adjacent time points
+- Correlation decays exponentially with time separation
 
-![](images/appCh06_technicalDetails_pg04.jpg)
-:::
+#### Compound Symmetry (CS)
+This structure assumes constant correlation across all time points:
 
----
+$$
+\sigma^2 \begin{bmatrix}
+1 & \rho & \rho & \rho \\
+\rho & 1 & \rho & \rho \\
+\rho & \rho & 1 & \rho \\
+\rho & \rho & \rho & 1 \\
+\end{bmatrix}
+$$
 
-::: {layout-ncol=2}
-![](images/appCh06_technicalDetails_pg05.jpg)
+- Often used when time ordering is less meaningful or measurements are equally spaced
+- Simpler structure, fewer parameters
 
-:::
+#### Gaussian
+- Similar to AR(1), but correlation drops off more quickly
+- Often used when time is continuous or spacing between time points varies
 
-The general linear model relaxes the independence assumption and allows for any specification of correlation among error terms (with the matrix $R$).
+#### Spherical Power
+- Same mathematical form as AR(1), just different context or terminology
+- Useful when modeling spatial or continuous time-based correlation
 
-- This includes multiple linear regression (MLR) as a special case when the correlation structure is $R = I$.
-- The generalization comes from recognizing that MLR can be written as a special case of generalized least squares (GLS).
-- The correlation structure determines what the matrix $R$ looks like mathematically.
-- You still estimate:
-  - Regression coefficients
-  - Standard errors of the coefficients
-- But now, you’re also estimating the correlation structure among residuals.
+### Model Fitting
+Fitting repeated measures models typically uses **restricted maximum likelihood** (REML), a technique that improves estimation of variance components.
 
-Key idea: When correlation is accounted for, statistical inference is valid, and predictions can be improved.
+During model fitting, the software estimates:
+
+- $\sigma^2 R$: the **variance–covariance matrix** of the errors
+- $\beta$: the **regression coefficient vector**
+
+The estimate of $\beta$ under GLS is:
+
+$$
+\hat{\beta} = \left(X^T R^{-1} X\right)^{-1} X^T R^{-1} Y
+$$
+
+- This formula generalizes the OLS estimator
+- When $R = I$, it reduces to the standard OLS solution
+
+### Variance of the GLS Estimator
+In addition to estimating the coefficients $\hat{\beta}$, we can also estimate their variances using the expression:
+
+$$
+\widehat{\text{Var}}(\hat{\beta}) = \hat{\sigma}^2 \left( X^T R^{-1} X \right)^{-1}
+$$
+
+This is the generalized version of the variance formula used in OLS.
+
+- When $R = I$, this reduces to the traditional multiple linear regression (MLR) variance estimator:
+
+$$
+\widehat{\text{Var}}(\hat{\beta}) = \hat{\sigma}^2 \left( X^T X \right)^{-1}
+$$
+
+Thus, the MLR estimator is a special case of GLS where the correlation structure is identity (i.e., no correlation among errors).
+
+### Summary: MLR as a Special Case of GLS
+The general linear model framework used in GLS relaxes the independence assumption of traditional MLR and allows for arbitrary correlation structures among errors (via the matrix $R$).
+
+- MLR is a special case of GLS when the correlation structure is $R = I$.
+- The structure of $R$ determines how residuals are related (e.g., repeated measurements, clustered observations).
+- Under GLS, we estimate:
+  - Regression coefficients $\hat{\beta}$
+  - Standard errors of $\hat{\beta}$
+  - The correlation structure (via estimated parameters in $R$)
+
+**Key idea:** When correlation is accounted for, statistical inference becomes valid and predictive accuracy improves.
 
 
 ## Weighted Least Squares (WLS)
