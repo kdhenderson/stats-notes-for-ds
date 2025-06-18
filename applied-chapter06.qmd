@@ -228,7 +228,7 @@ Interpretation:
 ### Generalized Least Squares (GLS) and Correlated Errors
 In repeated measures models, we no longer assume that errors are uncorrelated.
 
-To account for correlated errors, we extend the standard MLR assumptions using **generalized least squares (GLS)**. This involves specifying a more flexible error structure.
+To account for correlated errors, we extend the standard MLR assumptions using generalized least squares (GLS). This involves specifying a more flexible error structure.
 
 We now assume:
 
@@ -236,7 +236,7 @@ $$
 \varepsilon \sim \mathcal{N}(0, \sigma^2 R)
 $$
 
-Where:
+where:
 
 - $\varepsilon$ is multivariate normal with mean zero.
 - $\sigma^2 R$ is the **variance–covariance matrix** of the errors.
@@ -263,7 +263,7 @@ Each row in $\varepsilon$ corresponds to a specific subject and time point:
 | 2       | T2   | $\varepsilon_5$ |
 | 2       | T3   | $\varepsilon_6$ |
 
-The corresponding variance–covariance matrix $\sigma^2 R$ has a **block-diagonal structure** and might look like this:
+The corresponding variance–covariance matrix $\sigma^2 R$ has a block-diagonal structure and might look like this:
 
 $$
 \sigma^2 R = \sigma^2 \begin{bmatrix}
@@ -278,13 +278,13 @@ $$
 
 Key points:
 
-- The **upper-left 3×3 block** corresponds to Subject 1 and correlations among $\varepsilon_1$, $\varepsilon_2$, $\varepsilon_3$.
-- The **lower-right 3×3 block** corresponds to Subject 2 and correlations among $\varepsilon_4$, $\varepsilon_5$, $\varepsilon_6$
+- The upper-left 3×3 block corresponds to Subject 1 and correlations among $\varepsilon_1$, $\varepsilon_2$, $\varepsilon_3$.
+- The lower-right 3×3 block corresponds to Subject 2 and correlations among $\varepsilon_4$, $\varepsilon_5$, $\varepsilon_6$
 - **Off-diagonal correlations exist within subjects** (e.g., $\rho_{12}, \rho_{13}, \rho_{23}$ for subject 1).
 - **Between-subject correlations are zero**, indicated by the block-diagonal structure.
 - The values of the $\rho$ terms are determined by the assumed **correlation structure** (e.g., compound symmetry, AR(1), etc.).
 
-This block structure is how repeated measures models encode dependency **within subjects** but maintain **independence between subjects**.
+This block structure is how repeated measures models encode dependency within subjects but maintain independence between subjects.
 
 ### Correlation Structure Matrices
 Different correlation structures determine the form of the matrix $R$ in the repeated measures model.
@@ -328,12 +328,12 @@ $$
 - Useful when modeling spatial or continuous time-based correlation
 
 ### Model Fitting
-Fitting repeated measures models typically uses **restricted maximum likelihood** (REML), a technique that improves estimation of variance components.
+Fitting repeated measures models typically uses restricted maximum likelihood (REML), a technique that improves estimation of variance components.
 
 During model fitting, the software estimates:
 
-- $\sigma^2 R$: the **variance–covariance matrix** of the errors
-- $\beta$: the **regression coefficient vector**
+- $\sigma^2 R$: the variance–covariance matrix of the errors
+- $\beta$: the regression coefficient vector
 
 The estimate of $\beta$ under GLS is:
 
@@ -371,20 +371,69 @@ The general linear model framework used in GLS relaxes the independence assumpti
   - Standard errors of $\hat{\beta}$
   - The correlation structure (via estimated parameters in $R$)
 
-**Key idea:** When correlation is accounted for, statistical inference becomes valid and predictive accuracy improves.
+Key idea: Accounting for correlation leads to valid statistical inference and improved prediction.
 
 
 ## Weighted Least Squares (WLS)
 
 GLS can also be applied when independence holds, but the assumption of constant variance is violated (i.e., heteroscedasticity).
 
-::: {layout-ncol=2}
-![](images/appCh06_weightedLeastSquares_pg01.jpg)
+In this case, the **error covariance matrix** no longer looks like $\sigma^2 I$. Instead, each observation has its own variance:
 
-![](images/appCh06_weightedLeastSquares_pg02.jpg)
-:::
+$$
+\Sigma = \begin{bmatrix}
+\sigma_1^2 & 0 & 0 \\
+0 & \sigma_2^2 & 0 \\
+0 & 0 & \sigma_3^2 \\
+\end{bmatrix}
+$$
 
-You can only apply WLS if you know (or can estimate) the weights. There are numerous strategies for estimating the weights, but the basic strategy follows a theme. This is a common approach:
+- Each variance term $\sigma_i^2$ is unique.
+- Independence still holds (covariances are 0), but the variances are not constant across observations.
+
+We can re-express each unique variance in terms of a common variance component and a weight:
+
+$$
+\sigma_1^2 = \frac{1}{w_1} \sigma^2,\quad
+\sigma_2^2 = \frac{1}{w_2} \sigma^2,\quad
+\sigma_3^2 = \frac{1}{w_3} \sigma^2
+$$
+
+Each $w_i$ is a **weight term** that serves as a multiplicative factor determining how different the variance of each observation is from the baseline $\sigma^2$.
+
+### Weighted Error Structure in Matrix Form
+Using the weights, the variance–covariance matrix of the errors can be written as:
+
+$$
+\Sigma = 
+\begin{bmatrix}
+\sigma_1^2 & 0 & 0 \\
+0 & \sigma_2^2 & 0 \\
+0 & 0 & \sigma_3^2 \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+\frac{\sigma^2}{w_1} & 0 & 0 \\
+0 & \frac{\sigma^2}{w_2} & 0 \\
+0 & 0 & \frac{\sigma^2}{w_3} \\
+\end{bmatrix}
+=
+\sigma^2
+\begin{bmatrix}
+\frac{1}{w_1} & 0 & 0 \\
+0 & \frac{1}{w_2} & 0 \\
+0 & 0 & \frac{1}{w_3} \\
+\end{bmatrix}
+= \sigma^2 R
+$$
+
+- This is a special case of GLS where the **correlation matrix $R$ is diagonal**.
+- **WLS is GLS with unequal variances but uncorrelated errors.**
+
+We can use GLS techniques to obtain good estimates of the regression coefficients and their standard errors under this structure.
+
+### Estimating Weights in Practice
+You can only apply WLS if you know (or can estimate) the weights. There are numerous strategies for estimating the weights, but the basic approach follows a common pattern:
 
 1. Fit a regular regression model.
 2. Plot the absolute values of your residuals against:
@@ -392,14 +441,15 @@ You can only apply WLS if you know (or can estimate) the weights. There are nume
    - The predicted values from your model  
    Look for a pattern or trend in the spread of the residuals.
 3. Fit a regression model to the absolute value of the residuals to estimate the mean behavior (i.e., trend) of the variability.
-4. Use the predicted values from that model to compute weights: $w_i = \frac{1}{(\widehat{\text{predicted}})^2}$
+4. Use the predicted values from that model to compute weights:  
+   $$
+   w_i = \frac{1}{(\widehat{\text{predicted}})^2}
+   $$
 
 ```{r eval = FALSE}
-
 weight.model = lm(abs(model1$residuals) ~ data1$x)
 wts = 1 / fitted(weight.model)^2
-wls.model = lm(y~x, data1, weights=wts)
-
+wls.model = lm(y ~ x, data1, weights = wts)
 ```
 
 ### Interpretation

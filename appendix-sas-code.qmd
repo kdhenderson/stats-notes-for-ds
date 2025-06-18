@@ -3,18 +3,20 @@ title: "Appendix B: SAS Code Examples for Statistical Foundations"
 appendix: true
 format: html
 execute:
-  eval: false
+  engine: knitr  # avoid jupyter
+  eval: false    # reinforce global no-eval behavior
 ---
 
 Quick Navigation:
-- [1. Data Import & Summary Statistics](#1-data-import--summary-statistics)
-- [2. Visualization & Assumption Checks](#2-visualization--assumption-checks)
-- [3. Permutation Test](#3-permutation-test)
-- [4. t-Tests & Power Analysis](#4-t-tests-and-power-analysis)
-- [5. ANOVA and Extra Sum of Squares](#5-anova-and-extra-sum-of-squares)
-- [6. Non-Parametric Tests](#6-non-parametric-tests)
-- [7. Correlation & Simple Regression](#7-correlation--simple-regression)
-- [8. Residual Analysis](#8-residual-analysis)
+
+- [1. Data Import & Summary Statistics](#1-data-import--summary-statistics)  
+- [2. Visualization & Assumption Checks](#2-visualization--assumption-checks)  
+- [3. Permutation Test](#3-permutation-test)  
+- [4. t-Tests & Power Analysis](#4-t-tests-and-power-analysis)  
+- [5. ANOVA and Extra Sum of Squares](#5-anova-and-extra-sum-of-squares)  
+- [6. Non-Parametric Tests](#6-non-parametric-tests)  
+- [7. Correlation & Simple Regression](#7-correlation--simple-regression)  
+- [8. Residual Analysis](#8-residual-analysis)  
 
 ::: {.appendix}
 

@@ -7,19 +7,20 @@ execute:
 ---
 
 Quick Navigation:
-- [1. Data Import & Summary Statistics](#1-data-import--summary-statistics)
-- [2. Visualization & Assumption Checks](#2-visualization--assumption-checks)
-- [3. Permutation Test](#3-permutation-test-generate-permutation-distribution-for-group-mean-difference)
-- [4. t-Tests & Power Analysis](#4-t-tests--power-analysis)
-- [5. One-Way ANOVA & Extra Sum of Squares](#5-one-way-anova--extra-sum-of-squares)
-- [6. Multiple Comparisons](#6-multiple-comparisons)
-- [7. Contrasts](#7-contrasts)
-- [8. Non-Parametric Tests](#8-non-parametric-tests)
-- [9. Correlation & Simple Linear Regression](#9-correlation--simple-linear-regression)
-- [10. Residual Analysis](#10-residual-analysis)
-- [11. Log-Log Models & Back-Transformation](#11-log-log-models--back-transformation)
-- [12. Multiple Linear Regression (MLR)](#12-multiple-linear-regression-mlr)
-- [13. Variable Selection](#13-variable-selection)
+
+- [1. Data Import & Summary Statistics](#1-data-import--summary-statistics)  
+- [2. Visualization & Assumption Checks](#2-visualization--assumption-checks)  
+- [3. Permutation Test](#3-permutation-test-generate-permutation-distribution-for-group-mean-difference)  
+- [4. t-Tests & Power Analysis](#4-t-tests--power-analysis)  
+- [5. One-Way ANOVA & Extra Sum of Squares](#5-one-way-anova--extra-sum-of-squares)  
+- [6. Multiple Comparisons](#6-multiple-comparisons)  
+- [7. Contrasts](#7-contrasts)  
+- [8. Non-Parametric Tests](#8-non-parametric-tests)  
+- [9. Correlation & Simple Linear Regression](#9-correlation--simple-linear-regression)  
+- [10. Residual Analysis](#10-residual-analysis)  
+- [11. Log-Log Models & Back-Transformation](#11-log-log-models--back-transformation)  
+- [12. Multiple Linear Regression (MLR)](#12-multiple-linear-regression-mlr)  
+- [13. Variable Selection](#13-variable-selection)  
 
 ::: {.appendix}
 
