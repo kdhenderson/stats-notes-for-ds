@@ -28,12 +28,12 @@ Main distinction: The response variable in classification is **categorical**.
 
 Classification models work in two steps:
 
-1. **Predict the probability** that a categorical response will occur, given a set of explanatory variables: $P(Y = \text{"Default"} \mid X)$
+1. **Predict the probability** that a categorical response will occur, given a set of explanatory variables: $P(Y = \text{Default} \mid X)$
 2. **Convert that probability into a classification decision** based on a threshold.
 
 ### Comparison
 - For continuous responses: $Y = f(X)$
-- For categorical responses: $P(Y = \text{"Default"} \mid X) = f(X)$
+- For categorical responses: $P(Y = \text{Default} \mid X) = f(X)$
   - The model predicts probabilities, not the class itself.  
   - Predictions stay between 0 and 1 (unlike MLR, which can go below 0 or above 1).
 
@@ -42,8 +42,8 @@ Classification models work in two steps:
   - Example: A weather forecast predicting 60% chance of rain is more informative than just "yes" or "no".
 - Subtle relationships between predictors and the response lead to variability in predicted probabilities, creating a gray area.
   - For instance:
-    - $P(Y = \text{"Default"} \mid X = 100) = 0.82$
-    - $P(Y = \text{"Default"} \mid X = 100) = 0.52$
+    - $P(Y = \text{Default} \mid X = 100) = 0.82$
+    - $P(Y = \text{Default} \mid X = 100) = 0.52$
   - These two predictions might both get classified as "Default", even though the model sees them very differently.
 
 
@@ -95,7 +95,7 @@ These models have always been of the **predictive probability** type:
 - Quadratic Discriminant Analysis (QDA)  
 - Naive Bayes  
 
-#### Classification rule 
+#### Classification Rule 
 To convert a predictive probability model into a classification rule, apply a **threshold** (commonly 0.5):
   $$
   \hat{P}(Y = + \mid X) \geq 0.5 \Rightarrow \text{Classify as } +
@@ -143,11 +143,13 @@ In discriminant analysis, the assumptions are on the predictors (not the error t
 - $X_+ = (X_1, X_2, \dots, X_p)$ is a set of $p$ numeric predictors for the positive response class.  
 - $X_- = (X_1, X_2, \dots, X_p)$ is a set of the same $p$ numeric predictors for the negative response class.  
 
-#### LDA: $X_+ \sim MVN(\mu_+, \Sigma), \quad X_- \sim MVN(\mu_-, \Sigma)$
+#### LDA
+- $X_+ \sim MVN(\mu_+, \Sigma), \quad X_- \sim MVN(\mu_-, \Sigma)$
 - Equal variance-covariance matrices (same $\Sigma$), i.e., the predictors in each group should have the same variance and correlation.
 - Allows different means, i.e., the predictor sets can have different mean vectors for each response. This is desirable for separation between the classes. 
  
-#### QDA: $X_+ \sim MVN(\mu_+, \Sigma_+), \quad X_- \sim MVN(\mu_-, \Sigma_-)$
+#### QDA
+- $X_+ \sim MVN(\mu_+, \Sigma_+), \quad X_- \sim MVN(\mu_-, \Sigma_-)$
 - Covariance matrices differ by class (relaxes assumptions, i.e., allows different $\Sigma$s). 
 - More flexibility, but more parameters to estimate. 
 - Also allows different means.
@@ -176,6 +178,7 @@ $$
 
 ### Key Insights
 Bayes’ formula is fully specified using:
+
 - Prior probabilities
 - Predictor value $X$
 - Class-specific means and covariance matrices  
@@ -214,7 +217,6 @@ When using a threshold (e.g., 0.5), LDA’s boundary mathematically reduces to a
 - Suffers from the curse of dimensionality.
   - Poor performance with many irrelevant predictors.
   
----
 
 ## Error Metrics for Classification
 
@@ -230,7 +232,7 @@ These assess the **probability estimates** of your model, not just the final cla
 
 ### Log Loss (a.k.a. Entropy)
 - Penalizes incorrect, confident predictions more heavily  
-- Increases when predicted probabilities are uncertain (e.g., near 0.5) but the true class is strongly skewed
+- Increases when predicted probabilities are uncertain (e.g., near 0.5), but the true class is strongly skewed
 - Smaller when predicted probabilities are closer to the truth  
   - e.g., predicted probability = 0.9 when the true class is 1
 - Formula: $\text{Log Loss} = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \log(\hat{p}_i) + (1 - y_i) \log(1 - \hat{p}_i) \right]$
@@ -248,13 +250,14 @@ These assess the **probability estimates** of your model, not just the final cla
   - Can be decomposed into different sources of error (e.g., calibration and refinement)
  
 ### When to Use Scoring Rules
-
 Scoring rules are ideal for:
+
 - Comparing models in feature selection  
 - Tuning parameters (e.g., $k$ in KNN, penalty terms in regularized models, or pruning in trees)  
 - Estimating regression coefficients in logistic regression  
 
 They help ensure that:
+
 - Predicted probabilities are well-calibrated
 - Your model aligns well with the true underlying probabilities
 
@@ -274,6 +277,7 @@ They are derived from the **confusion matrix**, which compares predicted vs. act
 | **Predicted Negative**   | incorrectly predicted – | correctly predicted –   |
 
 This matrix summarizes:
+
 - How often the model predicted correctly
 - How often the model made mistakes
 - The types of mistakes
@@ -292,7 +296,6 @@ The threshold (e.g., 0.5) determines how probabilities are turned into class pre
 ### Common Metrics
 
 #### Misclassification Rate (MCR)
-
 The proportion of all observations where the model's classification was wrong (i.e., the global error rate):
 
 $$
@@ -300,17 +303,15 @@ $$
 $$
 
 #### Accuracy
-
 The proportion of all observations where the model's classification was correct:
 
 $$
 \text{Accuracy} = \frac{\text{\# correct predictions}}{n} = \frac{\text{TP} + \text{TN}}{n} = 1 - \text{MCR}
 $$
 
-> Accuracy is an unconditional metric — it doesn’t distinguish between types of errors or account for class imbalance.
+> Accuracy is an unconditional metric---it doesn’t distinguish between types of errors or account for class imbalance.
 
 ### Conditional Metrics
-
 These metrics are **conditioned** on a known true class or prediction. These metrics evaluate accuracy within a subset of observations. They help when accuracy alone is misleading.
 
 #### Sensitivity (Recall / True Positive Rate)
@@ -355,14 +356,15 @@ $$
 $$
 
 ### Why So Many Metrics?
-
 Different metrics highlight different aspects of model performance and practical priorities, which can be especially helpful with imbalanced datasets.
 
-Example: Predicting whether a patient needs high-risk surgery  
-- + class = needs surgery  
-- – class = does not need surgery  
+Example: Predicting whether a patient needs high-risk surgery 
+
+- positive class = needs surgery  
+- negative class = does not need surgery  
 
 Suppose:
+
 - Sensitivity = 90% → correctly detects 90% of patients who need surgery  
 - Specificity = 90% → correctly identifies 90% of those who don’t need surgery  
 - PPV = 47% → only 47% of patients predicted to need surgery actually do  
@@ -374,7 +376,7 @@ Suppose:
 ### Prevalence and Thresholding
 - **Prevalence**: The base rate of the + class in the population  
   - e.g., 1 in 10 people need surgery → prevalence = 10%
-- Sensitivity and specificity do **not** depend on prevalence  
+- Sensitivity and specificity **do not** depend on prevalence  
 - PPV and NPV **do** depend on prevalence
 
 
@@ -389,7 +391,7 @@ Suppose:
 > Choose a threshold based on costs of different errors.
 
 
-## Takeaways
+## Summary and Takeaways
 
 - Scoring rules assess probability estimates
 - Decision rule metrics evaluate classifications
@@ -399,6 +401,6 @@ Suppose:
 
 > Errors are not always equal. In many applications, the cost of a false positive is different from a false negative.
 
-Focus first on thorough EDA and building a model with good predicted probability estimates.  
-→ Then determine the threshold that best meets the needs of the problem.
+- Focus first on thorough EDA and building a model with good predicted probability estimates.  
+- Then determine the threshold that best meets the needs of the problem.
   
