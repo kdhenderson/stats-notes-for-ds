@@ -4,19 +4,20 @@ title: "2 x 2 Contingency Tables"
 
 ## Overview
 
-- Building towards logistic regression  
-- Metrics for comparing group proportions  
-- Fisher's exact test  
-- Chi-squared test  
+This chapter introduces contingency tables as a bridge between group comparisons and logistic regression models.
 
+- Understand the role of 2×2 tables in modeling binary outcomes  
+- Compare group proportions using appropriate statistical metrics  
+- Learn when and how to apply Fisher’s exact test  
+- Use chi-squared tests for large-sample inference
 
 ## Classification Tools
 
-- **LDA/QDA**
-- **KNN**
+- **Linear and Quadratic Discriminant Analysis (LDA/QDA)**  
+- **k-Nearest Neighbors (KNN)**  
 - **Logistic Regression**
-  - Parametric, good interpretation
-  - Analogous to multiple linear regression for binary categorical response
+  - A parametric method with strong interpretability.
+  - Analogous to multiple linear regression, but for binary categorical outcomes.
 
 
 ## Building Up to Multiple Linear Regression (MLR)
@@ -42,9 +43,10 @@ title: "2 x 2 Contingency Tables"
 ## Understanding 2x2 Contingency Tables
 
 The main purpose is to compare the probability of a response outcome between two groups.  
-> Are smokers more likely to get cancer than non-smokers?  
-> - Explanatory variable: smoker/non-smoker  
-> - Response variable: cancer/no cancer  
+
+- Are smokers more likely to get cancer than non-smokers?  
+  - Explanatory variable: smoker/non-smoker  
+  - Response variable: cancer/no cancer  
 
 There are three typical data collection designs:
 
@@ -54,9 +56,9 @@ There are three typical data collection designs:
 
 ### Prospective Studies
 - Populations for each level of the explanatory variable are determined in advance.
-  - This may happen naturally (e.g. subjects are obese or not obese) or through random assignment (e.g. placebo vs. treatment).
+  - This may happen naturally (e.g., subjects are obese or not obese) or through random assignment (e.g., placebo vs. treatment).
 - Simple random samples are taken within each group.
-- **Row totals are fixed** in advance - we know what the sample size will be for each group.
+- **Row totals are fixed** in advance---we know what the sample size will be for each group.
 - The explanatory variable is fixed, and we sample the response after some follow-up period.
 - Example: Vitamin C and Colds study
 - Randomized experiments are a special type of prospective study:
@@ -72,15 +74,17 @@ There are three typical data collection designs:
 - Example: Cancer and smoking status study  
 
 This approach is often used when:
-- Ethical concerns prevent random assignment (e.g. assigning people to smoke).
+
+- Ethical concerns prevent random assignment (e.g., assigning people to smoke).
 - Long follow-up periods are impractical.
 
 ### Observational Studies
-- Only the grand total may be fixed — or no totals are fixed at all.
+- Only the grand total may be fixed---or no totals are fixed at all.
 - Researcher has little to no control over the sampling.
 - Potential for confounding.
 - There may be no clearly defined response or predictor, making the study more about **association** than group comparison.
 
+---
 
 ## Parameters in 2x2 Tables
 
@@ -137,11 +141,14 @@ $$\pi_1 - \pi_2 = 0.05 - 0.01 = 0.04$$
   - Probability of not getting cancer = 5/8 = 1 - 3/8 = 0.625  
   
 ### Odds/Probability Relationship
-- Let
-  - $\omega_c$ = odds of cancer
-  - $\pi_c$ = probability of cancer
-  - $1 - \pi_c$: probability of not getting cancer
+Let:
+
+- $\omega_c$ = odds of cancer
+- $\pi_c$ = probability of cancer
+- $1 - \pi_c$: probability of not getting cancer
+
 Then:
+
 $$\omega_c = \frac{\pi_c}{1 - \pi_c}$$
 
 #### Odds Interpretation
@@ -177,7 +184,7 @@ If two populations have the same probability of an event, then they have the sam
   - If $> 1$, the odds are higher in group 1   
   - If $< 1$, the odds are lower in group 1  
       
-Note: Odds are not probabilities! Avoid words like "chance" or phrases like "x times more likely" when interpreting an odds ratio. Instead, say "the odds are x times higher."
+> Note: Odds are not probabilities! Avoid words like "chance" or phrases like "x times more likely" when interpreting an odds ratio. Instead, say "the odds are x times higher."
 
 
 ## Relative Risk
@@ -196,9 +203,10 @@ Note: Odds are not probabilities! Avoid words like "chance" or phrases like "x t
 ## Why So Many Metrics?
 
 All aim to detect group difference in proportions between groups: 
-    1. Difference in proportions (absolute)  
-    2. Odds ratio (relative)  
-    3. Relative risk (relative)  
+
+1. Difference in proportions (absolute)  
+2. Odds ratio (relative)  
+3. Relative risk (relative)  
 
 > Use difference in proportions when events are common and you need a simple story.  
 > Use relative risk for rare events.  
@@ -207,9 +215,10 @@ All aim to detect group difference in proportions between groups:
 
 ## Study Design Matters
 
-- **Retrospective studies**:
-  - Only the **odds ratio** is valid.
-  - Proportion and relative risk estimates are biased and are not valid metrics.
+**Retrospective studies**:
+
+- Only the **odds ratio** is valid.
+- Proportion and relative risk estimates are biased and are not valid metrics.
 
 
 ## Statistical Inference for 2x2 Tables
