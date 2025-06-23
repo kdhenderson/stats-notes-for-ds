@@ -44,7 +44,7 @@ This chapter introduces contingency tables as a bridge between group comparisons
 
 The main purpose is to compare the probability of a response outcome between two groups.  
 
-- Are smokers more likely to get cancer than non-smokers?  
+- Are smokers more likely to get cancer than non-smokers?
   - Explanatory variable: smoker/non-smoker  
   - Response variable: cancer/no cancer  
 
@@ -72,11 +72,9 @@ There are three typical data collection designs:
 - Samples are selected based on response status; **column totals** are fixed.
 - We determine the explanatory variable after selecting individuals.
 - Example: Cancer and smoking status study  
-
-This approach is often used when:
-
-- Ethical concerns prevent random assignment (e.g., assigning people to smoke).
-- Long follow-up periods are impractical.
+- This approach is often used when:
+  - Ethical concerns prevent random assignment (e.g., assigning people to smoke).
+  - Long follow-up periods are impractical.
 
 ### Observational Studies
 - Only the grand total may be fixed---or no totals are fixed at all.
