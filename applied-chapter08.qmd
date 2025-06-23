@@ -56,10 +56,10 @@ There are three typical data collection designs:
 
 ### Prospective Studies
 - Populations for each level of the explanatory variable are determined in advance.
-  - This may happen naturally (e.g., subjects are obese or not obese) or through random assignment (e.g., placebo vs. treatment).
-- Simple random samples are taken within each group.
-- **Row totals are fixed** in advance---we know what the sample size will be for each group.
-- The explanatory variable is fixed, and we sample the response after some follow-up period.
+  - This may happen naturally (e.g., obese vs. not obese) or by random assignment (e.g., placebo vs. treatment).
+- Simple random samples are collected from each group.
+- **Row totals are fixed** — the sample size for each group is determined before data collection.
+- The explanatory variable is fixed, and the response is observed after a follow-up period.
 - Example: Vitamin C and Colds study
 - Randomized experiments are a special type of prospective study:
   - Subjects are randomly assigned to predictor groups.
@@ -69,8 +69,8 @@ There are three typical data collection designs:
   
 ### Retrospective Studies
 - Reverse of prospective: the **response variable is fixed** in advance.
-- Samples are selected based on response status; **column totals** are fixed.
-- We determine the explanatory variable after selecting individuals.
+- Samples are selected based on response status; **column totals are fixed**.
+- The explanatory variable is determined *after* sample selection.
 - Example: Cancer and smoking status study  
 - This approach is often used when:
   - Ethical concerns prevent random assignment (e.g., assigning people to smoke).
@@ -78,48 +78,53 @@ There are three typical data collection designs:
 
 ### Observational Studies
 - Only the grand total may be fixed---or no totals are fixed at all.
-- Researcher has little to no control over the sampling.
-- Potential for confounding.
+- The researcher has little or no control over group membership.
+- There is greater potential for confounding.
 - There may be no clearly defined response or predictor, making the study more about **association** than group comparison.
 
----
 
 ## Parameters in 2x2 Tables
 
-Goal: Compare two groups using either mean differences or proportion differences.
+The goal is to compare two groups using **either a difference in means** or **a difference in proportions**.
 
-### Mean difference (t-tests)
+### Difference in Means (t-tests)
 - Parameters:  
   - $\mu_1$: mean of the response for group 1  
   - $\mu_2$: mean of the response for group 2  
 - Hypotheses:  
   - $H_0: \mu_1 = \mu_2$
   - $H_a: \mu_1 \neq \mu_2$
-  - 95% CI: $\mu_1 - \mu_2$
-    - If 0 is not in the interval, it supports $H_a$  
+- 95% Confidence Interval:  
+  - $\mu_1 - \mu_2$  
+  - If 0 is not in the interval, the result supports $H_a$. 
 
-### Proportion difference
+
+### Difference in Proportions
 - Parameters:  
   - $\pi_1$: probability of event in group 1  
   - $\pi_2$: probability of event in group 2  
 - Hypotheses:  
   - $H_0: \pi_1 = \pi_2$  
   - $H_a: \pi_1 \neq \pi_2$
-  - 95% CI: $\pi_1 - \pi_2$ 
-    - If 0 is not in the interval, it supports $H_a$ 
+- 95% Confidence Interval:  
+  - $\pi_1 - \pi_2$  
+  - If 0 is not in the interval, the result supports $H_a$. 
 
   
 ## Problems with Absolute Proportion Differences
 
-- Even small absolute differences can be practically important:
+Even small absolute differences can be practically important:
+
 $$\pi_1 - \pi_2 = 0.05 - 0.01 = 0.04$$
 - The confidence interval may suggest a small estimated difference.
 - This is an absolute difference.
 - But it ignores relative scale:
   - A 5% event rate is 5 times higher than a 1% event rate!   
 
+This motivates the use of **relative metrics** like the **odds ratio** and **relative risk**, especially when working with rare events.
+
     
-## Two Additional Metrics
+## Two Additional Metrics for Group Comparison
 
 1. **Odds Ratio**
    - Great for retrospective studies
@@ -131,14 +136,15 @@ $$\pi_1 - \pi_2 = 0.05 - 0.01 = 0.04$$
    - Often confused with odds ratios
 
 ### Odds Example
-- Suppose the odds of getting cancer are 1 to 2 → $\omega = \frac{1}{2} = 0.5$
-  - Odds are not a probability because the denominator is not the total. 
-- Probability of cancer = $\frac{1}{3} \approx 0.33$
-- Another example with the Compliment Rule:  
-  - Probability of getting cancer = 3/8 = 0.375  
-  - Probability of not getting cancer = 5/8 = 1 - 3/8 = 0.625  
-  
+- Suppose the odds of getting cancer are 1 to 2: $\omega = \frac{1}{2} = 0.5$
+  - Odds are not a probability because the denominator represents the number of non-events, not the total. 
+- The corresponding probability of cancer is: $\frac{1}{3} \approx 0.33$
+- Another example using the **complement rule**: 
+  - Probability of getting cancer: $3/8 = 0.375$  
+  - Probability of not getting cancer: $5/8 = 1 - 3/8 = 0.625$  
+
 ### Odds/Probability Relationship
+
 Let:
 
 - $\omega_c$ = odds of cancer
@@ -148,12 +154,16 @@ Let:
 Then:
 
 $$\omega_c = \frac{\pi_c}{1 - \pi_c}$$
+This formula shows how to convert between a probability and its corresponding odds.
 
 #### Odds Interpretation
-- $0 < \omega < 1$: odds are not in the event’s favor
+- $0 < \omega < 1$: odds are against the event (i.e., not in the event’s favor)
 - $\omega = 1$: 50/50 chance 
 - $\omega > 1$: odds favor the event 
-- Odds cannot be negative
+- Odds are always positive (they cannot be negative)
+
+
+### Summary Table: Parameters vs. Statistics
 
 | Metric                   | Parameter (population) | Statistic (sample) |
 |--------------------------|------------------------|--------------------|
@@ -163,44 +173,57 @@ $$\omega_c = \frac{\pi_c}{1 - \pi_c}$$
 
 ## Equivalent Hypotheses
 
-If two populations have the same probability of an event, then they have the same odds:
+If two populations have the same probability of an event, they also have the same odds.
 
-- The following hypotheses are all equivalent:  
-  - $H_0$: $\pi_1 = \pi_2$  
-  - $H_0$: $\pi_1 - \pi_2 = 0$  
-  - $H_0$: $\omega_1 = \omega_2$  
-  - $H_0$: $\omega_1 - \omega_2 = 0$  
+The following hypotheses are equivalent formulations of the null:
 
-### Relative Hypotheses 
-- The following hypothesis are all equivalent:  
-  - $H_0$: $\pi_1 = \pi_2$  
-  - $H_0$: $\frac{\pi_1}{\pi_2} = 1$  
-  - $H_0$: $\omega_1 = \omega_2$ 
-  - $H_0$: $\frac{\omega_1}{\omega_2} = 1$ 
-- Where $\frac{\omega_1}{\omega_2}$ is the odds ratio.  
-  - The odds ratio is always greater than 0.  
-  - If $> 1$, the odds are higher in group 1   
-  - If $< 1$, the odds are lower in group 1  
-      
-> Note: Odds are not probabilities! Avoid words like "chance" or phrases like "x times more likely" when interpreting an odds ratio. Instead, say "the odds are x times higher."
+- $H_0$: $\pi_1 = \pi_2$  
+- $H_0$: $\pi_1 - \pi_2 = 0$  
+- $H_0$: $\omega_1 = \omega_2$  
+- $H_0$: $\omega_1 - \omega_2 = 0$
+
+### Relative Hypotheses
+
+The following are equivalent relative null hypotheses---these express the idea that the two groups have equal risk or odds:
+
+- $H_0$: $\pi_1 = \pi_2$  
+- $H_0$: $\frac{\pi_1}{\pi_2} = 1$  
+- $H_0$: $\omega_1 = \omega_2$  
+- $H_0$: $\frac{\omega_1}{\omega_2} = 1$
+
+In this context:
+
+- $\dfrac{\omega_1}{\omega_2}$ is the **odds ratio**.
+- The odds ratio is always greater than 0.
+  - If OR > 1, the odds are higher in group 1.  
+  - If OR < 1, the odds are lower in group 1.
+
+> Note: Odds are not the same as probabilities!  
+> Avoid words like "chance" or phrases like "x times more likely" when interpreting an odds ratio.  
+> Instead, say: *“The odds are x times higher.”*
 
 
 ## Relative Risk
 
-- $H_0$: $\frac{\pi_1}{\pi_2} = 1$ 
-- Relative risk is easier to interpret
-- Since it is a ratio of two probabilities, you can use words like "chance" or "more likely" when interpreting it.  
+- Null hypothesis: $H_0: \dfrac{\pi_1}{\pi_2} = 1$
+- Relative risk is often easier to interpret than the odds ratio.
+- Since it is a ratio of two probabilities (i.e., compares two probabilities directly), you *can* use words like “chance” or “more likely” in interpretation.
+
+Tips for interpretation:
+
 - Place the larger proportion in the numerator.  
-  - This keeps the relative risk greater than 1, making interpretation more intuitive.
-- When using software:
-  - Be aware that the definition of the “event” is often handled automatically, and may not match the event you care about.
-  - Double-check the output with a quick mental or hand calculation.
-  - Many functions offer options to change the reference group or event — use them to make the output match your interpretation.
+  - This ensures the relative risk is greater than 1, making interpretation more intuitive.
+
+When using software:
+
+- Check how the “event” is defined — many functions choose this automatically.
+- Always verify the output with a quick mental or hand calculation.
+- Most software allows you to change the reference group or event to match your intended interpretation.
 
 
 ## Why So Many Metrics?
 
-All aim to detect group difference in proportions between groups: 
+All three metrics aim to detect a difference in proportions between groups: 
 
 1. Difference in proportions (absolute)  
 2. Odds ratio (relative)  
@@ -219,80 +242,95 @@ All aim to detect group difference in proportions between groups:
 - Proportion and relative risk estimates are biased and are not valid metrics.
 
 
-## Statistical Inference for 2x2 Tables
+## Statistical Inference for 2×2 Tables
 
-- There are numerous approaches to hypothesis testing and confidence intervals depending on a few general situations.  
-  - Sample size  
-  - Study design  
-  - Degree of agreement between your test and interval 
+There are several approaches to hypothesis testing and confidence interval construction, depending on:
 
-### Analysis (Hypothesis Testing) Workflow   
+- Sample size  
+- Study design  
+- How well the test and interval method align
 
-1. **Identify design**: prospective, retrospective\*, observational  
-2. **Choose metric**:
-   - Difference in proportions: event isn't rare, easy to interpret  
-   - Relative risk: rare events, clear interpretation  
-   - Odds ratio\*: **always valid**, required for retrospective
-3. **State hypotheses**:
-   - $H_0$: $\pi_1 = \pi_2$ (difference metric)  
+### Analysis Workflow for Inference (Hypothesis Testing)
+
+1. **Identify the study design**:  
+   - Prospective  
+   - Retrospective*  
+   - Observational  
+
+2. **Choose a metric**:  
+   - Difference in proportions → best when the event is not rare; easy to interpret 
+   - Relative risk → best for rare events and clear interpretation  
+   - Odds ratio → always valid; required for retrospective studies*
+
+3. **State your hypotheses**:  
+   - $H_0$: $\pi_1 = \pi_2$ (difference in proportions)  
    - $H_0$: $\frac{\pi_1}{\pi_2} = 1$ (relative risk)  
    - $H_0$: $\frac{\omega_1}{\omega_2} = 1$ (odds ratio)  
-   - For observational, state without specifying parameters: $H_0$: no association
-4. **Run test and obtain CI**:
+   - For purely observational studies, state without specifying parameters: $H_0$: no association
+
+4. **Run the test and construct a confidence interval**:
+
    - For large sample sizes:
-     - Use a chi-squared test for hypothesis testing.
-     - Use a Wald interval for confidence intervals.
-       - A continuity correction may improve approximation.
-   - For small to moderate sample sizes:
-     - Use Fisher’s exact test for hypothesis testing.
-     - Use a Fisher’s, bootstrap, or small-sample corrected Wald interval (e.g. Agresti-Coull) for the confidence interval.
-5. **Interpret results**:
-   - Report test and p-value 
-     - State the test used
-   - Report interval and what it means
-     - State the interval method
+     - Use a chi-squared test for the hypothesis test
+     - Use a Wald interval for the confidence interval  
+     - Consider adding a continuity correction to improve the approximation
+   - For small or moderate sample sizes:
+     - Use Fisher’s exact test for the hypothesis test
+     - Use a Fisher’s, bootstrap, or small-sample corrected Wald interval (e.g., Agresti–Coull) for the confidence interval
+   
+5. **Interpret the results**:
+   - Report the test used and the associated p-value  
+   - Report the confidence interval and explain what it means  
+   - Always state the method used for inference
+
+> \* The odds ratio is the only unbiased metric for retrospective studies.
   
 ### Workflow Example
 
-**Polio Vaccine Study (1954)**  
+**Polio Vaccine Study (1954)**
+
 - Randomized: vaccine vs. placebo  
 - 400,000 children  
-- Concern: paralysis side effect          
+- Primary concern: paralysis as a side effect  
 
-|                     | Paralysis | No paralysis |
-|---------------------|-----------|--------------|
-| Placebo             | 142       | 199,858      |
-| Salk Vaccine        | 56        | 199,944      |
-    
-#### Decisions:
-1. **Design**: prospective (randomized)  
-2. **Metric**: difference in proportions for easy interpretation (any are valid)  
-3. **Hypothesis**: $H_0: \pi_P = \pi_V$  
-4. **Large n** → chi-square + Wald interval  
-5. **Conclusion**:
-> Using a chi-squared test, there is significant evidence that the chances of a child obtaining paralysis differ between placebo and vaccine groups (p-value = ...).  
-> Using a Wald interval, we are 95% confident that the chance of paralysis is 0.029% to 0.0567% higher in the placebo group.
+| Group         | Paralysis | No Paralysis |
+|---------------|-----------|--------------|
+| Placebo       | 142       | 199,858      |
+| Salk Vaccine  | 56        | 199,944      |
+
+
+#### Analysis Decisions
+
+1. **Design**: Prospective (randomized)  
+2. **Metric**: Difference in proportions for easy interpretation (all metrics are valid here)  
+3. **Hypotheses**: $H_0$: $\pi_{\text{Placebo}} = \pi_{\text{Vaccine}}$  
+4. **Sample size**: Large $n$ → use chi-squared test and Wald interval  
+5. **Conclusion**:  
+   > Using a chi-squared test, there is significant evidence that the chances of a child suffering paralysis differ between placebo and vaccine groups (*p*-value = ...).  
+   > Using a Wald interval, we are 95% confident that the chance of paralysis is 0.029% to 0.0567% higher in the placebo group.
 
 ```{r exampleCode, eval = F}
 
+# Wald test for difference in proportions (no continuity correction)
 prop.test(c(#eventsRow1,#eventsRow2),c(row1Total, row2Total), correct = FALSE) # events, total sample size, without continuity correction
 prop.test(c(142, 56), c(200000, 200000), correct = FALSE)
 
-# Relative risk example
+# # Relative risk using epitab()
 epitab(polio, method = "riskratio", riskratio = "wald", rev = "b", pvalue = "chi2", verbose = TRUE)
 
 ```
 
-#### Alternative Framing  
-- Since events are rare, relative risk may communicate results better (very small changes in probability between the two groups).  
-  - P-value is the same, CI is different.  
-  - Testing conclusion is the same.  
-  - We are 95% confident that children in the placebo group are 1.86 to 3.45 times more likely to experience paralysis than those in the vaccine group. 
-  
-  - Be mindful of practical differences regarding the metrics used.  
-  
+#### Alternative Framing (Relative Risk)
+
+- Because events are rare, relative risk may better communicate the result (very small changes in probability between the two groups)..
+  - The *p*-value remains the same.
+  - The interpretation of the confidence interval changes.
+  - The testing conclusion is the same.
+
+    > We are 95% confident that children in the placebo group are 1.86 to 3.45 times more likely to experience paralysis than children in the vaccine group.
+
+- Be mindful that the choice of metric (difference in proportions vs. relative risk) can affect how results are interpreted in a practical context.
+
 #### Assumptions  
-- Design dependant assumptions:  
-    - Counts in 2x2 tables should be independent.  
-    - No repeated measures or time-based collections 
-      
+- Counts in 2x2 tables should be independent.  
+- No repeated measures or time-based observations 
