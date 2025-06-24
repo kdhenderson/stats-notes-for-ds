@@ -4,10 +4,10 @@ title: "Logistic Regression"
 
 ## Overview
 
-- Binary response recap  
-- Simple logistic model  
-- Interpreting regression coefficients (numeric and categorical predictor cases)  
-- Revisiting 2x2 tables 
+- Understand how logistic regression models a binary response   
+- Understand the structure and purpose of the simple logistic regression model 
+- Learn how to interpret regression coefficients for both numeric and categorical predictors  
+- Revisit the connection between logistic regression and 2×2 contingency tables 
 
 
 ## Simple Logistic Regression Model
@@ -21,56 +21,73 @@ title: "Logistic Regression"
 
 ### Predictive Models
 - Continuous response: $Y = f(x)$  
-- Categorical response: $P(Y = \text{'Default'} \mid X) = f(X)$  
-- With categorical responses, we predict the **probability** of the response, not the value itself  
+- Categorical response: $P(Y = \text{Default} \mid X) = f(X)$  
+- With categorical responses, we predict the **probability** of the response, not the value itself.  
 - We often write $f(X)$ as $p(X)$ to emphasize that it's a probability given predictors $X$.
-- Though still a function, it describes how the probabilities are changing rather than the response directly.
+- This is still a function---it just describes how the **probability** changes with the predictors rather than the response directly.
 
 ### The Linearity Problem
 - A linear equation for $p(X)$ doesn't make sense:
   - Linear functions range over $(-\infty, \infty)$
-  - Probabilities must stay between 0 and 1   
+  - But probabilities must stay between 0 and 1   
 
 ### Visualizing $p(X)$
-- Bin a continuous predictor into categories  
-- Calculate the proportion of the response for each bin  
+- One way to understand how $p(X)$ behaves:
+  - Bin a continuous predictor into categories  
+  - For each bin, compute the proportion of the response  
 
 ### The Path to Linearity
-- Scales and transformations:
+- Scales and Transformations: we apply transformations to make the model linear on a new scale.
   - $p(X)$: range $(0,1)$  
   - Odds: $\dfrac{p(X)}{1 - p(X)}$: range $(0, \infty)$  
   - **Log odds (logit)**: $\ln\left(\dfrac{p(X)}{1 - p(X)}\right)$: range $(-\infty, \infty)$  
 - The **logit function** maps probabilities to the full real number line  
 - This transformation enables linear modeling, because probabilities on the logit scale tend to be more linear with the predictor.  
-  
-###  Model Statement
-- Logistic regression models the log odds as a linear function:  
+
+### Model Statement
+- Logistic regression models the **log odds** as a linear function of $X$:
+
   $$
-  \ln\left(\frac{p(X)}{1 - p(X)}\right) = \beta_0 + \beta_1X
-  $$ 
+  \ln\left(\frac{p(X)}{1 - p(X)}\right) = \beta_0 + \beta_1 X
+  $$
   
 ### Parameter Estimation
-- **Multiple Linear Regression (MLR):**
-  - Estimates minimize the residual sum of squares  
-  - Closed-form solution exists (matrix algebra)
-- **Logistic Regression:**
-  - Estimates minimize the **log loss** error function
-  - No closed-form solution, i.e. cannot use matrix multiplication to find the answer — optimization (minimizing the log loss) is done **numerically**  
+
+#### Multiple Linear Regression (MLR)
+- Coefficient estimates minimize the **residual sum of squares**.  
+- Closed-form solution exists via matrix algebra.
+
+#### Logistic Regression
+- Coefficient estimates minimize the **log loss** (cross-entropy) error function.
+- No closed-form solution, i.e., cannot use matrix multiplication to find the answer.
+- Optimization (minimizing the log loss) is done numerically. 
 
 ### Hypothesis Testing
-- $H_0: \beta_1 = 0$ vs. $H_A: \beta_1 \ne 0$
-  - To understand the relationship between a predictor and the response, we should investigate the slope coefficient on the predictor.
-- Test statistic (z-score / z-statistic): $Z = \frac{\hat{\beta}_1 - 0}{SE(\hat{\beta}_1)}$
-- 95% Confidence interval: $\hat{\beta}_1 \pm z_{\alpha/2} \cdot SE(\hat{\beta}_1)$
-- Null distribution: $\text{standard normal distribution} = Z \sim N(0, 1)$ is used to calculate the p-value
-  - Some software may report a chi-square test (equivalent p-value from $Z^2$, squares the z-statisic and using a chi-square rather than a z distribution to calculate the p-value).  
-    
-### Predicted Probabilities
-- Model transformations:
-  $$\ln\left(\frac{p(X)}{1 - p(X)}\right) = \beta_0 + \beta_1X$$
-  $$\frac{p(X)}{1 - p(X)} = e^{\beta_0 + \beta_1X}$$
-  $$p(X) = \frac{e^{\beta_0 + \beta_1X}}{1 + e^{\beta_0 + \beta_1X}}$$
+- To understand the relationship between a predictor and the response, test the slope coefficient:
+  - $H_0$: $\beta_1 = 0$  
+  - $H_A$: $\beta_1 \ne 0$  
+- Test statistic (z-score): $Z = \frac{\hat{\beta}_1}{SE(\hat{\beta}_1)}$
+- 95% confidence interval: $\hat{\beta}_1 \pm z_{\alpha/2} \cdot SE(\hat{\beta}_1)$
+- The null distribution is standard normal: $Z \sim N(0, 1)$  
+- Some software reports a chi-squared test instead of a z-test  
+  - It squares the z-statistic: $Z^2$
+  - Then uses a $\chi^2$ distribution with 1 degree of freedom to compute the p-value  
+  - This gives the same p-value as the two-sided z-test
 
+### Predicted Probabilities
+
+- Logistic regression estimates the log odds, but we often want $p(X)$:
+  $$
+  \ln\left(\frac{p(X)}{1 - p(X)}\right) = \beta_0 + \beta_1 X
+  $$
+  $$
+  \frac{p(X)}{1 - p(X)} = e^{\beta_0 + \beta_1 X}
+  $$
+  $$
+  p(X) = \frac{e^{\beta_0 + \beta_1 X}}{1 + e^{\beta_0 + \beta_1 X}}
+  $$
+
+---
 
 ## Interpreting Coefficients: Continuous Predictors
 
