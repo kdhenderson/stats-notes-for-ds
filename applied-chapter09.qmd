@@ -4,10 +4,10 @@ title: "Logistic Regression"
 
 ## Overview
 
-- Understand how logistic regression models a binary response   
-- Understand the structure and purpose of the simple logistic regression model 
-- Learn how to interpret regression coefficients for both numeric and categorical predictors  
-- Revisit the connection between logistic regression and 2×2 contingency tables 
+- Understand how logistic regression models a binary response.   
+- Understand the structure and purpose of the simple logistic regression model. 
+- Learn how to interpret regression coefficients for both numeric and categorical predictors.  
+- Revisit the connection between logistic regression and 2×2 contingency tables. 
 
 
 ## Simple Logistic Regression Model
@@ -28,20 +28,20 @@ title: "Logistic Regression"
 
 ### The Linearity Problem
 - A linear equation for $p(X)$ doesn't make sense:
-  - Linear functions range over $(-\infty, \infty)$
-  - But probabilities must stay between 0 and 1   
+  - Linear functions range over $(-\infty, \infty)$.
+  - But probabilities must stay between 0 and 1.   
 
 ### Visualizing $p(X)$
 - One way to understand how $p(X)$ behaves:
-  - Bin a continuous predictor into categories  
-  - For each bin, compute the proportion of the response  
+  - Bin a continuous predictor into categories.  
+  - For each bin, compute the proportion of the response.  
 
 ### The Path to Linearity
-- Scales and Transformations: we apply transformations to make the model linear on a new scale.
+- Scales and transformations---we apply transformations to make the model linear on a new scale.
   - $p(X)$: range $(0,1)$  
-  - Odds: $\dfrac{p(X)}{1 - p(X)}$: range $(0, \infty)$  
-  - **Log odds (logit)**: $\ln\left(\dfrac{p(X)}{1 - p(X)}\right)$: range $(-\infty, \infty)$  
-- The **logit function** maps probabilities to the full real number line  
+  - Odds $= \frac{p(X)}{1 - p(X)}$: range $(0, \infty)$  
+  - **Log odds (logit)** $= \ln\left(\frac{p(X)}{1 - p(X)}\right)$: range $(-\infty, \infty)$  
+- The **logit function** maps probabilities to the full real number line.  
 - This transformation enables linear modeling, because probabilities on the logit scale tend to be more linear with the predictor.  
 
 ### Model Statement
@@ -69,10 +69,10 @@ title: "Logistic Regression"
 - Test statistic (z-score): $Z = \frac{\hat{\beta}_1}{SE(\hat{\beta}_1)}$
 - 95% confidence interval: $\hat{\beta}_1 \pm z_{\alpha/2} \cdot SE(\hat{\beta}_1)$
 - The null distribution is standard normal: $Z \sim N(0, 1)$  
-- Some software reports a chi-squared test instead of a z-test  
+- Some software reports a chi-squared test instead of a z-test.  
   - It squares the z-statistic: $Z^2$
-  - Then uses a $\chi^2$ distribution with 1 degree of freedom to compute the p-value  
-  - This gives the same p-value as the two-sided z-test
+  - Then uses a $\chi^2$ distribution with 1 degree of freedom to compute the p-value.  
+  - This gives the same p-value as the two-sided z-test.
 
 ### Predicted Probabilities
 
@@ -87,96 +87,110 @@ title: "Logistic Regression"
   p(X) = \frac{e^{\beta_0 + \beta_1 X}}{1 + e^{\beta_0 + \beta_1 X}}
   $$
 
----
 
 ## Interpreting Coefficients: Continuous Predictors
 
 ### Odds and Odds Ratios
+- Logistic regression coefficients have good interpretational value.
+- Logistic regression coefficients are interpreted using **odds ratios**.  
+- Whether the predictor is numeric or categorical determines the interpretation.  
+- For a continuous predictor $X$, the odds of the event occurring are:  
+  $$
+  \text{Odds}(X) = \frac{p(X)}{1 - p(X)} = e^{\beta_0 + \beta_1X}
+  $$
 
-- Logistic regression coefficients have good interpretational value.  
-- Whether the predictor is numeric or categorical determines interpretation.
-- Logistic regression coefficients are interpreted via odds ratios
-- Odds: $\text{Odds}(X) = \frac{p(X)}{1 - p(X)} = e^{\beta_0 + \beta_1X}$
-- Example: $\text{Odds}(X = 500) = e^{\beta_0 + \beta_1 \cdot 500}$, $\text{Odds}(X = 501) = e^{\beta_0 + \beta_1 \cdot 501}$
-- Odds ratio (OR), i.e.the odds at X = 501 relative to the odds at X = 500: $\frac{e^{\beta_0 + \beta_1 \cdot 501}}{e^{\beta_0 + \beta_1 \cdot 500}} = e^{\beta_1}$
+Example:  
 
-- Interpretation: For a 1-unit increase in $X$, the odds of the event occurring change by a factor of $e^{\beta_1}$
+- $\text{Odds}(X = 500) = e^{\beta_0 + \beta_1 \cdot 500}$  
+- $\text{Odds}(X = 501) = e^{\beta_0 + \beta_1 \cdot 501}$  
+- The **odds ratio (OR)** for a 1-unit increase in $X$ is:  
+$$
+\frac{e^{\beta_0 + \beta_1 \cdot 501}}{e^{\beta_0 + \beta_1 \cdot 500}} = e^{\beta_1}
+$$
+- **Interpretation**: For every 1-unit increase in $X$, the odds of the event occurring change by a factor of $e^{\beta_1}$.
 
 ### Generalized Interpretation
-- Interpretation does not depend on the actual value of $X$  
-- For a $\Delta$-unit increase: $\text{Odds change by } e^{\Delta \cdot \beta_1}$
+- This interpretation does not depend on the specific value of $X$.  
+- For a $\Delta$-unit increase in $X$, the odds change by a factor of $e^{\Delta \cdot \beta_1}$.  
 - Example:  
-  - A \$500 increase in the balance increases the odds of default by a factor of 15.64.  
-  - The odds of defaulting with a \$1,000 balance are 15.64 times higher than with \$500.  
+  - A \$500 increase in balance increases the odds of default by a factor of 15.64.  
+  - That is, the odds of defaulting with a \$1,000 balance are 15.64 times higher than with a \$500 balance.
 
 ### Tips
-- Odds ratios are relative, not absolute  
-- Use predicted probabilities to assess absolute likelihood.   
-- Using meaningful values of $X$ and stating the odds ratio using those values is way to provide clear interpretations. 
+- Odds ratios describe relative, not absolute, changes in risk.  
+- Use predicted probabilities to assess absolute likelihood.  
+- For clear communication, report odds ratios using meaningful values of $X$ and real-world increments.
 
 
 ## Interpreting Coefficients: Categorical Predictors
 
 ### Dummy Variables
-
-- Categorical variables are dummytized
-- One coefficient is created for the intercept and for all levels of the categorical predictor minus one.
-- One level is omitted → reference category, which is associated with the intercept
-- Coefficients are interpreted as odds ratios relative to the reference
+- Categorical variables are **dummytized** (converted into binary indicators).
+- One coefficient is estimated for each level of the categorical variable, minus one.
+- The omitted level is the **reference category**, and its effect is absorbed into the intercept.
+- Coefficients represent odds ratios relative to this reference group.
 
 ### Example: Student Status
-- Variable: `student`  
-  - Yes (1), No (0)  
-- Odds if student: $e^{\beta_0 + \beta_1 \cdot 1}$
+- Predictor variable: `student`  
+  - Yes (1), No (0)
+- Odds if student: $e^{\beta_0 + \beta_1 \cdot 1}$  
 - Odds if not a student: $e^{\beta_0 + \beta_1 \cdot 0} = e^{\beta_0}$
-- Odds ratio:$OR = \frac{e^{\beta_0 + \beta_1}}{e^{\beta_0}} = e^{\beta_1}$
-  - The odds of defaulting for a student are $e^{\beta_1}$ times higher/lower than for a nonstudent.  
+- **Odds ratio (OR)**:  
+  $$
+  \text{OR} = \frac{e^{\beta_0 + \beta_1}}{e^{\beta_0}} = e^{\beta_1}
+  $$
+- **Interpretation**: The odds of defaulting for a student are $e^{\beta_1}$ times higher (or lower) than for a nonstudent.
 
-### Confidence Intervals for ORs
-- 95% CI for $\beta_1$: $\hat{\beta}_1 \pm z_{\alpha/2} \cdot SE(\hat{\beta}_1)$
-- Exponentiate endpoints to get CI for the odds ratio: $\left( e^{\hat{\beta}_1 - z_{\alpha/2}SE(\hat{\beta}_1)}, e^{\hat{\beta}_1 + z_{\alpha/2}SE(\hat{\beta}_1)} \right)$
-- Interpretation is provided for the point estimate (coefficient); the confidence interval is reported to reflect sampling error, but without andy lengthy worded interpretation.  
+### Confidence Intervals for Odds Ratios
+- 95% confidence interval for $\beta_1$:  
+  $$
+  \hat{\beta}_1 \pm z_{\alpha/2} \cdot SE(\hat{\beta}_1)
+  $$
+- Exponentiate the interval endpoints to get a 95% confidence interval for the odds ratio:  
+  $$
+  \left( e^{\hat{\beta}_1 - z_{\alpha/2} \cdot SE(\hat{\beta}_1)},\ e^{\hat{\beta}_1 + z_{\alpha/2} \cdot SE(\hat{\beta}_1)} \right)
+  $$
+- Report the odds ratio and its confidence interval; interpretation is typically given for the point estimate (coefficient). Use the interval to communicate sampling error, without a lengthy worded interpretation.
 
-  
+
 ## General Workflow and Considerations
 
 ### Assumptions
-- Observations are independent  
-- The **log odds** are linearly related to continuous predictors  
-- No unaccounted confounders  
+- Observations are independent.
+- The **log odds** of the outcome are linearly related to continuous predictors.
+- No important confounding variables have been omitted.
 
-### Model Fit
-- Residual plots are less useful — binary outcome means variance changes are expected  
+### Assessing Model Fit
+- Traditional residual plots are less informative with binary outcomes (variance changes are expected).
 - Instead:
-  - Compare predicted probabilities to observed proportions, i.e. does the interpretation of the estimates make sense with the EDA?   
-  - Hosmer-Lemeshow test:
-    - $H_0$: model fits  
-    - $H_A$: model does not fit  
+  - Compare predicted probabilities to observed proportions.
+    - Do the estimated effects align with what you saw during EDA?
+  - Use the **Hosmer-Lemeshow test**:
+    - $H_0$: model fits well  
+    - $H_A$: model does not fit well
 
-### If Fit Is Poor
-- Strange trends in EDA → linear log odds assumption may be violated  
-  - Try polynomial terms or additional predictors  
-- Rejected Hosmer-Lemeshow test may not always imply a problem (especially in large samples)
+### If the Fit Is Poor
+- Unusual trends in EDA may signal that the linearity of log odds assumption is violated.  
+  - Try adding polynomial terms or interaction effects.  
+- A rejected Hosmer-Lemeshow test does not always imply a problem with poor model fit, especially with large samples.
 
 ### Recommended Workflow
+1. **EDA**
+   - Use LOESS curves for continuous predictors.  
+   - Use mosaic plots or proportion comparisons for categorical predictors.  
+2. **Fit the model**
+   - Assess model fit using diagnostic tests and visual checks.  
+3. **Inference**
+   - Use a z-test to assess whether coefficients are significantly different from zero.  
+   - Interpret coefficients using **odds ratios**.
+   - Report confidence intervals for the odds ratios.  
+   - Choose a sensible unit change based on the variable's scale and context.
 
-1. EDA  
-   - LOESS curve for continuous predictors  
-   - Mosaic plots or comparison of proportions for categorical predictors      
-2. Fit model  
-   - Check fit via diagnostic tests  
-3. Inference  
-   - z-test for coefficient relevance, i.e. not zero  
-   - Interpret coefficient as odds ratio  
-   - Provide confidence interval  
-   - Choose a sensible unit change based on context  
  
-   
 ## Looking Ahead: Multiple Logistic Regression
 
-- Like MLR, most applications require multiple predictors
+- Like multiple linear regression, most applications of logistic regression involve multiple predictors.
 - Key skills from this chapter:
-  - Understanding the logit function  
-  - Interpreting coefficients using odds ratios  
-  - Conducting EDA before modeling  
-     
+  - Understanding the logit function/transformation.
+  - Interpreting coefficients using odds ratios.
+  - Using EDA to guide model building and interpretation.   

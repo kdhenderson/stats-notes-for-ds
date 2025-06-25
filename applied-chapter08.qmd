@@ -6,10 +6,10 @@ title: "2 x 2 Contingency Tables"
 
 This chapter introduces contingency tables as a bridge between group comparisons and logistic regression models.
 
-- Understand the role of 2×2 tables in modeling binary outcomes  
-- Compare group proportions using appropriate statistical metrics  
-- Learn when and how to apply Fisher’s exact test  
-- Use chi-squared tests for large-sample inference
+- Understand the role of 2×2 tables in modeling binary outcomes.  
+- Compare group proportions using appropriate statistical metrics.  
+- Learn when and how to apply Fisher’s exact test.  
+- Use chi-squared tests for large-sample inference.
 
 ## Classification Tools
 
