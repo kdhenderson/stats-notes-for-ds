@@ -6,37 +6,46 @@ title: "Multiple Logistic Regression"
 
 This chapter introduces multiple logistic regression as both a classification tool and a method for statistical inference. We will discuss modeling strategies, communication strategies, and the general workflow for using multiple logistic regression in applied settings.
 
+## Overview
+
+- Introduce multiple logistic regression as a tool for classification and statistical inference.  
+- Explore the benefits of using multiple predictors, including adjusting for confounders.  
+- Understand how to interpret coefficients and interactions.  
+- Learn how to assess model fit and compare alternative models.  
+- Review strategies for feature selection and model complexity.  
+- Apply a general modeling workflow in practical settings.
+
 
 ## Motivations for Multiple Logistic Regression
 
 ### Simple vs. Multiple Logistic Regression
-- **Simple logistic regression**:
-  - Assumes no confounders
-  - Estimates the effect of a single predictor, ignoring all others
-- **Multiple logistic regression**:
-  - Adjusts for other variables while estimating the effect of one predictor
-  - Allows for both numerical and categorical predictors  
+- **Simple Logistic Regression**:
+  - Assumes there are no confounding variables.  
+  - Estimates the effect of a single predictor **without accounting for other factors**.  
+- **Multiple Logistic Regression**:
+  - Adjusts for additional variables while estimating the effect of one predictor.  
+  - Allows for both numerical and categorical predictors.  
 
 ### Simpson’s Paradox
-- An example of a confounding variable distorting the association between predictors and response
+- Anexample where a confounding variable distorts the observed relationship between predictors and the response.  
 - **Crane/Eagle Math/Physics Example**:
-  - You are more likely to pass if you are a math student versus a physics student.
-  - Almost all Eagles students were math students.
-  - Crane had an even distribution of math and physics students.
-  - A single 2x2 table ignores this confounding info.
-  - Logistic regression allows for comparison of schools while holding department fixed.
-  - Interaction effects between predictors (e.g. school × department) can also be assessed.
+  - Math students are more likely to pass than physics students.  
+  - Most Eagle students were in math, while Crane had an even mix.  
+  - A single 2×2 table masks this confounding structure.  
+  - Logistic regression enables comparisons between schools **while holding department fixed**.  
+  - Can also test for interaction effects (e.g., school × department).  
 
 ### Prediction vs. Explanation
-- Determining important health factors is a statistical inference problem (explanation).
-  - Not only identifying importance but quantifying it
-- Clinicians are also interested in predicting disease probability.
+- Identifying important health risk factors is an explanatory modeling goal—--a statistical inference problem.  
+  - The goal is not just to detect which variables matter, but to quantify their effects while accounting for other factors.  
+- In contrast, clinicians may also be interested in predicting the probability of disease for individual patients.  
+  - The emphasis is on accurate predictions, not necessarily understanding the individual role of each variable.
 
 #### Case Study Examples
-- **CAD Study**: Predicting coronary artery disease using sex, age, and ECG.
-  - Questions: Is sex a risk factor after accounting for age and ECG? Are there interactions?
-- **Titanic**: Survival prediction using ticket class, age, and sex.
-  - Questions: What contributed most to survival? Do the effects depend on each other?
+- **CAD Study**: Predicting coronary artery disease using sex, age, and ECG results.  
+  - Questions: Is sex still a risk factor after adjusting for age and ECG? Are there interaction effects?  
+- **Titanic**: Predicting survival based on ticket class, age, and sex.  
+  - Questions: Which factors had the largest impact on survival? Do the effects depend on each other?  
 
 
 ## The Multiple Logistic Regression Model
@@ -45,27 +54,51 @@ For multiple predictors $X = (X_1, X_2, \ldots, X_p)$, the general logistic regr
 $$
 \log\left( \frac{p(X)}{1 - p(X)} \right) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_p X_p
 $$
-  
+
+This model expresses the **log odds** of the outcome as a linear combination of predictors.
+
 ### Interpretation
-
 - **Additive models**:
-  - Each predictor appears only once in the model.
-  - $e^{\hat{\beta}}$ can be interpreted as an odds ratio
-  - Interpretation assumes "holding all other variables fixed"
-
+  - Each predictor appears once in the model.
+  - $e^{\hat{\beta}}$ is interpreted as an odds ratio.
+  - Interpretation assumes we are “holding all other variables fixed.”
 - **Complex models**:
-  - Include interaction and/or polynomial terms
-  - Odds ratios are still interpretable but require careful consideration of the regression formula
-  - **Effects plots** are often used for graphical interpretation 
+  - Include interaction terms and/or polynomial terms.
+  - Odds ratios are still interpretable but require careful consideration of the regression formula.
+  - **Effects plots** are commonly used for visual interpretation in these cases.
+
+#### Odds Ratios in Complex Models
+
+When a model includes interaction terms, odds ratios must be interpreted in the context of the full model. Here is an example:
+
+Model:  
+$$
+\log\left( \frac{p}{1 - p} \right) = \beta_0 + \beta_1 \cdot \text{Age} + \beta_2 \cdot \text{Smoking} + \beta_3 \cdot (\text{Age} \times \text{Smoking})
+$$
+
+- **Age**: continuous  
+- **Smoking**: binary (1 = smoker, 0 = non-smoker)
+
+Interpretation:
+
+- For **non-smokers** (`Smoking = 0`):  
+  Odds ratio for a 1-year increase in age is $\exp(\beta_1)$
+- For **smokers** (`Smoking = 1`):  
+  Odds ratio for a 1-year increase in age is $\exp(\beta_1 + \beta_3)$
+
+> **Key idea**: Odds ratios remain interpretable but must account for interaction terms and the full model formula.
 
 ### Classification Boundaries
-- **Additive**: linear boundaries (only numeric predictors)
-  - Similar to LDA but does not require predictors to be normally distributed
-- **Complex**: nonlinear boundaries arise from:
-  - Categorical × continuous interactions (unique boundary per level)
-  - Continuous × continuous or polynomial terms (curved/multiple boundaries)
-  - Categorical × categorical: N/A
+- **Additive models**:
+  - Produce linear decision boundaries (when predictors are numeric).
+  - Similar to LDA but without assuming normality of predictors.
+- **Complex models**:
+  - Can produce nonlinear boundaries, depending on the terms included:
+    - Categorical × continuous: separate linear boundary per category
+    - Continuous × continuous or polynomial: curved or non-parallel boundaries
+    - Categorical × categorical: nonlinear effects, but not meaningful to describe in terms of a boundary shape
 
+---
 
 ## Feature Selection
 
