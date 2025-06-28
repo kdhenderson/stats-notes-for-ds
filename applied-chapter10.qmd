@@ -123,38 +123,39 @@ Interpretation:
   - For **explanation**: use penalization or Firth’s logistic regression  
   - For **prediction**: consider Firth’s logistic, penalized logistic (e.g., `glmnet`), or alternative models (e.g., LDA)
 
----
 
 ## Complex Logistic Models
 
 ### Modeling Strategy
-- When including high-order interaction terms:
-  - Also include lower-order interactions
-    - e.g. if modeling a 3-way interaction, also include all 2-way interactions
+- When including higher-order interaction terms:
+  - Include the corresponding lower-order interactions  
+    - e.g., if modeling a 3-way interaction, also include all 2-way interactions
   - Use ANOVA-style tests to assess overall significance at each level of complexity
-  - Remove non-significant higher-order interactions and re-assess
+  - Remove non-significant higher-order interactions and reassess model fit
   - Compare models using:
     - Hosmer-Lemeshow test
     - Validation or cross-validation metrics
-  
+
 ### Coefficient Interpretation
-- Follow similar strategy as in MLR:
-  - Determine the appropriate contrast to combine regression coefficients to estimate specific comparison or trend based on the significant interactions
-  - Exponentiate to obtain odds ratio interpretation
+- Use a similar strategy as in multiple linear regression:
+  - Identify the appropriate contrast to combine regression coefficients  
+    - Allows estimation of specific comparisons or trends from significant interactions
+  - Exponentiate combined coefficients to obtain odds ratio interpretations
 
-- For highly complex models:
-  - Interpretation becomes difficult
-  - Use effects plots for visualization
-  
+- In more complex models:
+  - Interpretation becomes challenging
+  - Use effects plots to visualize and communicate model predictions
+
 ### Effects Plots
-- Show predicted probabilities across 1–3 variables
-- Other variables are held fixed:
-  - Categorical: reference level (usually, depends on software)
-  - Continuous: mean or median (depends on software)    
+- Display predicted probabilities across 1–3 variables
+- Hold other variables fixed:
+  - Categorical: reference level (depends on software)
+  - Continuous: mean or median (depends on software)
 
-> **Note**: Effects plots are not part of EDA; they visualize predictions from your fitted model. They can look simple or complex, depending on model structure—not the underlying raw data.
-  
- 
+> **Note**: Effects plots are not part of EDA. They visualize predictions from the fitted model, not the raw data. Their appearance reflects the model structure, not the underlying variable relationships.
+
+---
+
 ## General Workflow
 
 The general workflow for multiple logistic regression is similar to that of multiple linear regression.
