@@ -4,10 +4,6 @@ title: "Multiple Logistic Regression"
 
 ## Overview
 
-This chapter introduces multiple logistic regression as both a classification tool and a method for statistical inference. We will discuss modeling strategies, communication strategies, and the general workflow for using multiple logistic regression in applied settings.
-
-## Overview
-
 - Introduce multiple logistic regression as a tool for classification and statistical inference.  
 - Explore the benefits of using multiple predictors, including adjusting for confounders.  
 - Understand how to interpret coefficients and interactions.  
@@ -21,22 +17,22 @@ This chapter introduces multiple logistic regression as both a classification to
 ### Simple vs. Multiple Logistic Regression
 - **Simple Logistic Regression**:
   - Assumes there are no confounding variables.  
-  - Estimates the effect of a single predictor **without accounting for other factors**.  
+  - Estimates the effect of a single predictor without accounting for other factors.  
 - **Multiple Logistic Regression**:
   - Adjusts for additional variables while estimating the effect of one predictor.  
   - Allows for both numerical and categorical predictors.  
 
 ### Simpson’s Paradox
-- Anexample where a confounding variable distorts the observed relationship between predictors and the response.  
-- **Crane/Eagle Math/Physics Example**:
+- An example where a confounding variable distorts the observed relationship between predictors and the response.  
+- **Crane/Eagle &ndash; Math/Physics Example**:
   - Math students are more likely to pass than physics students.  
   - Most Eagle students were in math, while Crane had an even mix.  
   - A single 2×2 table masks this confounding structure.  
-  - Logistic regression enables comparisons between schools **while holding department fixed**.  
+  - Logistic regression enables comparisons between schools while holding department fixed.  
   - Can also test for interaction effects (e.g., school × department).  
 
 ### Prediction vs. Explanation
-- Identifying important health risk factors is an explanatory modeling goal—--a statistical inference problem.  
+- Identifying important health risk factors is an explanatory modeling goal---a statistical inference problem.  
   - The goal is not just to detect which variables matter, but to quantify their effects while accounting for other factors.  
 - In contrast, clinicians may also be interested in predicting the probability of disease for individual patients.  
   - The emphasis is on accurate predictions, not necessarily understanding the individual role of each variable.
@@ -90,8 +86,8 @@ Interpretation:
 
 ### Classification Boundaries
 - **Additive models**:
-  - Produce linear decision boundaries (when predictors are numeric).
-  - Similar to LDA but without assuming normality of predictors.
+  - Produce linear decision boundaries (when predictors are numeric)
+  - Similar to LDA but without assuming normality of predictors
 - **Complex models**:
   - Can produce nonlinear boundaries, depending on the terms included:
     - Categorical × continuous: separate linear boundary per category
@@ -106,19 +102,19 @@ Interpretation:
 - Useful for both regularization and feature selection.
 
 ### Stepwise Selection
-- Common approaches include forward, backward, and stepwise procedures
-- Best subset selection is also possible
+- Common approaches include forward, backward, and stepwise procedures.
+- Best subset selection is also possible.
 - Model comparison metrics:
   - AIC (Akaike Information Criterion)
   - LogLoss or Brier Score, evaluated on a validation set or via K-fold cross-validation
 
 ### Separability Problem
 - When training data is **perfectly separated**:
-  - This signals strong, influential predictors
-  - However, the maximum likelihood estimate (MLE), i.e., the regression coefficient that minimizes the logloss, becomes $\hat{\beta} = \infty$  
-  - Software may issue warnings or fail to converge
-  - Predicted probabilities become exactly 0 or 1
-    - No uncertainty estimate, confidence intervals, or inference is possible
+  - This signals strong, influential predictors.
+  - However, the maximum likelihood estimate (MLE), i.e., the regression coefficient that minimizes the logloss, becomes $\hat{\beta} = \infty$.  
+  - Software may issue warnings or fail to converge.
+  - Predicted probabilities become exactly 0 or 1.
+    - No uncertainty estimate, confidence intervals, or inference is possible.
 - **Solutions**:
   - For **explanation**: use penalization or Firth’s logistic regression  
   - For **prediction**: consider Firth’s logistic, penalized logistic (e.g., `glmnet`), or alternative models (e.g., LDA)
@@ -154,37 +150,38 @@ Interpretation:
 
 > **Note**: Effects plots are not part of EDA. They visualize predictions from the fitted model, not the raw data. Their appearance reflects the model structure, not the underlying variable relationships.
 
----
 
 ## General Workflow
 
-The general workflow for multiple logistic regression is similar to that of multiple linear regression.
+The overall workflow for multiple logistic regression closely parallels that of multiple linear regression.
 
 ### Modeling Steps
-
-1. Define primary question(s) and predictor(s)
-2. Identify potential confounders and covariates, i.e. additional variables for which you want to account
-3. Perform EDA and data cleaning:
-   - Summary statistics and plots
+1. **Define primary question(s) and predictor(s)**
+2. **Identify potential confounders and covariates**  
+   - These are additional variables you want to account for
+3. **Perform EDA and data cleaning**
+   - Use summary statistics and plots
    - Explore possible interactions
-4. Fit candidate models:
-   - Based on insights from EDA
-   - Use ANOVA tests or feature selection to decide on complexity
-5. Assess model fit:
-   - Hosmer-Lemeshow test
-   - Evaluate metrics on validation or K-fold CV
-6. Interpret final model:
-   - Odds ratios (additive models)
-     - Complex models with interactions can also be interpreted, taking care with contrasts 
-   - Effects plots (complex models)
-   
-### Classification Considerations
+4. **Fit candidate models**
+   - Guided by findings from EDA
+   - Use ANOVA tests or feature selection to choose an appropriate model complexity
+5. **Assess model fit**
+   - Use the Hosmer-Lemeshow test
+   - Evaluate performance on a validation set or using K-fold cross-validation
+6. **Interpret the final model**
+   - For additive models: interpret coefficients as odds ratios
+   - For complex models with interactions:
+     - Use appropriate contrasts to combine coefficients
+     - Use effects plots for interpretation and communication
 
-- Try multiple classification tools (e.g. non-parametric approaches) comparing error metrics
-- Choose threshold based on context (e.g. cost of misclassification types)
-- Validate both model and threshold using:
-  - Independent test set
-  - Entirely new dataset
+### Classification Considerations
+- Try multiple classification methods (e.g., non-parametric approaches) and compare error metrics
+- Choose a classification threshold based on context  
+  - For example, consider the cost of false positives vs. false negatives
+- Validate both the model and the threshold using:
+  - An independent test set
+  - An entirely new dataset, if available
 - Set up a monitoring strategy:
-  - Regular checks on prediction accuracy
-  - Adapt to changes in data collection or algorithm dynamics
+  - Regularly check prediction accuracy
+  - Adjust the model if data collection methods or population characteristics change
+   
