@@ -4,59 +4,57 @@ title: "Principal Component Analysis"
 
 ## Overview
 
-- **Principal Component Analysis (PCA)** is a foundational tool for unsupervised data analysis and dimensionality reduction.
-
-- This chapter covers:
-  - What unsupervised analysis is
-  - The motivation for data reduction
-  - Applications of PCA
-  - Technical details of PCA
-  - Introduction to nonlinear data reduction methods (*t*-SNE, MDS) 
+- Introduce Principal Component Analysis (PCA) as a tool for unsupervised data analysis and dimensionality reduction.  
+- Describe the difference between supervised and unsupervised analysis.  
+- Explain the motivation for reducing data dimensionality.  
+- Explore practical applications of PCA.  
+- Review the technical foundations of PCA.  
+- Introduce nonlinear dimensionality reduction methods (*t*-SNE, MDS).  
 
 
 ## What Is PCA?
 
 ### Supervised vs. Unsupervised Learning
-
-- **Supervised learning**: Provide both the response variable and predictors. Models aim to:
-  - Explain the relationship
+- **Supervised learning**: Both predictors and the response variable are provided. Models aim to:
+  - Explain relationships
   - Perform hypothesis testing and build confidence intervals
   - Make predictions
-
-- **Unsupervised learning**: Only provide the predictors.
-  - No response variable
+- **Unsupervised learning**: Only predictors are provided.
+  - No response variable is used
   - Goals vary; interpretation is often subjective
-  - Not trying to make predictions or explain in the traditional sense as with linear and logistic regression  
-  - More challenging than supervised 
-  - No easy way to validate results on future data
-  - Common uses:
-    - Exploratory data analysis (EDA) of a supervised analysis
-    - Identifying subpopulations
+  - Not used for prediction or traditional explanation as with linear and logistic regression
+  - Typically more challenging than supervised methods
+  - No standard or easy way to validate results on future data
+  - Common applications include:
+    - Exploratory data analysis (EDA) to support supervised analysis
+    - Identifying subgroups or patterns
     - Improving computational efficiency
-    - Simplifying regression/classification prediction tasks
-
+    - Simplifying downstream prediction tasks  
+  
 ### Unsupervised Tools
+Common techniques include:
+
 - **Data reduction**:  
   - Principal Component Analysis (PCA)  
   - *t*-SNE  
   - Multidimensional Scaling (MDS)
 - **Clustering**:  
   - Hierarchical  
-  - *k*-means
+  - *k*-means clustering
 
 
 ## PCA and Data Reduction
 
 ### Motivation for Data Reduction
-- Too many variables → Hard to analyze, visualize, or model
-- Goal: create a new data set with fewer variables while preserving "information"
-- "Information" depends on algorithm 
-  - "Information" can be defined in terms of **variability**
-    
+- When there are too many variables, it becomes difficult to analyze, visualize, or model the data.
+- The goal of PCA is to create a smaller set of variables that preserves as much information as possible.
+- What counts as “information” depends on the algorithm.  
+  - For PCA, **information is defined in terms of variability**.
+  
 ### Principal Components
-- New variables $Z_1, Z_2, \dots, Z_p$ are called **principal components**.
-- Each new variable, $Z_j$ is a **linear combination** of the original $X_i$ variables:
-  - Coefficients change for each principal component.
+- PCA creates new variables $Z_1, Z_2, \dots, Z_p$ called **principal components**.
+- Each component $Z_j$ is a **linear combination** of the original $X_i$ variables:
+  - Each principal component uses different weights (coefficients):
 
 $$
 Z_1 = \phi_{11}X_1 + \phi_{12}X_2 + \dots + \phi_{1p}X_p \\
@@ -64,26 +62,30 @@ Z_2 = \phi_{21}X_1 + \phi_{22}X_2 + \dots + \phi_{2p}X_p \\
 \vdots \\
 Z_p = \phi_{p1}X_1 + \phi_{p2}X_2 + \dots + \phi_{pp}X_p
 $$
-- PCA creates the same number of principal components as variables in the original data set.  
-  - Where is the reduction? Should we:  
-    - Keep only a few?, How many?, Which ones? What criterion? 
+- PCA always produces the same number of principal components as the original number of variables.
+  - So where is the “reduction”?  
+    - Do we keep only a few?  
+    - If so, how many? Which ones? Based on what criterion?
 
 ### Properties of Principal Components
 - **Uncorrelated** with each other
-- **Ordered by variance**: $\text{Var}(Z_1) > \text{Var}(Z_2) > \dots > \text{Var}(Z_p)$
-- Total variance is preserved: $\sum_{i=1}^p \text{Var}(X_i) = \sum_{i=1}^p \text{Var}(Z_i)$
+- **Ordered by variance**: $\text{Var}(Z_1) > \text{Var}(Z_2) > \dots > \text{Var}(Z_p)$  
+- Total variance is preserved:
+  $$
+  \sum_{i=1}^p \text{Var}(X_i) = \sum_{i=1}^p \text{Var}(Z_i)
+  $$
 
 ### Reducing Dimensions
-- Because $\text{Var}(Z_1) > \text{Var}(Z_2) > \dots > \text{Var}(Z_p)$  
-  - Some variables will essentially have 0 variance  
-  - Drop low-variance components since all the values in the column are about the same, those components aren't useful.
-  - Left with $k < p$ variables.  
-- Total variability is preserved:
-$$
-\sum_{i=1}^p \text{Var}(X_i) \approx \sum_{i=1}^k \text{Var}(Z_i), \quad \text{where } k < p
-$$
+- Because components are ordered by variance:
+  - Later components often have very low variance---some essentially zero.  
+  - These components carry little information and can be dropped.
+  - We keep only the first $k$ components where $k < p$, and $p$ is the original number of variables.
+- Total variability is approximately preserved:
+  $$
+  \sum_{i=1}^p \text{Var}(X_i) \approx \sum_{i=1}^k \text{Var}(Z_i), \quad \text{where } k < p
+  $$
 
-
+  
 ## Performing PCA
 
 ### From Data to Components

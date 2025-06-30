@@ -224,7 +224,7 @@ $$
 Multicollinearity occurs when two or more explanatory variables are highly correlated, leading to:
 
 - Difficulty in holding other variables fixed.
-- Increased uncertainty in coefficient estimates (wider intervals, larger p-values)..
+- Increased uncertainty in coefficient estimates (wider intervals, larger *p*-values).
 - Drastic changes in conclusions when variables are added or removed.
 
 ### Variance Inflation Factor (VIF)
@@ -261,5 +261,5 @@ High VIFs are not always concerning.
 
 ### Scenario 3: Predictive Modeling
 - Multicollinearity is **not** a concern when the goal is pure prediction.
-- It only affects coefficient standard errors ($SE$) and the hypothesis testing framework.
+- It only affects coefficient standard errors (*SE*) and the hypothesis testing framework.
 - The focus is on model performance, not coefficient interpretation.
