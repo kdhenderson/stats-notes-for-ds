@@ -71,31 +71,26 @@ $$
 Since $A$ has **3 columns** and $B$ has **3 rows**, multiplication is valid, and the resulting matrix $AB$ has dimension $2 \times 2$.  
 
 To compute the element in **row 1, column 1** of $AB$:  
-
 $$
 AB_{1,1} = (1 \times 7) + (2 \times 9) + (3 \times 11) = 7 + 18 + 33 = 58
 $$
 
 To compute the element in **row 1, column 2**:  
-
 $$
 AB_{1,2} = (1 \times 8) + (2 \times 10) + (3 \times 12) = 8 + 20 + 36 = 64
 $$
 
 To compute the element in **row 2, column 1**:  
-
 $$
 AB_{2,1} = (4 \times 7) + (5 \times 9) + (6 \times 11) = 28 + 45 + 66 = 139
 $$
 
 To compute the element in **row 2, column 2**:  
-
 $$
 AB_{2,2} = (4 \times 8) + (5 \times 10) + (6 \times 12) = 32 + 50 + 72 = 154
 $$
 
 Thus, the final matrix product is:  
-
 $$
 AB =
 \begin{bmatrix}
@@ -105,7 +100,7 @@ AB =
 $$  
 
 ### Identity Matrices  
-- An identity matrix is always symmetric, with:  
+- An **identity matrix** is always symmetric, with:  
   - All diagonal elements of **1**  
   - All off-diagonal elements of **0** 
 - The identity matrix behaves like **1** in scalar multiplication:  
@@ -116,7 +111,7 @@ $$
 - If a matrix is square and meets certain conditions, an inverse matrix exists.  
 - The inverse of $A$ is denoted as $A^{-1}$.  
 - The property: $AA^{-1} = A^{-1}A = I$
-- Inverse operations are matrix equivalents of division.  
+- Inverse operations are the matrix equivalent of division. 
   
 ### Tips for Reading Matrix Formulas  
 - Always check the dimension of the final result when interpreting matrix expressions.  
@@ -127,8 +122,7 @@ $$
 Let $C_{n \times 1}$ be a column vector of chosen numbers, and let $Y_{n \times 1}$ be a column vector representing a sample of data. The computation $C' Y$ (the transpose of $C$ multiplied by $Y$) allows us to compute:
 
 ### Averages
-If all elements of $C$ are set to $\frac{1}{n}$, then the matrix multiplication:
-
+If all elements of $C$ are equal to $\frac{1}{n}$, then the matrix multiplication:
 $$
 C' Y =
 \begin{bmatrix}
@@ -139,12 +133,10 @@ y_1 \\ y_2 \\ \vdots \\ y_n
 \end{bmatrix}
 = \frac{1}{n} (y_1 + y_2 + \dots + y_n) = \frac{1}{n} \sum_{i=1}^{n} y_i = \bar{Y}
 $$
-
 This shows that $C' Y$ computes the **sample mean** $\bar{Y}$ using matrix multiplication.
 
 ### Weighted Averages
 If $C$ contains weights that sum to 1 and are all positive, then the matrix multiplication:
-
 $$
 C' Y =
 \begin{bmatrix}
@@ -155,12 +147,10 @@ y_1 \\ y_2 \\ \vdots \\ y_n
 \end{bmatrix}
 = w_1 y_1 + w_2 y_2 + \dots + w_n y_n = \sum_{i=1}^{n} w_i Y_i = \bar{Y}_w
 $$
-
 This shows that $C' Y$ computes the **weighted mean** $\bar{Y}_w$ using matrix multiplication.
 
 ### Summation
 If all elements of $C$ are set to 1, then the matrix multiplication:
-
 $$
 C' Y =
 \begin{bmatrix}
@@ -171,12 +161,10 @@ y_1 \\ y_2 \\ \vdots \\ y_n
 \end{bmatrix}
 = y_1 + y_2 + \dots + y_n = \sum_{i=1}^{n} y_i
 $$
-
 This shows that $C' Y$ computes the **sum** of all values in $Y$ using matrix multiplication.
 
 ### Extending to Matrices
 If $C$ is not a vector but a matrix, then multiple computations can be performed simultaneously using matrix multiplication:
-
 $$
 C' Y =
 \begin{bmatrix}
@@ -192,12 +180,10 @@ y_1 \\ y_2 \\ \vdots \\ y_n
 \sum Y
 \end{bmatrix}
 $$
-
 This shows that $C' Y$ stores the mean in the first row and the sum in the second, efficiently computing both.
 
 ### Sums of Squares
 If $Y$ is multiplied by its own transpose, then the matrix multiplication:
-
 $$
 Y' Y =
 \begin{bmatrix}
@@ -208,7 +194,6 @@ y_1 \\ y_2 \\ \vdots \\ y_n
 \end{bmatrix}
 = y_1^2 + y_2^2 + \dots + y_n^2 = \sum_{i=1}^{n} Y_i^2
 $$
-
 This shows that $Y' Y$ computes the **sum of squares** of $Y$ using matrix multiplication, which is useful for variance and regression calculations.
 
 
@@ -220,10 +205,10 @@ This section describes how to summarize numerical data when working with multipl
 Basic summaries for individual variables:
 
 - Mean and standard deviation  (if normally distributed)  
-- Five-number summary: Min, 1st quartile, Median, 3rd quartile, Max 
+- Five-number summary: min, 1st quartile, median, 3rd quartile, max 
 
 ### Multiple Variables  
-When working with multiple variables:.
+When working with multiple variables:
 
 - Compute the mean and standard deviation for each variable  
 - Some variables may be correlated  
@@ -249,7 +234,7 @@ In addition to individual means and standard deviations, we also measure **covar
 
 Matrices provide a compact way to represent the relationships between multiple variables.
 
-$X_1$ and $X_2$ follow a **multivariate normal distribution (MVN)**:  
+$X_1$ and $X_2$ follow a multivariate normal distribution (MVN):  
 
 - **Mean vector**:
   $$
@@ -267,13 +252,12 @@ $X_1$ and $X_2$ follow a **multivariate normal distribution (MVN)**:
   \sigma_{12} & \sigma_2^2
   \end{bmatrix}
   $$
-- The diagonal elements are variances, while off-diagonal elements represent covariances
-- The covariance matrix must be symmetric
-
+- The diagonal elements are variances; the off-diagonal elements are covariances.
+- The covariance matrix must be symmetric.
 
 ## Covariance and Correlation
 
-- **Covariance ($\sigma_{12}$)** measures how two variables move together but depends on scale.
+- **Covariance** ($\sigma_{12}$) measures how two variables move together but depends on scale.
 - **Correlation** is the standardized version of covariance.
   $$
   \text{COR}(X_1,X_2) = \frac{\text{COV}(X_1, X_2)}{\sigma_1 \sigma_2}
@@ -379,7 +363,7 @@ To estimate and test coefficients in MLR:
 1. Estimate coefficients using: $\hat{\beta} = (X^T X)^{-1} X^T Y$  
 2. Compute the covariance matrix of estimates: $\text{Var}(\hat{\beta}) = \sigma^2 (X^T X)^{-1}$  
    - Take the square root of diagonal elements to get standard errors.
-3. Use $\hat{\beta}$ and standard errors to compute $t$-statistics, p-values. and confidence intervals. 
+3. Use $\hat{\beta}$ and standard errors to compute *t*-statistics, *p*-values. and confidence intervals. 
 
 ### The Matrix Advantage  
 - The matrix formula $\hat{\beta} = (X^T X)^{-1} X^T Y$ works regardless of the number of predictors or sample size.
