@@ -16,20 +16,20 @@ title: "Principal Component Analysis"
 
 ### Supervised vs. Unsupervised Learning
 - **Supervised learning**: Both predictors and the response variable are provided. Models aim to:
-  - Explain relationships
-  - Perform hypothesis testing and build confidence intervals
-  - Make predictions
+  - Explain relationships.
+  - Perform hypothesis testing and build confidence intervals.
+  - Make predictions.
 - **Unsupervised learning**: Only predictors are provided.
-  - No response variable is used
-  - Goals vary; interpretation is often subjective
-  - Not used for prediction or traditional explanation as with linear and logistic regression
-  - Typically more challenging than supervised methods
-  - No standard or easy way to validate results on future data
+  - No response variable is used.
+  - Goals vary; interpretation is often subjective.
+  - Not used for prediction or traditional explanation as with linear and logistic regression.
+  - Typically more challenging than supervised methods.
+  - No standard or easy way to validate results on future data.
   - Common applications include:
-    - Exploratory data analysis (EDA) to support supervised analysis
-    - Identifying subgroups or patterns
-    - Improving computational efficiency
-    - Simplifying downstream prediction tasks  
+    - Exploratory data analysis (EDA) to support supervised analysis.
+    - Identifying subgroups or patterns.
+    - Improving computational efficiency.
+    - Simplifying downstream prediction tasks.  
   
 ### Unsupervised Tools
 Common techniques include:
@@ -49,19 +49,26 @@ Common techniques include:
 - When there are too many variables, it becomes difficult to analyze, visualize, or model the data.
 - The goal of PCA is to create a smaller set of variables that preserves as much information as possible.
 - What counts as “information” depends on the algorithm.  
-  - For PCA, **information is defined in terms of variability**.
+  - For PCA, information is defined in terms of variability.
   
 ### Principal Components
 - PCA creates new variables $Z_1, Z_2, \dots, Z_p$ called **principal components**.
-- Each component $Z_j$ is a **linear combination** of the original $X_i$ variables:
+- Each component $Z_j$ is a **linear combination** of the original $X_i$ variables.
   - Each principal component uses different weights (coefficients):
 
-$$
-Z_1 = \phi_{11}X_1 + \phi_{12}X_2 + \dots + \phi_{1p}X_p \\
-Z_2 = \phi_{21}X_1 + \phi_{22}X_2 + \dots + \phi_{2p}X_p \\
-\vdots \\
-Z_p = \phi_{p1}X_1 + \phi_{p2}X_2 + \dots + \phi_{pp}X_p
-$$
+    $$
+    Z_1 = \phi_{11}X_1 + \phi_{12}X_2 + \dots + \phi_{1p}X_p
+    $$
+    $$
+    Z_2 = \phi_{21}X_1 + \phi_{22}X_2 + \dots + \phi_{2p}X_p
+    $$
+    $$
+    \vdots
+    $$
+    $$
+    Z_p = \phi_{p1}X_1 + \phi_{p2}X_2 + \dots + \phi_{pp}X_p
+    $$
+
 - PCA always produces the same number of principal components as the original number of variables.
   - So where is the “reduction”?  
     - Do we keep only a few?  
@@ -85,130 +92,128 @@ $$
   \sum_{i=1}^p \text{Var}(X_i) \approx \sum_{i=1}^k \text{Var}(Z_i), \quad \text{where } k < p
   $$
 
-  
+
 ## Performing PCA
 
 ### From Data to Components
 - PCA requires:
-  - Centering (and possibly scaling) the data
-    - Center the data by subtracting the mean from each value.
+  - Centering (and possibly scaling) the data:
+    - Centering means subtracting the mean from each variable.
   - Computing either:
-    - Covariance matrix (if unscaled)
-    - Correlation matrix (if standardized, this is 'standard operating procedure')
-      - Scaling leads to analysis essentially on the z-scores.
+    - The **covariance matrix** (if the data are unscaled)
+    - The **correlation matrix** (if the data are standardized; this is the *standard operating procedure*)
+      - Standardizing (scaling) transforms the data to *z*-scores, allowing PCA to focus on relative variation rather than absolute scales.
 - From the matrix, extract:
   - **Eigenvectors**: the weights (loadings) used to compute $Z_i$
   - **Eigenvalues**: the variance of each $Z_i$
   - Each eigenvalue has an associated eigenvector. There are $p$ of each.
 
 ### Matrix View
-- Eigenvector for $Z_1$ is $(\phi_{11}, \phi_{12}, \dots, \phi_{1p})$
-- **Eigenvector matrix** contains all loading coefficients. Eigenvectors are arranged columnwise.
-  - Transpose loading matrix and matrix multiply by old variables to get $p$ rows 
-- **Eigenvalues** quantify the variance of each principal component. Sometimes they are expressed in matrix form.
+- The eigenvector for $Z_1$ is $(\phi_{11}, \phi_{12}, \dots, \phi_{1p})$.
+- The **eigenvector matrix** contains all loading coefficients. Eigenvectors are arranged columnwise.
+  - Transpose the loading matrix and multiply it by the original variable matrix to obtain $p$ rows (one per principal component).
+- Eigenvalues quantify the variance of each principal component. These are sometimes expressed in matrix form.
 
 ### Scree Plots and Component Selection
-- Scree plots
-  - Plot eigenvalues arranged in order
-  - Plot variance proportions ($\frac{\text{eigenvalue}_i}{\text{sum of eigenvalues}}$) arranged in order
-  - Plot cumulative proportion of variance
+- Scree plots:
+  - Plot eigenvalues in decreasing order.
+  - Plot variance proportions:  $\dfrac{\lambda_i}{\sum_{j=1}^p \lambda_j}$, where $\lambda_i$ is the $i$th eigenvalue.
+  - Plot the cumulative proportion of variance.
 - Strategies for reduction:
-  - Keep enough PCs to explain ~80–90% of the variance (may be arbitrarily picked)
-  - Keep first 3–4 for visualization in EDA
-  - Look for an “elbow” in the scree plot
+  - Keep enough principal components (PCs) to explain approximately 80–90% of the variance (cutoff may be arbitrary).
+  - Keep the first 3–4 PCs for visualization in EDA.
+  - Look for an “elbow” in the scree plot, where additional components contribute little to the explained variance.
 
  
 ## Applications of PCA
 
 ### Simplify Regression and Classification
-- Use PCA on predictors only
-- New predictors are uncorrelated (no multicollinearity)
-- Reduces dimensionality (i.e data reduction, fewer predictors)
+- Apply PCA to the predictors only.
+- The resulting predictors (PCs) are uncorrelated---no multicollinearity.
+- Reduces dimensionality (i.e., fewer predictors, more compact model).
 - Important notes:
   - PCA is unsupervised!
-  - PCs may not align with response variable better than the original variables.
-  - Can be thought of as a processing step rather than a predictive tool.
+  - The PCs may not align better with the response variable than the original predictors.
+  - PCA should be viewed as a preprocessing step, not a predictive tool.
 
 ### PCA for EDA in Classification
 
 #### Purpose
-- To get a sense if the predictors will work well, not for use in the model itself.
-- When to use feature selection instead:
-  - If project requires use of original predictors (e.g. must be interpretable)  
-  - Large number of predictors  
+- Gain insight into whether the predictors might work well---this is *not* for model fitting.
+- Consider using feature selection instead:
+  - If the project requires using original predictors (e.g., for interpretability)
+  - When the number of predictors is very large
 
 #### Strategy
-- Plot PCs to visualize group separation
-- If separation exists, your predictors may work well
+- Plot PCs to visualize group separation.
+- If clear separation exists, the predictors may be promising.
 - If not:
-  - Predictors may be irrelevant
-  - Or, nonlinear methods may be required
-    - Use nonlinear data reduction or add complexity
-- Use as a sanity check for assessing models. Should good prediction accuracy be expected from those variables.
+  - Predictors may lack signal or be irrelevant.
+  - Alternatively, nonlinear methods may be needed:
+    - Try nonlinear data reduction or increase model complexity.
+- Use this as a sanity check: Is good prediction accuracy likely from these variables?
 
 ### Image Compression
-- Reduce the number of pixels (variables)
-- PCA compresses the data
-- Reconstruct image from fewer components
+- Reduce the number of pixels (variables).
+- PCA compresses the data by reducing dimensionality.
+- Reconstruct the image from a limited number of components.
 
 ### Common Pitfalls
+- *Never* include the response variable in PCA.
+- Interpreting component coefficients can be challenging.
+  - Strategies exist, such as examining the eigenvectors to summarize key contributions.
+- PCA is sensitive to outliers.
+- Categorical variables can cause misleading results, especially with arbitrary numeric coding.
+- PCA preserves only variance:
+  - Allows visualization of the "global" structure (e.g., linear separation)
+  - But proximity in PC space does *not* guarantee proximity in the original space
 
-- Do **not** use the response variable in PCA
-- Coefficient interpretation is difficult
-  - Interpretation strategies exist, such as using eigenvectors to summarize. 
-- PCA is sensitive to outliers
-- Categorical variables can lead to misleading PCA results, especially if arbitrary numeric coding is used
-- Only variance is preserved  
-  - Allows to visualize "global" structure of data (i.e. linear separation)  
-  - When data points are closer together in PC space, it does not imply that they are close in the original space  
 
-    
 ## Nonlinear Data Reduction
 
 ### Beyond Linear PCA
-- Linear PCA maps data to a linear plane
-  - Reduce the dimensionality of the points  
-  - Projected on the "closest" plane/hyperplane possible
-- **Nonlinear methods** allow curved manifolds 
-  - Project points onto lower dimensional, nonlinear surfaces  
-  - Choosing appropriate parameters and methods is important in nonlinear reduction  
-  - Some are strictly EDA, not used as predictors  
+- Linear PCA maps data to a linear plane:
+  - Reduces the dimensionality of the data
+  - Projects observations onto the "closest" plane or hyperplane
+- **Nonlinear methods** allow curved manifolds:
+  - Project points onto lower-dimensional, nonlinear surfaces
+  - Require careful selection of parameters and algorithms
+  - Often used strictly for EDA, not as inputs for predictive models
 
 ### Common Nonlinear Reduction Techniques
-- **Kernel PCA**:
-  - Use kernel functions (polynomial, radial basis (RBF))
-  - Perform PCA in transformed feature space
+- **Kernel PCA**  
+  - Uses kernel functions (e.g., polynomial, radial basis function (RBF))  
+  - Performs PCA in a transformed feature space  
   - Can be used in predictive models  
-
-- **Multidimensional Scaling (MDS)**:
-  - Preserves distances or similarities between points
-  - Typically used for 2D/3D visualizations
-  - Not directly used in predictive models 
-
-- **t-SNE** (*t*-Distributed Stochastic Neighbor Embedding):
-  - Non-parametric
-  - Captures local structure using probability models, i.e. models distances between points probabilistically
-    - Seeks lower-dimensional map that preserves the distribution of the distances  
-  - Not used in predictive models
-  - Results can vary based on hyperparameters like *perplexity* 
-  - Sometimes PCA is applied first (computation time) 
+- **Multidimensional Scaling (MDS)**  
+  - Preserves distances or similarities between points  
+  - Typically used for 2D/3D visualizations  
+  - Not directly used in predictive models  
+- ***t*-SNE** (*t*-Distributed Stochastic Neighbor Embedding)  
+  - Nonparametric  
+  - Captures local structure using probability models (i.e., models distances between points probabilistically)  
+    - Seeks a lower-dimensional map that preserves the distribution of pairwise distances  
+  - Not used in predictive models  
+  - Results can vary based on hyperparameters like *perplexity*  
+  - Sometimes PCA is applied first to reduce computation time  
   
 
 ## PCA: Technical Details
 
 ### Matrix Decomposition
-- Assume multiple variables follow a multivariate distribution
+- Assume multiple variables follow a multivariate distribution.
 - Principal components are:
   - Uncorrelated
-  - Have variances = eigenvalues
-  - Computed via eigenvectors
-    - The eigenvectors provide the coefficients used to create the principal components via linear combinations
-- Decompose $\Sigma$ or $R$: $\Sigma = \phi \Lambda \phi'$
-  where:
-  - $\phi$ = matrix of eigenvectors
+  - Have variances equal to their corresponding eigenvalues
+  - Computed using eigenvectors  
+    - These eigenvectors provide the coefficients for creating the principal components as linear combinations of the original variables.
+- Decompose $\Sigma$ or $R$:
+  $$\Sigma = \phi \Lambda \phi'
+  $$
+  where:  
+  - $\phi$ = matrix of eigenvectors  
   - $\Lambda$ = diagonal matrix of eigenvalues
-- Key property: The transpose of the eigenvector matrix is its inverse.
-$$
-\phi^\top \phi = \phi \phi^\top = I
-$$
-  
+- Key property: the eigenvector matrix is orthonormal, so its transpose is its inverse:
+  $$
+  \phi^\top \phi = \phi \phi^\top = I
+  $$  
