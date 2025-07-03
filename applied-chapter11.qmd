@@ -55,7 +55,6 @@ Common techniques include:
 - PCA creates new variables $Z_1, Z_2, \dots, Z_p$ called **principal components**.
 - Each component $Z_j$ is a **linear combination** of the original $X_i$ variables.
   - Each principal component uses different weights (coefficients):
-
     $$
     Z_1 = \phi_{11}X_1 + \phi_{12}X_2 + \dots + \phi_{1p}X_p
     $$
@@ -68,7 +67,6 @@ Common techniques include:
     $$
     Z_p = \phi_{p1}X_1 + \phi_{p2}X_2 + \dots + \phi_{pp}X_p
     $$
-
 - PCA always produces the same number of principal components as the original number of variables.
   - So where is the “reduction”?  
     - Do we keep only a few?  
@@ -217,3 +215,4 @@ Common techniques include:
   $$
   \phi^\top \phi = \phi \phi^\top = I
   $$  
+  

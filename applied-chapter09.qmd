@@ -45,7 +45,7 @@ title: "Logistic Regression"
 - This transformation enables linear modeling, because probabilities on the logit scale tend to be more linear with the predictor.  
 
 ### Model Statement
-- Logistic regression models the **log odds** as a linear function of $X$:
+- Logistic regression models the log odds as a linear function of $X$:
 
   $$
   \ln\left(\frac{p(X)}{1 - p(X)}\right) = \beta_0 + \beta_1 X
@@ -66,13 +66,13 @@ title: "Logistic Regression"
 - To understand the relationship between a predictor and the response, test the slope coefficient:
   - $H_0$: $\beta_1 = 0$  
   - $H_A$: $\beta_1 \ne 0$  
-- Test statistic (z-score): $Z = \frac{\hat{\beta}_1}{SE(\hat{\beta}_1)}$
+- Test statistic (*z*-statistic): $Z = \frac{\hat{\beta}_1}{SE(\hat{\beta}_1)}$
 - 95% confidence interval: $\hat{\beta}_1 \pm z_{\alpha/2} \cdot SE(\hat{\beta}_1)$
 - The null distribution is standard normal: $Z \sim N(0, 1)$  
-- Some software reports a chi-squared test instead of a z-test.  
-  - It squares the z-statistic: $Z^2$
-  - Then uses a $\chi^2$ distribution with 1 degree of freedom to compute the p-value.  
-  - This gives the same p-value as the two-sided z-test.
+- Some software reports a chi-squared test instead of a *z*-test.  
+  - It squares the *z*-statistic: $Z^2$
+  - Then uses a $\chi^2$ distribution with 1 degree of freedom to compute the *p*-value.  
+  - This gives the same *p*-value as the two-sided *z*-test.
 
 ### Predicted Probabilities
 
@@ -103,10 +103,10 @@ Example:
 
 - $\text{Odds}(X = 500) = e^{\beta_0 + \beta_1 \cdot 500}$  
 - $\text{Odds}(X = 501) = e^{\beta_0 + \beta_1 \cdot 501}$  
-- The **odds ratio (OR)** for a 1-unit increase in $X$ is:  
-$$
-\frac{e^{\beta_0 + \beta_1 \cdot 501}}{e^{\beta_0 + \beta_1 \cdot 500}} = e^{\beta_1}
-$$
+- The odds ratio (OR) for a 1-unit increase in $X$ is:  
+  $$
+  \frac{e^{\beta_0 + \beta_1 \cdot 501}}{e^{\beta_0 + \beta_1 \cdot 500}} = e^{\beta_1}
+  $$
 - **Interpretation**: For every 1-unit increase in $X$, the odds of the event occurring change by a factor of $e^{\beta_1}$.
 
 ### Generalized Interpretation
@@ -135,7 +135,7 @@ $$
   - Yes (1), No (0)
 - Odds if student: $e^{\beta_0 + \beta_1 \cdot 1}$  
 - Odds if not a student: $e^{\beta_0 + \beta_1 \cdot 0} = e^{\beta_0}$
-- **Odds ratio (OR)**:  
+- Odds ratio (OR):  
   $$
   \text{OR} = \frac{e^{\beta_0 + \beta_1}}{e^{\beta_0}} = e^{\beta_1}
   $$
@@ -157,7 +157,7 @@ $$
 
 ### Assumptions
 - Observations are independent.
-- The **log odds** of the outcome are linearly related to continuous predictors.
+- The log odds of the outcome are linearly related to continuous predictors.
 - No important confounding variables have been omitted.
 
 ### Assessing Model Fit
@@ -181,8 +181,8 @@ $$
 2. **Fit the model**
    - Assess model fit using diagnostic tests and visual checks.  
 3. **Inference**
-   - Use a z-test to assess whether coefficients are significantly different from zero.  
-   - Interpret coefficients using **odds ratios**.
+   - Use a *z*-test to assess whether coefficients are significantly different from zero.  
+   - Interpret coefficients using odds ratios.
    - Report confidence intervals for the odds ratios.  
    - Choose a sensible unit change based on the variable's scale and context.
 
@@ -193,4 +193,5 @@ $$
 - Key skills from this chapter:
   - Understanding the logit function/transformation.
   - Interpreting coefficients using odds ratios.
-  - Using EDA to guide model building and interpretation.   
+  - Using EDA to guide model building and interpretation.  
+  

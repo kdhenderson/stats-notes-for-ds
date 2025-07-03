@@ -14,17 +14,17 @@ This chapter introduces contingency tables as a bridge between group comparisons
 ## Classification Tools
 
 - **Linear and Quadratic Discriminant Analysis (LDA/QDA)**  
-- **k-Nearest Neighbors (KNN)**  
+- ***k*-Nearest Neighbors (KNN)**  
 - **Logistic Regression**
-  - A parametric method with strong interpretability.
-  - Analogous to multiple linear regression, but for binary categorical outcomes.
+  - A parametric method with strong interpretability
+  - Analogous to multiple linear regression, but for binary categorical outcomes
 
 
 ## Building Up to Multiple Linear Regression (MLR)
 
 | Explanatory Variable           | Method                        |
 |--------------------------------|-------------------------------|
-| One categorical variable       | t-tests (2 groups)            |
+| One categorical variable       | *t*-tests (2 groups)            |
 |                                | ANOVA (3+ groups)             |
 | One numeric                    | Simple linear regression      |
 | Mix of categorical and numeric | Multiple linear regression    |
@@ -58,7 +58,7 @@ There are three typical data collection designs:
 - Populations for each level of the explanatory variable are determined in advance.
   - This may happen naturally (e.g., obese vs. not obese) or by random assignment (e.g., placebo vs. treatment).
 - Simple random samples are collected from each group.
-- **Row totals are fixed** — the sample size for each group is determined before data collection.
+- **Row totals are fixed**---the sample size for each group is determined before data collection.
 - The explanatory variable is fixed, and the response is observed after a follow-up period.
 - Example: Vitamin C and Colds study
 - Randomized experiments are a special type of prospective study:
@@ -87,7 +87,7 @@ There are three typical data collection designs:
 
 The goal is to compare two groups using **either a difference in means** or **a difference in proportions**.
 
-### Difference in Means (t-tests)
+### Difference in Means (*t*-tests)
 - Parameters:  
   - $\mu_1$: mean of the response for group 1  
   - $\mu_2$: mean of the response for group 2  
@@ -279,7 +279,7 @@ There are several approaches to hypothesis testing and confidence interval const
      - Use a Fisher’s, bootstrap, or small-sample corrected Wald interval (e.g., Agresti–Coull) for the confidence interval
    
 5. **Interpret the results**:
-   - Report the test used and the associated p-value  
+   - Report the test used and the associated *p*-value  
    - Report the confidence interval and explain what it means  
    - Always state the method used for inference
 

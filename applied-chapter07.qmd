@@ -80,8 +80,8 @@ Classification models work in two steps:
 
 ## Terminology
 
-- Positive class (+): The outcome for which you want to predict the probability.  
-- Negative class (−): The other possible outcome (in a binary response).  
+- Positive class (+): The outcome for which you want to predict the probability  
+- Negative class (−): The other possible outcome (in a binary response)  
 - These are mathematically arbitrary but can be practically important depending on the question you’re answering.  
     
 
@@ -100,15 +100,15 @@ To convert a predictive probability model into a classification rule, apply a **
   $$
   \hat{P}(Y = + \mid X) \geq 0.5 \Rightarrow \text{Classify as } +
   $$
-- The threshold can be adjusted to account for the cost of making a mistake.
 
+- The threshold can be adjusted to account for the cost of making a mistake.
 
 ### Nonparametric Models
 These models originally focused on making **classification decisions** (not probabilities):
 
 - Decision Trees  
 - Random Forests  
-- k-Nearest Neighbors (KNN)  
+- *k*-Nearest Neighbors (KNN)  
 
 To help standardize functions and workflows, software retroactively added predicted probabilities.
 
@@ -127,15 +127,15 @@ To help standardize functions and workflows, software retroactively added predic
 ## Discriminant Analysis (LDA & QDA)
 
 ### Overview
-- Discriminant analysis is a parametric approach for classification
-- Applies only to numeric predictors
-- Assumes predictors follow a multivariate normal (MVN) distribution within each class
+- Discriminant analysis is a parametric approach for classification.
+- Applies only to numeric predictors.
+- Assumes predictors follow a multivariate normal (MVN) distribution within each class.
   
 ### Common Types
 - Linear Discriminant Analysis (LDA):
-  - Decision boundaries are linear (hyperplanes)
+  - Decision boundaries are linear (hyperplanes).
 - Quadratic Discriminant Analysis (QDA):
-  - Decision boundaries are conic sections (typically quadratic)
+  - Decision boundaries are conic sections (typically quadratic).
 
 ### Assumptions
 In discriminant analysis, the assumptions are on the predictors (not the error terms as in MLR).
@@ -184,7 +184,7 @@ Bayes’ formula is fully specified using:
 - Class-specific means and covariance matrices  
 - All estimated from the training data
 
-When using a threshold (e.g., 0.5), LDA’s boundary mathematically reduces to a linear boundary
+When using a threshold (e.g., 0.5), LDA’s boundary mathematically reduces to a linear boundary.
 
 ### Additional Notes on Classification Boundaries
 - Outliers affect sample means and variances $\rightarrow$ can distort the boundary.  
@@ -206,16 +206,16 @@ When using a threshold (e.g., 0.5), LDA’s boundary mathematically reduces to a
 ## Pros and Cons of LDA/QDA
 
 ### Pros
-- Handles correlated predictors (i.e., as long as the correlation isn't perfect).
-- Parametric model that works when logistic regression fails due to complete separation of classes in training data.
-- Optimal when assumptions are met.
+- Handles correlated predictors (i.e., as long as the correlation isn't perfect)
+- Parametric model that works when logistic regression fails due to complete separation of classes in training data
+- Optimal when assumptions are met
 
 ### Cons
-- Sensitive to outliers.
-- Cannot handle categorical predictors due to the MVN assumption.
-- No built-in feature selection.
-- Suffers from the curse of dimensionality.
-  - Poor performance with many irrelevant predictors.
+- Sensitive to outliers
+- Cannot handle categorical predictors due to the MVN assumption
+- No built-in feature selection
+- Suffers from the curse of dimensionality
+  - Poor performance with many irrelevant predictors
   
 
 ## Error Metrics for Classification
@@ -258,8 +258,8 @@ Scoring rules are ideal for:
 
 They help ensure that:
 
-- Predicted probabilities are well-calibrated
-- Your model aligns well with the true underlying probabilities
+- Predicted probabilities are well-calibrated.
+- Your model aligns well with the true underlying probabilities.
 
 
 ## Decision Rule Metrics
@@ -291,31 +291,27 @@ The threshold (e.g., 0.5) determines how probabilities are turned into class pre
 
 - Aggregates and cross references how many times predictions were accurate and how many misclassifications were made using the thresholding strategy.  
 - It will change when the threshold changes (depends on the threshold).  
-- Used to compare models/optimize tuning parameters for techniques that do not produce a predicted probability 
+- Used to compare models/optimize tuning parameters for techniques that do not produce a predicted probability. 
   
 ### Common Metrics
 
 #### Misclassification Rate (MCR)
 The proportion of all observations where the model's classification was wrong (i.e., the global error rate):
-
 $$
 \text{MCR} = \frac{\text{\# incorrect predictions}}{n} = \frac{\text{FP} + \text{FN}}{n}
 $$
 
 #### Accuracy
 The proportion of all observations where the model's classification was correct:
-
 $$
 \text{Accuracy} = \frac{\text{\# correct predictions}}{n} = \frac{\text{TP} + \text{TN}}{n} = 1 - \text{MCR}
 $$
-
 > Accuracy is an unconditional metric---it doesn’t distinguish between types of errors or account for class imbalance.
 
 ### Conditional Metrics
 These metrics are **conditioned** on a known true class or prediction. These metrics evaluate accuracy within a subset of observations. They help when accuracy alone is misleading.
 
 #### Sensitivity (Recall / True Positive Rate)
-
 > *"Given that the true class is positive, how often did we predict positive?"*
 
 - Focuses on the **true +** group  
@@ -325,7 +321,6 @@ $$
 $$
 
 #### Specificity (True Negative Rate)
-
 > *"Given that the true class is negative, how often did we predict negative?"*
 
 - Focuses on the **true –** group  
@@ -335,7 +330,6 @@ $$
 $$
 
 #### Positive Predictive Value (PPV / Precision)
-
 > *"Given that we predicted positive, how often was that correct?"*
 
 - Focuses on the **predicted +** group  
@@ -346,7 +340,6 @@ $$
 
  
 #### Negative Predictive Value (NPV)
-
 > *"Given that we predicted negative, how often was that correct?"*
 
 - Focuses on the **predicted –** group  
@@ -376,13 +369,13 @@ Suppose:
 ### Prevalence and Thresholding
 - **Prevalence**: The base rate of the + class in the population  
   - e.g., 1 in 10 people need surgery → prevalence = 10%
-- Sensitivity and specificity **do not** depend on prevalence  
-- PPV and NPV **do** depend on prevalence
+- Sensitivity and specificity *do not* depend on prevalence  
+- PPV and NPV *do* depend on prevalence
 
 
 ## Changing the Threshold
 
-- Thresholding affects the confusion matrix and all related metrics  
+- Thresholding affects the confusion matrix and all related metrics.  
 - A lower threshold → more positive predictions:
   - Increases sensitivity, reduces specificity 
 - A higher threshold → fewer positive predictions:
@@ -393,8 +386,8 @@ Suppose:
 
 ## Summary and Takeaways
 
-- Scoring rules assess probability estimates
-- Decision rule metrics evaluate classifications
+- Scoring rules assess probability estimates.
+- Decision rule metrics evaluate classifications.
 - Confusion matrices and derived metrics:
   - Depend on threshold
   - Must reflect real-world context and costs 

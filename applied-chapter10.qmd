@@ -77,12 +77,12 @@ $$
 
 Interpretation:
 
-- For **non-smokers** (`Smoking = 0`):  
+- For **non-smokers** (*Smoking = 0*):  
   Odds ratio for a 1-year increase in age is $\exp(\beta_1)$
-- For **smokers** (`Smoking = 1`):  
+- For **smokers** (*Smoking = 1*):  
   Odds ratio for a 1-year increase in age is $\exp(\beta_1 + \beta_3)$
 
-> **Key idea**: Odds ratios remain interpretable but must account for interaction terms and the full model formula.
+> Key idea: Odds ratios remain interpretable but must account for interaction terms and the full model formula.
 
 ### Classification Boundaries
 - **Additive models**:
@@ -106,12 +106,12 @@ Interpretation:
 - Best subset selection is also possible.
 - Model comparison metrics:
   - AIC (Akaike Information Criterion)
-  - LogLoss or Brier Score, evaluated on a validation set or via K-fold cross-validation
+  - Log loss or Brier Score, evaluated on a validation set or via *K*-fold cross-validation
 
 ### Separability Problem
 - When training data is **perfectly separated**:
   - This signals strong, influential predictors.
-  - However, the maximum likelihood estimate (MLE), i.e., the regression coefficient that minimizes the logloss, becomes $\hat{\beta} = \infty$.  
+  - However, the maximum likelihood estimate (MLE), i.e., the regression coefficient that minimizes the log loss, becomes $\hat{\beta} = \infty$.  
   - Software may issue warnings or fail to converge.
   - Predicted probabilities become exactly 0 or 1.
     - No uncertainty estimate, confidence intervals, or inference is possible.
@@ -167,7 +167,7 @@ The overall workflow for multiple logistic regression closely parallels that of 
    - Use ANOVA tests or feature selection to choose an appropriate model complexity
 5. **Assess model fit**
    - Use the Hosmer-Lemeshow test
-   - Evaluate performance on a validation set or using K-fold cross-validation
+   - Evaluate performance on a validation set or using *K*-fold cross-validation
 6. **Interpret the final model**
    - For additive models: interpret coefficients as odds ratios
    - For complex models with interactions:
