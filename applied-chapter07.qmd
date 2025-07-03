@@ -7,7 +7,7 @@ title: "Classification"
 - Understand the distinction between regression and classification.  
 - Learn about classification boundaries.  
 - Explore classification methods:  
-  - k-Nearest Neighbors (KNN)  
+  - *k*-Nearest Neighbors (KNN)  
   - Linear and Quadratic Discriminant Analysis (LDA/QDA)  
 - Evaluate classification performance using error metrics.  
 

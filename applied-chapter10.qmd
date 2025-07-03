@@ -2,7 +2,7 @@
 title: "Multiple Logistic Regression"
 ---
 
-## Overview
+## Objectives
 
 - Introduce multiple logistic regression as a tool for classification and statistical inference.  
 - Explore the benefits of using multiple predictors, including adjusting for confounders.  

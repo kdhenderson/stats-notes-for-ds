@@ -2,7 +2,7 @@
 title: "Logistic Regression"
 ---
 
-## Overview
+## Objectives
 
 - Understand how logistic regression models a binary response.   
 - Understand the structure and purpose of the simple logistic regression model. 

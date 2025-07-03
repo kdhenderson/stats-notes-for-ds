@@ -2,7 +2,7 @@
 title: "Principal Component Analysis"
 ---
 
-## Overview
+## Objectives
 
 - Introduce Principal Component Analysis (PCA) as a tool for unsupervised data analysis and dimensionality reduction.  
 - Describe the difference between supervised and unsupervised analysis.  

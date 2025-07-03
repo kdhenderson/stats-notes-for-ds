@@ -2,127 +2,124 @@
 title: "Clustering"
 ---
 
-## Overview
+## Objectives
 
-- Clustering objective  
-  - $k$-means  
-  - Hierarchical clustering  
-- Considerations  
-- Heatmaps and applications  
+- Understand the goal of clustering as an unsupervised learning method.  
+- Learn how *k*-means and hierarchical clustering assign observations to groups.  
+- Explore linkage methods and distance metrics used in clustering.  
+- Evaluate clustering results using cluster validity metrics.  
+- Visualize clustering output using dendrograms and heatmaps. 
 
-
-## Clustering Objective
+## Motivation for Clustering
 
 When plotting two numerical variables:
-- Are the observations part of one homogeneous group?
-- Or are there subsets of observations that behave more similarly and look 'different' compared with others?
 
-Key points:
-- Clustering is an unsupervised technique.
-- Each data point is assigned to a group (cluster).
-- Data within the same group are more similar.
-- Data between groups are quite different.
+- Are all observations part of one homogeneous group?  
+- Or do some form distinct subgroups that behave more similarly to each other?
+
+Key points: 
+
+- Clustering is an unsupervised learning method.  
+- Each data point is assigned to a group (cluster).  
+- Points within a cluster are more similar.  
+- Points in different clusters are more dissimilar.
 
 ### Heterogeneous Populations
 - Most populations are heterogeneous.
-- Perks of identifying subpopulations:
-  - Deeper EDA and sanity checks (for classification problems)
-  - Unique trends need unique models
-  - Optimizing downstream decisions
+- Benefits of identifying subpopulations:
+  - Deeper EDA and sanity checks (for classification problems)  
+  - Unique trends may require unique models  
+  - Better decision-making in downstream tasks  
 
 
-## $k$-Means Clustering
+## *k*-Means Clustering
 
 ### Metric for Cluster Fit
+Assuming observations are already assigned to clusters, there is a trade-off between:
 
-Assuming observations are already assigned to clusters:
-- Trade-off between:
-  - Within-cluster variability
-  - Between-cluster variability
+- Within-cluster variability  
+- Between-cluster variability  
 
 Within-cluster metric:
-- Let $k$ be the number of clusters.
-- Let $C_k$ be the set of observations assigned to cluster $k$.
+
+- Let $k$ be the number of clusters.  
+- Let $C_k$ be the set of observations assigned to cluster $k$.  
 - Define within-cluster variability $W(C_k)$ as:
   $$
-  W(C_k) = \frac{1}{\text{number of observations in cluster}} \times \text{sum of squared pairwise Euclidean distances within cluster}
+  W(C_k) = \frac{1}{|C_k|} \sum_{i,j \in C_k} d(x_i, x_j)^2
   $$
+  where, $|C_k|$ is the number of observations in cluster $k$, and $d(x_i, x_j)$ is the Euclidean distance between two points in the same cluster.
+- The goal is to minimize overall within-cluster variability.  
+- However, within-cluster variability can always be minimized by increasing $k$, so the key question is: *how many clusters are actually present?*
 
-- The goal is to minimize the overall within-cluster variability.
-- Note: Within-cluster variability can be arbitrarily minimized.
-> ⚠️ *Note: Within-cluster variability can always be minimized by increasing $k$, so the big question is: how many clusters are actually present?*
-
- 
 ### Challenges in Minimizing $W(C_k)$
-- Large number of possible assignments.
-- Increases with $k$ (number of clusters) and $n$ (sample size).
-- $k$-means clustering obtains a local minimization.
-- $k$ must be specified upfront to initialize the algorithm.    
+- There are a large number of possible cluster assignments.
+- The number of possible assignments increases with $k$ (number of clusters) and $n$ (sample size).
+- *k*-means clustering may converge to a local minimum rather than the global best solution.
+- The number of clusters $k$ must be specified upfront to initialize the algorithm.
 
-### $k$-Means Algorithm
-
-1. Randomly assign observations to cluster groups.
-2. Reassignment:
-   - (a) Calculate the average centroid for each group, i.e. mean of the observations from step 1.
-   - (b) Reassign observations to the nearest centroid.
-3. Repeat step 2 until within-cluster variability converges.
+### *k*-Means Algorithm
+1. Randomly assign observations to cluster groups.  
+2. Reassignment:  
+   a. Compute the centroid of each group (i.e., the mean of the assigned observations).  
+   b. Reassign observations to the nearest centroid.  
+3. Repeat step 2 until within-cluster variability converges.  
   
 ### Defining "Close"
-
-- Distance metrics:
-  - Euclidean distance
-  - Mahalanobis distance
-  - Manhattan distance
-
+Distance metrics:
+  
+- Euclidean distance
+- Mahalanobis distance
+- Manhattan distance
 
 ## Hierarchical Clustering
 
-- Does not require specifying $k$ in advance.
-- Begins with each observation as its own cluster.
-- Fuses observations to create progressively coarser clusters.
-- Outputs a dendrogram tree to visualize clustering.
+- Does not require specifying $k$ in advance.  
+- Begins with each observation as its own cluster.  
+- Fuses observations to create progressively coarser clusters.  
+- Produces a dendrogram to visualize the clustering process.  
 
 ### Linkage
-- Distance (dissimilarity) metric is used between observations.
+- A distance (dissimilarity) metric is used between observations.  
 - Clusters can fuse:
-  - Two points
-  - One cluster and one point
-  - Two clusters
-- Dissimilarity metric between clusters is called linkage.
+  - Two points  
+  - One cluster and one point  
+  - Two clusters  
+- The dissimilarity metric between clusters is called **linkage**.  
 
 ### Common Linkage Types
-1. Complete  
-2. Single  
-3. Average  
-4. Centroid  
+- Complete linkage uses the maximum pairwise distance.
+- Single linkage uses the minimum pairwise distance.
+- Average linkage uses the mean of all pairwise distances.
+- Centroid linkage uses distance between cluster centroids.
 
 #### Complete Linkage
-- Maximal inter-cluster dissimilarity.
-- Compute all pairwise distances between cluster A and cluster B.
-- Record the **largest** pairwise distance between the clusters.
-- Merge clusters with the **smallest maximum** distance (i.e. smallest dissimilarity).
- 
+- Maximal inter-cluster dissimilarity  
+- Compute all pairwise distances between cluster A and cluster B  
+- Record the **largest** pairwise distance between the clusters  
+- Merge clusters with the **smallest maximum** distance (i.e., smallest dissimilarity)  
+
 #### Single Linkage
-- Minimal inter-cluster dissimilarity.
-- Compute all pairwise distances between cluster A and cluster B.
-- Record the **smallest pairwise** distance between the clusters.
-- Merge clusters with the **smallest minimum** distance (i.e. smallest dissimilarity). 
-- Can produce trailing dendrograms with single observations (i.e. many single observations fused with clusters). 
+- Minimal inter-cluster dissimilarity  
+- Compute all pairwise distances between cluster A and cluster B  
+- Record the **smallest pairwise** distance between the clusters  
+- Merge clusters with the **smallest minimum** distance (i.e., smallest dissimilarity)  
+- Can produce trailing dendrograms with single observations (i.e., many single observations fused with clusters)  
 
 #### Average Linkage
-- Mean inter-cluster dissimilarity.
-- Compute all pairwise distances between cluster A and cluster B.
-- Record the **mean** distance between clusters.
-- Repeat for all pairwise clusters available.
-- Merge clusters with the **smallest average**. 
-  
+- Mean inter-cluster dissimilarity  
+- Compute all pairwise distances between cluster A and cluster B  
+- Record the **mean** distance between clusters  
+- Repeat for all pairwise clusters available  
+- Merge clusters with the **smallest average**  
+
 #### Centroid Linkage
-- Mean intercluster dissimilarity
-- Distance between cluster centroids.
-- Compute centroids of each cluster.
-- Merge clusters whose centroids are **closest** (i.e. have the smallest distance). 
- 
-  
+- Mean inter-cluster dissimilarity  
+- Distance between cluster centroids  
+- Compute centroids of each cluster  
+- Merge clusters whose centroids are **closest** (i.e., have the smallest distance)  
+
+
 ## Considerations for Either Tool
 
 ### Key Considerations
@@ -130,12 +127,12 @@ Within-cluster metric:
 - Should variables be standardized?
 - Which linkage type? (for hierarchical)
 - How many clusters? 
-  
+
 ### Correlation vs. Distance
 - Observations may be far apart by distance but close in terms of **correlation**.
 - Example:
-  - Distance metric: heavy vs. light shoppers.
-  - Correlation metric: shoppers buying similar items. 
+  - Distance metric: heavy vs. light shoppers
+  - Correlation metric: shoppers buying similar items 
   
 ### Standardization
 - Without standardization: variables with large scales dominate clustering.
@@ -143,26 +140,26 @@ Within-cluster metric:
 - Recommendation: Standardize unless there is a strong reason not to.
 
 ### Choice of Linkage
-- Results vary by linkage choice.
+- Results vary depending on the linkage method.  
 - **Complete** and **average linkage**:
-  - Commonly used.
-  - Easier-to-read dendrograms.
+  - Commonly used  
+  - Produce easier-to-read dendrograms  
 - **Single linkage**:
-  - Good for finding outliers.
-  - Clusters may be loosely connected, i.e. observations within clusters may be less similar that you would like. 
-      
+  - Useful for identifying outliers  
+  - May form loosely connected clusters (i.e., observations within a cluster may be less similar than desired).  
+
 ### Choosing the Number of Clusters
-- Apply clustering with different values of $k$.
-- Compute cluster validity metrics.
-- Plot metric vs. cluster size to guide decision.
-   
+- Apply clustering with different values of $k$.  
+- Compute cluster validity metrics.  
+- Plot each metric against cluster size to guide the decision.     
+
     
 ## Cluster Validity Metrics
 
 ### Internal Cluster Validity
-- No ground truth available.
-- Estimate within-cluster vs. between-cluster variation.
-    
+- No ground truth available  
+- Estimate within-cluster vs. between-cluster variation  
+
 ### Common Metrics
 - Silhouette statistic
 - Dunn index
@@ -170,13 +167,13 @@ Within-cluster metric:
 
 #### Silhouette Statistic
 For each observation:
-- Calculate average dissimilarity **within** its cluster.
-- Calculate the minimum average dissimilarity to a **different** cluster.
+- Calculate average dissimilarity **within** its cluster.  
+- Calculate the minimum average dissimilarity to a **different** cluster.  
 - Silhouette value for observation $i$:
   $$
   \text{Silhouette}_i = \frac{\text{between} - \text{within}}{\max(\text{between}, \text{within})}
   $$
-- Average silhouette values summarize overall clustering quality.
+- Average silhouette values summarize overall clustering quality.  
 
 #### Dunn Index
 - Ratio:
@@ -189,31 +186,30 @@ For each observation:
 - Davies-Bouldin index (DB)
 - Maulik-Bandyopadhyay index (MB)
 - Saitta score function (SF)  
- 
-  
+
+
 ## The Clustering Challenge
 
-- Results depend on choices made (distance metric, standardization, linkage type).
-- No single method is perfect for determining the number of clusters.
-- Avoid interpreting any one result as absolute truth.
-- Examine multiple clustering solutions to identify general patterns.
-- Simulation studies show clustering performance depends on cluster separation, noise, and structure.
-- Issues like sub-clusters or overlapping groups can lead to incorrect $k$ estimates or misleading assignments.
-  
+- Results depend on choices made (distance metric, standardization, linkage type).  
+- No single method is perfect for determining the number of clusters.  
+- Avoid relying on any single clustering result as absolute truth.  
+- Examine multiple clustering solutions to identify general patterns.  
+- Simulation studies show clustering performance depends on cluster separation, noise, and structure.  
+- Issues like sub-clusters or overlapping groups can lead to incorrect $k$ estimates or misleading assignments.  
 
+  
 ## Heatmaps
 
 ### Motivation
-- Dendrograms and cluster assignments do not show the underlying data.
-- Heatmaps offer a visual check and help interpret clusters.
+- Dendrograms and cluster assignments do not show the underlying data.  
+- Heatmaps provide a visual check and help interpret clusters.  
 
 ### Heatmap Details
-- Plot of raw or standardized numeric variables.
+- Plot of raw or standardized numeric variables  
 - Can represent:
-  - Data matrices of observations.
-  - Summary matrices (e.g. means, correlations).
-- Grid of rectangles colored by numeric values.
-
+  - Data matrices of observations  
+  - Summary matrices (e.g., means, correlations)  
+- Grid of rectangles colored by numeric values  
 
 ### Heatmaps with Clustering
 - Hierarchical clustering can be applied to rows and/or columns.
@@ -228,8 +224,7 @@ For each observation:
 - Definition of 'observation' varies depending on context.
 
 Possible uses:
-- Clustering correlation statistics.
-- Clustering variables (i.e., treating variables as the observations by transposing the data matrix).
-  - Variables often cluster based on strong positive correlations.
 
-      
+- Clustering correlation statistics  
+- Clustering variables (i.e., treating variables as the observations by transposing the data matrix).  
+  - Variables often cluster based on strong positive correlations.  

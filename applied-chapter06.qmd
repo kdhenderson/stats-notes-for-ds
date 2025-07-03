@@ -21,7 +21,7 @@ This chapter explores repeated measures, which allow us to relax the independenc
 
 flowchart TD
   A["Linear models<br>(constant variance,<br>normality assumptions)"] --> B["Errors are<br>independent"]
-  B --> D["t-tests"]
+  B --> D["*t*-tests"]
   B --> E["ANOVA"]
   B --> F["SLR"]
   A --> C["Errors are<br>correlated"]
@@ -50,10 +50,10 @@ flowchart TD
 ## Repeated Measures
 
 - Linear models assume constant variance and normality with independent errors.
-  - Examples: t-tests, ANOVA, simple linear regression (SLR) 
+  - Examples: *t*-tests, ANOVA, simple linear regression (SLR) 
 - When errors are correlated:
   - Examples: time series, repeated measures  
-  - Ignoring correlation can produce misleading $p$-values and confidence intervals.  
+  - Ignoring correlation can produce misleading *p*-values and confidence intervals.  
   - We need to model the correlation among errors (i.e., include additional parameters in the model) for valid inference and better predictions. 
 - Repeated measures refers to multiple measurements on the same subject (i.e., dependent observations).
   - For example, if a subject starts with high (or conversely low) values, their measurements tend to remain high (or low) over time.  
@@ -161,7 +161,7 @@ Correlation structures are theoretical models that describe the expected trend i
    - Use AIC to select the best-fitting model.
    - Optionally use a correlogram to guide your choice.
 5. Conduct inference on regression coefficients:
-   - Report $p$-values and confidence intervals.
+   - Report *p*-values and confidence intervals.
    - Results will be more trustworthy when correlation is accounted for.
    
 
@@ -427,8 +427,8 @@ $$
 = \sigma^2 R
 $$
 
-- This is a special case of GLS where the **correlation matrix $R$ is diagonal**.
-- **WLS is GLS with unequal variances but uncorrelated errors.**
+- This is a special case of GLS where the correlation matrix $R$ is diagonal.
+- WLS is GLS with unequal variances but uncorrelated errors.
 
 We can use GLS techniques to obtain good estimates of the regression coefficients and their standard errors under this structure.
 

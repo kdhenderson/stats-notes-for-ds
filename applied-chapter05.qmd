@@ -108,7 +108,7 @@ $$
 - If $I$ is an $r \times r$ identity matrix, then $IA = A$.
 
 ### Matrix Inverses  
-- If a matrix is square and meets certain conditions, an inverse matrix exists.  
+- If a matrix is square and meets certain conditions, an **inverse matrix** exists.  
 - The inverse of $A$ is denoted as $A^{-1}$.  
 - The property: $AA^{-1} = A^{-1}A = I$
 - Inverse operations are the matrix equivalent of division. 
@@ -204,7 +204,7 @@ This section describes how to summarize numerical data when working with multipl
 ### One-Variable Summaries 
 Basic summaries for individual variables:
 
-- Mean and standard deviation  (if normally distributed)  
+- Mean and standard deviation (if normally distributed)  
 - Five-number summary: min, 1st quartile, median, 3rd quartile, max 
 
 ### Multiple Variables  
