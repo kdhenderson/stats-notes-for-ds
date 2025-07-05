@@ -2,30 +2,45 @@
 title: "Drawing Statistical Conclusions"
 ---
 
+## Objectives
+
+This chapter introduces how statistical studies are designed, how we draw conclusions from them, and how uncertainty is measured through hypothesis testing and resampling methods.
+
+- Distinguish between observational studies and experiments, including the role of randomization.  
+- Understand key sampling methods and definitions (parameter vs. statistic).  
+- Recognize ethical requirements for data collection, including informed consent and IRB review.  
+- Conduct hypothesis tests and interpret *p*-values in context.  
+- Use permutation testing to assess the likelihood of observed results under random assignment.  
+- Communicate statistical results clearly, including context, limitations, and reproducibility.
+
+
 ## Observational Studies vs. Experiments
-- **Experiment:** The investigator actively manipulates the environment with random assignment to treatment groups.
+
+- **Experiment**: The investigator actively manipulates the environment with random assignment to treatment groups.
   - Randomization ensures groups are comparable across all potential confounding variables and removes researcher bias.
-  - Enables cause-and-effect conclusions.
-- **Observational Study:** The researcher is passive and observes without intervention.
-  - Suitable for ethical or practical constraints.
-  - Can build evidence for causation when combined with multiple studies and theoretical considerations, e.g. smoking causes lung cancer.
+  - Enables **cause-and-effect** conclusions.
+- **Observational study**: The researcher is passive and observes without intervention.
+  - Suitable when experiments would be unethical or impractical.
+  - Can build evidence for causation when combined with multiple studies and theoretical reasoning (e.g., smoking causes lung cancer).
 
 
 ## Statistical Sampling
-Random sampling uses chance to select a representative sample, allowing us to infer population characteristics. 
 
-### Key Definitions:
-- **Parameter:** Characteristic of a population.
-- **Statistic:** Characteristic of a sample.
-  
-### Sampling Designs:
-1. **Simple Random Sample**: Each individual has an equal chance of selection.
-2. **Stratified Random Sample**: The population is divided into subgroups (e.g., gender), and random sampling is performed within each group.
+Random sampling uses chance to select a representative sample, allowing us to infer population characteristics.  
+
+### Key Definitions
+- **Parameter**: Characteristic of a population
+- **Statistic**: Characteristic of a sample
+
+### Sampling Designs
+1. **Simple random sample**: Each individual has an equal chance of selection.
+2. **Stratified random sample**: The population is divided into subgroups (e.g., gender), and random sampling is performed within each group.
 
 
-## Ethics of gathering data
-- Informed consent must be obtained from participants to ensure they are aware of the study’s purpose, procedures, and potential risks or benefits.
-- The Institutional Review Board (IRB) evaluates the study to determine its appropriateness:  
+## Ethics of Gathering Data
+
+- **Informed consent** must be obtained from participants so they are aware of the study’s purpose, procedures, and potential risks or benefits.
+- The **Institutional Review Board (IRB)** evaluates the study to determine its ethical and scientific appropriateness:
   - Ensures the study minimizes risks and maximizes benefits.
   - Reviews the experimental design and statistical plan for ethical and scientific rigor.
 
@@ -36,58 +51,57 @@ Random sampling uses chance to select a representative sample, allowing us to in
 
 #### Key Concepts
 1. **Hypotheses**:
-   - **Null Hypothesis ($H_0$)**: Assumes no effect or difference (e.g., treatment means are equal).
-     - Because treatment group assignment is random, we assume that if the treatment has no effect, the parameter means are equal across groups.
-   - **Alternative Hypothesis ($H_a$)**: Suggests an effect or difference exists.
-2. **Test Statistic**: Divides a sample estimate (e.g. difference in means) by a measure of variability (e.g. standard error).
-   - Example: A t-statistic in a two-sample t-test.
-3. **P-Value**: Probability of observing by random chance a result as extreme as the sample, assuming $H_0$ is true. Calculated from the test statistic.
-4. **Decision**: Compare the p-value to the significance level ($\alpha$). Under the assumption that the population means are equal, the result is either unlikely or not unlikely.
+   - **Null hypothesis ($H_0$)**: Assumes no effect or difference (e.g., treatment means are equal).
+     - Because treatment group assignment is random, we assume that if the treatment has no effect, the population means are equal across groups.
+   - **Alternative hypothesis ($H_a$)**: Suggests an effect or difference exists.
+2. **Test statistic**: A sample estimate (e.g., difference in means) divided by a measure of variability (e.g., standard error).
+   - Example: A *t*-statistic in a two-sample *t*-test.
+3. **P-Value**: Probability of observing by random chance a result as extreme as the sample, assuming $H_0$ is true. Calculated using the test statistic.
+4. **Decision**: Compare the *p*-value to the significance level ($\alpha$). Under the assumption that the population means are equal, a small *p*-value indicates that the observed result would be unlikely due to chance alone.
    - If $p < \alpha$: Reject $H_0$.
    - Otherwise: Fail to reject $H_0$.
-5. **Conclusion**: State the null and alternative hypotheses in plain language, reporting a p-value.
-   - Observational studies use a fictitious chance model, using the same calculations but the conclusions are different because of the lack of randomization
+5. **Conclusion**: Summarize the result in plain language, referencing both hypotheses and the *p*-value.
+   - In observational studies, we use a **fictitious chance model** to apply the same calculations, but causal interpretations are limited due to lack of randomization.
 
 #### General Principles
 - Evidence is gathered by collecting a sample and analyzing differences in key metrics.
-- If $H_0$ is true, differences between sample means should be small. The p-value helps quantify "small".
+- If $H_0$ is true, differences between sample means should be small. The *p*-value quantifies how small is “small enough.”
 
-#### Lottery Example
-- Assumption (hypotheses): Bivin is playing fair.
-- Evidence (test statistic): He won 10x in a row.
-- Probability (p-value): The probability of winning 10x in a row if he is playing fair is very, very small.
-- Decision: He is not playing fair. Reject the assumption.
-- Conclusion: Since the probability of winning 10x in a row is very small if he is playing fair, then we will conclude that Bivin is cheating.
-
+#### Example: Lottery Case
+- **Assumption ($H_0$)**: Bivin is playing fair.
+- **Evidence (test statistic)**: He won 10 times in a row.
+- **Probability (*p*-value)**: The probability of winning 10 times in a row, assuming fairness, is extremely low.
+- **Decision**: Reject $H_0$. The outcome is too unlikely under fair play.
+- **Conclusion**: Since the probability of winning 10 times in a row under fair play is so small, we conclude that Bivin is likely cheating.
 
 ### Permutation Testing
-
 - **Purpose**: Tests results against all possible randomizations to assess how unusual the observed result is.
-  - Example: In an experiment, permutations represent all possible assignments of participants to treatment groups.
-- **P-Value Calculation**: Count the number of permutations as extreme as the observed result, divided by the total permutations.
-  - Example: If 10 out of 1,000 permutations are as extreme as the observed difference, the p-value is $10 / 1,000 = 0.01$.
+  - In an experiment, permutations represent all possible assignments of participants to treatment groups.
+- **P-value calculation**: Count how many permutations are as extreme as the observed result, and divide by the total number of permutations.
+  - Example: If 10 out of 1,000 permutations are as extreme as the observed result, the *p*-value is $10 / 1{,}000 = 0.01$.
 
 
 ## Writing Up Results
 
-- Results are typically communicated in writing, often for non-expert audiences.  
-- **Include context about the experiment**, such as:  
-  - What is the research question?  
-  - What were the treatment groups?  
-  - What was measured?  
-- **Include descriptive statistics**, such as:  
-  - Mean  
-  - Standard deviation  
-  - Outliers, along with possible explanations  
-  - Important differences observed in the data  
-- **State the p-value**:  
-  - Does it support the null hypothesis?  
-  - What does this imply in the context of the research?  
-- **Mention challenges**, such as:  
-  - Difficulties encountered during the study  
-  - Confounding variables that might have influenced the results  
-- **Clarify the scope of the study**:  
-  - Can the results be generalized to the population of interest?  
-  - Is the sample representative of the broader population?  
-- Ensure the report **includes enough detail** for the study to be reproduced by other researchers.
+Results are typically communicated in writing, often for non-expert audiences.
 
+- **Include context about the experiment:**
+  - What was the research question?
+  - What were the treatment groups?
+  - What was measured?
+- **Include descriptive statistics:**
+  - Mean
+  - Standard deviation
+  - Outliers (with explanations)
+  - Important differences observed in the data
+- **State the *p*-value:**
+  - Does it support or contradict $H_0$?
+  - What does this imply in the context of the study?
+- **Mention challenges:**
+  - Difficulties encountered during the study
+  - Confounding variables that may have affected results
+- **Clarify the scope of the study:**
+  - Can results be generalized to the target population?
+  - Was the sample representative?
+- **Ensure reproducibility:**
+  - Provide enough detail for another researcher to reproduce the study.  
