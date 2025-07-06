@@ -2,32 +2,49 @@
 title: "Inference Using T-Distributions"
 ---
 
+## Objectives
+
+This chapter introduces confidence intervals and hypothesis tests based on *t*-distributions, which are used when population standard deviations are unknown. You will learn to:
+
+- Apply the Central Limit Theorem (CLT) to inference problems.  
+- Construct and interpret confidence intervals using the *t*-distribution.  
+- Perform hypothesis tests and compute *t*-statistics and *p*-values.  
+- Link confidence intervals to hypothesis test results.  
+- Distinguish statistical from practical significance.  
+- Use R to calculate critical values and *p*-values.
+
+
 ## Central Limit Theorem (CLT)
-If we pull a large enough sample from a normal (or approximately normal) distribution, the sampling distribution of the sample mean will also be normal. The mean of the sampling distribution of the sample means is the same as the mean of the population from which those sample means were taken. This is why we can use $\bar{X}$ to infer about $\mu$.
+
+If we draw a large enough sample from a normal (or approximately normal) distribution, the sampling distribution of the sample mean will also be normal. The mean of this sampling distribution of the sample means equals the population mean from which those sample means were taken. This allows us to use the sampling mean, $\bar{X}$, to make inferences about the population mean, $\mu$.
 
 
-## Interpretation of a confidence interval
-If we took many, many samples from the same population and constructed a confidence interval for the mean from each one, then approximately 95 percent of those intervals would contain the true mean. We hope that we have contained the mean in our interval, and thus we are 95 percent confident that our interval contains the mean.
+## Interpretation of a Confidence Interval
+
+If we took many random samples from the same population and constructed a confidence interval for the mean from each one, then approximately 95% of those intervals would contain the true mean. For a single interval, we interpret this as: we are 95% confident that the interval contains the true mean.
 
 
 ## Confidence Intervals
-- Measure how large or small a parameter value could be.
-- Random sampling results in slightly different estimates of a population mean.
-- We calculate an interval around our sample mean with a certain level of confidence that it contains the population mean (plausible values).
-- From normal distribution theory:
-  - Approximately $68\%$ of values lie within $1\sigma$ of $\mu$,
-  - Approximately $95\%$ within $2\sigma$,
-  - Approximately $99.7\%$ within $3\sigma$.
-- Since we usually want to estimate the population mean ($\mu$) and standard deviation ($\sigma$), we use the sample standard deviation ($s$) as an estimate.
-- A t-distribution has fatter tails than a normal distribution, accounting for error in estimating the standard deviation.
+
+- Measure how large or small a parameter value could plausibly be.  
+- Random sampling leads to slightly different sample means (estimates of the population mean).  
+- A confidence interval is constructed around $\bar{X}$ with a given level of confidence that it contains $\mu$. In other words, it contains the plausible values of $\mu$.
+- From normal distribution theory:  
+  - Approximately 68% of values lie within $1\sigma$ of $\mu$ 
+  - Approximately 95% within $2\sigma$  
+  - Approximately 99.7% within $3\sigma$  
+- - In practice, we usually estimate both the population mean ($\mu$) and standard deviation ($\sigma$) using sample values. We estimate $\sigma$ using the sample standard deviation, $s$.  
+- The *t*-distribution has fatter tails than the normal distribution to account for additional uncertainty from estimating $\sigma$ with the sample standard deviation $s$.
 
 The formula for a confidence interval is:
 $$
 CI = \bar{X} \pm t_{\text{crit}} \left( \frac{s}{\sqrt{n}} \right)
 $$
-where $t_{\text{crit}}$ is determined by the desired confidence level and degrees of freedom.  
-- Confidence Interval (CI) Example Statement: "With $\_\_\%$ confidence, the true mean $\mu$ is between $\_\_$ and $\_\_$, based on a sample $n = \_\_$ from this population."
+where $t_{\text{crit}}$ is based on the desired confidence level and degrees of freedom.
 
+**Example confidence interval statement**: "With $\_\_$% confidence, the true mean $\mu$ is between $\_\_$ and $\_\_$, based on a sample $n = \_\_$ from this population."
+
+---
 
 ## Hypothesis Testing
 
