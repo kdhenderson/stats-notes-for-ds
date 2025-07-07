@@ -85,23 +85,23 @@ Random sampling uses chance to select a representative sample, allowing us to in
 
 Results are typically communicated in writing, often for non-expert audiences.
 
-- **Include context about the experiment:**
+- **Include context about the experiment**:
   - What was the research question?
   - What were the treatment groups?
   - What was measured?
-- **Include descriptive statistics:**
+- **Include descriptive statistics**:
   - Mean
   - Standard deviation
   - Outliers (with explanations)
   - Important differences observed in the data
-- **State the *p*-value:**
+- **State the *p*-value**:
   - Does it support or contradict $H_0$?
   - What does this imply in the context of the study?
-- **Mention challenges:**
+- **Mention challenges**:
   - Difficulties encountered during the study
   - Confounding variables that may have affected results
-- **Clarify the scope of the study:**
+- **Clarify the scope of the study**:
   - Can results be generalized to the target population?
   - Was the sample representative?
-- **Ensure reproducibility:**
+- **Ensure reproducibility**:
   - Provide enough detail for another researcher to reproduce the study.  

@@ -33,7 +33,7 @@ If we took many random samples from the same population and constructed a confid
   - Approximately 68% of values lie within $1\sigma$ of $\mu$ 
   - Approximately 95% within $2\sigma$  
   - Approximately 99.7% within $3\sigma$  
-- - In practice, we usually estimate both the population mean ($\mu$) and standard deviation ($\sigma$) using sample values. We estimate $\sigma$ using the sample standard deviation, $s$.  
+- In practice, we usually estimate both the population mean ($\mu$) and standard deviation ($\sigma$) using sample values. We estimate $\sigma$ using the sample standard deviation, $s$.  
 - The *t*-distribution has fatter tails than the normal distribution to account for additional uncertainty from estimating $\sigma$ with the sample standard deviation $s$.
 
 The formula for a confidence interval is:
@@ -44,60 +44,73 @@ where $t_{\text{crit}}$ is based on the desired confidence level and degrees of 
 
 **Example confidence interval statement**: "With $\_\_$% confidence, the true mean $\mu$ is between $\_\_$ and $\_\_$, based on a sample $n = \_\_$ from this population."
 
----
 
 ## Hypothesis Testing
 
-### Steps for Testing Significance:
-1. Choose a significance level $\alpha$:
-   - $\alpha$ determines the probability of a Type I error (rejecting the null hypothesis when it is true).
-   - A lower $\alpha$ reduces the chance of a Type I error.
-2. Choose a one-sided or two-sided test and confirm assumptions are met (e.g. near-normal distribution, random sampling).
-3. State the hypotheses: the assumption about characteristics of one or more parameter in the population.
-   - $H_0$: Null hypothesis
-   - $H_a$: Alternative hypothesis
-4. Follow these six steps:
-   1. Identify $H_0$ and $H_a$.
-   2. Find the critical value(s) and draw and shade the rejection region.
-   3. Calculate the test statistic (i.e. the evidence).
-   4. Compute the p-value.
-   5. Decide whether to reject or fail to reject $H_0$.
-   6. Write a conclusion in non-technical terms, including the p-value, confidence interval, and scope.
+### Steps for Testing Significance
+1. **Choose a significance level** ($\alpha$):  
+   - $\alpha$ is the probability of a Type I error (rejecting $H_0$ when it is true).  
+   - Smaller values of $\alpha$ reduce the chance of a Type I error.
+2. **Specify the test direction and check assumptions**:  
+   - Choose a one-sided or two-sided test.  
+   - Confirm that assumptions are met (e.g., approximate normality, random sampling).
+3. **State the hypotheses** (i.e., assumptions about the population parameter or parameters):  
+   - $H_0$: Null hypothesis (no effect or difference)  
+   - $H_a$: Alternative hypothesis (effect or difference exists)
+4. **Follow these six steps**:
+   1. Identify $H_0$ and $H_a$.  
+   2. Find the critical value(s) and draw and shade the rejection region.  
+   3. Calculate the test statistic (i.e., the evidence).  
+   4. Compute the *p*-value.  
+   5. Compare the *p*-value to $\alpha$ and decide whether to reject or fail to reject $H_0$.  
+   6. Write a conclusion in non-technical terms, including the *p*-value, confidence interval, and scope.
 
-### Test Statistic:
-- A measure of a sample (the estimate) divided by its variability:
+### Test Statistic
+A test statistic is a sample estimate divided by its variability (standard error):
 $$
 t = \frac{\bar{X} - \mu_0}{\frac{s}{\sqrt{n}}}
 $$
-- For a one-sided test, the sign of the numerator matters. It is always the sample mean minus the population mean.
 
-### p-Value:
-- Calculated assuming the null hypothesis is true.
-- A small p-value suggests that random variation alone is unlikely to explain the observed differences.
-- Computed as the area under the tails (one or two) beyond the t-statistic, corresponding to $H_a$.
-- A p-value is a probability not a hard cutoff, you can just state the value and let the reader decide.
+- For a one-sided test, the sign of the numerator matters. Always subtract $\mu_0$ from the sample mean $\bar{X}$.
+
+### P-Value
+- Calculated assuming $H_0$ is true.  
+- A small *p*-value suggests the observed difference is unlikely due to random variation alone.  
+- The *p*-value is the area in one or both tails beyond the observed *t*-statistic, depending on the form of $H_a$.  
+- A *p*-value is a probability - not a binary cutoff. Report the value and let the reader decide.
 
 
 ## Linking Hypothesis Tests and Confidence Intervals
-- A $(1-\alpha)\%$ confidence interval is equivalent to a two-sided hypothesis test with a significance level of $\alpha$.
-- Hypothesis tests can be evaluated through confidence intervals.
+
+- A $(1 - \alpha)\%$ confidence interval corresponds to a two-sided hypothesis test at significance level $\alpha$.  
+- If the null value is outside the interval, we reject $H_0$ at level $\alpha$. 
+- Confidence intervals provide an alternative way to evaluate hypothesis test results.
 
 
 ## Statistical Significance vs. Practical Significance
-- Statistical significance implies results are unlikely due to random sampling error but does not guarantee practical significance.
-- p-values are influenced by sample size.
-- Effect size, such as Cohen’s $d$, measures practical value.
+
+- **Statistical significance** means the result is unlikely due to random sampling error.  
+- **Practical significance** considers whether the effect is meaningful in context.  
+- *p*-values are affected by sample size---large samples can make small effects statistically significant.  
+- **Effect size** (e.g., Cohen’s $d$) helps assess practical importance.
 
 
-## In R:
-- **Critical Value:** `qt(alpha, df)`
-  - Use $\alpha/2$ or $1-\alpha/2$ for a two-sided test; $\alpha$ or $1-\alpha$ for a one-sided test.
-- **p-Value:** `pt(t-statistic, df, lower.tail = TRUE/FALSE)`
-  - Multiply by 2 for a two-tailed p-value.
+## In R
+
+- **Critical value**: `qt(probability, df)`  
+  - For a two-sided test, use $\alpha/2$ and $1 - \alpha/2$.  
+  - For a one-sided test, use $\alpha$ or $1 - \alpha$.
+- **p-value**: `pt(t_statistic, df, lower.tail = TRUE/FALSE)`  
+  - Multiply by 2 for a two-sided *p*-value.
 
 
-## Complete Analysis Format:
-1. Statement of the problem.
-2. Address the assumptions.
-3. Perform the appropriate test (five steps).
-4. Provide a conclusion in non-technical terms, including the p-value, confidence interval, and scope of inference.
+## Complete Analysis Format
+
+1. State the problem clearly.  
+2. Check that the assumptions are satisfied.  
+3. Perform the appropriate test (using the six steps).  
+4. Write a conclusion in plain language, including:  
+   - The *p*-value  
+   - The confidence interval  
+   - The scope of inference
+   
