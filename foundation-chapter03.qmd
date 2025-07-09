@@ -95,84 +95,112 @@ title: "Data Screening, Assumptions, and Transformations"
 - Run analyses with and without outliers and compare the results.  
 - Report both versions to provide transparency.
 
----
 
 ## Resistance
-- A procedure is **resistant** if it remains stable when small parts of the data change.
-  - Example: Median is resistant, while the mean is not.
-- t-tools are based on means and are not resistant to outliers or long tails.
+
+- A procedure is **resistant** if its results remain stable when small parts of the data change.  
+  - Example: The median is resistant to outliers, while the mean is not.  
+- *t*-tools are based on means and are not resistant to outliers or long-tailed distributions.
 
 
 ## Log Transformation (Natural Log)
+
 - **When to use**:
-  - Ratio of largest to smallest value > 10.
-  - Skewed data.
-  - Group with larger mean also have the larger variance.
+  - The ratio of the largest to smallest value is greater than 10.  
+  - The data are skewed.  
+  - The group with the larger mean also has the larger variance.
 - **Effects**:
-  - Corrects non-normality and non-constant variance.
-  - Requires back-transformation to interpret median and CIs on the original scale.
+  - Reduces skew, improves normality, and corrects non-constant variance.  
+  - Requires back-transformation to interpret results (e.g., medians, confidence intervals) on the original scale.
 
 ### Other Transformations
-- Square root
-- Inverse
-- Reciprocal
-- **Note**: These transformations are harder to back-transform than log transformations.
-
-  
-## Log Transformations: Propositions (Logarithmic Properties)
-1. Normal distribution: The mean equals the median in a normal distribution.
-2. Monotonicity: The log function is monotonically increasing, meaning log(median x) = median(log(x)).
-3. Log differences:
-   - $\log(a) - \log(b) = \log\left(\frac{a}{b}\right)$
-4. Exponentiation: $e^{\log(x)} = x$
+- Square root  
+- Inverse  
+- Reciprocal  
+> **Note**: These transformations are harder to back-transform than log transformations and may complicate interpretation.
 
 
-## t-Test Interpretation (Log-Transformed Data)
-- $\text{mean}(\log x) - \text{mean}(\log y) = \gamma$
-- The distribution is approximately normal, so the mean and median are equal:  
-  $\text{median}(\log x) - \text{median}(\log y) = \gamma$
-- The logarithmic function is monotonically increasing:  
-  $\log(\text{median}(x)) - \log(\text{median}(y)) = \gamma$
-- Exponentiation gives:  
-  $e^{\log(\text{median}(x) / \text{median}(y))} = e^\gamma$
-- Therefore,  
-  $\text{median}(x) / \text{median}(y) = e^\gamma$
-- **Interpretation**: The median of $x$ is estimated to be $e^\gamma$ times the median of $y$.
+## Log Transformations: Propositions from Log Properties
+
+These propositions come from basic properties of logarithms and allow us to translate log-scale comparisons back to the original measurement scale.
+
+1. **Normal distribution**: In a normal distribution, the mean equals the median.  
+2. **Monotonicity**: The log function is monotonically increasing, so $\log(\text{median}(x)) = \text{median}(\log(x))$.  
+3. **Log differences**: $\log(a) - \log(b) = \log\left(\frac{a}{b}\right)$  
+4. **Exponentiation**: $e^{\log(x)} = x$
+
+
+## *t*-Test Interpretation (Log-Transformed Data)
+
+We apply the previous propositions to interpret results from a *t*-test on log-transformed data. Suppose:
+$$
+\text{mean}(\log x) - \text{mean}(\log y) = \gamma
+$$
+
+Because the distribution is approximately normal, we assume the mean and median are roughly equal:
+$$
+\text{median}(\log x) - \text{median}(\log y) = \gamma
+$$
+
+The logarithmic function is monotonically increasing:
+$$
+\log(\text{median}(x)) - \log(\text{median}(y)) = \gamma
+$$
+
+Rewriting using the log difference identity:
+$$
+\log\left(\frac{\text{median}(x)}{\text{median}(y)}\right) = \gamma
+$$  
+
+Exponentiating both sides:
+$$
+e^{\log\left(\frac{\text{median}(x)}{\text{median}(y)}\right)} = e^\gamma
+$$
+
+Therefore:
+$$
+\frac{\text{median}(x)}{\text{median}(y)} = e^\gamma
+$$
+
+### Interpretation
+
+The median of group $x$ is estimated to be $e^\gamma$ times the median of group $y$.
 
 
 ## Inequality of Variance
-- **Visual evidence** should be used as primary evidence for detecting unequal variances.
-- **F-test**: Tests for equal variances but is sensitive to normality violations.  
-  - $H_0$: population variances are equal
-  - $H_a$: population variances are not equal
-- Use hypothesis tests for equality of variance with caution.
+
+- **Visual evidence** should be the primary tool for detecting unequal variances (e.g., side-by-side boxplots or spread differences in histograms).  
+- **F-test**: A formal test for equality of variances, but it is sensitive to violations of normality.  
+  - $H_0$: Population variances are equal.  
+  - $H_a$: Population variances are not equal.  
+- Use hypothesis tests for equality of variance with caution, and only when assumptions are satisfied.
 
 
 ## General Rules of Thumb
-- Equal sample sizes and large samples: t-tools are robust.
-- Different standard deviations:
-  - Equal sample sizes: t-tools are valid with large samples.
-  - Unequal sample sizes: t-tools are not valid.
+
+- When sample sizes are equal and large, *t*-tools are generally robust.  
+- When standard deviations differ:  
+  - If sample sizes are equal: *t*-tools are still valid with large samples.  
+  - If sample sizes are unequal: *t*-tools are not valid and alternative methods should be considered.
 
 
-## Welch’s t-Test
-- Adjusted for unequal standard deviations.
-- Adjusts degrees of freedom using the Satterthwaite approximation.
-- Still assumes normality.
+## Welch’s *t*-Test
+
+- Designed to handle situations where population standard deviations are unequal.  
+- Adjusts the degrees of freedom using the Satterthwaite approximation.  
+- Still assumes normality in the underlying populations.
 
 
 ## Non-Normal Distributions
-- Long-tailed distributions:
-  - Wider CIs than expected (e.g. $> (1-\alpha) \%$), leading to fewer rejections of the null hypothesis.
-  - Fewer rejections can increase the true capture rate of $\mu$ to $> (1-\alpha) \%$, resulting in rejection rates $< \alpha \%$.  
 
-![](images/display_3_4.png){width=6in fig-align="left"}  
-Source: @ramsey2012statistical.
+- **Long-tailed distributions**:  
+  - Can produce wider confidence intervals than expected (e.g., greater than the nominal $(1 - \alpha)\%$ level---for example, more than 95% when using a 95% CI), leading to fewer rejections of the null hypothesis.  
+  - These wider intervals increase the chance of capturing the true mean $\mu$, pushing the actual coverage above $(1 - \alpha)\%$ and resulting in rejection rates below $\alpha$.  
+- **Unequal sample sizes and variances**  
+  - When both sample sizes and standard deviations differ substantially, confidence intervals may become too narrow or too wide.  
+  - This can cause actual coverage rates to deviate from the nominal 95% level---either above or below---depending on the direction of the imbalance.
 
-- When sample sizes and standard deviations both differ, CIs can become either too narrow or too wide.  
-
-![](images/display_3_5.png){width=6in fig-align="left"}  
-Source: @ramsey2012statistical.
+See Displays 3.4 and 3.5 in *The Statistical Sleuth* [@ramsey2012statistical] for simulation-based evidence.
 
 
 ## References
