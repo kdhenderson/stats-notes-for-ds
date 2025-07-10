@@ -2,31 +2,50 @@
 title: "Type I, Type II Error, and Power"
 ---
 
-## Objectives:
-- Understand Type I and Type II errors, and statistical power.
-- Calculate sample size needed to achieve a specific power.
-- Create and interpret power curves.
+## Objectives
+
+- Define and distinguish between **Type I error**, **Type II error**, and **statistical power**.
+- Explain how effect size, sample size, and significance level influence power.
+- Calculate power or required sample size using R or SAS.
+- Create and interpret power curves to communicate trade-offs in study design.
 
 
-## Helpful Resources:
+## Helpful Resources
+
 - [Interactive Power Applet](https://statsthroughsimulation.shinyapps.io/PowerApplet/)
-- [SAS Power and Sample Size Documentation](https://support.sas.com/documentation/onlinedoc/stat/141/power.pdfx)
+- [SAS Power and Sample Size Documentation](https://support.sas.com/documentation/onlinedoc/stat/141/power.pdf)
 
 
-## Type I Error
-- If the null hypothesis ($H_0$) is true, the test is correct if it fails to reject (FTR).
-- Rejecting $H_0$ when it is true is a Type I error, with a probability equal to $\alpha$.
-- The critical value determines the rejection region. If $\bar{x}$ is on the $H_0$ side, the test FTRt.
-- There is an $\alpha$% chance that $H_0$ is true and $\bar{x}$ will be as extreme or more extreme than the critical value, leading to a Type I error.
+## Hypothesis Test Errors and Outcomes
+
+### Type I Error
+- If the null hypothesis ($H_0$) is true, the test is correct when it **fails to reject** $H_0$.
+- Rejecting $H_0$ when it is true is a **Type I error**, with a probability equal to $\alpha$.
+- The critical value determines the rejection region. If $\bar{x}$ falls on the $H_0$ side, the test fails to reject.
+- There is an $\alpha$% chance that $H_0$ is true and $\bar{x}$ is as extreme or more extreme than the critical value, leading to a Type I error.
 
 
-## Type II Error
-- If $H_0$ is false, the test is correct if it rejects $H_0$.
-- Failing to reject $H_0$ when it is false is a Type II error, with a probability equal to $\beta$.
+### Type II Error
+- If $H_0$ is false, the test is correct when it **rejects** $H_0$.
+- Failing to reject $H_0$ when it is false is a **Type II error**, with a probability equal to $\beta$.
 
+### Hypothesis Test Outcome Matrix
+The following matrix summarizes the four possible outcomes of a hypothesis test, highlighting the probabilities of Type I error ($\alpha$), Type II error ($\beta$), and power ($1 - \beta$).  
+  
+<div style="max-width: 400px; margin: auto; text-align: center;">
+$$
+\begin{array}{|c|c|c|}
+\hline
+& H_0\ \textbf{True} & H_0\ \textbf{False} \\ \hline
+\textbf{Reject } H_0 & \text{Type I error } (\alpha) & \text{✅ Power } (1 - \beta) \\ \hline
+\textbf{FTR } H_0 & \text{✅ Correct} & \text{Type II error } (\beta) \\ \hline
+\end{array}
+$$
 
-![Type I and II Errors Table](images/sketch_4_1.png){width=2in fig-align="left"}  
-*This table summarizes the outcomes of hypothesis testing, highlighting the probabilities of Type I error ($\alpha$), Type II error ($\beta$), and power ($1 - \beta$).*
+<div style="font-size: 0.9em; line-height: 1.2em; text-align: center;">
+<em>*Matrix of hypothesis test outcomes based on the truth of $H_0$ and the decision to reject or not reject.*</em>
+</div>
+</div>
 
 
 ## Power
