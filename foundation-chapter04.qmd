@@ -4,7 +4,7 @@ title: "Type I, Type II Error, and Power"
 
 ## Objectives
 
-- Define and distinguish between **Type I error**, **Type II error**, and **statistical power**.
+- Define and distinguish between Type I error, Type II error, and statistical power.
 - Explain how effect size, sample size, and significance level influence power.
 - Calculate power or required sample size using R or SAS.
 - Create and interpret power curves to communicate trade-offs in study design.
@@ -59,7 +59,7 @@ $$
 
 - Effect size is the difference between the null mean and the true mean.
 - Example: If the null mean is 50 and the true mean is 60, the raw effect size is 10.
-- Cohen’s *d* is a standardized measure of effect size:
+- **Cohen’s *d*** is a standardized measure of effect size:
   $$
   d = \frac{\text{raw effect size}}{\text{standard deviation}} = \frac{\mu_1 - \mu_0}{\sigma}
   $$
