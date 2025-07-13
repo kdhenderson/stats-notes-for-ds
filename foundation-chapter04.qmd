@@ -70,17 +70,19 @@ $$
 ![Sampling Distributions, Power, and Effect Size](images/4_2.png){fig-align="center"}  
 *This diagram illustrates the relationship between effect size, critical values, power, and Type I and Type II errors. Narrower distributions from larger sample sizes improve the ability to detect true differences.*
 
----
-
 ## How to Increase Power
-- **Increase effect size:** Larger differences are easier to detect.
-- **Increase $\alpha$:** A less stringent threshold makes rejection more likely. Increasing $\alpha$ makes the critical value less extreme, making it easier for the test statistic to to exceed it.
-- **Increase sample size:** Larger samples reduce variability in $\bar{x}$, making it more likely to be close to $\mu$ and increasing the test's ability to detect true differences.
-- **Note:** If power is close to $\beta$, the chances of detect the difference or make a type II error are similar. This can happen when the effect size is too small. Increasing sample size can help.
+
+- **Increase effect size**: Larger differences are easier to detect.
+- **Increase $\alpha$**: A less stringent threshold makes rejection more likely. Increasing $\alpha$ makes the critical value less extreme, making it easier for the test statistic to exceed it, thus increasing the chance of rejecting $H_0$.
+- **Increase sample size**: Larger samples reduce variability in $\bar{x}$, making it more likely to be close to $\mu$ and increasing the likelihood of detecting true effects.
+
+> **Note**: If power is close to $\beta$, the chances of detecting a difference or making a Type II error are similar. This may occur when the effect size is small. Increasing the sample size can help.
 
 
 ## Balancing Type I and Type II Errors
-- Reducing $\alpha$ decreases the chance of a Type I error but increases the chance of a Type II error.
+
+- Reducing $\alpha$ decreases the probability of a Type I error but increases the probability of a Type II error.
+- There is often a trade-off between these two error types, so both should be considered in study design.
 
 
 ## Example Code For Finding Power or Other Missing Parameters
@@ -91,17 +93,17 @@ library(tidyverse)
 
 ## Missing parameter is indicated with `NULL`
 
-# Calculate power for one-sample t-test with specified parameters
+# One-sample t-test power calculation
 power.t.test(n = 41, delta = .07, 
-sd = .2, sig.level = 0.05,
-power = NULL, 
-type = "one.sample", alternative = "one.sided")
+             sd = 0.2, sig.level = 0.05,
+             power = NULL, 
+             type = "one.sample", alternative = "one.sided")
 
-# Example for two-sample t-test
+# Two-sample t-test example
 power.t.test(n = 250, delta = 5,
-sd = 25, sig.level = 0.05, 
-power = NULL, 
-type = "two.sample", alternative = "one.sided")
+             sd = 25, sig.level = 0.05, 
+             power = NULL, 
+             type = "two.sample", alternative = "one.sided")
 
 ```
 
@@ -109,30 +111,30 @@ SAS code:
 ```{sas eval=FALSE}
 /* Missing parameter is indicated with a period */
 
-/* Example for one-sample t-test */
+/* One-sample t-test */
 proc power;
 	onesamplemeans
-		sides=1
-		alpha=.1
-		nullmean=20000
-		mean=20450
-		stddev=500
-		ntotal=8
-		power=.;
+		sides = 1
+		alpha = 0.1
+		nullmean = 20000
+		mean = 20450
+		stddev = 500
+		ntotal = 8
+		power = .;
 run;
 
-/* Example for two-sample t-test */
-proc power; 
-*can specify mean for each (nullmean) and ntotal;
+/* Two-sample t-test */
+proc power;
+*can specify mean for each (nullmean) and ntotal;	
 	twosamplemeans
-		sides=1
-		alpha=.05
-		meandiff=4
-		stddev=3
-		npergroup=50
-		power=.;
-run;
-
+		sides = 1
+		alpha = 0.05
+		meandiff = 4
+		stddev = 3
+		npergroup = 50
+		power = .;
+run;		
+		
 ```
 
 
@@ -144,21 +146,21 @@ R code:
 powerholder = c()
 samplesizes = seq(60, 80, by = 1)
 
-for(i in 1:length(samplesizes))
-{
-  powerholder[i] = power.t.test(n = samplesizes[i], delta = 0.07, sd = 0.20, sig.level = .05,
+for(i in 1:length(samplesizes)) {
+  powerholder[i] = power.t.test(n = samplesizes[i], delta = 0.07, sd = 0.20, sig.level = 0.05,
                                 type = "one.sample", alternative = "one.sided")$power
 }
 
 # Create a data frame
 powerdf = data.frame(samplesizes, powerholder)
 
-# Create the power curve
-powerdf %>% ggplot(aes(x = samplesizes, y = powerholder)) +
+# Plot the power curve
+powerdf %>% 
+  ggplot(aes(x = samplesizes, y = powerholder)) +
   geom_line(color = "blue3", linewidth = 1.5) +
   ggtitle("Power Curve") +
   ylab("Power") +
-  xlab("Sample Sizes") +
+  xlab("Sample Size") +
   ylim(0.75, 1.0) +
   theme_bw()
 
@@ -171,32 +173,31 @@ ods graphics on;
 
 proc power;
 	onesamplemeans
-		sides=1
-		alpha=.05
-		nullmean=0
-		ntotal=60 80
-		mean=.07
-		stddev=.2
+		sides = 1
+		alpha = 0.05
+		nullmean = 0
+		ntotal = 60 80
+		mean = 0.07
+		stddev = 0.2
 		power = .;
-		plot x=n min=60 max=80;
+		plot x = n min = 60 max = 80;
 run;
 
 ods graphics off;
-
 
 /* Power curve for different effect sizes */
 ods graphics on;
 
 proc power;
 	twosamplemeans
-		sides=1
-		alpha=.05
-		nulldiff=0
-		meandiff=3 to 5 by 0.1 
-		ntotal=47
-		stddev=4.5
+		sides = 1
+		alpha = 0.05
+		nulldiff = 0
+		meandiff = 3 to 5 by 0.1 
+		ntotal = 47
+		stddev = 4.5
 		power = .;
-		plot x=effect min=3 max=5;
+		plot x = effect min = 3 max = 5;
 run;
 
 ods graphics off;
@@ -206,15 +207,15 @@ ods graphics off;
 
 ## Summary of Start-to-Finish Analysis for Client Presentation
 
-### Initial Meetings:
-- Define key parameters, such as power ($\geq 80\%$).
-- Perform a power analysis to determine required sample sizes for different power thresholds.
-- Provide sample size options based on budget and desired power.
-- Present a power curve to illustrate how power changes with sample size.
+### Initial Meetings
+- Define key parameters, such as power (e.g., at least 80%).
+- Conduct a power analysis to determine required sample sizes for different power thresholds.
+- Provide multiple options based on budget and desired power.
+- Visualize trade-offs to illustrate how power changes with sample size using a power curve.
 
-### Final Presentation:
-- Restate the question of interest and test parameters.
-- Visualize the data using histograms or boxplots and summary statistics.
-- Present results, including $p$-values, confidence intervals, and scope.
-- Provide an appendix with assumptions and a six-step hypothesis test.
-- Include contact information.
+### Final Presentation
+- Restate the research question and test parameters.
+- Display descriptive statistics and plots (e.g., boxplots, histograms).
+- Present test results, including *p*-values and confidence intervals.
+- Include a summary of assumptions and a six-step test outline in the appendix.
+- Share contact information for follow-up.
