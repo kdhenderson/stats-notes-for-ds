@@ -75,30 +75,36 @@ A permutation test is a flexible, nonparametric alternative to the two-sample *t
      - Not computationally feasible for large $n$.
    - **Normal Approximation**:
      - For larger samples (with few ties), the rank sum statistic approximates a normal distribution.
-     - Apply a **continuity correction** to adjust for the discrete nature of rank sums and improve *p*-value accuracy (see below).
+     - Compute a *Z*-statistic using:
+       $$
+       Z = \frac{T - \text{Mean}(T)}{\text{SD}(T)}
+       $$
+       Where:
+       - $T$: The observed rank sum.
+       - $\text{Mean}(T) = n_1 \bar{R}$, with $\bar{R}$ the average rank of all combined observations.
+       - $\text{SD}(T) = s_R \sqrt{ \frac{n_1 n_2}{n_1 + n_2} }$, where $s_R$ is the standard deviation of all ranks.
+     - Apply a **continuity correction** to improve *p*-value accuracy:
+       - Add 0.5 to $T$ for a **left-tailed** test.
+       - Subtract 0.5 from $T$ for a **right-tailed** test.
+     - This correction improves the match between the discrete statistic and the continuous normal curve.
 
 **Confidence Intervals**:
 
 - Use the **Hodges–Lehmann estimator** to construct a confidence interval for the difference in medians.
 
----
+### Visualizing the Continuity Correction
 
-### Normal Approximation with Continuity Correction
+When the rank sum distribution is approximated by a normal curve, a continuity correction adjusts for the fact that $T$ is discrete.
 
-       - Apply a continuity correction to adjust for the discrete nature of rank sums by approximating their area (represented as bars) with the area under a continuous curve (e.g. the normal distribution), improving the accuracy of p-value calculations:
-         - For a left-sided test, add a small adjustment.
-         - For a right-sided test, subtract a small adjustment.
-         
-![Sampling distribution of the rank-sum statistic under the null hypothesis.](images/display_4_6.png){width=6in fig-align="left"}   
-![Illustration of the continuity correction for approximating p-values.](images/display_continuityCorrection.png){width=5in fig-align="left"}   
-Source: @ramsey2012statistical.
+**Conceptually**:
 
-- $Z = \frac{T - \text{Mean}(T)}{\text{SD}(T)}$
-- $T$: Rank sum statistic.  
-- $\bar{R}$: Average of all the ranks (both groups).  
-- $s_R$ – Standard deviations of all the ranks (both groups).  
-- $\text{Mean}(T)$ and $\text{SD}(T)$: Theoretical mean and standard deviation of the rank sum statistic under $H_0$.  
-- **p-value**: Proportion of values from a standard normal distribution more extreme than the observed Z-statistic ($Z$).
+- The rank sum statistic creates a histogram-like distribution (discrete bars).
+- Exact *p*-values are based on shaded bar areas beyond a cutoff.
+- The normal approximation uses a smooth curve instead.
+- The continuity correction shifts the normal cutoff to the center of the bar, improving the approximation.
+
+![**How continuity correction improves normal approximation.**  
+Illustration of continuity correction in a rank-based test. The gray bars show the exact (discrete) distribution of the test statistic. The black curve represents the normal approximation. The dashed vertical line at 7 is the unadjusted threshold; the dotted red line at 7.5 shows the continuity-corrected threshold, which more accurately aligns the area under the normal curve (red shaded) with the area of the histogram bars.](images/fch05_continuity_correction.png){fig-title=""}
 
 
 ## Alternatives to the Paired t-Test

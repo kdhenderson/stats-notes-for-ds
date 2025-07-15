@@ -67,8 +67,9 @@ $$
 - Increasing effect size increases power and decreases $\beta$, but it does not affect the critical value or $\alpha$.
 - Power and the probability of a Type II error depend on the actual value of $\mu$.
 
-![Sampling Distributions, Power, and Effect Size](images/4_2.png){fig-align="center"}  
-*This diagram illustrates the relationship between effect size, critical values, power, and Type I and Type II errors. Narrower distributions from larger sample sizes improve the ability to detect true differences.*
+![**Sampling Distributions, Power, and Effect Size.** 
+This diagram illustrates the relationship between effect size, critical values, power, and Type I and Type II errors. Narrower distributions from larger sample sizes improve the ability to detect true differences.](images/fch04_errors_and_power.png){fig-align="center"}
+
 
 ## How to Increase Power
 
