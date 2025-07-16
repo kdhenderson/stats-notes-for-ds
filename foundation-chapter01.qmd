@@ -67,12 +67,14 @@ Random sampling uses chance to select a representative sample, allowing us to in
 - Evidence is gathered by collecting a sample and analyzing differences in key metrics.
 - If $H_0$ is true, differences between sample means should be small. The *p*-value quantifies how small is “small enough.”
 
+::: {.example}
 #### Example: Lottery Case
 - **Assumption ($H_0$)**: Bivin is playing fair.
 - **Evidence (test statistic)**: He won 10 times in a row.
 - **Probability (*p*-value)**: The probability of winning 10 times in a row, assuming fairness, is extremely low.
 - **Decision**: Reject $H_0$. The outcome is too unlikely under fair play.
 - **Conclusion**: Since the probability of winning 10 times in a row under fair play is so small, we conclude that Bivin is likely cheating.
+:::
 
 ### Permutation Testing
 - **Purpose**: Tests results against all possible randomizations to assess how unusual the observed result is.
