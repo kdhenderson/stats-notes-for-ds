@@ -24,11 +24,48 @@ title: "Comparisons Among Several Samples"
 - **Hypotheses**:
   - $H_0$: All population means are equal.
   - $H_A$: At least one population mean differs from another.
-- ANOVA is a preliminary test; subsequent post-hoc tests identify which means differ.
+- ANOVA is a preliminary test; if significant, it indicates that at least one mean differs. Specific pairwise differences can be explored using post-hoc tests (not covered in detail here).
 
-::: {layout-ncol=2}
-![Equal Means vs. Separate Means Models](images/notes_6_1.jpg)  
-*Figure 1: Comparison of equal means and separate means models, illustrating residual differences.*  
+### Comparing Models in ANOVA
+- **Two competing models**:
+  - **Equal means model (EMM)**: Assumes all groups share the same population mean (null hypothesis).
+  - **Separate means model (SMM)**: Assumes each group has its own mean (alternative hypothesis).
+- **Hypotheses**:
+  - $H_0$: $\mu_1 = \mu_2 = \mu_3$ 
+  - $H_A$: At least one pair of means differs
+- **Residual** is defined as: $\text{Residual} = \text{Observed} - \text{Predicted}$
+
+![**Equal Means vs. Separate Means Models.** 
+Comparison of two models: one assumes all groups share a single population mean (equal means model), and the other estimates a separate mean for each group (separate means model). Brackets illustrate residuals from observed values to the grand mean.](images/fch06_equal_and_separate_means_models.png){fig-title=""}
+
+#### Equal Means Model (EMM)
+- All observations are predicted using the grand mean: $\bar{X} = 13$
+- Sum of squared residuals (SSR): $\text{SSR}_{\text{EMM}} = 462$
+
+| Level | Observation 1    | Observation 2    | Observation 3    |
+|-------|------------------|------------------|------------------|
+| 1     | $(3 - 13)^2 = 100$ | $(5 - 13)^2 = 64$  | $(7 - 13)^2 = 36$  |
+| 2     | $(10 - 13)^2 = 9$  | $(12 - 13)^2 = 1$  | $(14 - 13)^2 = 1$  |
+| 3     | $(20 - 13)^2 = 49$ | $(22 - 13)^2 = 81$ | $(24 - 13)^2 = 121$ |
+
+#### Separate Means Model (SMM)
+- Each group has its own sample mean (perfect fit).
+- Sum of squared residuals: $\text{SSR}_{\text{SMM}} = 24$
+
+| Level | Observation 1    | Observation 2    | Observation 3    |
+|-------|------------------|------------------|------------------|
+| 1     | $(3 - 5)^2 = 4$   | $(5 - 5)^2 = 0$   | $(7 - 5)^2 = 4$   |
+| 2     | $(10 - 12)^2 = 4$ | $(12 - 12)^2 = 0$ | $(14 - 12)^2 = 4$ |
+| 3     | $(20 - 22)^2 = 4$ | $(22 - 22)^2 = 0$ | $(24 - 22)^2 = 4$ |
+
+#### Notes
+- A perfect fitting line means predicted values match the observations exactly, so residuals are zero.
+- The **sum of squared residuals (SSR)** quantifies total error:
+$$
+\text{SSR} = \sum (\text{Observed} - \text{Predicted})^2 = \sum (\text{Residual})^2
+$$
+
+---
 
 ![ANOVA Table](images/notes_6_2.jpg) 
 *Figure 2: ANOVA table showing degrees of freedom, sum of squares, mean squares, $F$-statistic, and $p$-value.*  
@@ -43,8 +80,9 @@ title: "Comparisons Among Several Samples"
 1. **Define Hypotheses**:
    - $H_0: \mu_1 = \mu_2 = \mu_3 = \dots$ (Equal means model).
    - $H_A$: At least one pair of means is different.
-   - Null assumes data come from the same distribution (grand mean); alternative assumes different distributions (separate means).
-   - Models are compared by finding the sum of squared residuals. A good fitting model will have smaller residuals (observed - predicted).  
+   - The null model assumes all observations are drawn from a single population distribution with the same mean (grand mean).
+   - The alternative allows group-specific distributions with different means (separate means model).
+   - Models are compared by finding the sum of squared residuals. A good fitting model will have smaller residuals (observed - predicted).
 2. **Get Critical Value**:
    - From an $F$-distribution.
    - Degrees of freedom: $df_1$ (model) and $df_2$ (error).
