@@ -3,17 +3,19 @@ title: "Comparisons Among Several Samples"
 ---
 
 ## Objectives
-- Learn to use ANOVA tests for comparing means among three or more groups.
-- Understand how to examine model assumptions for validity.
-- Calculate the sample size necessary to detect a particular effect size in ANOVA.
-- Make statistical inferences for multiple samples and interpret results in context.
-- Apply the extra sum of squares principle to create and interpret ANOVA tables.
-- Use full and reduced models to test different combinations of group means.
-- Understand the Kruskal-Wallis test as a non-parametric alternative to ANOVA.
-- Differentiate between random and fixed effects.
+
+- Explain the purpose of analysis of variance (ANOVA) for comparing means across multiple groups.
+- Formulate and interpret hypotheses for ANOVA tests.
+- Check model assumptions to ensure the validity of ANOVA results.
+- Construct and interpret ANOVA tables using the extra sum of squares principle.
+- Compare full and reduced models using $F$-tests.
+- Understand and apply the Kruskal-Wallis test as a non-parametric alternative.
+- Distinguish between fixed and random effects in the context of ANOVA.
+- Calculate sample sizes needed to detect a specified effect size using power analysis.
 
 
 ## ANOVA: Analysis of Variance
+
 - **Purpose**: Test equality of means from more than two populations by comparing variability within groups to variability between groups.
 - **Assumptions**:
   - All populations have normal distributions (reasonable symmetry in samples).
@@ -36,7 +38,8 @@ title: "Comparisons Among Several Samples"
 *Figure 3: Detailed breakdown of ANOVA table components.*  
 
 
-## ANOVA: 6-step hypothesis test
+## ANOVA: Six-Step Hypothesis Test
+
 1. **Define Hypotheses**:
    - $H_0: \mu_1 = \mu_2 = \mu_3 = \dots$ (Equal means model).
    - $H_A$: At least one pair of means is different.
@@ -48,7 +51,11 @@ title: "Comparisons Among Several Samples"
    - Calculate quantiles in R using `qf(alpha, df1, df2)`. Use $1-\alpha$ for a R-tailed test.  
 3. **Calculate $F$-Statistic** (F in SAS ANOVA table):
    - Formula:  
-     $F = \frac{\text{MS between}}{\text{MS within}} = \frac{\frac{\text{extra SS}}{\text{extra df}}}{\text{MSE}} = \frac{\text{Variation explained by the full model}}{\text{Variation left to be explained}}$.
+   $$
+   F = \frac{\text{MS}_{\text{between}}}{\text{MS}_{\text{within}}} 
+     = \frac{\text{Extra SS} / \text{Extra df}}{\text{MSE}} 
+     = \frac{\text{Variation Explained}}{\text{Variation Left to Explain}}
+  $$
    - Where:
      - $\text{MS between} = \frac{\text{extra SS}}{\text{extra df}}$
      - $\text{MS within} = \text{MSE} = \frac{\text{Error SS}}{\text{Error df}}$
@@ -68,6 +75,7 @@ title: "Comparisons Among Several Samples"
 :::
 
 ## SAS code for ANOVA
+
 ```{sas eval=FALSE}
 * Generalized Linear Model: Extends analysis to multiple groups (e.g. ANOVA for 3+ groups);
 proc glm data = dataSet;
@@ -78,6 +86,7 @@ run;
 
 
 ## R code for ANOVA
+
 ```{r eval=FALSE}
 # aov = analysis of variance
 # numerical response ~ factor groupings
@@ -92,11 +101,11 @@ summary(fit)
 - $R^2 = \frac{\text{Variation Explained by Full Model}}{\text{Total Variation}} = \frac{\text{Extra Sum of Squares}}{\text{Total Sum of Squares}}$. 
 - Represents the percentage of total variance explained by group membership.
 - Example: $R^2$ of 0.75 indicates 75% of the response variation is explained by group differences.
-- $R$: Correlation coefficient
+- $R$: Pearson correlation coefficient between observed and predicted values
 
 ### RMSE: Root Mean Square Error
 - $\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{\text{Unexplained Variation}}$
-- Quantifies the amount of unexplained variation in the model.
+- Quantifies the amount of unexplained variation in the model, i.e., the standard deviation of the model's residuals.
 
 ### Coefficient of Variation (CV)
 $\text{CV} = \frac{\text{RMSE}}{\text{Grand Mean}} \times 100$
@@ -104,6 +113,7 @@ $\text{CV} = \frac{\text{RMSE}}{\text{Grand Mean}} \times 100$
 
 
 ## ANOVA Assumptions and Robustness
+
 - **Normality**:
   - Check with histograms, boxplots, and Q-Q plots.
   - ANOVA is robust to slight violations of normality, especially with large sample sizes.
@@ -117,12 +127,14 @@ $\text{CV} = \frac{\text{RMSE}}{\text{Grand Mean}} \times 100$
 
 
 ## Welch’s ANOVA
+
 - Still assumes normality.
 - Adjusts for unequal standard deviations.
 - Degrees of freedom are lowered.
 
 
 ## Kruskal-Wallis Test
+
 - Non-parametric alternative for ANOVA.
 - Tests medians instead of means.
 - **Assumptions**:
@@ -132,6 +144,7 @@ $\text{CV} = \frac{\text{RMSE}}{\text{Grand Mean}} \times 100$
 
 
 ## Power Analysis for ANOVA – SAS code
+
 ```{sas eval=FALSE}
 proc power;
   onewayanova test=overall;
@@ -141,6 +154,7 @@ run;
 
 
 ## Random vs. Fixed Effects
+
 - **Random Effects**:
   - Observations are a random sample from a larger population of possible levels.
   - Levels of observations are meant to be representative of the population of things you could sample, even if you cannot sample every possible level.
@@ -158,6 +172,7 @@ run;
 
 
 ## Writing Up Results
+
 - ANOVA tests whether the between-group variability is significantly larger than the within-group variability, providing evidence that group means are different.
 - The $F$-test does not identify which specific means are different or how they differ. Additional tests (e.g. post-hoc tests) are required to answer these questions of interest (QOI).
 
