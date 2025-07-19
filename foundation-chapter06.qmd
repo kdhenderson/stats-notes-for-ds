@@ -33,7 +33,7 @@ title: "Comparisons Among Several Samples"
 - **Hypotheses**:
   - $H_0$: $\mu_1 = \mu_2 = \mu_3$ 
   - $H_A$: At least one pair of means differs
-- **Residual** is defined as: $\text{Residual} = \text{Observed} - \text{Predicted}$
+- A **residual** is defined as: $\text{  Residual} = \text{Observed} - \text{Predicted}$
 
 ![**Equal Means vs. Separate Means Models.** 
 Comparison of two models: one assumes all groups share a single population mean (equal means model), and the other estimates a separate mean for each group (separate means model). Brackets illustrate residuals from observed values to the grand mean.](images/fch06_equal_and_separate_means_models.png){fig-title=""}
@@ -59,17 +59,73 @@ Comparison of two models: one assumes all groups share a single population mean 
 | 3     | $(20 - 22)^2 = 4$ | $(22 - 22)^2 = 0$ | $(24 - 22)^2 = 4$ |
 
 #### Notes
-- A perfect fitting line means predicted values match the observations exactly, so residuals are zero.
+- A perfect fit means predicted values match the observations exactly, so residuals are zero.
 - The **sum of squared residuals (SSR)** quantifies total error:
 $$
 \text{SSR} = \sum (\text{Observed} - \text{Predicted})^2 = \sum (\text{Residual})^2
 $$
 
----
+### Comparing EMM and SMM Using an $F$-Test
 
-![ANOVA Table](images/notes_6_2.jpg) 
-*Figure 2: ANOVA table showing degrees of freedom, sum of squares, mean squares, $F$-statistic, and $p$-value.*  
-:::
+To formally compare the equal means model (EMM) and separate means model (SMM), we use an **$F$-test**. This test evaluates whether the extra parameters in the more complex model (SMM) explain a significantly greater portion of the total variability.
+
+See the ANOVA table below for how these calculations break down.
+
+#### ANOVA Table
+
+| Source | df | SS  | MS  | F     | P       |
+|--------|----|-----|-----|-------|---------|
+| Model (Between / Extra) | 2  | 438 | 219 | 54.75 | 0.0001 |
+| Error (Within / Full / SMM)    | 6  | 24  | 4   |       |         |
+| Total (Reduced / EMM)             | 8  | 462 |     |       |         |
+
+- **df**: Degrees of freedom
+- **SS**: Sum of squares
+- **MS**: Mean square = SS / df
+- **F**: Ratio of explained to unexplained variability: $F$-statistic = $\frac{\text{MS}_{\text{model}}}{\text{MS}_{\text{error}}}$
+- **P**: $p$-value from the $F$-distribution
+
+#### Notes
+- Degrees of freedom reflect how many means are being estimated.
+- Mean square values (MS) are variances: $\text{MS} = \frac{\text{SS}}{\text{df}}$, which follows the general variance formula: $\text{var}(x) = \frac{\sum (X_i - \bar{X})^2}{n - 1}$
+- The top row of the table (Between / Extra) is how much variance is explained by using separate means.
+- The **mean square error (MSE)** estimates within-group variance: $\text{MSE} = 4$
+- The **root mean square error (RMSE)** is:$\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{4} = 2$
+- This is also our estimate of the shared population standard deviation: $\hat{\sigma} = \text{RMSE} = 2$
+
+#### Understanding Degrees of Freedom in ANOVA
+- Degrees of freedom reflect how many parameters (means) are estimated and how much data is available to estimate variability.
+- In ANOVA, the total degrees of freedom are split into two parts:
+
+| **Source**              | **Formula** | **Interpretation**                                      |
+|-------------------------|-------------|----------------------------------------------------------|
+| Model (Between Groups)  | $k - 1$     | Number of group means (parameters) being estimated minus 1 |
+| Error (Within Groups)   | $n - k$     | Leftover variation after estimating $k$ group means      |
+| Total                   | $n - 1$     | Total variation in the dataset                           |
+
+For example, with 3 groups and 9 total observations:
+
+- Model df = $3 - 1 = 2$
+- Error df = $9 - 3 = 6$
+- Total df = $9 - 1 = 8$
+
+#### Visualizing the $F$-Test
+
+The $F$-statistic is compared to an $F$-distribution with 2 and 6 degrees of freedom. (Every $F$-distribution has 2 degrees of freedom.)
+
+- $F_{2,6} = 54.75$
+- Critical value at $\alpha = 0.05$: $F_{2,6}^{*} \approx 5.14$
+- The region to the right of 54.75 under the curve gives the $p$-value, which is very small ($p = 0.0001$), indicating strong evidence against the null model (EMM).
+
+![**$F$-distribution.** Right-skewed $F_{2,6}$ distribution showing critical value (5.14), observed test statistic (54.75), and rejection region representing $p$-value (0.0001).](images/fch06_fdistribution.png){fig-title=""}
+
+#### Interpretation
+- The top row of the ANOVA table shows how much variability is explained by the model.
+- The second row shows how much variability is left over (residual error).
+- A high $F$-value means the SMM explains significantly more variability than the EMM.
+- We conclude that at least one group mean differs significantly from the others.
+
+---
 
 ![Detailed ANOVA Table Overview](images/notes_6_3.png){width=6in fig-align="left"}   
 *Figure 3: Detailed breakdown of ANOVA table components.*  
