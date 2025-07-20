@@ -125,11 +125,11 @@ The $F$-statistic is compared to an $F$-distribution with 2 and 6 degrees of fre
 - A high $F$-value means the SMM explains significantly more variability than the EMM.
 - We conclude that at least one group mean differs significantly from the others.
 
+See the summary figure below for a visual breakdown of how these components are computed and interpreted.
+
+![**ANOVA Table Breakdown.** Visual summary of how degrees of freedom, sum of squares, mean squares, and the $F$-statistic are calculated and interpreted for the model, error, and total variation.](images/fch06_anova_table_breakdown.png){fig-title=""}
+
 ---
-
-![Detailed ANOVA Table Overview](images/notes_6_3.png){width=6in fig-align="left"}   
-*Figure 3: Detailed breakdown of ANOVA table components.*  
-
 
 ## ANOVA: Six-Step Hypothesis Test
 
