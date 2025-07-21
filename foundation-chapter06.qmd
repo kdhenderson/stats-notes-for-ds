@@ -129,54 +129,98 @@ See the summary figure below for a visual breakdown of how these components are 
 
 ![**ANOVA Table Breakdown.** Visual summary of how degrees of freedom, sum of squares, mean squares, and the $F$-statistic are calculated and interpreted for the model, error, and total variation.](images/fch06_anova_table_breakdown.png){fig-title=""}
 
----
 
 ## ANOVA: Six-Step Hypothesis Test
 
 1. **Define Hypotheses**:
-   - $H_0: \mu_1 = \mu_2 = \mu_3 = \dots$ (Equal means model).
-   - $H_A$: At least one pair of means is different.
-   - The null model assumes all observations are drawn from a single population distribution with the same mean (grand mean).
+   - $H_0: \mu_1 = \mu_2 = \mu_3 = \dots$ (equal means model)
+   - $H_A$: At least one pair of means is different
+   - The null model assumes all observations are drawn from a single population with the same mean (grand mean).
    - The alternative allows group-specific distributions with different means (separate means model).
-   - Models are compared by finding the sum of squared residuals. A good fitting model will have smaller residuals (observed - predicted).
+   - Models are compared using the sum of squared residuals: a good fitting model has smaller residuals (observed − predicted).
 2. **Get Critical Value**:
-   - From an $F$-distribution.
-   - Degrees of freedom: $df_1$ (model) and $df_2$ (error).
-   - Calculate quantiles in R using `qf(alpha, df1, df2)`. Use $1-\alpha$ for a R-tailed test.  
-3. **Calculate $F$-Statistic** (F in SAS ANOVA table):
-   - Formula:  
+   - From an $F$-distribution
+   - Degrees of freedom: $df_1$ (model) and $df_2$ (error)
+   - In R, use `qf(1 - alpha, df1, df2)` to find the critical value. (Use $1-\alpha$ for a R-tailed test.)
+3. **Calculate $F$-Statistic**:
    $$
-   F = \frac{\text{MS}_{\text{between}}}{\text{MS}_{\text{within}}} 
+   F = \frac{\text{MS}_{\text{between}}}{\text{MS}_{\text{within}}}
      = \frac{\text{Extra SS} / \text{Extra df}}{\text{MSE}} 
      = \frac{\text{Variation Explained}}{\text{Variation Left to Explain}}
-  $$
-   - Where:
-     - $\text{MS between} = \frac{\text{extra SS}}{\text{extra df}}$
-     - $\text{MS within} = \text{MSE} = \frac{\text{Error SS}}{\text{Error df}}$
+   $$
+   Where:
+   - $\text{MS}_{\text{between}} = \frac{\text{Extra SS}}{\text{Extra df}}$
+   - $\text{MS}_{\text{within}} = \text{MSE} = \frac{\text{Error SS}}{\text{Error df}}$
 4. **Determine p-value**:
-   - Compare $F$-statistic to the critical value.
+   - Compare the test statistic to the $F$ distribution.
+   - If $F$-statistic is in the upper tail, $p$ will be small.
 5. **Decision**:
-   - Reject $H_0$ if $p$-value < $\alpha$; otherwise, fail to reject.
+   - Reject $H_0$ if $p < \alpha$.
 6. **Interpretation**:
-   - Rejecting $H_0$ indicates evidence that at least one pair of group means is different.
+   - Rejecting $H_0$ because of a significant result suggests at least one group mean differs.
 
-::: {layout-ncol=2}
-![SAS Output Table](images/notes_6_4.jpg)  
-*Figure 4: SAS output showing $F$-statistic, $p$-value, and $R^2$ metrics.*  
 
-![R-Squared and Variance Explained](images/notes_6_5.jpg)  
-*Figure 5: Illustration of $R^2$, showing the proportion of total variance explained by the model.*  
-:::
+## Key Metrics in ANOVA
+
+### $R^2$: Coefficient of Determination
+- $R^2 = \dfrac{\text{Explained Variation}}{\text{Total Variation}} = \dfrac{\text{Extra SS}}{\text{Total SS}}$
+- Represents the proportion of total variance in the response that is explained by the model (i.e., group membership).
+- $R$: Pearson correlation coefficient between observed and predicted values
+
+### RMSE: Root Mean Square Error
+- $\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{\text{Unexplained Variation}}$
+- Estimates the typical distance between observed and predicted values (i.e., the standard deviation of residuals).
+
+### Coefficient of Variation (CV)
+- A unitless measure of **relative variability** (standard deviation relative to the mean):
+  $$
+  \text{CV} = \frac{\text{RMSE}}{\text{Grand Mean}} \times 100 = \frac{\text{RMSE}}{\bar{X}} \times 100 = \frac{\sqrt{\text{MSE}}}{\bar{X}} \times 100
+  $$
+
 
 ## SAS code for ANOVA
 
 ```{sas eval=FALSE}
-* Generalized Linear Model: Extends analysis to multiple groups (e.g. ANOVA for 3+ groups);
+* Generalized Linear Model: Extends analysis to multiple groups (e.g., ANOVA for 3+ groups);
 proc glm data = dataSet;
-class group;
-model responseVar = groupingVar; * Fits an ANOVA;
+  class group;
+  model responseVar = groupingVar; * Fits an ANOVA;
 run;
 ```
+
+::: {.example}
+### SAS ANOVA Output Summary
+
+SAS provides the $R^2$, root MSE, and coefficient of variation in its ANOVA output. See the example output below for how these metrics are reported.
+
+**Example SAS Output: ANOVA Summary**
+
+| Source           | DF | Sum of Squares | Mean Square | F Value | Pr > F |
+|------------------|----|----------------|-------------|---------|--------|
+| Model (Between / Extra) | 2  | 438.0 | 219.0 | 54.75 | 0.0001 |
+| Error (SMM)            | 6  | 24.0  | 4.0   |       |        |
+| Corrected Total (EMM) | 8  | 462.0 |       |       |        |
+
+| R-Square | Coeff Var | Root MSE | Score Mean |
+|----------|-----------|----------|------------|
+| 0.948052 | 15.38462  | 2.0      | 13.0       |
+
+**Calculations**:
+
+- $R^2 = \dfrac{\text{Explained Variation}}{\text{Total Variation}} = \dfrac{\text{Extra SS}}{\text{Total SS}} = \frac{438}{462} \approx 0.948$
+- $\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{\text{Unexplained Variation}} = 2$
+- $\bar{X}$: grand mean, the mean of all observations ($n$ = 9 in the example above)
+- The **Score Mean** reported by SAS is the grand mean ($\bar{X} = 13$), the average of all observations across all groups.
+- $\text{CV} = \frac{\text{RMSE}}{\bar{X}} \times 100 = \frac{2}{13} \times 100 \approx 15.38\%$
+
+**Interpretation**:
+
+- Extra sum of squares: variability explained by the full model (SMM)
+- Total sum of squares: total variability (that could be explained)
+- The model (group membership) explains 94.8% of the total variability in the response ($R^2 = 0.948$).
+- RMSE = 2 indicates the estimated standard deviation of residuals, the typical size of the model residuals.
+- CV ≈ 15.38% indicates moderate relative variability around the grand mean. This matches the SAS output: `Coeff Var = 15.38462`.
+:::
 
 
 ## R code for ANOVA
@@ -188,23 +232,7 @@ fit = aov(responseVar ~ groupingVar, data = dataSet)
 summary(fit)
 ```
 
-
-## Key Metrics in ANOVA
-
-### $R^2$: Coefficient of Determination
-- $R^2 = \frac{\text{Variation Explained by Full Model}}{\text{Total Variation}} = \frac{\text{Extra Sum of Squares}}{\text{Total Sum of Squares}}$. 
-- Represents the percentage of total variance explained by group membership.
-- Example: $R^2$ of 0.75 indicates 75% of the response variation is explained by group differences.
-- $R$: Pearson correlation coefficient between observed and predicted values
-
-### RMSE: Root Mean Square Error
-- $\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{\text{Unexplained Variation}}$
-- Quantifies the amount of unexplained variation in the model, i.e., the standard deviation of the model's residuals.
-
-### Coefficient of Variation (CV)
-$\text{CV} = \frac{\text{RMSE}}{\text{Grand Mean}} \times 100$
-- Measures relative standard deviation as a percentage of the mean.
-
+---
 
 ## ANOVA Assumptions and Robustness
 
