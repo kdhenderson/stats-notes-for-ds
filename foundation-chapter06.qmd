@@ -236,36 +236,39 @@ summary(fit)
 
 ## ANOVA Assumptions and Robustness
 
-- **Normality**:
-  - Check with histograms, boxplots, and Q-Q plots.
-  - ANOVA is robust to slight violations of normality, especially with large sample sizes.
+### Assumptions
+- **Normality**
+  - Check with histograms, boxplots, and Q–Q plots.
+  - ANOVA is fairly robust to non-normality, especially when sample sizes are large and equal across groups.
 - **Equal Standard Deviations**:
-  - This assumption is crucial for the validity of ANOVA results.
+  - This assumption is crucial for the validity of ANOVA and $F$-test results.
   - ANOVA is less robust to violations of this assumption compared to $t$-tests.
   - Confidence intervals depend on this assumption being met.
   - Confidence intervals are widest when the group with the largest standard deviation also has the largest sample size.
-- **Independence**:
-  - Ensure independence of observations both within and between groups.  
+- **Independence**
+  - Observations must be independent both within and between groups.
+  - This is generally satisfied through random sampling or random assignment.
 
 
-## Welch’s ANOVA
+## Alternatives to Standard ANOVA
 
-- Still assumes normality.
-- Adjusts for unequal standard deviations.
-- Degrees of freedom are lowered.
+### Welch’s ANOVA
+- A robust alternative to classical ANOVA when standard deviations are unequal.
+- *Still assumes normality*.
+- Adjusts the degrees of freedom lower to account for unequal variances.
+- Output includes adjusted $F$-statistic and *p*-value.
 
-
-## Kruskal-Wallis Test
-
-- Non-parametric alternative for ANOVA.
-- Tests medians instead of means.
+### Kruskal–Wallis Test
+- A **non-parametric alternative** to ANOVA that compares medians instead of means.
+- Useful for **non-normal** or **skewed** distributions or small sample sizes.
 - **Assumptions**:
-  - Does not require normality, making it useful for non-symmetric distributions or small sample sizes.  
+  - Does not assume normality.
   - Robust to unequal variances.
-- $p$-values follow a chi-square distribution.
+  - Observations must be independent.
+- The *p*-value is based on a chi-square distribution.
 
 
-## Power Analysis for ANOVA – SAS code
+## Power Analysis for ANOVA (SAS)
 
 ```{sas eval=FALSE}
 proc power;
@@ -277,32 +280,52 @@ run;
 
 ## Random vs. Fixed Effects
 
-- **Random Effects**:
-  - Observations are a random sample from a larger population of possible levels.
-  - Levels of observations are meant to be representative of the population of things you could sample, even if you cannot sample every possible level.
-  - Desired inferences are on the entire population of levels, not just the levels included in the study.
-  - Variance includes:
-    - Residual variance (variance of each observation from the overall mean).
-    - Variance associated with random effects.
-  - There is typically more error associated with random effects models.
-- **Fixed Effects**:
-  - Inferences are specific to the levels included in the study.
-  - Levels are not intended to represent a larger population.
-- **Statistical Considerations**:
-  - Random effects models account for extra variability by including variance from random effects, reducing the probabilities of Type I and Type II errors.
-  - Fixed effects models do not include this extra variability, which may lead to increased risk of Type I or II errors if used improperly.
+### Fixed Effects
+- Levels (e.g., groups or treatments) are *explicitly of interest* and not intended to generalize beyond the study or represent a larger population.
+- Inference applies only to the levels included in the analysis.
+- Common in controlled experiments with pre-defined groups or treatments.
+- The model estimates a unique mean for each level.
+
+### Random Effects
+- Levels represent a *random sample* from a larger population of possible groups or conditions.
+- The goal is to make inferences about the entire population of levels---not just those observed in the study. That is, even if you cannot sample every possible level, the levels in the study are meant to be representative of the population of interest.
+- The model accounts for two sources of variation:
+  - **Residual variance** (within-group variability): variance of each observation from the overall mean
+  - **Random effect variance** (between-group variability): variance associated with the random effects
+- Observations are nested within groups drawn at random.
+- There is typically more error associated with random effects models.
+
+### Statistical Considerations
+- **Random effects models** include additional variability from the group-level random component. This increases standard errors but yields more conservative and generalizable inferences.
+- **Fixed effects models** do not account for this extra group-level variability, which may lead to underestimated standard errors if used when random effects would be more appropriate.
+- Choosing the wrong model type can increase the risk of **Type I** or **Type II errors**.
+
+> In short:  
+>
+> - Use **fixed effects** when your levels (e.g., treatments) are all of interest and exhaust the population you care about.  
+> - Use **random effects** when your levels are sampled from a larger population and you want to generalize your conclusions.
 
 
 ## Writing Up Results
 
-- ANOVA tests whether the between-group variability is significantly larger than the within-group variability, providing evidence that group means are different.
-- The $F$-test does not identify which specific means are different or how they differ. Additional tests (e.g. post-hoc tests) are required to answer these questions of interest (QOI).
+ANOVA tests whether the **between-group variability** is significantly larger than the **within-group variability**, providing evidence that group means differ.
 
-### Steps for Writing Results:
-1. State the research question, treatments, and context.
-2. Describe data collection methods, sample sizes, and treatments.
-3. Summarize assumption checks (relying on visual evidence).
-4. Provide descriptive statistics for groups.
-5. Report effect size, $F$-statistic, degrees of freedom, and $p$-value.
-6. Include residual diagnostics, mention transformations and information about other tests if used.  
-7. Conclude with decisions and contextual interpretations.
+- The *$F$-test* indicates *whether* at least one group mean differs.
+- It does *not* identify *which* specific means are different or *how* they differ.
+- Additional procedures such as *post-hoc tests* are required to explore these questions of interest (QOIs).
+
+### Steps for Writing Results
+1. **State the research question**, experimental conditions, and context clearly.
+2. **Describe the study design**, including how data were collected, sample sizes, and treatments or groups.
+3. **Check and summarize assumptions**:
+   - Use graphical tools (e.g., histograms, Q-Q plots, residual plots).
+   - Note whether normality, equal variance, and independence were reasonable.
+4. **Provide descriptive statistics** for each group.
+5. **Report the ANOVA test results**:
+   - Include the *$F$-statistic*, degrees of freedom, *$p$-value*, and relevant effect sizes (e.g., *$R^2$*, RMSE, CV).
+6. **Include residual diagnostics**:
+   - Mention if any transformations were applied.
+   - Note any violations and how they were addressed (e.g., using Welch’s ANOVA).
+7. **Interpret the results in context**:
+   - Discuss whether the null hypothesis was rejected.
+   - Relate the findings to the original research question. 
