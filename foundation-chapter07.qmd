@@ -10,110 +10,113 @@ title: "Linear Combinations and the Multiple Comparison Problem"
 
 
 ## Fallacies in Hypothesis Testing
-1. **False Causality**: A small p-value does not indicate causation. Causality can only be inferred from randomized experiments, not observational studies.
-2. **Accepting the Null**: Should state, “no evidence of a difference,” not that the null hypothesis is true. There isn't enough evidence to suggest a difference is due to anything but chance. 
-3. **Statistical vs. Practical Significance**: Statistical significance does not imply practical importance. Evaluate with power, effect size, and confidence intervals.  
-   - Differences that are statistically but not practically significant may be due to a large sample size.  
-   - If a difference is practically significant but not statistically significant, collect more data.
+
+1. **False causality**: A small *p*-value does not indicate causation. Causality can only be inferred from randomized experiments, not observational studies.
+2. **Accepting the null**: We should say there is “no evidence of a difference,” not that the null hypothesis is true. There is not enough evidence to suggest the observed difference is due to anything other than chance.
+3. **Statistical vs. practical significance**: Statistical significance does not imply practical importance. Evaluate practical significance using power, effect size, and confidence intervals.  
+   - Differences that are statistically but not practically significant may arise due to large sample sizes.  
+   - If a difference is practically significant but not statistically significant, more data may be needed.
 4. **Data Dredging**: Avoid fishing for significance (data snooping). This can lead to publication bias against negative results.
-5. **Good Statistics from Bad Data**: Biased or non-random data compromises conclusions. Experimental design determines what inferences can be made and what statistical methods can be used.
+5. **Good statistics from bad data**: Biased or non-random data compromise conclusions. Experimental design determines which inferences and statistical methods are valid.
 
 
 ## Linear Combination of Group Means
 
-- An ANOVA only allows pairwise comparisons of means and does not account for structure within the groups. For example, you might want to compare an average of means to a single mean or to the average of other means. 
-- To begin, use the ANOVA framework as an initial screening device to test for any overall differences in means to determine whether further testing is necessary.
-   
-### Linear Contrasts
+- ANOVA allows only pairwise comparisons of means and does not account for meaningful structure across groups. In practice, you may wish to compare the average of several means to a single group, or to the average of others.  
+- The ANOVA *F*-test serves as an initial screening tool for detecting any overall differences in means. If the *F*-test is significant, follow-up tests can be considered.
 
+### Linear Contrasts
 - A **linear combination** of group means is defined as:
   $$
   \gamma = C_1\mu_1 + C_2\mu_2 + \dots + C_I\mu_I
   $$
-  where $\gamma$ is the parameter representing the linear combination, and $C_i$ are coefficients that sum to zero, making the combination a **contrast**.
-- Use $g$ and $\bar{x}$ to estimate $\gamma$ and $\mu$.
-- The standard error of $g$, denoted $SE(g)$, is calculated as:
+  where $\gamma$ represents the linear combination and the $C_i$ are coefficients. When the coefficients sum to zero, the combination is called a **contrast**.
+- Estimate $\gamma$ using $g = C_1\bar{x}_1 + C_2\bar{x}_2 + \dots + C_I\bar{x}_I$, where $\bar{x}_i$ are group sample means.
+- The standard error of $g$, denoted $SE(g)$, is given by:
   $$
   SE(g) = S_p \sqrt{\frac{C_1^2}{n_1} + \frac{C_2^2}{n_2} + \dots + \frac{C_I^2}{n_I}}
   $$
   where $S_p$ is the pooled standard deviation.  
-  Even when comparing only two groups (i.e. the other coefficients / terms under the square root are zero), the pooled standard deviation is used under the assumption of equal variances from all groups.
-- The $t$-statistic for testing contrasts is:
+  Even when comparing only two groups (i.e., the other coefficients and terms under the square root are zero), the pooled standard deviation is used under the assumption of equal variances across all groups.
+- The *t*-statistic for testing contrasts is:
   $$
   t_{\alpha, df} = \frac{g - \gamma}{SE(g)}
   $$
-  where $g$ is the observed linear combination, $\gamma$ is the hypothesized value (e.g. $\gamma = 0$), and $df$ are the degrees of freedom associated with the pooled standard deviation.
+  where $g$ is the observed linear combination, $\gamma$ is the hypothesized value (e.g., $\gamma = 0$), and $df$ is the degrees of freedom associated with $S_p$.
 
 
 ## Steps for a Linear Contrast Test
 
-1. **Summary Statistics**: Obtain group means, sample sizes, and the pooled standard deviation from the ANOVA model (e.g. $RMSE$).
-2. **Specify Coefficients**: Choose $C_i$ such that their sum equals zero.
-3. **Estimate the Contrast**: Compute the linear combination $g$ using the group means and coefficients.
-4. **Calculate Standard Error**: $SE(g)$  
-5. **Construct Confidence Intervals**: $CI = g \pm t_{\alpha, df} \cdot SE(g)$  
-6. **Perform the Test**: Calculate the $t$-statistic.
+1. **Summarize the data**: Obtain group means, sample sizes, and the pooled standard deviation from the ANOVA model (e.g., RMSE).
+2. **Specify the coefficients**: Choose $C_i$ values such that $\sum C_i = 0$.
+3. **Estimate the contrast**: Compute the linear combination, $g$, using the sample means and chosen coefficients.
+4. **Compute the standard error**: Calculate $SE(g)$ using the formula above.
+5. **Construct confidence intervals**:
+   $$
+   CI = g \pm t_{\alpha, df} \cdot SE(g)
+   $$
+6. **Perform the test**: Calculate the *t*-statistic to assess the contrast.
 
 ### Simultaneous Inferences
-- When testing multiple contrasts or pairwise comparisons, the likelihood of a **Type I error** increases. Adjustments are needed to the significance level or p-value to maintain the overall error rate.
-- Note the distinction between:
-  - **Individual confidence level**: The probability that a single interval captures the parameter ($1 - \alpha$).
-  - **Familywise confidence level**: The probability that all intervals simultaneously capture their parameters is less than $1 - \alpha$, leading to compound uncertainty.
+- When testing multiple contrasts or pairwise comparisons, the risk of a **Type I error** increases. Adjustments to significance levels or *p*-values are needed to maintain the overall error rate.
+- Distinguish between:
+  - **Individual confidence level**: The probability that a single interval captures its parameter ($1 - \alpha$).
+  - **Familywise confidence level**: The probability that all intervals simultaneously capture their parameters. This probability is less than $1 - \alpha$ unless corrections are applied.
 
 ### Common Applications of Linear Contrasts
-1. Comparing averages of group means, e.g. $\text{Average of groups 1 and 2 vs. group 3}$.
-2. Comparing rates in studies, e.g. dietary interventions in rodents.
-3. Testing specific hypotheses about combinations of group means.
+1. Comparing average values, e.g., the mean of groups 1 and 2 versus group 3.
+2. Comparing response rates across treatments, such as dietary interventions in animals.
+3. Testing specific hypotheses about structured combinations of group means.
 
 
 ## Adjusting for Multiple Comparisons
 
-When conducting multiple tests, it is crucial to control the **familywise error rate** (FWER) to prevent an inflated Type I error rate. Below are the commonly used post-hoc procedures, categorized by purpose:
+When conducting multiple tests, it is important to control the **familywise error rate** (FWER). Common post-hoc procedures are outlined below.
 
-### Procedures for All Pairwise Differences in Means:
 
-1. **Bonferroni Adjustment**:  
-   - Adjusts the significance level:  
+### Procedures for All Pairwise Differences in Means
+
+1. **Bonferroni adjustment**  
+   - Adjusts the significance level:
      $$
-     \text{New significance level} = \frac{\alpha}{\# \text{ of comparisons}}
+     \text{Adjusted } \alpha = \frac{\alpha}{\# \text{ comparisons}}
      $$
-   - Example: For 4 groups with 6 pairwise tests ($\binom{4}{2} = 6$),  
+   - Example: For 4 groups, there are $\binom{4}{2} = 6$ comparisons:
      $$
      \alpha = \frac{0.05}{6} = 0.0083
      $$
-   - **Strengths**: Simple and widely applicable.  
-   - **Weaknesses**: Very conservative, reducing power.
-
-2. **Tukey’s Honestly Significant Difference (HSD)**:  
-   - Used for simultaneous confidence intervals for pairwise mean differences.  
+   - **Strengths**: Simple, widely applicable  
+   - **Weaknesses**: Very conservative; reduces power
+2. **Tukey’s Honestly Significant Difference (HSD)**  
+   - Used to construct simultaneous confidence intervals for all pairwise mean differences  
    - Based on the **studentized range statistic**:
      $$
-     q = \frac{\bar{X}_{\text{largestGrp}} - \bar{X}_{\text{smallestGrp}}}{\sqrt{\frac{MSE}{n}}}
+     q = \frac{\bar{X}_{\text{largest}} - \bar{X}_{\text{smallest}}}{\sqrt{\frac{MSE}{n}}}
      $$
-     (for groups with equal $n$).  
-   - Confidence intervals for differences:
+     (for groups with equal $n$)  
+   - Confidence intervals:
      $$
      (\bar{X}_i - \bar{X}_j) \pm q_{\alpha, (k, N-k)} \cdot \sqrt{\frac{MSE}{n}}
      $$
-   - For unequal sample sizes, use the harmonic mean. (SAS does this:
+   - For unequal $n$, use the **harmonic mean** (as done in SAS):
      $$
      n_{ij} = \frac{2 \cdot n_i \cdot n_j}{n_i + n_j}
      $$
-   - **Strengths**: Maintains FWER and provides clear interpretation.  
-   - **Weaknesses**: Assumes equal variances (can be extended using Tukey-Kramer).
-
-3. **Ryan-Elliot-Gabriel-Welsch Q-procedure (REGWQ)**:  
-   - Algorithm-based method recommended by SAS.  
-   - Balances power and control of Type I errors.  
+   - **Strengths**: Maintains FWER; easy to interpret  
+   - **Weaknesses**: Assumes equal variances (can be extended via Tukey-Kramer)
+3. **Ryan-Elliot-Gabriel-Welsch Q (REGWQ) procedure**  
+   - Recommended by SAS; balances power and Type I error control  
    - **Method**:
-     1. Arrange sample means in descending order.
-     2. Reject null if:
+     1. Order the group means in descending order
+     2. Reject $H_0$ if:
         $$
         \text{Difference} > q_{\text{critical}} \cdot \text{Studentized range}
         $$
-     3. Adjust $p$-values for the number of comparisons.  
-   - **Strengths**: High power, nominal Type I error rate.  
-   - **Weaknesses**: Requires algorithmic implementation.
+     3. Adjust *p*-values accordingly for the number of comparisons  
+   - **Strengths**: High power; nominal Type I error  
+   - **Weaknesses**: Algorithmically complex
+
+--- 
 
 ### Procedures for Pairwise Differences from a Control:
 
