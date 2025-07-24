@@ -7,7 +7,7 @@ biblio-title: References
 link-citations: true
 link-bibliography: true
 # csl: apa-6th-edition.csl
-# license: "CC BY-SA"
+license: "CC BY 4.0 for content, MIT for code"
 
 format:
   html:
@@ -19,6 +19,8 @@ format:
     #chapter-level: 1  # Ensure chapters are properly numbered starting from "1"
     code-fold: true
     css: styles.css
+    footer: |
+      Except where otherwise noted, content is licensed under <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
 
 book:
   author: 
@@ -27,6 +29,14 @@ book:
       orcid: "0000-0002-9265-7709"
       email: kdhenderson@gmail.com
       corresponding: true
+    - name: "Professor of Applied Statistics"
+      affiliation: "SMU MSDS Program"
+      email: "TBD"
+    - name: "Professor of Statistical Foundations"
+      affiliation: "SMU MSDS Program"
+      email: "TBD"
+    # Professors listed as placeholders; will confirm with them before publication.
+    # Add later to index.qmd author contributions if relevant: *All authors reviewed and approved the final version of this book.*
   date: last-modified
   chapters:
     - index.qmd  # Introduction or preface

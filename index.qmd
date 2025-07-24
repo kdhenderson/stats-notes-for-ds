@@ -9,6 +9,21 @@ format:
 
 This book serves as a companion for students in the SMU Master of Science in Data Science program, specifically for the Statistical Foundations and Applied Statistics courses. It is designed to summarize both the theoretical understanding and practical applications of statistical methods.
 
+
 ## **Book Structure**
+
 - **Part 1: Statistical Foundations**: Covers the theoretical groundwork.
 - **Part 2: Applied Statistics**: Focuses on real-world statistical applications.
+
+
+## License
+
+This book is licensed under a [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+
+All code examples are licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+
+## Author Contributions
+
+- **Professor of Applied Statistics** and **Professor of Statistical Foundations**: Developed the original course materials and lectures on which this book is based.
+- **Kristin Henderson**: Compiled, adapted, and updated these notes from the original course materials, and prepared the Quarto book for publication.

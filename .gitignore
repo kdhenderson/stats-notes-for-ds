@@ -1,4 +1,21 @@
+# macOS system files
+.DS_Store
+
+# RStudio files
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
+
+# Quarto build and cache directories
+.quarto/
+_book/
+*.html
+*.pdf
+
+# Python/Jupyter notebook checkpoints (if you use Jupyter)
+.ipynb_checkpoints/
+
+# Temporary files
+*.tmp
+*.log
