@@ -16,7 +16,7 @@ title: "Linear Combinations and the Multiple Comparison Problem"
 3. **Statistical vs. practical significance**: Statistical significance does not imply practical importance. Evaluate practical significance using power, effect size, and confidence intervals.  
    - Differences that are statistically but not practically significant may arise due to large sample sizes.  
    - If a difference is practically significant but not statistically significant, more data may be needed.
-4. **Data Dredging**: Avoid fishing for significance (data snooping). This can lead to publication bias against negative results.
+4. **Data dredging**: Avoid fishing for significance (data snooping). This can lead to publication bias against negative results.
 5. **Good statistics from bad data**: Biased or non-random data compromise conclusions. Experimental design determines which inferences and statistical methods are valid.
 
 
@@ -49,7 +49,7 @@ title: "Linear Combinations and the Multiple Comparison Problem"
 
 1. **Summarize the data**: Obtain group means, sample sizes, and the pooled standard deviation from the ANOVA model (e.g., RMSE).
 2. **Specify the coefficients**: Choose $C_i$ values such that $\sum C_i = 0$.
-3. **Estimate the contrast**: Compute the linear combination, $g$, using the sample means and chosen coefficients.
+3. **Estimate the contrast**: Compute the linear combination $g$ using the sample means and chosen coefficients.
 4. **Compute the standard error**: Calculate $SE(g)$ using the formula above.
 5. **Construct confidence intervals**:
    $$
@@ -98,7 +98,7 @@ When conducting multiple tests, it is important to control the **familywise erro
      $$
      (\bar{X}_i - \bar{X}_j) \pm q_{\alpha, (k, N-k)} \cdot \sqrt{\frac{MSE}{n}}
      $$
-   - For unequal $n$, use the **harmonic mean** (as done in SAS):
+     - When group sizes are unequal, use the **harmonic mean** of $n_i$ and $n_j$  (as done in SAS):
      $$
      n_{ij} = \frac{2 \cdot n_i \cdot n_j}{n_i + n_j}
      $$
@@ -112,70 +112,67 @@ When conducting multiple tests, it is important to control the **familywise erro
         $$
         \text{Difference} > q_{\text{critical}} \cdot \text{Studentized range}
         $$
-     3. Adjust *p*-values accordingly for the number of comparisons  
+     3. Adjust the *p*-values for the number of comparisons  
    - **Strengths**: High power; nominal Type I error  
    - **Weaknesses**: Algorithmically complex
 
---- 
-
-### Procedures for Pairwise Differences from a Control:
-
-1. **Dunnett’s Procedure**:  
-   - Compares each treatment group to a single control group.  
-   - Uses the **d-statistic**:
+### Procedures for Pairwise Differences vs. Control
+1. **Dunnett’s procedure**  
+   - Compares each treatment group to a single control group 
+   - Uses the **$D$-statistic**:
      $$
-     D = d_{(k-1, N-k)} \cdot \sqrt{\frac{2 \cdot MSE}{n_{harmonic}}}
+     D = d_{(k-1, N-k)} \cdot \sqrt{\frac{2 \cdot MSE}{n_{\text{harmonic}}}}
      $$
    - Degrees of freedom:
      $$
-     df = (k-1, N-k)
+     df = (k - 1, N - k)
      $$
-     where $k-1$ is between-groups df, and $N-k$ is within-groups df.  
-   - **Strengths**: Focused on control comparisons.  
-   - **Weaknesses**: Limited to control-vs-treatment tests.
+     where $k - 1$ is the between-groups degrees of freedom and $N - k$ is the within-groups degrees of freedom
+   - **Strengths**: Targets control comparisons directly  
+   - **Weaknesses**: Not designed for all pairwise tests and limited to control-versus-treatment tests
    
-### Procedures for All Possible Comparisons:
-
-1. **Scheffé’s Method**:  
-   - Used for all possible comparisons, including non-pairwise contrasts.  
-   - Based on the **F-distribution**, allowing more flexible hypotheses.  
-   - **Strengths**: Flexible for complex comparisons. less conservative than Bonferroni. 
-   - **Weaknesses**: Less powerful for pairwise comparisons.
+### Procedures for All Possible Comparisons
+1. **Scheffé’s method**  
+   - Allows for testing *any* linear combination of means 
+   - Used for all possible comparisons, including non-pairwise contrasts
+   - Based on the *F*-distribution  
+   - **Strengths**: Flexible, ideal for complex non-pairwise hypotheses, and less conservative than Bonferroni
+   - **Weaknesses**: Less powerful for simple pairwise tests   
 
 
 ## Key Considerations for Post-Hoc Comparisons
 
-1. **Type I Error Control**:  
-   Even if the null hypothesis is true, performing too many tests increases the risk of rejecting it by chance. Post-hoc procedures are designed to control this risk.
-
-2. **Planned vs. Unplanned Comparisons**:  
-   - Use **planned comparisons** when specific hypotheses about group differences are made (e.g. control vs. treatment).  
-   - Use **unplanned post-hoc comparisons** when there are no prior hypotheses, but ANOVA shows significance.
-
-3. **Decision Framework After ANOVA**:
-   - If the **F-statistic is not significant**, stop testing (no evidence of group differences).  
-   - If the **F-statistic is significant**, proceed with post-hoc methods based on:
-     - Is there inherent structure in the data? For example, is it more appropriate to test one group mean against combinations of others (linear contrasts)?
-     - The structure of the data may not always justify multiple pairwise comparisons.
+1. **Type I error control**  
+   Performing multiple tests increases the chance of a false positive (Type I error). Even if all null hypotheses are true, testing too many comparisons increases the likelihood of finding a “significant” result by chance. Post-hoc adjustments help control this overall error risk.
+2. **Planned vs. unplanned comparisons**  
+   - Use **planned comparisons** when testing specific hypotheses defined in advance  
+   - Use **unplanned post-hoc comparisons** when no prior hypotheses were made, but the ANOVA is significant
+3. **Decision framework after ANOVA**
+   - If the ***F*-statistic is not significant**, no further testing is needed. There is no evidence that group means differ.
+   - If the ***F*-statistic is significant**, then post-hoc comparisons are appropriate. The choice of follow-up method depends on:
+     - Whether there is meaningful structure in the groups (e.g., contrasts like "average of groups A and B vs. group C")
+     - Whether pairwise comparisons or structured contrasts best address your research question
 
 ### Summary Table of Post-Hoc Methods
 
 | **Procedure**               | **Purpose**                                | **Strengths**                                                | **Weaknesses**                                   |
 |-----------------------------|--------------------------------------------|------------------------------------------------------------|-------------------------------------------------|
 | Bonferroni Adjustment       | Controls Type I error for pairwise tests   | Simple, widely applicable                                   | Very conservative, reduced power               |
-| Tukey’s HSD                 | All pairwise differences                  | Maintains familywise error rate, easy interpretation        | Assumes equal variances                         |
-| Dunnett’s Procedure         | Compare to control group                  | Focused on control vs. treatments                          | Not suitable for all pairwise comparisons       |
-| REGWQ Procedure             | Pairwise differences                      | Good power, recommended by SAS                             | Requires algorithmic implementation             |
-| Scheffé’s Method            | All possible comparisons (non-pairwise)   | Flexible, good for complex comparisons                     | Less powerful for pairwise differences          |
+| Tukey’s HSD                 | All pairwise differences                   | Maintains familywise error rate, easy interpretation        | Assumes equal variances                         |
+| Dunnett’s Procedure         | Compare to control group                   | Focused on control vs. treatments                          | Not suitable for all pairwise comparisons       |
+| REGWQ Procedure             | Pairwise differences                       | Good power, recommended by SAS                             | Requires algorithmic implementation             |
+| Scheffé’s Method            | All possible comparisons (non-pairwise)    | Flexible, good for complex comparisons                     | Less powerful for pairwise differences          |
 
 
 ## Reporting Results
-- Discuss research question, assumptions, and design.
-- Summarize exploratory data analysis.
-- Report ANOVA results (F-statistic, degrees of freedom, p-value).
-- Describe effect size and any post-hoc analyses.
-- Put the conclusion in the context of the problem.
 
+- Discuss the research question, design, and assumptions.
+- Summarize the exploratory data analysis (EDA).
+- Report ANOVA results: *F*-statistic, degrees of freedom, and *p*-value.
+- Describe the effect size and post-hoc analysis used.
+- Conclude in the context of the original research question.
+
+---
 
 ::: {#contrastExample layout-ncol=2}
 ![](images/notes_7_1_exHandicapContrast_1.png)

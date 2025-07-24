@@ -260,6 +260,6 @@ High VIFs are not always concerning.
 - Use model selection techniques to minimize collinearity.
 
 ### Scenario 3: Predictive Modeling
-- Multicollinearity is **not** a concern when the goal is pure prediction.
+- Multicollinearity is *not* a concern when the goal is pure prediction.
 - It only affects coefficient standard errors (*SE*) and the hypothesis testing framework.
 - The focus is on model performance, not coefficient interpretation.
