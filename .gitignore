@@ -19,3 +19,27 @@ _book/
 # Temporary files
 *.tmp
 *.log
+
+# Files I will probably delete
+delete_maybe/
+Archive.zip
+
+# # Original images and handwritten notes - these files are kept locally but not tracked in git
+# images/images_removed/
+
+# # 1. Move files (if you haven't already)
+# # 2. Stage and commit moves
+# git add -A
+# git commit -m "Move images to images_removed"
+# git push
+
+# # 3. Remove from tracking
+# git rm --cached -r images/images_removed/
+# git commit -m "Stop tracking files in images_removed"
+# git push
+
+# # 4. Add to .gitignore
+# # (edit .gitignore to add: images/images_removed/)
+# git add .gitignore
+# git commit -m "Ignore images_removed directory"
+# git push
