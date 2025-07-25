@@ -13,6 +13,9 @@ _book/
 *.html
 *.pdf
 
+# Quarto generated files for individual pages
+*_files/
+
 # Python/Jupyter notebook checkpoints (if you use Jupyter)
 .ipynb_checkpoints/
 
