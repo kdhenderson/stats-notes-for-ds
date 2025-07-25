@@ -1,0 +1,203 @@
+---  
+title: "The Bootstrap"  
+---  
+
+## Objectives
+
+- Understand the bootstrap procedure.  
+- Recognize its benefits for inference and prediction.  
+- Apply the bootstrap to estimate uncertainty.
+
+
+## Bootstrap Procedure
+  
+### Overview
+The bootstrap is a resampling method that allows us to:  
+
+- Estimate the variability (uncertainty) of statistical estimators.  
+- Perform statistical inference, such as hypothesis testing and confidence intervals.  
+- Enhance predictive modeling by stabilizing estimates in high-variance models.  
+  
+### Key Benefits
+Difficulties in Multiple Linear Regression (MLR) that bootstrap addresses:  
+
+- No transformation adequately satisfies model assumptions.  
+- Transformations that improve assumptions reduce interpretability, which is needed for the situation.  
+- A complex model is required but introduces high variance (overfitting).  
+  
+The bootstrap is heavily used in **nonparametric predictive modeling**, such as **random forests**, where high variance is common, and it can be used in many statistical procedures.  
+  
+### Conceptual Understanding
+
+#### Standard Errors and Uncertainty 
+- When assumptions are not met, standard errors (SE) are often incorrect.  
+- SE is critical for quantifying the variability of estimators like the mean.  
+- Example: The standard error of the mean is:  
+    $$  
+    SE(\bar{X}) = \frac{\sigma}{\sqrt{n}}  
+    $$  
+- However, for statistics like the **median** or **trimmed mean**, there is no simple theoretical SE formula. This makes bootstrap-based estimation particularly valuable.  
+  
+### Impact of Outliers on SE
+- The mean is highly sensitive to outliers, while the median is more robust.  
+- The standard error of the mean has a known formula: 
+  $$ SE(\bar{X}) = \frac{\sigma}{\sqrt{n}} $$ 
+  whereas the SE for the median is unknown.  
+- The bootstrap provides a way to estimate SE for any statistic, even when no closed-form solution exists.  
+  
+### Key Analogy
+- The **population** is to the **sample** as the **sample** is to the **bootstrap samples**.  
+  
+### Main Idea
+- The bootstrap mimics the process of generating a sampling distribution.  
+- The resulting bootstrap distribution allows:  
+  - Estimation of SE for any statistic.  
+  - Computation of confidence intervals (CIs).  
+- The standard deviation of the bootstrap distribution directly serves as an estimate of the standard error of the statistic, because each bootstrap sample has the same size as the original dataset.  
+  
+### Pseudo-Code for Bootstrap Sampling
+1. Determine the sample size $n$.  
+2. Randomly sample $n$ observations **with replacement** from the dataset to obtain a bootstrap sample.  
+3. Compute the statistic of interest (e.g., mean, median).  
+4. Repeat steps 2 and 3 **$B$** times (typically $B = 1000$ or more).  
+5. Use the resulting bootstrap distribution for inference.  
+  
+  
+## Statistical Inference Using the Bootstrap
+  
+### Bootstrap Confidence Intervals
+The bootstrap is commonly used to construct confidence intervals (CIs). There are five major approaches:  
+
+1. Percentile Bootstrap (Basic)  
+2. Empirical Bootstrap  
+3. Bootstrap $t$-Intervals  
+4. Bias-Corrected and Accelerated (BCa) Bootstrap  
+5. ABC Method  
+  
+#### Percentile Bootstrap Intervals
+- Uses the empirical distribution of the bootstrap samples, which is the most intuitive approach and easiest to implement.  
+- For a **95% CI**, take the **2.5th and 97.5th percentiles** from the bootstrap distribution.  
+- No parametric assumptions of the distribution of data are required.  
+  
+##### Issues:
+- May not achieve the nominal coverage probability (e.g., a 95% CI may only contain the true parameter 90% of the time).  
+- Causes:  
+  - Bias in the center of the bootstrap distribution.  
+  - Skewness in the bootstrap distribution.  
+- Problems arise when dealing with **nuisance parameters** (e.g., variance in regression models).  
+  
+#### Alternative Approaches
+Several adjustments improve upon the percentile bootstrap:  
+
+- Empirical Bootstrap (addresses bias only).  
+- Bootstrap $t$-intervals.  
+- BCa Bootstrap (corrects for both bias and skewness).  
+- ABC Method (can be computationally demanding).  
+  
+  
+## Bootstrapping in Multiple Linear Regression
+  
+There are two main bootstrap approaches for MLR:  
+  
+1. **Bootstrapping Pairs** handles violations of normality and constant variance.  
+2. **Bootstrapping Residuals**:  
+   - Assumes normality of residuals.  
+   - Addresses high leverage points by resampling residuals rather than entire observations.  
+   - Not recommended when there are violations of constant variance. A special type, the wild bootstrap, is effective for handling heteroskedasticity.  
+  
+### Bootstrapping Pairs
+
+#### Process  
+- Sample entire rows of data (predictor-response pairs) with replacement.  
+- Each observed response value remains paired with its corresponding predictor values (i.e., values in the whole row stay together).  
+- Fit the regression model on each resampled dataset (bootstrap sample).  
+- Obtain a sampling distribution of regression coefficients.  
+
+#### Key Benefit  
+- Preserves the original structure of the data, including any existing nonconstant variance.  
+  
+### Bootstrapping Residuals
+
+#### Process  
+1. Fit the model $Y = f(X) + \epsilon$ to obtain residuals.  
+2. Resample the residuals with replacement.  
+3. Create new responses using: $Y^* = \hat{Y} + \text{bootstrap residual}$  
+   - The new bootstrapped response is created by adding bootstrapped errors to the predicted values from the original fit.  
+4. Fit the model to the new dataset and store coefficients to build the sampling distribution.  
+
+#### Limitations  
+- Assumes independence.  
+- Not recommended when variance is nonconstant, as the nonconstant variance property is lost.  
+- May drop low-frequency categorical levels:  
+  - Consider collapsing levels before bootstrapping.  
+  - Otherwise, a level might be missing, causing the corresponding coefficient to be omitted—this is especially problematic when coding your own bootstrap procedure.  
+
+#### Implementation 
+- The `lmboot` R package provides tools for bootstrapping residuals.  
+  
+  
+## Bootstrap in Predictive Modeling: Ensembling and Bagging
+
+The bootstrap plays a crucial role in predictive modeling, particularly in ensemble methods.  
+
+- Leo Breiman developed bagging and was one of the first to use the bootstrap in a non-classical way of developing confidence intervals.  
+  
+### Ensembling
+- Train multiple models (of different types) on a training data set.  
+- Make predictions for the same observation across all models.  
+- Average the predictions to reduce variance.  
+  
+#### Why It Works  
+- Each model's predictions have their own **mean squared error (MSE)**, which includes both bias and variance.  
+- Averaging predictions primarily reduces the **variance** component — the ensemble's variance is generally smaller than that of individual models, so overall MSE tends to decrease in larger ensembles.
+- This helps smooth out overfitting by reducing variance and leads to more stable predictions.  
+- However, the variance reduction is not as strong as in traditional averaging (e.g., averaging independent sample means, $\bar{X}$s) because all models are trained on the same dataset.  
+  
+### Bias-Variance Trade-off in Ensembling
+1. Fit high-variance models intentionally (e.g., deep decision trees or complex models).  
+2. Averaging dampens variance while retaining predictive power.  
+3. The final ensemble model can achieve both low bias and lower variance, assuming the base models started with low bias.  
+  
+### Bootstrap Aggregation (Bagging)
+- Bagging (Bootstrap Aggregation) extends ensembling to improve prediction accuracy for a **single model type**.  
+- Instead of different model types, bagging:  
+  - Uses bootstrap resampling to create different training datasets.  
+  - Fits the same model type (e.g., decision trees) on each bootstrap sample.  
+  - Averages predictions across all models (e.g., "bag" a decision tree model).  
+
+#### Why Bagging Works 
+- A single MLR model trained on the same data always yields the same results.  
+- Resampling with replacement introduces variation, enabling bagging to improve performance.  
+  
+  
+## Recap
+  
+### Bootstrap Inference
+- The bootstrap enables nonparametric estimation of standard errors (SEs) without strict distributional assumptions.  
+  - The independence assumption still applies.  
+  - Bootstrap regression SE estimates tend to be better than MLR SE estimates if the model is too simple and fails to capture the true trend or complexity.  
+- Several approaches exist for constructing confidence intervals, with BCa and bootstrap $t$-intervals being more robust than percentile bootstrap.  
+  - Exception: Avoid BCa for small sample sizes, as estimating skewness is unreliable.  
+- Paired bootstrap is preferred for regression models with nonconstant variance.  
+- The bootstrap can provide inference on penalized regression coefficient estimates.  
+- Parametric bootstrap methods exist, but they retain model assumptions.  
+  - Resamples come from a theoretical distribution rather than from the actual dataset (i.e., a simulated dataset).  
+- Representative samples are crucial for accurate inference.  
+  - Although bootstrapping is often used in nonparametric small-sample methods, it still requires a representative sample to capture the true distribution.  
+  - Small sample sizes may fail to provide an accurate representation of the population, limiting the effectiveness of bootstrapping.  
+  
+### Bagging Recap
+- Bagging is a powerful ensemble technique that stabilizes high-variance models from a single prediction tool.  
+- It sacrifices interpretability for a gain in predictive performance.  
+- It is less effective for MLR (since MLR is usually biased rather than high variance).  
+- It is particularly valuable for:  
+  - Tree-based models (e.g., decision trees, random forests).  
+  - Feature selection in unstable models, where small changes in data can cause significant variation in the selected features.  
+  
+### Practical Considerations
+- Bootstrap for inference: Use 1000-5000 bootstrap samples.  
+- Bagging: Typically requires 100-500 bootstrap samples.  
+- Out-of-bag (OOB) error provides an internal validation estimate derived from the observations that weren't included in the bootstrap sample (similar to cross-validation).  
+  
+### Final Thoughts
+The bootstrap is one of the most impactful contributions to statistics and data science in the past 40 years. Understanding its applications in both statistical inference and machine learning is critical for data scientists.  
