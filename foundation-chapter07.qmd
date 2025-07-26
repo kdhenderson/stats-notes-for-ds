@@ -172,20 +172,17 @@ When conducting multiple tests, it is important to control the **familywise erro
 - Describe the effect size and post-hoc analysis used.
 - Conclude in the context of the original research question.
 
----
 
 ## Linear Combination of Group Means  
 
 ### Handicap & Capability Study: ANOVA and Follow-Up Contrast
 
-#### Global Question: Do Any Group Means Differ?
+#### Global Question of Interest
 
 **Goal**:  
-
 How do physical handicaps affect perception of employment qualification?
 
 **Assumptions**:  
-
 - Independent observations  
 - Normal distributions  
 - Equal variances  
@@ -194,23 +191,21 @@ There is no visual evidence to suggest these assumptions are violated.
 
 **ANOVA Setup**:  
 Let  
-
-- $H_0$: $\mu_1 = \mu_2 = \mu_3 = \mu_4 = \mu_5$ (Equal Means Model)  
+- $H_0$: $\mu_1 = \mu_2 = \mu_3 = \mu_4 = \mu_5$ (equal means model)  
 - $H_A$: At least one $\mu_i \ne \mu_j$ for some $i \ne j$
 
-Test results:  
-
+**Results**:  
 - *F*-statistic: $F_{4,65} = 2.85$  
-- *p*-value: 0.0301
-- Decision: Reject $H_0$
+- *p*-value: 0.0301  
+- **Decision**: Reject $H_0$
 
 **Conclusion**:  
 There is sufficient evidence to suggest that at least two group means differ (*p* = 0.0301 from a one-way ANOVA).
 
-#### Follow-Up Contrast: Comparing Two Group Averages
-Is the average of the Amputee and Hearing groups different from the average of the Crutch and Wheelchair groups?
+### Targeted Contrast: Comparing Two Group Averages
+We now test whether the average score of the Amputee and Hearing groups differs from that of the Crutch and Wheelchair groups.
 
-**Hypotheses**:
+#### Hypotheses
 $$
 H_0: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} = \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2}
 $$
@@ -234,8 +229,8 @@ $$
 H_A: \mu_{\text{Amp}} + \mu_{\text{Hear}} - \mu_{\text{Crutch}} - \mu_{\text{Wheel}} \ne 0
 $$
 
-#### Contrast Definition
-This contrast compares the average of the Amputee and Hearing groups to the average of the Crutch and Wheelchair groups, excluding the None group. The group labels are listed alphabetically, which is the default in most statistical software.
+#### Defining the Contrast
+This contrast compares the average of the Amputee and Hearing groups to the average of the Crutch and Wheelchair groups, excluding the None group. The coefficients (weights) are assigned based on the groupings of interest. The group labels are listed alphabetically, which is the default in most statistical software.
 
 $$
 \gamma = 1\mu_{\text{Amp}} - 1\mu_{\text{Crutch}} + 1\mu_{\text{Hear}} + 0\mu_{\text{None}} - 1\mu_{\text{Wheel}}
@@ -246,11 +241,11 @@ Here, $\gamma$ represents the *population value* of the contrast---a linear comb
 #### Method: Linear Contrast Formulas and Test Statistic
 To evaluate this question, we use a linear contrast to compare combined group means.
 
-- *Hypotheses*:
+- **Hypotheses**:
   $$
   H_0: \gamma = 0 \quad \text{vs.} \quad H_A: \gamma \ne 0
   $$
-- *General definition of a contrast*:
+- **General definition of a contrast**:
   $$
   \gamma = C_1\mu_1 + C_2\mu_2 + \dots + C_I\mu_I
   $$
@@ -258,16 +253,17 @@ To evaluate this question, we use a linear contrast to compare combined group me
   $$
   \sum C_i = 0
   $$
-- *Estimate of* $\gamma$:
+- **Contrast estimate**:
   $$
   g = C_1\bar{x}_1 + C_2\bar{x}_2 + \dots + C_I\bar{x}_I
   $$
-- *Standard error of* $g$:
+  where $C_i$ are the contrast weights and $\bar{x}_i$ are the sample means.
+- **Standard error**:
   $$
   SE(g) = S_p \sqrt{ \frac{C_1^2}{n_1} + \frac{C_2^2}{n_2} + \dots + \frac{C_I^2}{n_I} }
   $$
   where $S_p = \sqrt{MSE}$ is the pooled standard deviation (assuming equal variances and independent observations).
-- *Test statistic*:
+- **Test statistic**:
   $$
   t = \frac{g - \gamma}{SE(g)}
   $$
@@ -277,59 +273,60 @@ To evaluate this question, we use a linear contrast to compare combined group me
   $$
   where $N$ is the total number of observations and $I$ is the number of groups.
 
-#### Worked Example: Difference of Sums
-- *Hypotheses*:
+::: {.example}
+### Worked Example: Difference of Sums
+- **Hypotheses**:
   $$
   H_0: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} = \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2}
   $$
   $$
   H_A: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} \ne \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2}
   $$
-- *Contrast coefficients*:
+- **Contrast coefficients**:
   $$
   \gamma = 1\mu_{\text{Amp}} - 1\mu_{\text{Crutch}} + 1\mu_{\text{Hear}} + 0\mu_{\text{None}} - 1\mu_{\text{Wheel}}
   $$
-- *Estimate* $\gamma$ with $g$ using group means:
+- **Estimate $\gamma$ with $g$ using group means**:
   $$
   g = 1\bar{x}_{\text{Amp}} - 1\bar{x}_{\text{Crutch}} + 1\bar{x}_{\text{Hear}} + 0\bar{x}_{\text{None}} - 1\bar{x}_{\text{Wheel}}
   $$
-
-
   $$
   g = (1)(4.43) + (-1)(5.92) + (1)(4.05) + (0)(4.9) + (-1)(5.34) = -2.78
   $$
 
 The estimated contrast represents the estimated difference between the sum of the populations means of the Amputee and Hearing groups and the sum of the populations means of of the Crutch and Wheelchair groups.
 
-- *Standard error*:
+- **Standard error**:
   $$
   SE(g) = \sqrt{2.6666 \left( \frac{1^2}{14} + \frac{(-1)^2}{14} + \frac{1^2}{14} + \frac{0^2}{14} + \frac{(-1)^2}{14} \right)} = 0.8729
   $$
   where $S_p = \sqrt{MSE} = \sqrt{2.6666}$
 
-### Confidence Interval (95%) for the Difference of Sums
-- *Formula*:
+#### Confidence Interval (95%) for the Difference of Sums
+- **Formula**:
   $$
   g \pm t_{df, 0.975} \cdot SE(g)
   $$
-- *Degrees of freedom*:
+- **Degrees of freedom**:
   $$
   df = 70 - 5 = 65 \quad \Rightarrow \quad t_{65, 0.975} = 1.991
   $$
-- *Calculation*:
+- **Calculation**:
   $$
   -2.78 \pm (1.991)(0.8729)
   $$
-- *Interval for the difference of sums*:
+- **Interval for the difference of sums**:
   $$
   CI = (-4.518, -1.042)
   $$
-- *Interval for the difference of means* (averaging over 2 vs. 2 groups):
+- **Interval for the difference of means** (averaging over 2 vs. 2 groups):
   $$
   CI = \left( \frac{-4.518}{2}, \frac{-1.042}{2} \right) = (-2.259, -0.521)
   $$
---- not my original notes from chatgpt
-### Conclusion
+
+There is sufficient evidence that the sum of points assigned to the Amputee and Hearing groups is smaller ($g = -2.8$) than the sum of points assigned to the Crutch and Wheelchair groups at the $\alpha = 0.05$ confidence level, because the confidence interval does not contain 0.
+
+#### Summary of Findings
 
 - The initial ANOVA showed a statistically significant difference across all five groups (*p* = 0.0301).
 - A targeted contrast comparing the average of the Amputee and Hearing groups to that of the Crutch and Wheelchair groups yielded:
@@ -339,18 +336,75 @@ The estimated contrast represents the estimated difference between the sum of th
 
 We conclude that the Amputee and Hearing groups were rated significantly lower, on average, than the Crutch and Wheelchair groups.
 )
----
+:::
 
-::: {#contrastExample layout-ncol=2}
-![](images/notes_7_5_exHandicapContrast_5.png)
+::: {.example}
+### Hypothesis Test---Sums
+1. **Hypotheses**:
+   $$
+   H_0: \mu_{\text{Amp}} + \mu_{\text{Hear}} = \mu_{\text{Crutch}} + \mu_{\text{Wheel}}
+   $$
+   $$
+   H_A: \mu_{\text{Amp}} + \mu_{\text{Hear}} \ne \mu_{\text{Crutch}} + \mu_{\text{Wheel}}
+   $$
+2. **Critical value**:
+   $$
+   t_{65}(0.975) = 1.9971
+   $$
+3. ***t*-statistic**:
+   $$
+   SE(g) = 0.8729 \Rightarrow t_{\text{stat}} = \frac{-2.78}{0.8729} = -3.19
+   $$
+4. ***p*-value**: $p = 0.0022$
+5. **Decision**: Reject $H_0$
+6. **Conclusion**:
 
-![](images/notes_7_6_exHandicapContrast_6.png)
+   There is strong evidence to suggest that the sum of the means of the Amputee and Hearing groups is less than that of the Crutch and Wheelchair groups (*p*-value = 0.0022). The 95% confidence interval for the difference of sums is $(-4.529, -1.043)$ points.
+:::
+
+::: {.example}
+### Hypothesis Test---Means (Not Sums)
+
+1. **Hypotheses**:
+   $$
+   H_0: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} = \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2}
+   $$
+   $$
+   H_A: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} \ne \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2}
+   $$
+2. **Critical value**:
+   $$
+   t_{65}(0.975) = 1.9971
+   $$
+3a. **Standard error**:
+   $$
+   SE(g) = \sqrt{2.6666 \left( \frac{(0.5)^2}{14} + \frac{(-0.5)^2}{14} + \frac{(0.5)^2}{14} + \frac{0^2}{14} + \frac{(-0.5)^2}{14} \right) = \sqrt{0.1905} = 0.4364
+   $$
+3b. **Test statistic**:
+
+   $$
+   g = -1.393 \quad \Rightarrow \quad t = \frac{g - \gamma}{SE(g)} = \frac{g - 0}{SE(g)} = \frac{-1.393}{0.4364} = -3.19
+   $$
+
+   Same $t$-statistic as for sums, but different $g$ because the 0.5 vs. 1 and different SE.
+4. ***p*-value**: $p = 0.0022$
+5. **Decision**: Reject $H_0$
+6. **Conclusion**:
+
+   There is strong evidence to suggest that the *average* of the means of the Amputee and Hearing groups is less than that of the Crutch and Wheelchair groups (*p*-value = 0.0022). The 95% confidence interval for the difference in *means* is (-2.26, -0.52) points.
+
+> Note: This is based on means, not sums.
+
+#### Final Conclusion (Client-Facing---Difference in Group Means)
+
+There is strong evidence to suggest that the average of the means of the Amputee and Hearing groups is less than the average of the means of the Crutches and Wheelchair groups (*p*-value = 0.0022).
+
+We are 95% confident that the average of the mean scores of the Crutches and Wheelchair groups is between 0.5215 and 2.2605 points greater than the average of the mean points of the Amputee and Hearing groups.
 :::
 
 ---
 
 ::: {#contrastExample layout-ncol=2}
-![](images/notes_7_7_exHandicapContrast_7.png)
 
 ![](images/notes_7_8_theoryOfBonferroni_1.png)
 :::
