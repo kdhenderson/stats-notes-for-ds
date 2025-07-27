@@ -402,14 +402,129 @@ There is strong evidence to suggest that the average of the means of the Amputee
 We are 95% confident that the average of the mean scores of the Crutches and Wheelchair groups is between 0.5215 and 2.2605 points greater than the average of the mean points of the Amputee and Hearing groups.
 :::
 
----
+### Why We Do a Multiple Comparison Correction — The Bonferroni
 
-::: {#contrastExample layout-ncol=2}
+#### Motivation
 
-![](images/notes_7_8_theoryOfBonferroni_1.png)
+When conducting multiple hypothesis tests, the probability of making at least one **Type I error** (a false positive, rejecting $H_0$ when $H_0$ is true) increases. Bonferroni correction helps control this overall risk by adjusting the significance level for individual tests.
+
+### Probability Review: Two Coin Flips
+
+#### Prop 1: Independence of Events
+$$
+P(AB) = P(A) \cdot P(B)
+$$
+
+Example:
+$$
+P(\text{HH}) = P(\text{H}) \cdot P(\text{H}) = 0.5 \cdot 0.5 = 0.25
+$$
+
+#### Prop 2: Sample Space of Two Fair Coin Flips
+
+| Outcome | Probability |
+|---------|-------------|
+| HH      | 0.25        |
+| HT      | 0.25        |
+| TH      | 0.25        |
+| TT      | 0.25        |
+
+**Probability of at least one head**:
+
+$$
+P(\text{at least 1 H}) = 1 - P(\text{no heads}) = 1 - P(\text{TT}) = 1 - 0.25 = 0.75
+$$
+
+::: {.example}
+### Multiple Testing Analogy: Coin Flips
+This parallels the logic behind multiple testing:
+
+- Getting two tails = no Type I error
+- Getting at least one head = at least one Type I error
+
+Just like the probability of getting at least one head increases with more coin flips, the probability of making at least one Type I error increases with more hypothesis tests — unless we adjust for it.
+
+This illustrates how running multiple independent tests increases the probability of rejecting at least one true null---even if *all* nulls are actually true. That’s why corrections like the Bonferroni adjustment are necessary.
 :::
 
----
+### Familywise Error Rate With Multiple Tests
+Let $K = 2$ (number of independent hypothesis tests), and assume the null hypothesis is true in both.
+
+- **TIE** = Type I error  
+- **FTR** = Fail to reject $H_0$
+
+#### Probability of at Least One Type I Error Without Correction
+$$
+P(\text{at least 1 TIE in 2 tests}) = 1 - P(\text{no TIE in 2 tests}) = 1-P(\text{FTR in 2 tests})
+$$
+
+Assuming each test has $\alpha = 0.05$:
+
+$$
+= 1 - P(\text{FTR})P(\text{FTR}) = 1 - P(\text{FTR})^2 = 1 - (1 - \alpha)^2 = 1 - (0.95)^2 = 0.0975
+$$
+
+> This means there's a 9.75% chance of incorrectly rejecting at least one null hypothesis when both are actually true.
+
+### Bonferroni Adjustment
+
+To maintain a **familywise error rate** of $\alpha = 0.05$, Bonferroni sets a more stringent per-test threshold:
+
+$$
+\alpha' = \frac{\alpha}{K} = \frac{0.05}{2} = 0.025
+$$
+where:
+
+- $\alpha$ is the desired familywise error rate (e.g., 0.05)
+- $k$ is the number of comparisons
+- $\alpha'$ is the adjusted threshold for each test, the per-comparison significance level
+
+Then the familywise error becomes:
+
+$$
+P(\text{at least 1 TIE in 2 tests}) = 1 - P(\text{no TIE in 2 tests}) = 1 - P(\text{FTR})^2 = 1 - (1 - \alpha')^2 = 1 - (0.975)^2 = 0.0494
+$$
+
+So Bonferroni successfully lowers the overall chance of making a Type I error across all tests back to the desired 0.05 level.
+
+### Interpreting the Diagram
+
+![**Bell curve showing original $\alpha$ and Bonferroni-corrected rejection regions.**
+The Bonferroni-adjusted regions lie farther from 0, reflecting the more stringent critical values.](images/fch07_bonferroni.png)
+
+The shaded areas represent rejection regions under two scenarios:
+
+- Outer shaded tails: Original $\alpha = 0.05$ rejection regions (2.5% in each tail)
+- Inner shaded tails: Bonferroni-adjusted $\alpha' = 0.025$ rejection regions (1.25% in each tail)
+
+The critical value for Bonferroni (CVB) is the $t$- or $z$-value that corresponds to $\alpha'$, which lies further from 0 than the uncorrected critical value. This makes it harder to reject $H_0$.
+
+### Key Concepts Illustrated
+- Without correction:
+  $$
+  P(\text{at least one TIE}) = 1 - (1 - \alpha)^K = 1 - (0.95)^2 = 0.0975
+  $$
+- With Bonferroni correction:
+  $$
+  \alpha' = \frac{0.05}{2} = 0.025 \quad \Rightarrow \quad P(\text{at least one TIE}) = 1 - (0.975)^2 = 0.0494
+  $$
+- CVB (critical value for Bonferroni) moves farther from 0, tightening the rejection region
+- Bonferroni maintains a familywise error rate at or below 0.05
+
+### Summary
+- When we conduct multiple comparisons, the overall Type I error rate is inflated.
+- The Bonferroni correction addresses this by adjusting the per-comparison significance level:
+  $$
+  \alpha' = \frac{\alpha}{K}
+  $$
+- Pros:
+  - Simple and widely applicable
+  - Works for any number of tests
+  - Makes no assumptions about the test structure
+  - Can be applied directly to *p*-values
+- Cons:
+  - Can be overly conservative
+  - Reduces power, making it harder to reject $H_0$
 
 ::: {#contrastExample layout-ncol=2}
 ![](images/notes_7_9_exMultipleComparison_1.png)

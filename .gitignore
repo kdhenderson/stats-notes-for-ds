@@ -46,3 +46,5 @@ Archive.zip
 # git add .gitignore
 # git commit -m "Ignore images_removed directory"
 # git push
+
+/.quarto/
