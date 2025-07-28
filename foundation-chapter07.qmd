@@ -526,6 +526,48 @@ The critical value for Bonferroni (CVB) is the $t$- or $z$-value that correspond
   - Can be overly conservative
   - Reduces power, making it harder to reject $H_0$
 
+### Multiple Comparison Procedures — Handicap Study
+
+We now explore multiple comparison questions using the Handicap study data. These comparisons build on the need for error rate control, such as the Bonferroni adjustment, after identifying overall group differences.
+
+#### Questions of Interest (QOIs)
+
+1. **Are any pairs of group means different?**  
+2. **Does the Amputee group have a different mean score than the None group?**  
+3. **Which specific pairs of groups differ?**  
+4. **Do the means of the four Handicap groups differ from the Non-Handicap (None) group?**
+
+Each of these questions involves multiple comparisons and may require adjustment for familywise error rates.
+
+#### QOI 1: Are Any Group Means Different?
+
+We begin with an overall test to determine if there are any mean differences across the five groups. This involves an ANOVA and is the first step in any further group comparisons.
+
+1a. **Hypotheses**:
+$$
+H_0: \mu_1 = \mu_2 = \dots = \mu_5 \quad \text{(All group means are equal)}
+$$
+$$
+H_A: \text{At least two group means differ}
+$$
+1b. **Assumptions**:
+    
+- Normality  
+- Equal variances (e.g., visual checks and Brown–Forsythe test)  
+- Independence (assumed from study design)
+2. **Critical value**: $F_{\alpha, 4, 65}$
+3. **ANOVA test statistic ($F$-statistic)**: $F = 2.85$
+4. **p-value**: $p = 0.0301$
+5. **Decision**: Reject $H_0$ (*needle in the haystack*)
+6. **Conclusion**: There is sufficient evidence at $\alpha = 0.05$ to conclude that at least two group means differ ($p = 0.0301$, from a standard ANOVA).
+
+- Since the omnibus ANOVA test is significant, we proceed to investigate which group differences are driving the result. Multiple comparison procedures will be necessary to identify specific contrasts.
+
+**Model fitting R code (for context)**:
+```{r eval=FALSE}
+fit <- aov(Score ~ Handicap, data = Handicap)
+```
+
 ::: {#contrastExample layout-ncol=2}
 ![](images/notes_7_9_exMultipleComparison_1.png)
 
