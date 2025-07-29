@@ -543,18 +543,18 @@ Each of these questions involves multiple comparisons and may require adjustment
 
 We begin with an overall test to determine if there are any mean differences across the five groups. This involves an ANOVA and is the first step in any further group comparisons.
 
-1a. **Hypotheses**:
+- **Assumptions**:
+  - Normality  
+  - Equal variances (e.g., visual checks and Brown–Forsythe test)  
+  - Independence (assumed from study design)
+
+1. **Hypotheses**:
 $$
 H_0: \mu_1 = \mu_2 = \dots = \mu_5 \quad \text{(All group means are equal)}
 $$
 $$
 H_A: \text{At least two group means differ}
 $$
-1b. **Assumptions**:
-    
-- Normality  
-- Equal variances (e.g., visual checks and Brown–Forsythe test)  
-- Independence (assumed from study design)
 2. **Critical value**: $F_{\alpha, 4, 65}$
 3. **ANOVA test statistic ($F$-statistic)**: $F = 2.85$
 4. **p-value**: $p = 0.0301$
@@ -568,13 +568,100 @@ $$
 fit <- aov(Score ~ Handicap, data = Handicap)
 ```
 
-::: {#contrastExample layout-ncol=2}
-![](images/notes_7_9_exMultipleComparison_1.png)
+#### QOI 2: Does the Amputee Group Differ from the None Group?
 
-![](images/notes_7_10_exMultipleComparison_2.png)
-:::
+We now test whether the mean score for the Amputee group differs from that of the None group.
 
----
+- This contrast was identified *before* looking at the data (i.e., a **planned comparison**), so we do *not* need to apply a multiple comparison correction.
+
+**Hypotheses**:
+
+$$
+H_0: \mu_{\text{Amp}} = \mu_{\text{None}}
+$$
+$$
+H_A: \mu_{\text{Amp}} \ne \mu_{\text{None}}
+$$
+
+**Options for Testing the Contrast**:  
+
+We could use one of the following approaches:
+
+1. **Two-sample $t$-test** (just Amputee vs. None):
+   - Pooled standard deviation  
+   - Degrees of freedom: $df = 26$  
+   - $t$-distribution 
+   - $p$-value: 0.4678
+
+2. **Fit a GLM model using only Amputee and None**:
+   - Equivalent $F$-statistic  
+   - Same result as above: $df = 1$, $26$  
+   - $F$-distribution
+   - $p$-value: 0.4678
+
+3. **Best option**: Use **all 70 observations**:
+   - Use the **pooled standard deviation** from the full model  
+   - Conduct the planned contrast within the **global ANOVA model**
+   - Critical value: $F_{\alpha, 4, 65}
+   - $F$-statistic with extended degrees of freedom: $df = 65$  
+   - $p$-value: 0.4477  
+
+**Conclusion**:
+
+- **Decision**: Fail to reject $H_0$
+- **Interpretation**: There is not sufficient evidence to suggest that the mean rating of the Amputee group is different from the None group (*p* = 0.4477 from a contrast using all the data).
+
+#### QOI 3: Which Specific Pairs of Groups Differ?
+
+We now explore whether there is evidence that any specific pair of group means differ. These are **not planned comparisons**, so we must adjust for the increased chance of Type I error due to multiple testing.
+
+- There are 5 groups, which gives $K = \binom{5}{2} = 10$ (5 choose 2) pairwise comparisons.
+- Without correction, the risk of at least one false positive (rejecting $H_0$ when it is true) increases.
+- Bonferroni correction provides a simple solution by adjusting the significance threshold.
+
+**Unadjusted Procedure**  
+Compare each group pair using pairwise comparisons without correction:
+
+```{sas eval=FALSE}
+proc glm data=Handicap;
+  class Handicap;
+  model Score = Handicap;
+  means Handicap / hovtest=bf;
+  ls means Handicap / pdiff;
+run;
+```
+
+- Compare each pair’s raw *p*-value to $\alpha = 0.05$
+- Inflated Type I error risk due to multiple tests
+
+**Bonferroni Adjustment and Procedure**:  
+To control the familywise error rate, adjust $\alpha$ using Bonferroni:
+
+- Adjusted threshold: $\alpha' = \frac{\alpha}{K} = \frac{0.05}{10} = 0.005$
+- Use Bonferroni-adjusted confidence intervals and *p*-values to control error rate across the family of comparisons.
+
+The Bonferroni-adjusted analysis in SAS uses the adjust=bon option:
+
+```{sas eval=FALSE}
+proc glm data=Handicap;
+  class Handicap;
+  model Score = Handicap;
+  means Handicap / hovtest=bf;
+  ls means Handicap / pdiff adjust=bon cl; *cl = confidence level;
+run;
+```
+
+- Each *p*-value is multiplied by $K$ before comparing to the original $\alpha$
+
+This ensures:
+$$
+K \cdot p_{\text{adj}} \leq \alpha
+$$
+
+**Interpretation**:
+
+- This protects against Type I error across the family of tests.
+- Conservative, but appropriate when many unplanned comparisons are being made.
 
 ::: {#contrastExample layout-ncol=2}
 ![](images/notes_7_11_exMultipleComparison_3.png)
