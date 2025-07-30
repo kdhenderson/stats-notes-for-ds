@@ -3,10 +3,11 @@ title: "Linear Combinations and the Multiple Comparison Problem"
 ---
 
 ## Objectives
-- Understand weaknesses of the alternative hypothesis for an ANOVA F-test.
-- Formulate appropriate linear combinations of means.
-- Understand the multiple comparison problem and how to correct for it.
-- Use the formulation to make appropriate inferences.
+
+- Recognize the limitations of the alternative hypothesis in an ANOVA *F*-test.  
+- Construct and interpret linear combinations of group means.  
+- Understand the need for multiple comparison procedures and when to apply them.  
+- Apply methods such as Bonferroni and Dunnett to test planned and unplanned comparisons.  
 
 
 ## Fallacies in Hypothesis Testing
@@ -81,9 +82,9 @@ When conducting multiple tests, it is important to control the **familywise erro
      $$
      \text{Adjusted } \alpha = \frac{\alpha}{\# \text{ comparisons}}
      $$
-   - Example: For 4 groups, there are $\binom{4}{2} = 6$ comparisons:
+   - Example: For 4 groups, there are $\binom{4}{2} = 6$ pairwise comparisons (i.e., 4 choose 2):
      $$
-     \alpha = \frac{0.05}{6} = 0.0083
+     \alpha' = \frac{0.05}{6} = 0.0083
      $$
    - **Strengths**: Simple, widely applicable  
    - **Weaknesses**: Very conservative; reduces power
@@ -142,16 +143,18 @@ When conducting multiple tests, it is important to control the **familywise erro
 
 ## Key Considerations for Post-Hoc Comparisons
 
-1. **Type I error control**  
-   Performing multiple tests increases the chance of a false positive (Type I error). Even if all null hypotheses are true, testing too many comparisons increases the likelihood of finding a “significant” result by chance. Post-hoc adjustments help control this overall error risk.
+1. **Type I Error Control**  
+   - Multiple tests increase the chance of a false positive (Type I error).  
+   - Even if all null hypotheses are true, testing too many comparisons increases the likelihood of finding a “significant” result by chance.  
+   - Post-hoc adjustments help control the overall Type I error rate.
 2. **Planned vs. unplanned comparisons**  
-   - Use **planned comparisons** when testing specific hypotheses defined in advance  
-   - Use **unplanned post-hoc comparisons** when no prior hypotheses were made, but the ANOVA is significant
+   - Use **planned comparisons** when testing specific hypotheses defined in advance.  
+   - Use **unplanned post-hoc comparisons** when no prior hypotheses were made, but the ANOVA is significant.
 3. **Decision framework after ANOVA**
    - If the ***F*-statistic is not significant**, no further testing is needed. There is no evidence that group means differ.
    - If the ***F*-statistic is significant**, then post-hoc comparisons are appropriate. The choice of follow-up method depends on:
-     - Whether there is meaningful structure in the groups (e.g., contrasts like "average of groups A and B vs. group C")
-     - Whether pairwise comparisons or structured contrasts best address your research question
+     - Whether there is meaningful structure in the groups (e.g., contrasts like "average of groups A and B vs. group C").
+     - Whether pairwise comparisons or structured contrasts best address your research question.
 
 ### Summary Table of Post-Hoc Methods
 
@@ -191,10 +194,12 @@ There is no visual evidence to suggest these assumptions are violated.
 
 **ANOVA Setup**:  
 Let  
+
 - $H_0$: $\mu_1 = \mu_2 = \mu_3 = \mu_4 = \mu_5$ (equal means model)  
 - $H_A$: At least one $\mu_i \ne \mu_j$ for some $i \ne j$
 
 **Results**:  
+
 - *F*-statistic: $F_{4,65} = 2.85$  
 - *p*-value: 0.0301  
 - **Decision**: Reject $H_0$
@@ -376,16 +381,14 @@ We conclude that the Amputee and Hearing groups were rated significantly lower, 
    $$
    t_{65}(0.975) = 1.9971
    $$
-3a. **Standard error**:
+3. **Standard error**:
    $$
-   SE(g) = \sqrt{2.6666 \left( \frac{(0.5)^2}{14} + \frac{(-0.5)^2}{14} + \frac{(0.5)^2}{14} + \frac{0^2}{14} + \frac{(-0.5)^2}{14} \right) = \sqrt{0.1905} = 0.4364
+   SE(g) = \sqrt{2.6666 \left( \frac{(0.5)^2}{14} + \frac{(-0.5)^2}{14} + \frac{(0.5)^2}{14} + \frac{0^2}{14} + \frac{(-0.5)^2}{14} \right)} = \sqrt{0.1905} = 0.4364
    $$
-3b. **Test statistic**:
-
+   **Test statistic**:
    $$
    g = -1.393 \quad \Rightarrow \quad t = \frac{g - \gamma}{SE(g)} = \frac{g - 0}{SE(g)} = \frac{-1.393}{0.4364} = -3.19
    $$
-
    Same $t$-statistic as for sums, but different $g$ because the 0.5 vs. 1 and different SE.
 4. ***p*-value**: $p = 0.0022$
 5. **Decision**: Reject $H_0$
@@ -475,9 +478,9 @@ $$
 $$
 where:
 
-- $\alpha$ is the desired familywise error rate (e.g., 0.05)
-- $k$ is the number of comparisons
-- $\alpha'$ is the adjusted threshold for each test, the per-comparison significance level
+- $\alpha$ is the desired familywise error rate (e.g., 0.05).
+- $k$ is the number of comparisons.
+- $\alpha'$ is the adjusted threshold for each test, the per-comparison significance level.
 
 Then the familywise error becomes:
 
@@ -508,8 +511,8 @@ The critical value for Bonferroni (CVB) is the $t$- or $z$-value that correspond
   $$
   \alpha' = \frac{0.05}{2} = 0.025 \quad \Rightarrow \quad P(\text{at least one TIE}) = 1 - (0.975)^2 = 0.0494
   $$
-- CVB (critical value for Bonferroni) moves farther from 0, tightening the rejection region
-- Bonferroni maintains a familywise error rate at or below 0.05
+- CVB (critical value for Bonferroni) moves farther from 0, tightening the rejection region.
+- Bonferroni maintains a familywise error rate at or below 0.05.
 
 ### Summary
 - When we conduct multiple comparisons, the overall Type I error rate is inflated.
@@ -615,9 +618,9 @@ We could use one of the following approaches:
 
 We now explore whether there is evidence that any specific pair of group means differ. These are **not planned comparisons**, so we must adjust for the increased chance of Type I error due to multiple testing.
 
-- There are 5 groups, which gives $K = \binom{5}{2} = 10$ (5 choose 2) pairwise comparisons.
+- There are 5 groups, which gives $K = \binom{5}{2} = 10$ pairwise comparisons.
 - Without correction, the risk of at least one false positive (rejecting $H_0$ when it is true) increases.
-- Bonferroni correction provides a simple solution by adjusting the significance threshold.
+- The Bonferroni correction provides a simple solution by adjusting the significance threshold.
 
 **Unadjusted Procedure**  
 Compare each group pair using pairwise comparisons without correction:
@@ -635,13 +638,12 @@ run;
 - Inflated Type I error risk due to multiple tests
 
 **Bonferroni Adjustment and Procedure**:  
-To control the familywise error rate, adjust $\alpha$ using Bonferroni:
+To control the familywise error rate, adjust $\alpha$ using the Bonferroni correction:
 
 - Adjusted threshold: $\alpha' = \frac{\alpha}{K} = \frac{0.05}{10} = 0.005$
-- Use Bonferroni-adjusted confidence intervals and *p*-values to control error rate across the family of comparisons.
+- Use Bonferroni-adjusted confidence intervals and *p*-values to control the error rate across the family of comparisons.
 
 The Bonferroni-adjusted analysis in SAS uses the adjust=bon option:
-
 ```{sas eval=FALSE}
 proc glm data=Handicap;
   class Handicap;
@@ -651,27 +653,56 @@ proc glm data=Handicap;
 run;
 ```
 
-- Each *p*-value is multiplied by $K$ before comparing to the original $\alpha$
-
-This ensures:
-$$
-K \cdot p_{\text{adj}} \leq \alpha
-$$
+- The `cl` option provides Bonferroni-adjusted confidence intervals.
+- These intervals are wider because:
+  - $\alpha$' is smaller than $\alpha$.
+  - The critical value is larger.
+  - The multiplier increases.
+  - Wider intervals result from a more conservative correction.
+- The `cldiff` option gives both directions (e.g., $A - B$ and $B - A$).
+- Each *p*-value is multiplied by $K$ before comparison to the original $\alpha$:
+  $$
+  K \cdot p_{\text{adj}} \leq \alpha
+  $$
 
 **Interpretation**:
 
-- This protects against Type I error across the family of tests.
-- Conservative, but appropriate when many unplanned comparisons are being made.
+- This procedure protects against Type I error across the entire family of tests.
+- It is conservative but appropriate when many unplanned comparisons are being made.
 
-::: {#contrastExample layout-ncol=2}
-![](images/notes_7_11_exMultipleComparison_3.png)
+**Conclusion**:
 
-![](images/notes_7_12_exMultipleComparison_4.png)
-:::
+After applying the Bonferroni adjustment,only 1 of the 10 tests produced a statistically significant result. Therefore, there is evidence (*p*-value = 0.0035 from a *t*-test) that the Crutches and Hearing groups have different mean ratings. A 95% Bonferroni-adjusted confidence interval for the difference in means between the Crutches and Hearing groups is $(0.0779,\ 3.6649)$.
 
----
+#### QOI 4: Do the Means of the Four Handicap Groups Differ from the Non-Handicap (None) Group?
 
-::: {#contrastExample layout-ncol=2}
-![](images/notes_7_13_exMultipleComparison_5.png)
-:::
+Assume we are interested in testing whether the means of the four handicap groups differ from the mean of the non-handicap group (i.e., the None group).
+
+- Use **Dunnett’s procedure** because we are comparing the control group (None) to all the others — a pairwise set of **dependent** comparisons (repeating the control group).
+
+Option 1: Dunnett-adjusted confidence intervals
+
+- Specify the control group on the right side using `dunnett('None')`
+- Also provides Dunnett-corrected confidence intervals
+
+```{sas eval=FALSE}
+proc glm data=Handicap;
+  class Handicap;
+  model Score = Handicap;
+  means Handicap / hovtest=bf dunnett('None');
+run;
+```
+
+Option 2: Dunnett-adjusted *p*-values only
+
+- Use `control('None')` to specify the control group
+- Provides Dunnett-adjusted *p*-values for all pairwise comparisons with the None group
+
+```{sas eval=FALSE}
+proc glm data=Handicap;
+  class Handicap;
+  model Score = Handicap;
+  ls means Handicap / pdiff=control('None');
+run;
+```
 
