@@ -23,6 +23,11 @@ This book is licensed under a [Creative Commons Attribution 4.0 International Li
 All code examples are licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
 
+## Software and Output
+
+This book includes example output from SAS® and R, generated using instructional or simulated datasets. These outputs are used solely for teaching and demonstration purposes. SAS is a registered trademark of SAS Institute Inc., and R is open-source software licensed under the GNU General Public License.
+
+
 ## Author Contributions
 
 - **Professor of Applied Statistics** and **Professor of Statistical Foundations**: Developed the original course materials and lectures on which this book is based.

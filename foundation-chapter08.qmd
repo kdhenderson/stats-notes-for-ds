@@ -3,20 +3,25 @@ title: "Linear Correlation and Simple Linear Regression"
 ---
 
 ## Objectives
+
 - Understand how to calculate and interpret Pearson’s $r$.
 - Recognize the relationship between Pearson’s $r$ and scatterplots.
 - Identify how patterns in data affect the magnitude and sign of Pearson’s $r$.
 - Discuss when correlation equals causation and when it does not.
-- Explore the basics of simple linear regression.
+- Explain the basics of simple linear regression.
 
-### Resources
+
+## Helpful Resources
+
 - [Interactive Correlation Visualization](https://rpsychologist.com/d3/correlation)
 - [Regression Shuffle Applet](https://www.rossmanchance.com/applets/2021/regshuffle/regshuffle.htm)
 
 
 ## Scatterplots
-Scatterplots visually represent the relationship between two quantitative variables, illustrating how they vary together. (Variations can show 3+ variables). Key points:
-- **Explanatory variable (X)** is plotted on the X-axis, while the **response variable (Y)** is on the Y-axis.
+
+Scatterplots visually represent the relationship between two quantitative variables, illustrating how they vary together. Key points:
+
+- The **explanatory variable ($X$)** is plotted on the X-axis, while the **response variable ($Y$)** is on the Y-axis.
 - Each dot represents an observation.
 - Patterns to look for include:
   - Positive or negative linear relationships
@@ -26,13 +31,14 @@ Scatterplots visually represent the relationship between two quantitative variab
 
 
 ## Interpreting Correlations
+
 ### Square of Correlation Coefficient ($r^2$)
 - Represents shared variance. Example: $r = 0.8$ implies $r^2 = 0.64$, meaning 64% of variability in $Y$ is explained by its linear relationship with $X$.
 
 ### Significance
-- $r = 1$: Perfect positive linear relationship.
-- $r = -1$: Perfect negative linear relationship.
-- $r = 0$: No linear relationship.
+- When $r = 1$, there is a perfect positive linear relationship.
+- When $r = -1$, there is a perfect negative linear relationship.
+- When $r = 0$, there is no linear relationship.
 
 ### Key Notes
 - The sign of $r$ indicates the direction of the slope (positive or negative):
@@ -43,6 +49,7 @@ Scatterplots visually represent the relationship between two quantitative variab
 
 
 ## Correlation Analysis
+
 ### Key Formula
 $$
 r = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{(n-1) S_x S_y} = \frac{\sum_{i=1}^n Z_x Z_y}{n-1}
@@ -50,11 +57,12 @@ $$
 Where $n$ = number of $(x, y)$ pairs.
 
 ### Why Plot the Data First?
-- Use scatterplots to visually check for linear relationships, outliers, or curved patterns, e.g. Anscombe dataset. Then find the correlation for the strength of the relationship.
+- Use scatterplots to visually check for linear relationships, outliers, or curved patterns (e.g., Anscombe's dataset). Then calculate the correlation to assess the strength of the relationship.
 - Outliers can significantly distort $r$, regression slopes, and intercepts, as these measures are not resistant to extreme values.
 
 
 ## Factors Affecting the Magnitude of $r$
+
 - **Bivariate Outliers**: Can inflate or deflate $r$.
 - **Distribution Shape**: Differences in variability between $X$ and $Y$ can distort $r$.
 - **Range Restrictions**: Restricted ranges of data can misrepresent $r$.
@@ -62,6 +70,7 @@ Where $n$ = number of $(x, y)$ pairs.
 
 
 ## Facts About $r$
+
 - $r$ estimates the population correlation, $\rho$.
 - Measures the strength of a linear relationship between two variables.
 - Always between $-1$ and $1$.
@@ -74,34 +83,40 @@ Where $n$ = number of $(x, y)$ pairs.
 ## Interpreting $r^2$, the Coefficient of Determination
 
 ### Definition
-- $r^2$ represents the proportion of variance in $Y$ explained by its linear relationship with $X$:
-  - $r^2$ represents the proportion of variance in $Y$ that can be explained by changes in $X$ (Dr. McGee).
-  - $r^2$ is the estimated (if calculated from a sample) proportion of the variation in $Y$ explained by the linear relationship between $X$ and $Y$ (Dr. Sadler).  
-  - For example, an $r^2$ of 0.75 means that 75% of the variability in $Y$ can be attributed to its linear relationship with $X$, while the remaining 25% is unexplained by the model.
+
+$r^2$, also known as the *coefficient of determination*, represents the proportion of variability in $Y$ that is explained by its linear relationship with $X$.
+
+If $r^2$ is calculated from a sample, it serves as an estimate of how well changes in $X$ explain variation in $Y$.
+
+For example, an $r^2$ of 0.75 means that 75% of the variability in $Y$ can be attributed to its linear relationship with $X$, while the remaining 25% remains unexplained by the model.
 
 ### Formula
 $$
-R^2 = 1 - \frac{SS_{res}}{SS_{tot}}
+R^2 = 1 - \frac{SS_{\text{res}}}{SS_{\text{tot}}}
 $$
 Where:
-- $SS_{res}$ = sum of squared residuals.
-- $SS_{tot}$ = total sum of squares.
+
+- $SS_{\text{res}}$ = sum of squared residuals
+- $SS_{\text{tot}}$ = total sum of squares
 
 This measures how much of the total variance from the equal means model is explained by the regression model.
 
 
 ## Correlation Doesn’t Equal Causation
+
 - Association (strong correlation) is not causation.
 - The only way to make cause-and-effect statements is with a randomized experiment.
 
 
 ## Keys to Remember
+
 - The correlation coefficient assumes **equal standard deviation**:
   - Don’t confuse fewer data points with smaller standard deviation.
 - The range of the data is a proxy for the spread. Knowing the particular $X$ value reduces the variation.
 
 
 ## Data Exploration
+
 - Always plot the data using scatterplots for two quantitative variables.
 - Look for overall patterns: positive/negative, strong/weak, curved/linear.
 - If the relationship is linear, calculate a numerical summary.
@@ -151,15 +166,14 @@ Y = \beta_0 + \beta_1 X
 $$
 
 ### Interpretation
-1. **Slope ($\hat{\beta}_1$)**, coefficient of x:
+1. **Slope ($\hat{\beta}_1$)**, coefficient of $X$:
    - Represents the predicted change in $Y$ for a one-unit increase in $X$.
-   - Rise over run, or $\frac{\Delta Y}{\Delta X}$
-   - A 1 unit increase in $X$ results in a $\beta_1$ unit increase in the predicted $Y$. It is estimated that a 1 unit increase in $X$ results in a $\beta_1$ unit increase in $Y$.
-   - Example: A slope of $6.708$ means a 1-hour increase in study time predicts an average score increase of $6.708$ points.
-2. **Intercept ($\hat{\beta}_0$)**, a constant:
-   - Represents the predicted $Y$ when $X = 0$.
-   - The predicted response that corresponds to $X = 0$. It is estimated that when $X = 0$, $Y$ will be $\beta_0$.
-   - Example: An intercept of $40.993$ means a predicted score of $40.993$ when no study time is recorded.
+   - "Rise over run": $\frac{\Delta Y}{\Delta X}$
+   - Each one-unit increase in $X$ is associated with an estimated increase of $\beta_1$ units in the predicted value of $Y$.
+   - Example: A slope of $6.708$ means a one-hour increase in study time predicts an average score increase of 6.708 points.
+2. **Intercept ($\hat{\beta}_0$)**, constant term:
+   - Represents the predicted value of $Y$ when $X = 0$.
+   - Example: An intercept of $40.993$ means a predicted score of 40.993 when no study time is recorded.
 
 ### Extrapolation
 - Predictions are only valid for $X$ values within the range used to build the model.
@@ -180,35 +194,96 @@ $$
 - $m_{Y|X} = b_0 + b_1X$: Mean of $Y$ as a function of $X$ or for a specific value of $X$.
 - $s_{Y|X} = s$: Standard deviation of $Y$ as a function of $X$, assuming equal standard deviation across $X$ values.
 
-::: {#R-hand-calculated layout-ncol=2}
-![Pearson's R pg1](images/notes_8_1_pearsonsRbyhand_1.png)  
+### Hand-Calculated Pearson’s $r$
+We can calculate the sample linear correlation coefficient, $r$, using either of the following equivalent formulas:
+$$
+r = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{(n - 1) S_X S_Y} = \frac{\sum_{i=1}^n Z_{X_i} Z_{Y_i}}{n - 1}
+$$
+Where:
 
-![Pearson's R pg2](images/notes_8_2_pearsonsRbyhand_2.png)
-:::
-*Figure 1: Hand-calculated Pearson's $r$.*  
+- $Z_{X_i} = \dfrac{X_i - \bar{X}}{S_X}$
+- $Z_{Y_i} = \dfrac{Y_i - \bar{Y}}{S_Y}$
 
-## Pearson’s $r$ and 6-Step Hypothesis Test
+#### Example: Calculating $Z$-scores
+To compute $Z_{X}$ for the first observation:
+$$
+Z_{X_1} = \frac{1 - 3.923}{2.397} = -1.220
+$$
+
+To compute $Z_{Y}$ for the first observation:
+$$
+Z_{Y_1} = \frac{34 - 67.308}{19.564} = -0.578
+$$
+
+### Raw Data and Z-Scores
+| Hours ($X$) | Score ($Y$) | $Z_X$  | $Z_Y$  | $Z_X Z_Y$ |
+|------------|-------------|--------|--------|-----------|
+| 1          | 34          | -1.220 | -1.7703| 2.077     |
+| 1          | 56          | -1.220 | -0.578 | 0.705     |
+| 2          | 45          | -0.802 | -1.140 | 0.915     |
+| 2          | 70          | -0.802 |  0.138 | -0.110    |
+| 2          | 55          | -0.802 | -0.624 | 0.305     |
+| 3          | 68          | -0.385 |  0.035 | -0.014    |
+| 4          | 67          |  0.032 | -0.016 | -0.001    |
+| 4          | 79          |  0.032 |  0.598 | 0.019     |
+| 4          | 45          |  0.032 | -1.140 | -0.037    |
+| 6          | 89          |  0.862 |  1.109 | 0.956     |
+| 7          | 95          |  1.284 |  1.416 | 1.817     |
+| 7          | 78          |  1.284 |  0.547 | 0.702     |
+| 8          | 94          |  1.701 |  1.364 | 2.321     |
+
+**Summary statistics**:
+
+- $\bar{X} = 3.923$, $S_X = 2.397$
+- $\bar{Y} = 67.308$, $S_Y = 19.564$
+- $n = 13$
+- $\sum Z_X Z_Y = 9.86036$
+
+### Final Computation of $r$
+$$
+r = \frac{\sum_{i=1}^{13} Z_{X_i} Z_{Y_i}}{13 - 1} = \frac{9.86036}{12} = 0.8217
+$$
+
+Therefore, the sample correlation is: $r = 0.8217$
+
+### Scatterplot of Test Score by Study Hours
+After plotting the data, we do not see evidence of:
+
+- Outliers
+- Unequal standard deviations
+- A curved relationship
+
+Since a linear relationship appears appropriate, we proceed with correlation analysis.
+
+The correlation coefficient is: $r = 0.8217$
+
+This value provides evidence of a strong positive linear association between study hours and test score.
+
+![**Scatterplot of test score vs. study hours with best-fit line.**](images/fch08_pearsonR.png){fig-title=""}
+
+
+## Pearson’s $r$ and the Six-Step Hypothesis Test
 
 ### 1. Hypotheses (Testing $\rho$, the Population Correlation Coefficient)
-- $H_0$: $\rho = 0$ (No linear correlation exists in the population)
-- $H_A$: $\rho \neq 0$ (A linear correlation exists in the population)
+- $H_0$: $\rho = 0$ (no linear correlation in the population)
+- $H_A$: $\rho \ne 0$ (a linear correlation exists in the population)
 
-### 2. Critical Value (From a $t$-Distribution)
-- $\pm t_{0.975, 13-2} = \pm 2.201$
+### 2. Critical Value (From a *t*-Distribution)
+- $\pm t_{0.975, 13 - 2} = \pm 2.201$
 
-#### Computing the Critical Value:
-- In SAS: `quantile("t", 0.975, 13-2)`
+#### Computing the critical value:
+- In SAS: `quantile("t", 0.975, 13 - 2)`
 - In R: `qt(0.975, 11)`
 
 ### 3. Test Statistic
-The sample linear correlation coefficient $r$ is transformed into a $t$-distribution using the formula:
+The sample linear correlation coefficient $r$ is transformed into a *t*-distribution using the formula:
 $$
-t = \frac{r\sqrt{n - 2}}{\sqrt{1 - r^2}} \sim t_{n-2}
+t = \frac{r\sqrt{n - 2}}{\sqrt{1 - r^2}} \sim t_{n - 2}
 $$
 
-#### Substituting Values:
+#### Substituting values:
 $$
-t = \frac{0.8217 \cdot \sqrt{13 - 2}}{\sqrt{1 - (0.8217)^2}} = 4.71818
+t = \frac{0.8217 \cdot \sqrt{13 - 2}}{\sqrt{1 - (0.8217)^2}} = 4.718
 $$
 
 ### Compute $r$ in Statistical Software
@@ -217,36 +292,43 @@ $$
 ```{sas eval=FALSE}
 proc corr data = Studytime;
 run;
-To get r:
-in SAS:
-proc corr data = Studytime;
-run;
 ```
 
 #### In R:
 ```{r eval=FALSE}
-cor.test(StudyTime$StudyHours,StudyTime$ExamScore)
+cor.test(StudyTime$StudyHours, StudyTime$ExamScore)
 ```
 
-::: {#R-from-code layout-ncol=2}
-![Pearson's R Code Output SAS](images/notes_8_3_pearsonsR_SAS.png) 
+:::{layout-ncol=2}
+![](images/fch08_pearsonsR_SAS.png){fig-title="Pearson’s Correlation Output in SAS."}
 
-![Pearson's R Code Output R](images/notes_8_4_pearsonsR_R.png)
+![](images/fch08_pearsonsR_R.png){fig-title="Pearson’s Correlation Output in R."}
 :::
-*Figure 2: Outputs in SAS and R.*  
 
-### 4. Find the $p$-value
-- $p-\text{value} = 0.0006$ 
+<div class="figure-caption">
+<strong>Outputs from SAS and R showing the Pearson correlation between study time and exam score.</strong> SAS includes descriptive statistics, $r = 0.8217$, and a *p*-value. R includes the $t$-statistic, degrees of freedom, confidence interval, estimate ($r = 0.8217$), and *p*-value for $H_0: \rho = 0$.
+</div>
+
+### 4. Find the *p*-Value
+The *p*-value is calculated using the *t*-distribution with $n - 2$ degrees of freedom.
+
+- In this example, the *p*-value is 0.0006.
 
 ### 5. Decision
-- At $\alpha = 0.05$, reject $H_0$ because $p = 0.0006 < 0.05$.
+At a significance level of $\alpha = 0.05$:
+
+- Since $p = 0.0006 < 0.05$, we reject the null hypothesis $H_0$.
 
 ### 6. Conclusion
-- **Interpretation**: At the $\alpha = 0.05$ significance level, the test provides strong evidence that exam scores are linearly correlated with study hours (p-value = 0.0006).
-- (Since it’s significant, it makes sense to interpret $R^2$).
-- It is estimated that $R^2 = 67.52\%$ of the variation in the exam score is explained by its relationship with study hours
-- **Scope**:Because the students weren’t randomly assigned study hours, we cannot establish causation, only association. Additionally, because we do not know how the data were selected, we cannot generalize the result beyond the subjects in this study.
+At the $\alpha = 0.05$ level, there is strong evidence that exam scores are linearly correlated with study hours (*p*-value = 0.0006).
 
+- Since the correlation is statistically significant, it makes sense to interpret $R^2$.
+- It is estimated that $R^2 = 67.5\%$ of the variation in exam scores is explained by study hours.
+
+**Scope**:  
+Because students were not randomly assigned study hours, we cannot conclude causation, only association. Also, since the data collection method is unknown, we cannot generalize this result beyond the students in the study.
+
+---
 
 ![Least Squares Regression Line 1](images/notes_8_5_handCalculatedParameterEstimates.png){width=6in fig-align="left"}    
 
@@ -306,7 +388,6 @@ $H_a: \beta_1 \neq 0$
 ### Putting It All Together
 1. Plot the data to visualize the relationship.
 2. Test the linear correlation coefficient.
-3. Reject $H_0$ if $\rho = 0$ is not supported (significant correlation). The slope ($\beta_1$) is also significantly different from zero.
+3. Reject $H_0$ if $\rho = 0$ is not supported (significant correlation). The slope ($\hat{\beta}_1$) is also significantly different from zero.
 4. Calculate and interpret regression coefficients.
 5. Use the regression model for predictions within the valid range.
-
