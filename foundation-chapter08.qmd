@@ -328,39 +328,94 @@ At the $\alpha = 0.05$ level, there is strong evidence that exam scores are line
 **Scope**:  
 Because students were not randomly assigned study hours, we cannot conclude causation, only association. Also, since the data collection method is unknown, we cannot generalize this result beyond the students in the study.
 
----
+### Least Squares Regression Model
+We now estimate the least squares regression line:
+$$
+\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 X
+$$
 
-![Least Squares Regression Line 1](images/notes_8_5_handCalculatedParameterEstimates.png){width=6in fig-align="left"}    
+Based on the sample of 13 students, the slope and intercept are calculated using the formulas:
+$$
+\hat{\beta}_1 = \dfrac{\sum (X_i - \bar{X})(Y_i - \bar{Y})}{\sum (X_i - \bar{X})^2}, \quad 
+\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}
+$$
+
+**Hand Calculation**
+
+| $Y_i\ \text{(Grade)}$ | $X_i\ \text{(Hours)}$ | $X_i - \bar{X}$ | $Y_i - \bar{Y}$ | $(X_i - \bar{X})(Y_i - \bar{Y})$ | $(X_i - \bar{X})^2$ |
+|:-------------:|:-------------:|:---------------:|:---------------:|:-------------------------------:|:------------------:|
+| 34            | 1             | -2.9231         | -33.3077        | 97.3609                         | 8.5444             |
+| 56            | 1             | -2.9231         | -11.3077        | 33.0533                         | 8.5444             |
+| 45            | 2             | -1.9231         | -22.3077        | 42.8994                         | 3.6982             |
+| 70            | 2             | -1.9231         | 2.6923          | -5.1775                         | 3.6982             |
+| 55            | 2             | -1.9231         | -12.3077        | 23.6686                         | 3.6982             |
+| 68            | 3             | -0.9231         | 0.6923          | -0.6391                         | 0.8521             |
+| 67            | 4             | 0.0769          | -0.3077         | -0.0237                         | 0.0059             |
+| 79            | 4             | 0.0769          | 11.6923         | 0.8994                          | 0.0059             |
+| 45            | 4             | 0.0769          | -22.3077        | -1.7160                         | 0.0059             |
+| 89            | 6             | 2.0769          | 21.6923         | 45.0533                         | 4.3136             |
+| 95            | 7             | 3.0769          | 27.6923         | 85.2071                         | 9.4675             |
+| 78            | 7             | 3.0769          | 10.6923         | 32.8994                         | 9.4675             |
+| 94            | 8             | 4.0769          | 26.6923         | 108.8225                        | 16.6213            |
+
+| Statistic                                    | Value    |
+|---------------------------------------------|----------|
+| $\bar{X}$ (mean of study hours)             | 3.923    |
+| $\bar{Y}$ (mean of exam scores)             | 67.308   |
+| $\sum (X_i - \bar{X})^2$                    | 68.923   |
+| $\sum (X_i - \bar{X})(Y_i - \bar{Y})$       | 462.308  |
+
+- Slope:
+  $$
+  \hat{\beta}_1 = \dfrac{462.308}{68.923} = 6.708
+  $$
+- Intercept: 
+  $$
+  \hat{\beta}_0 = 67.308 - (6.708 \times 3.923) = 40.993
+  $$
+
+**Final least squares regression line**:
+$$
+\widehat{\text{Grade}} = 40.993 + 6.708 \times \text{StudyHours}
+$$
+
+### Regression Output in Software
 
 ```{sas eval=FALSE}
 proc reg data = StudyTime;
-* response = explanatory;
-model ExamScore = StudyTime;
-run;
-* for confidence intervals;
-* model ExamScore = StudyTime / clb;
-*OR;
-proc glm data = StudyTime;
-* solution -> regression: parameter estimate table;
-model ExamScore = StudyTime / solution;
+   * Model syntax: response = explanatory;
+   model ExamScore = StudyTime;
 run;
 
+* To request confidence intervals for coefficients, use the CLB option:
+* model ExamScore = StudyTime / clb;
+
+* Alternatively, use PROC GLM for similar results:
+proc glm data = StudyTime;
+   * The SOLUTION option displays the parameter estimates;
+   model ExamScore = StudyTime / solution;
+run;
 ```
 
 
 ```{r eval=FALSE}
-#lm - linear model(response ~ explanatory, data)
-fit = lm(ExamScore~StudyHours, data= StudyTime)
-summary(fit)
+# Fit a linear model: response ~ explanatory
+fit = lm(ExamScore ~ StudyHours, data = StudyTime)
 
+# Display regression coefficients, standard errors, t-tests, and R-squared
+summary(fit)
 ```
 
 :::{layout-ncol=2}
-![Least Squares Regression Line 2](images/notes_8_6_parameterEstimateTable_SAS.png)
+![](images/fch08_parameterEstimateTable_SAS.png){fig-title="Regression Output in SAS."}
 
-![Least Squares Regression Line 2](images/notes_8_7_parameterEstimateTable_R.png) 
+![](images/fch08_parameterEstimateTable_R.png){fig-title="Regression Output in R."}
 :::
-*Figure 4: Least Squares Regression Line*  
+
+<div class="figure-caption">
+<strong>Least squares regression estimates from SAS and R.</strong> SAS and R both estimate the regression line: $\widehat{\text{Grade}} = 40.993 + 6.708 \times \text{StudyHours}$, reporting standard errors, $t$-statistics, and *p*-values for both coefficients.
+</div>
+
 
 Hypothesis testing for the intercept and slope
 
