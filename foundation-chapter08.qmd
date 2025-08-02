@@ -339,8 +339,8 @@ $$
 \hat{\beta}_1 = \dfrac{\sum (X_i - \bar{X})(Y_i - \bar{Y})}{\sum (X_i - \bar{X})^2}, \quad 
 \hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}
 $$
-
-**Hand Calculation**
+::: {.example}
+### Hand Calculation of Coefficients
 
 | $Y_i\ \text{(Grade)}$ | $X_i\ \text{(Hours)}$ | $X_i - \bar{X}$ | $Y_i - \bar{Y}$ | $(X_i - \bar{X})(Y_i - \bar{Y})$ | $(X_i - \bar{X})^2$ |
 |:-------------:|:-------------:|:---------------:|:---------------:|:-------------------------------:|:------------------:|
@@ -378,8 +378,10 @@ $$
 $$
 \widehat{\text{Grade}} = 40.993 + 6.708 \times \text{StudyHours}
 $$
+:::
 
-### Regression Output in Software
+
+## Regression Output in Software
 
 ```{sas eval=FALSE}
 proc reg data = StudyTime;
@@ -396,7 +398,6 @@ proc glm data = StudyTime;
    model ExamScore = StudyTime / solution;
 run;
 ```
-
 
 ```{r eval=FALSE}
 # Fit a linear model: response ~ explanatory
@@ -417,17 +418,134 @@ summary(fit)
 </div>
 
 
-Hypothesis testing for the intercept and slope
+## Sampling Distributions of the Coefficients
 
-:::{layout-ncol=2}
-![](images/display_8_1.png)
+### Slope ($\hat{\beta}_1$)
+- **Center**: The mean of the sampling distribution is $\beta_1$.
+- **Spread**:
+  $$
+  \text{SE}(\hat{\beta}_1) = \hat{\sigma} \sqrt{\dfrac{1}{(n - 1)s_X^2}}, \quad \text{df} = n - 2
+  $$
+  where $s_X^2$ is the sample variance of the $X$s.
+- **Shape**: Normal (under regression assumptions)
 
-![](images/display_8_2.png)
+### Intercept ($\hat{\beta}_0$)
+- **Center**: The mean of the sampling distribution is $\beta_0$.
+- **Spread**:
+  $$
+  \text{SE}(\hat{\beta}_0) = \hat{\sigma} \sqrt{\dfrac{1}{n} + \dfrac{\bar{X}^2}{(n - 1)s_X^2}}, \quad \text{df} = n - 2
+  $$
+- **Shape**: Normal (under regression assumptions)
 
-![](images/display_8_3.png)
+### Residual Standard Deviation
 
-![](images/display_8_4.png)
-:::
+- Used to estimate $\sigma$:
+  $$
+  \hat{\sigma} = \sqrt{\dfrac{\text{Sum of squared residuals}}{\text{df}}}
+  $$
+
+
+## Sampling Distributions of $\hat{\beta}_1$ and $\hat{\beta}_0$
+
+We can simulate and visualize the variability in the slope and intercept estimates using the formulas:
+
+- Standard error of the slope:
+  $$
+  \text{SE}(\hat{\beta}_1) = \hat{\sigma} \sqrt{ \frac{1}{(n - 1)s_X^2} }
+  $$
+
+- Standard error of the intercept:
+  $$
+  \text{SE}(\hat{\beta}_0) = \hat{\sigma} \sqrt{ \frac{1}{n} + \frac{\bar{X}^2}{(n - 1)s_X^2} }
+  $$
+
+From the hand-calculated table based on the grade vs. study hours data:
+
+- $n = 13$
+- $\bar{X} = 3.923$
+- $\sum (X_i - \bar{X})^2 = 68.923$
+- $\sum (Y_i - \hat{Y}_i)^2 = \text{SSE} = 1491.80$
+- $\hat{\beta}_1 = 6.708$
+- $\hat{\beta}_0 = 40.993$
+  
+1. Sample Variance of $X$: $s_X^2 = 5.76$
+
+We compute the sample variance of the explanatory variable (Study Hours) using the formula:
+$$
+s_X^2 = \frac{1}{n - 1} \sum_{i=1}^n (X_i - \bar{X})^2 = \frac{68.923}{13 - 1} = 5.76
+$$
+
+2. Estimate of Residual Standard Deviation: $\hat{\sigma} = 12.0$
+
+We compute the residual standard deviation using:
+
+$$
+\hat{\sigma} = \sqrt{\dfrac{\text{Sum of squared residuals}}{\text{df}}} = \sqrt{ \frac{\sum_{i=1}^n (Y_i - \hat{Y}_i)^2 }{n - 2}}
+$$
+
+This is the square root of the **mean squared error (MSE)** from the regression.
+
+To compute the **sum of squared residuals** (also called **SSE** or **Sum of Squared Errors**), we use the fitted regression line:
+$$
+\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i = 40.993 + 6.708 \cdot X_i
+$$
+
+For each observation in the dataset:
+
+1. Compute the predicted value using the regression equation:  
+   $$
+   \hat{Y}_i = 40.993 + 6.708 \cdot X_i
+   $$
+2. Find the residual (difference between the actual and predicted values):  
+   $$
+   e_i = Y_i - \hat{Y}_i
+   $$
+3. Square the residual:  
+   $$
+   e_i^2 = (Y_i - \hat{Y}_i)^2
+   $$
+4. Sum all the squared residuals:  
+   $$
+   \text{SSE} = \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2
+   $$
+
+So:
+$$
+\hat{\sigma} = \sqrt{ \frac{1491.80}{13 - 2} } = \sqrt{ \frac{1491.80{11} } = \sqrt{144} = 11.65
+$$
+
+This estimate reflects the typical deviation of observed exam scores from the predicted regression line.
+
+3. Then we can calculate the standard error of $\hat{\beta}_1$ (Slope):
+  $$
+  \text{SE}(\hat{\beta}_1) = \hat{\sigma} \sqrt{\dfrac{1}{(n - 1)s_X^2}}, \quad \text{df} = n - 2
+  $$
+  $$
+  \text{SE}(\hat{\beta}_1) = 11.65 \sqrt{\dfrac{1}{(13 - 1) \cdot 5.76}} = 1.40
+  $$
+4. And we can calculate the standard error of $\hat{\beta}_0$ (Intercept):
+  $$
+  \text{SE}(\hat{\beta}_0) = \hat{\sigma} \sqrt{\frac{1}{n} + \frac{\bar{X}^2}{(n - 1)s_X^2}}
+  $$
+  $$
+  \text{SE}(\hat{\beta}_0) = 11.65 \sqrt{\frac{1}{13}+ \frac{3.923^2}{(13 - 1) \cdot 5.76}} = 6.38
+  $$
+We obtain:
+
+- $\text{SE}(\hat{\beta}_1) = 1.40$
+- $\text{SE}(\hat{\beta}_0) = 6.38$
+
+These values reflect the **spread** (standard deviation) of the sampling distributions shown below:
+
+### Sampling Distributions of Regression Coefficients
+
+![](images/fch08_sampling_distributions_coefficients.png){fig-title="Sampling distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$."}
+
+<div class="figure-caption">
+<strong>Sampling distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$.</strong> Both sampling distributions are approximately normal under regression assumptions. The center of each distribution is the true coefficient ($\beta_0$ or $\beta_1$), and their spread is determined by sample size $n$, the variability of the explanatory variable $X$, and the residual variance $\hat{\sigma}^2$. These distributions form the basis for *t*-tests and confidence intervals for the regression coefficients.
+</div>
+
+## Hypothesis testing for the Intercept and Slope
 
 Two T-Tests!!!  
 $H_0: \beta_0 = 0$
@@ -436,9 +554,56 @@ $H_a: \beta_0 \neq 0$
 $H_0: \beta_1 = 0$
 $H_a: \beta_1 \neq 0$
 
-:::{layout-ncol=2}
-![Study Hours Example](images/notes_8_8_studyHourExample.png)
-:::
+
+## Hypothesis Test and Confidence Interval for Grades vs. Study Hours
+
+### 1. Hypotheses
+$$
+H_0: \beta_1 = 0 \\
+H_A: \beta_1 \ne 0
+$$
+
+### 2. Critical Value Method
+
+Degrees of freedom:  
+$$
+df = n - 2 = 13 - 2 = 11
+$$
+
+For a two-tailed test with $\alpha = 0.05$:
+$$
+t_{0.975,11} = t^* = \pm 2.201
+$$
+
+### 3. Test Statistic
+$$
+t = \frac{\hat{\beta}_1 - 0}{SE(\hat{\beta}_1)} = \frac{6.708 - 0}{1.403} = 4.78
+$$
+
+### 4. *p*-value
+$$
+\text{p-value} = 0.0006 < 0.05
+$$
+
+### 5. Decision
+Since the test statistic exceeds the critical value and the *p*-value is less than 0.05, we reject $H_0$.
+
+### 6. Conclusion
+There is strong evidence to suggest that the number of study hours and grade scores are positively linearly related.  
+That is, the slope is significantly greater than 0 (*p*-value = 0.0006).
+
+### 7. 95% Confidence Interval for the Slope
+$$
+\hat{\beta}_1 \pm t^* \cdot SE(\hat{\beta}_1) = 6.708 \pm 2.201 \times 1.403 = (3.609, 9.807)
+$$
+
+We are 95% confident that for each 1-hour increase in study time, the mean exam score increases between 3.6 and 9.8 points. Our best estimate of that increase is 6.708 points.
+
+![](images/fch08_ttestSlope.png){fig-title="Two-tailed *t*-test for slope."}
+
+<div class="figure-caption">
+<strong>Two-tailed *t*-test for slope coefficient.</strong> The red line shows the observed test statistic ($t = 4.78$). Shaded regions represent the critical regions at $\alpha = 0.05$ for a two-tailed test with 11 degrees of freedom. The slope coefficient is statistically significant (*p*-value = 0.0006).
+</div>
 
 ### Putting It All Together
 1. Plot the data to visualize the relationship.
