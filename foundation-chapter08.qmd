@@ -439,64 +439,79 @@ summary(fit)
 
 ### Residual Standard Deviation
 
-- Used to estimate $\sigma$:
-  $$
-  \hat{\sigma} = \sqrt{\dfrac{\text{Sum of squared residuals}}{\text{df}}}
-  $$
+The **residual standard deviation** estimates the true standard deviation $\sigma$ of the errors in the regression model:
+$$
+\hat{\sigma} = \sqrt{\dfrac{\text{Sum of Squared Residuals}}{\text{df}}}
+$$
 
+This is also known as the **root mean squared error** (RMSE). The degrees of freedom for simple linear regression are:
+$$
+\text{df} = n - 2
+$$
 
-## Sampling Distributions of $\hat{\beta}_1$ and $\hat{\beta}_0$
+### Sampling Distributions of $\hat{\beta}_1$ and $\hat{\beta}_0$
 
-We can simulate and visualize the variability in the slope and intercept estimates using the formulas:
+When fitting a simple linear regression model, the estimated coefficients $\hat{\beta}_1$ and $\hat{\beta}_0$ each have their own sampling distribution:
 
-- Standard error of the slope:
-  $$
-  \text{SE}(\hat{\beta}_1) = \hat{\sigma} \sqrt{ \frac{1}{(n - 1)s_X^2} }
-  $$
+#### Standard Error of the Slope
+$$
+\text{SE}(\hat{\beta}_1) = \hat{\sigma} \sqrt{ \frac{1}{(n - 1)s_X^2} }
+$$
 
-- Standard error of the intercept:
-  $$
-  \text{SE}(\hat{\beta}_0) = \hat{\sigma} \sqrt{ \frac{1}{n} + \frac{\bar{X}^2}{(n - 1)s_X^2} }
-  $$
+#### Standard Error of the Intercept
+$$
+\text{SE}(\hat{\beta}_0) = \hat{\sigma} \sqrt{ \frac{1}{n} + \frac{\bar{X}^2}{(n - 1)s_X^2} }
+$$
+Where:
 
-From the hand-calculated table based on the grade vs. study hours data:
+- $\hat{\sigma}$ is the residual standard deviation
+- $s_X^2$ is the sample variance of the explanatory variable
+- $\bar{X}$ is the mean of the $X_i$ values
+
+These formulas assume the regression model meets the standard assumptions (linearity, independence, equal variance, and normality of errors).
+
+::: {.example}
+### Example: Study Hours and Exam Grades
+
+From the regression of 13 students’ exam grades on study hours, we are given or calculated:
 
 - $n = 13$
 - $\bar{X} = 3.923$
 - $\sum (X_i - \bar{X})^2 = 68.923$
-- $\sum (Y_i - \hat{Y}_i)^2 = \text{SSE} = 1491.80$
-- $\hat{\beta}_1 = 6.708$
-- $\hat{\beta}_0 = 40.993$
+- $\hat{\beta}_1 = 6.708$, $\hat{\beta}_0 = 40.993$
+- $\text{SSE} = \sum (Y_i - \hat{Y}_i)^2 = 1491.80$
   
-1. Sample Variance of $X$: $s_X^2 = 5.76$
+#### 1. Sample Variance of $X$
 
-We compute the sample variance of the explanatory variable (Study Hours) using the formula:
+We compute the sample variance of the explanatory variable:
 $$
-s_X^2 = \frac{1}{n - 1} \sum_{i=1}^n (X_i - \bar{X})^2 = \frac{68.923}{13 - 1} = 5.76
-$$
-
-2. Estimate of Residual Standard Deviation: $\hat{\sigma} = 12.0$
-
-We compute the residual standard deviation using:
-
-$$
-\hat{\sigma} = \sqrt{\dfrac{\text{Sum of squared residuals}}{\text{df}}} = \sqrt{ \frac{\sum_{i=1}^n (Y_i - \hat{Y}_i)^2 }{n - 2}}
+s_X^2 = \frac{1}{n - 1} \sum (X_i - \bar{X})^2 = \frac{68.923}{13-1} = 5.744
 $$
 
-This is the square root of the **mean squared error (MSE)** from the regression.
+#### 2. Residual Standard Deviation
+
+The residual standard deviation estimates the typical deviation between the actual and predicted exam scores:
+$$
+\hat{\sigma} = \sqrt{\dfrac{\text{Sum of squared residuals}}{\text{df}}} = \sqrt{ \dfrac{ \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 }{n - 2} } = \sqrt{ \dfrac{1491.799}{11} } = 11.646
+$$
+
+This is the square root of the **mean squared error (MSE)** from the regression and is used to quantify residual variability.
+
+::: {.callout-note collapse="true"}
+##### How is the sum of squared residuals (SSE) calculated?
 
 To compute the **sum of squared residuals** (also called **SSE** or **Sum of Squared Errors**), we use the fitted regression line:
 $$
 \hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i = 40.993 + 6.708 \cdot X_i
 $$
 
-For each observation in the dataset:
+For each observation:
 
-1. Compute the predicted value using the regression equation:  
+1. Compute the predicted value:  
    $$
    \hat{Y}_i = 40.993 + 6.708 \cdot X_i
    $$
-2. Find the residual (difference between the actual and predicted values):  
+2. Find the residual:  
    $$
    e_i = Y_i - \hat{Y}_i
    $$
@@ -504,68 +519,86 @@ For each observation in the dataset:
    $$
    e_i^2 = (Y_i - \hat{Y}_i)^2
    $$
-4. Sum all the squared residuals:  
+4. Sum the squared residuals:  
    $$
-   \text{SSE} = \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2
+   \text{SSE} = \sum_{i=1}^{n} (Y_i - \hat{Y}_i)^2 = 1491.799
    $$
-
-So:
+Substituting back into the formula:
 $$
-\hat{\sigma} = \sqrt{ \frac{1491.80}{13 - 2} } = \sqrt{ \frac{1491.80{11} } = \sqrt{144} = 11.65
+\hat{\sigma} = \sqrt{\dfrac{1491.799}{13 - 2}} = \sqrt{\dfrac{1491.799}{11}} = 11.646
+$$
+:::
+
+#### 3. Standard Error of the Slope
+
+$$
+\text{SE}(\hat{\beta}_1) = \hat{\sigma} \sqrt{\dfrac{1}{(n - 1)s_X^2}}, \quad \text{df} = n - 2
 $$
 
-This estimate reflects the typical deviation of observed exam scores from the predicted regression line.
+$$
+\text{SE}(\hat{\beta}_1) = 11.646 \cdot \sqrt{\frac{1}{12 \cdot 5.744}} = 1.403
+$$
+#### 4. Standard Error of the Intercept
 
-3. Then we can calculate the standard error of $\hat{\beta}_1$ (Slope):
-  $$
-  \text{SE}(\hat{\beta}_1) = \hat{\sigma} \sqrt{\dfrac{1}{(n - 1)s_X^2}}, \quad \text{df} = n - 2
-  $$
-  $$
-  \text{SE}(\hat{\beta}_1) = 11.65 \sqrt{\dfrac{1}{(13 - 1) \cdot 5.76}} = 1.40
-  $$
-4. And we can calculate the standard error of $\hat{\beta}_0$ (Intercept):
-  $$
-  \text{SE}(\hat{\beta}_0) = \hat{\sigma} \sqrt{\frac{1}{n} + \frac{\bar{X}^2}{(n - 1)s_X^2}}
-  $$
-  $$
-  \text{SE}(\hat{\beta}_0) = 11.65 \sqrt{\frac{1}{13}+ \frac{3.923^2}{(13 - 1) \cdot 5.76}} = 6.38
-  $$
-We obtain:
+$$
+\text{SE}(\hat{\beta}_0) = \hat{\sigma} \sqrt{\frac{1}{n} + \frac{\bar{X}^2}{(n - 1)s_X^2}}
+$$
 
-- $\text{SE}(\hat{\beta}_1) = 1.40$
-- $\text{SE}(\hat{\beta}_0) = 6.38$
+$$
+\text{SE}(\hat{\beta}_0) = 11.646 \cdot \sqrt{ \frac{1}{13} + \frac{3.923^2}{12 \cdot 5.744} } = 6.381
+$$
 
-These values reflect the **spread** (standard deviation) of the sampling distributions shown below:
+#### Summary
+- $\text{SE}(\hat{\beta}_1) = 1.403$
+- $\text{SE}(\hat{\beta}_0) = 6.381$
+
+These values describe the variability in slope and intercept estimates across hypothetical repeated samples.
+:::
 
 ### Sampling Distributions of Regression Coefficients
 
-![](images/fch08_sampling_distributions_coefficients.png){fig-title="Sampling distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$."}
+![](images/fch08_sampling_distributions_coefficients.png){fig-title="Sampling Distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$."}
 
 <div class="figure-caption">
-<strong>Sampling distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$.</strong> Both sampling distributions are approximately normal under regression assumptions. The center of each distribution is the true coefficient ($\beta_0$ or $\beta_1$), and their spread is determined by sample size $n$, the variability of the explanatory variable $X$, and the residual variance $\hat{\sigma}^2$. These distributions form the basis for *t*-tests and confidence intervals for the regression coefficients.
+<strong>Sampling distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$.</strong> Under the assumptions of simple linear regression, the sampling distributions of the slope and intercept are approximately normal. Their centers are the true population coefficients ($\beta_0$ and $\beta_1$), and their spread depends on sample size ($n$), the variability in the explanatory variable ($X$), and the residual variability ($\hat{\sigma}^2$). These distributions are the foundation for *t*-tests and confidence intervals in regression.
 </div>
 
-## Hypothesis testing for the Intercept and Slope
 
-Two T-Tests!!!  
-$H_0: \beta_0 = 0$
-$H_a: \beta_0 \neq 0$
+## Hypothesis Testing for Slope and Intercept
 
-$H_0: \beta_1 = 0$
-$H_a: \beta_1 \neq 0$
+In simple linear regression, we can test whether either regression coefficient is significantly different from zero. This includes:
+
+- A *t*-test for the slope $\beta_1$ to assess whether the explanatory variable is linearly associated with the response.
+- A *t*-test for the intercept $\beta_0$ to assess whether the predicted response is significantly different from zero when the explanatory variable is zero.
+
+The general form of the hypotheses is:
+
+- For the intercept:
+  $$
+  H_0: \beta_0 = 0 \quad \text{vs.} \quad H_A: \beta_0 \ne 0
+  $$
+- For the slope:
+  $$
+  H_0: \beta_1 = 0 \quad \text{vs.} \quad H_A: \beta_1 \ne 0
+  $$
+
+We now demonstrate the full hypothesis test procedure using the slope $\beta_1$ as an example.
 
 
-## Hypothesis Test and Confidence Interval for Grades vs. Study Hours
+## Hypothesis Test and Confidence Interval for the Slope
+
+We test whether the slope of the regression line differs significantly from zero using a two-tailed *t*-test.
 
 ### 1. Hypotheses
+
+We are testing whether the number of study hours is linearly related to exam score:
 $$
 H_0: \beta_1 = 0 \\
 H_A: \beta_1 \ne 0
 $$
-
 ### 2. Critical Value Method
 
-Degrees of freedom:  
+Degrees of freedom:
 $$
 df = n - 2 = 13 - 2 = 11
 $$
@@ -577,7 +610,7 @@ $$
 
 ### 3. Test Statistic
 $$
-t = \frac{\hat{\beta}_1 - 0}{SE(\hat{\beta}_1)} = \frac{6.708 - 0}{1.403} = 4.78
+t = \frac{\hat{\beta}_1 - 0}{SE(\hat{\beta}_1)} = \frac{6.708}{1.403} = 4.78
 $$
 
 ### 4. *p*-value
@@ -599,15 +632,31 @@ $$
 
 We are 95% confident that for each 1-hour increase in study time, the mean exam score increases between 3.6 and 9.8 points. Our best estimate of that increase is 6.708 points.
 
+> **Note**: A similar *t*-test and confidence interval can be constructed for the intercept $\beta_0$, using the same degrees of freedom and standard error of the intercept. Most software packages report both tests automatically.
+
 ![](images/fch08_ttestSlope.png){fig-title="Two-tailed *t*-test for slope."}
 
 <div class="figure-caption">
 <strong>Two-tailed *t*-test for slope coefficient.</strong> The red line shows the observed test statistic ($t = 4.78$). Shaded regions represent the critical regions at $\alpha = 0.05$ for a two-tailed test with 11 degrees of freedom. The slope coefficient is statistically significant (*p*-value = 0.0006).
 </div>
 
-### Putting It All Together
-1. Plot the data to visualize the relationship.
-2. Test the linear correlation coefficient.
-3. Reject $H_0$ if $\rho = 0$ is not supported (significant correlation). The slope ($\hat{\beta}_1$) is also significantly different from zero.
-4. Calculate and interpret regression coefficients.
-5. Use the regression model for predictions within the valid range.
+## Summary: Steps in Simple Linear Regression
+
+1. **Plot the data** to visualize the relationship.
+2. **Assess linear association** between the two variables:
+   - Compute and test the **correlation coefficient** $\rho$.
+   - If $\rho \ne 0$, there is evidence of a linear relationship.
+3. **Calculate the regression coefficients**:
+   - Estimate the slope $\hat{\beta}_1$ and intercept $\hat{\beta}_0$.
+   - These describe the fitted line and are needed for inference.
+4. **Test the slope coefficient ($\beta_1$)**:
+   - Use a *t*-test to determine whether the explanatory variable is significantly associated with the response.
+   - In simple linear regression, this test is equivalent to testing whether the correlation coefficient $\rho$ differs from 0.
+5. **Interpret the regression coefficients** (slope and intercept):
+   - Report the slope and intercept in context, assessing practical significance.
+   - Include point estimates, standard errors, and confidence intervals.
+6. **Use the model for prediction**:
+   - Only make predictions within the range of observed values for the explanatory variable.
+   
+> **Note:** In simple linear regression, testing whether $\beta_1 = 0$ is equivalent to testing whether the population correlation $\rho = 0$.
+
