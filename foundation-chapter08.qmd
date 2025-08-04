@@ -33,7 +33,8 @@ Scatterplots visually represent the relationship between two quantitative variab
 ## Interpreting Correlations
 
 ### Square of Correlation Coefficient ($r^2$)
-- Represents shared variance. Example: $r = 0.8$ implies $r^2 = 0.64$, meaning 64% of variability in $Y$ is explained by its linear relationship with $X$.
+- Represents shared variance
+- Example: $r = 0.8$ implies $r^2 = 0.64$, meaning 64% of variability in $Y$ is explained by its linear relationship with $X$
 
 ### Significance
 - When $r = 1$, there is a perfect positive linear relationship.
@@ -54,7 +55,7 @@ Scatterplots visually represent the relationship between two quantitative variab
 $$
 r = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{(n-1) S_x S_y} = \frac{\sum_{i=1}^n Z_x Z_y}{n-1}
 $$
-Where $n$ = number of $(x, y)$ pairs.
+where $n$ = number of $(x, y)$ pairs.
 
 ### Why Plot the Data First?
 - Use scatterplots to visually check for linear relationships, outliers, or curved patterns (e.g., Anscombe's dataset). Then calculate the correlation to assess the strength of the relationship.
@@ -73,18 +74,18 @@ Where $n$ = number of $(x, y)$ pairs.
 
 - $r$ estimates the population correlation, $\rho$.
 - Measures the strength of a linear relationship between two variables.
-- Always between $-1$ and $1$.
-- Unitless; unaffected by changes in measurement scales.
+- Is always between $-1$ and $1$.
+- Is unitless and unaffected by changes in measurement scales.
 - Assumes both variables are quantitative.
 - Assumes bivariate normal distribution (for any value of $y$, $x$ has a normal distribution, and vice versa).
-- Not resistant to outliers.
+- Is not resistant to outliers.
 
 
 ## Interpreting $r^2$, the Coefficient of Determination
 
 ### Definition
 
-$r^2$, also known as the *coefficient of determination*, represents the proportion of variability in $Y$ that is explained by its linear relationship with $X$.
+$r^2$, also known as the **coefficient of determination**, represents the proportion of variability in $Y$ that is explained by its linear relationship with $X$.
 
 If $r^2$ is calculated from a sample, it serves as an estimate of how well changes in $X$ explain variation in $Y$.
 
@@ -94,7 +95,7 @@ For example, an $r^2$ of 0.75 means that 75% of the variability in $Y$ can be at
 $$
 R^2 = 1 - \frac{SS_{\text{res}}}{SS_{\text{tot}}}
 $$
-Where:
+where:
 
 - $SS_{\text{res}}$ = sum of squared residuals
 - $SS_{\text{tot}}$ = total sum of squares
@@ -110,7 +111,7 @@ This measures how much of the total variance from the equal means model is expla
 
 ## Keys to Remember
 
-- The correlation coefficient assumes **equal standard deviation**:
+- The correlation coefficient assumes equal standard deviation.
   - Don’t confuse fewer data points with smaller standard deviation.
 - The range of the data is a proxy for the spread. Knowing the particular $X$ value reduces the variation.
 
@@ -127,7 +128,7 @@ This measures how much of the total variance from the equal means model is expla
 
 ### Origin of Regression
 - The term **regression** originates from Francis Galton’s phrase "Regression toward mediocrity," referring to regression to the mean.
-- A regression line is a straight line that describes how a **response variable ($Y$)** changes as an **explanatory variable ($X$)** changes. It is used to predict the value of $Y$ for a given $X$.
+- A regression line is a straight line that describes how a response variable ($Y$) changes as an explanatory variable ($X$) changes. It is used to predict the value of $Y$ for a given $X$.
 
 ### Key Points
 1. **One Best-Fit Line**: 
@@ -143,7 +144,7 @@ This measures how much of the total variance from the equal means model is expla
 
 3. **Choice of Variables**:
    - Regression equation depends on the designation of explanatory and response variables.
-   - **With correlation**, you can flip $X$ and $Y$, but not with regression.
+   - With correlation you can flip $X$ and $Y$ but not with regression.
 
 4. **Subpopulations**:
    - In simple regression with a single explanatory variable, each value of the explanatory variable corresponds to a subpopulation of responses.
@@ -177,7 +178,7 @@ $$
 
 ### Extrapolation
 - Predictions are only valid for $X$ values within the range used to build the model.
-- **Extrapolation**: Predicting values of $Y$ for $X$ outside the observed data range. Use cautiously, as extrapolated predictions may not reliably represent real-world behavior and clearly communicate that the results are extrapolated.
+- **Extrapolation**: Predicting values of $Y$ for $X$ outside the observed data range. Use cautiously, as extrapolated predictions may not reliably represent real-world behavior, and clearly communicate that the results are extrapolated.
 
 ### Assumptions for Linear Regression
 1. **Normality**, conditional on $X$:
@@ -199,7 +200,7 @@ We can calculate the sample linear correlation coefficient, $r$, using either of
 $$
 r = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{(n - 1) S_X S_Y} = \frac{\sum_{i=1}^n Z_{X_i} Z_{Y_i}}{n - 1}
 $$
-Where:
+where:
 
 - $Z_{X_i} = \dfrac{X_i - \bar{X}}{S_X}$
 - $Z_{Y_i} = \dfrac{Y_i - \bar{Y}}{S_Y}$
@@ -237,11 +238,11 @@ $$
 - $\bar{X} = 3.923$, $S_X = 2.397$
 - $\bar{Y} = 67.308$, $S_Y = 19.564$
 - $n = 13$
-- $\sum Z_X Z_Y = 9.86036$
+- $\sum Z_X Z_Y = 9.860$
 
 ### Final Computation of $r$
 $$
-r = \frac{\sum_{i=1}^{13} Z_{X_i} Z_{Y_i}}{13 - 1} = \frac{9.86036}{12} = 0.8217
+r = \frac{\sum_{i=1}^{13} Z_{X_i} Z_{Y_i}}{13 - 1} = \frac{9.860}{12} = 0.8217
 $$
 
 Therefore, the sample correlation is: $r = 0.8217$
@@ -281,7 +282,7 @@ $$
 t = \frac{r\sqrt{n - 2}}{\sqrt{1 - r^2}} \sim t_{n - 2}
 $$
 
-#### Substituting values:
+Substituting values:
 $$
 t = \frac{0.8217 \cdot \sqrt{13 - 2}}{\sqrt{1 - (0.8217)^2}} = 4.718
 $$
@@ -339,6 +340,7 @@ $$
 \hat{\beta}_1 = \dfrac{\sum (X_i - \bar{X})(Y_i - \bar{Y})}{\sum (X_i - \bar{X})^2}, \quad 
 \hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}
 $$
+
 ::: {.example}
 ### Hand Calculation of Coefficients
 
@@ -462,11 +464,11 @@ $$
 $$
 \text{SE}(\hat{\beta}_0) = \hat{\sigma} \sqrt{ \frac{1}{n} + \frac{\bar{X}^2}{(n - 1)s_X^2} }
 $$
-Where:
+where:
 
-- $\hat{\sigma}$ is the residual standard deviation
-- $s_X^2$ is the sample variance of the explanatory variable
-- $\bar{X}$ is the mean of the $X_i$ values
+- $\hat{\sigma}$ is the residual standard deviation.
+- $s_X^2$ is the sample variance of the explanatory variable.
+- $\bar{X}$ is the mean of the $X_i$ values.
 
 These formulas assume the regression model meets the standard assumptions (linearity, independence, equal variance, and normality of errors).
 
@@ -538,6 +540,7 @@ $$
 $$
 \text{SE}(\hat{\beta}_1) = 11.646 \cdot \sqrt{\frac{1}{12 \cdot 5.744}} = 1.403
 $$
+
 #### 4. Standard Error of the Intercept
 
 $$
@@ -596,6 +599,7 @@ $$
 H_0: \beta_1 = 0 \\
 H_A: \beta_1 \ne 0
 $$
+
 ### 2. Critical Value Method
 
 Degrees of freedom:
@@ -605,7 +609,7 @@ $$
 
 For a two-tailed test with $\alpha = 0.05$:
 $$
-t_{0.975,11} = t^* = \pm 2.201
+t_{0.975,11} = \pm 2.201
 $$
 
 ### 3. Test Statistic
@@ -627,7 +631,7 @@ That is, the slope is significantly greater than 0 (*p*-value = 0.0006).
 
 ### 7. 95% Confidence Interval for the Slope
 $$
-\hat{\beta}_1 \pm t^* \cdot SE(\hat{\beta}_1) = 6.708 \pm 2.201 \times 1.403 = (3.609, 9.807)
+\hat{\beta}_1 \pm t_{0.975, 11} \cdot SE(\hat{\beta}_1) = 6.708 \pm 2.201 \times 1.403 = (3.609, 9.807)
 $$
 
 We are 95% confident that for each 1-hour increase in study time, the mean exam score increases between 3.6 and 9.8 points. Our best estimate of that increase is 6.708 points.
@@ -659,4 +663,3 @@ We are 95% confident that for each 1-hour increase in study time, the mean exam 
    - Only make predictions within the range of observed values for the explanatory variable.
    
 > **Note:** In simple linear regression, testing whether $\beta_1 = 0$ is equivalent to testing whether the population correlation $\rho = 0$.
-
