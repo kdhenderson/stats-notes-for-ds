@@ -29,4 +29,15 @@
   font-size: 0.95em;
 }
 
+.mytableblock {
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #ffffff;
+  font-size: 0.9em; /* Shrink table text slightly */
+  width: 95%; /* Optional shrink */
+  margin-left: auto;
+  margin-right: auto;
+}
 

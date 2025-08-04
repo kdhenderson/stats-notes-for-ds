@@ -3,56 +3,204 @@ title: "Quantifying Uncertainty: Confidence, Prediction and Calibration Interval
 ---
 
 ## Objectives
+
 - Calculate and interpret confidence intervals for the slope of a regression line.
 - Predict future values using the regression model.
 - Obtain and interpret confidence intervals for predicted responses.
 - Use a regression model to calibrate one measurement against another.
 
+## Useful Resources
 
-## Resources
 - [Rossman Chance Applets: Regression Shuffle](https://www.rossmanchance.com/applets/2021/regshuffle/regshuffle.htm)
 
 
 ## Statistical Relationships
-- **Key Insight:** The value of the explanatory variable determines the mean response value.
+
+- Key Insight: The value of the explanatory variable determines the mean response value.
 - Variability exists around the response variable for a given explanatory value.
-- Slope and intercept have unique distributions and standard errors.
+- Slope and intercept have distinct sampling distributions and standard errors.
+
 
 ## Formal Assumptions
-- **Linearity:** A linear relationship exists between the means of the response variable distributions and the explanatory variable.
-- **Independence:** Observations are independent.
-- **Normality:** The response variable $y$ is normally distributed for each fixed $x$ value. 
-  - Errors are in $y$, not $x$.  
-  - Normality is not assumed for $y$ overall but for $y$ at a fixed $x$)
-- **Constant Variance:** Variability in $y$ distributions is constant across all values of $x$.
+
+- **Linearity**: A linear relationship exists between the means of the response variable distributions and the explanatory variable.
+- **Independence**: Observations are independent.
+- **Normality**: The response variable $y$ is normally distributed for each fixed $x$ value. 
+  - Errors are in $y$, not $x$.
+  - Normality is assumed for $y$ at each fixed $x$, not for $y$ overall.
+- **Constant variance**: The variability in the $y$ distributions is constant across all values of $x$.
 
 
 ## Regression Model
-- **Theoretical Model:**
+
+- **Theoretical model**:
   $$
   y = \beta_0 + \beta_1 x + \varepsilon
   $$
-  - $y = \text{mean} \pm \text{residual}$, where the residual represents the error between the mean and the observed value.
+  - $y = \text{mean} \pm \text{residual}$, where the residual represents the difference between the observed value and the mean.
   - Residuals ($\varepsilon$) follow a normal distribution with mean zero and constant variance ($\sigma^2$).
-- **Regression Line (Estimated Values):** $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$
-- **Residuals:** $e_i = y_i - \bar{y} = y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i)$
-)
-- **Distribution of Residuals:** $\varepsilon \sim N(0, \sigma^2)$  
-  - Residuals are normally distributed around zero, with an estimated standard deviation equal to the standard deviation of each $y$ distribution.
+- **Regression line (estimated values)**: $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$
+- **Residuals**: $e_i = y_i - \hat{y}_i = y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i)$
+- **Distribution of residuals**: $\varepsilon \sim N(0, \sigma^2)$  
+  - Residuals are normally distributed around zero, with estimated standard deviation $\hat{\sigma}$, i.e., the standard deviation of each $y$ distribution.
 
 
 ## Using Residual Plots to Check Regression Validity
-- **Key Points:**
-  - Residual plots help validate regression assumptions.
-  - Random residual patterns suggest a valid model.
-    - Look for random distribution without pattern or outliers, mean value of zero, uniform variability along horizontal axis.
-    - Why plot the residuals? It’s easier to see departures from a horizontal rather than sloped line.
-  - A Q-Q plot of residuals confirms normality.
-  - If the residuals are randomly distributed with constant variance (narrower = stronger relationship, wider = weaker) and a Q-Q plot of the residuals show normality, the data are okay for inference.
 
-:::{layout-ncol=2}
-![Residual Analysis](images/notes_9_1.png)
+- Key points:
+  - Residual plots help validate regression assumptions.
+  - Random patterns in residuals suggest a valid model.
+    - Look for randomness, no obvious pattern, constant variability (homoscedasticity), and a mean of zero.
+    - Watch for outliers or patterns that might suggest curvature or unequal spread.
+    - Narrower bands of residuals (i.e., smaller spread) suggest a stronger relationship between $x$ and $y$; wider spread suggests a weaker relationship.
+    - It’s easier to detect deviations from a horizontal line (in residuals) than from a sloped regression line.
+  - A Q–Q plot of residuals assesses normality.
+  - If residuals are randomly distributed with constant variance, and the Q–Q plot shows normality, the model is appropriate for inference.
+
+
+## Analysis of Variance in Regression
+
+### Data Summary
+
+| Level | Score 1 | Score 2 | Score 3 |
+|--------|---------|---------|---------|
+| 1      | 3       | 5       | 7       |
+| 2      | 10      | 12      | 14      |
+| 3      | 20      | 22      | 24      |
+
+Sample size: $n = 9$
+
+### Regression Equation
+Fitting a linear model:
+$$
+\text{Score} = -4 + 8.5 \cdot \text{Level}
+$$
+
+### Equal Means Model vs. Regression Model Comparison
+
+#### Total Variability Under the Equal Means Model
+
+The **Equal Means Model (EMM)** assumes a single grand mean across all groups:
+
+$$
+\bar{y} = 13
+$$
+
+We compute the squared deviations from the grand mean for each observation. These add up to the **Total Sum of Squares (SST)**.
+
+::: {.mytableblock title="Equal Means Model: Squared Deviations from Grand Mean"}
+
+<div class="figure-caption">
+<strong>Equal Means Model: Squared Deviations from Grand Mean</strong>
+</div>
+
+| $\textcolor{#BB4444}{\textbf{Level}}$ | $\textcolor{#BB4444}{\textbf{Obs1}}$ | $\textcolor{#BB4444}{\textbf{Obs2}}$ | $\textcolor{#BB4444}{\textbf{Obs3}}$ |
+|--------------------------------------|--------------------------------------|--------------------------------------|--------------------------------------|
+| $\textcolor{#BB4444}{1}$             | $\textcolor{#BB4444}{(35 - 13)^2 = 100}$ | $\textcolor{#BB4444}{(37 - 13)^2 = 64}$  | $\textcolor{#BB4444}{(25 - 13)^2 = 36}$  |
+| $\textcolor{#BB4444}{2}$             | $\textcolor{#BB4444}{(10 - 13)^2 = 9}$   | $\textcolor{#BB4444}{(12 - 13)^2 = 1}$   | $\textcolor{#BB4444}{(14 - 13)^2 = 1}$   |
+| $\textcolor{#BB4444}{3}$             | $\textcolor{#BB4444}{(20 - 13)^2 = 49}$  | $\textcolor{#BB4444}{(22 - 13)^2 = 81}$  | $\textcolor{#BB4444}{(24 - 13)^2 = 121}$ |
+
 :::
+
+$$
+\text{SST} = \sum (y_i - \bar{y})^2 = \textcolor{#BB4444}{462}
+$$
+
+#### Residual Variability Under the Regression Model
+
+We now compute residuals from the fitted regression model:
+
+$$
+\hat{y}_i = -4 + 8.5 \cdot x_i
+$$
+
+::: {.mytableblock title="Regression Model: Squared Residuals"}
+
+<div class="figure-caption">
+<strong>Regression Model: Squared Residuals</strong>
+</div>
+
+| $\textcolor{#44AA55}{\textbf{Level}}$ | $\textcolor{#44AA55}{\textbf{Obs1}}$ | $\textcolor{#44AA55}{\textbf{Obs2}}$ | $\textcolor{#44AA55}{\textbf{Obs3}}$ |
+|--------------------------------------|--------------------------------------|--------------------------------------|--------------------------------------|
+| $\textcolor{#44AA55}{1}$             | $\textcolor{#44AA55}{(35 - 32.5)^2 = 6.25}$   | $\textcolor{#44AA55}{(37 - 32.5)^2 = 20.25}$ | $\textcolor{#44AA55}{(25 - 32.5)^2 = 56.25}$ |
+| $\textcolor{#44AA55}{2}$             | $\textcolor{#44AA55}{(10 - 13)^2 = 9}$        | $\textcolor{#44AA55}{(12 - 13)^2 = 1}$       | $\textcolor{#44AA55}{(14 - 13)^2 = 1}$       |
+| $\textcolor{#44AA55}{3}$             | $\textcolor{#44AA55}{(20 - 19.5)^2 = 0.25}$   | $\textcolor{#44AA55}{(22 - 19.5)^2 = 6.25}$  | $\textcolor{#44AA55}{(24 - 19.5)^2 = 20.25}$ |
+
+:::
+
+$$
+\text{SSE} = \sum (y_i - \hat{y}_i)^2 = \textcolor{#44AA55}{28.5}
+$$
+
+#### Decomposition of Variance
+
+::: {.mytableblock title="ANOVA Table: Comparing Regression to Equal Means Model"}
+
+<div class="figure-caption">
+<strong>ANOVA Table: Comparing Regression to Equal Means Model</strong>
+</div>
+
+| $\textcolor{#4477DD}{\textbf{Source}}$ | $\textcolor{#4477DD}{\textbf{df}}$ | $\textcolor{#4477DD}{\textbf{SS}}$ | $\textcolor{#4477DD}{\textbf{MS}}$ | $\textcolor{#4477DD}{\textbf{F}}$ | $\textcolor{#4477DD}{\mathit{p}\text{-value}}$ |
+|-------------------------|----------------|------------------|------------------|----------------|----------------------|
+| $\textcolor{#4477DD}{\text{Model}}$     | $\textcolor{#4477DD}{1}$ | $\textcolor{#4477DD}{433.5}$  | $\textcolor{#4477DD}{433.5}$            | $\textcolor{#4477DD}{106.47}$         | $\textcolor{#4477DD}{< 0.0001}$             |
+| $\textcolor{#44AA55}{\text{Error}}$     | $\textcolor{#44AA55}{7}$ | $\textcolor{#44AA55}{28.5}$   | $\textcolor{#AA9933}{4.07}$             |                |                      |
+| $\textcolor{#BB4444}{\text{Total}}$     | $\textcolor{#BB4444}{8}$ | $\textcolor{#BB4444}{462}$    |                  |                |                      |
+
+:::
+
+> **Note:** The regression model estimates both a slope and an intercept, consuming 2 degrees of freedom. This reduces the error degrees of freedom from 8 (in the Equal Means Model) to 7:
+>
+> $$
+> \text{df}_{\text{Error}} = n - 2 = 9 - 2 = 7
+> $$
+
+#### $R^2$ and RMSE Interpretation
+
+The total variability in the response can be decomposed into variability explained by the regression model and variability due to error:
+
+$$
+R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}
+$$
+
+The $R^2$ value quantifies how much of the total variability is explained by the regression model:
+
+$$
+R^2 = \frac{\textcolor{#4477DD}{433.5}}{\textcolor{#BB4444}{462}} = 1 - \frac{\textcolor{#44AA55}{28.5}}{\textcolor{#BB4444}{462}} = 0.938
+$$
+
+This means 93.8% of the variability in scores is explained by the regression model.
+
+The **error variance** is measured by the **Mean Squared Error (MSE)**, and the square root of MSE gives the **Root Mean Squared Error (RMSE)**:
+
+$$
+\textcolor{#AA9933}{
+  \text{MSE} = 4.07 \quad \Rightarrow \quad 
+  \text{RMSE} = \hat{\sigma} \text{ of each } y \text{ distribution} = \sqrt{4.07} \approx 2.02
+}
+$$
+
+#### Visual Comparison of Models
+
+![](images/fch09_residualAnalysis.png)
+
+<div class="figure-caption">
+<strong>Visual Comparison of Residuals: EMM vs. Regression Model.</strong> The regression model reduces residual error compared to the EMM. Residuals from both models are shown for a single point to illustrate how $R^2$ captures relative model improvement.
+</div>
+
+#### F Distribution Under the Null Hypothesis
+
+![](images/f_distribution_placeholder.png)
+
+<div class="figure-caption">
+<strong>F Distribution Under Null Hypothesis.</strong>
+</div>
+
+The F-test compares the variability explained by the regression model to the residual variability. A large value like $F = 106.47$ indicates the regression model provides a significantly better fit than the equal means model.
+
+#### Hypothesis Test Conclusion
+
+The $F$-statistic of 106.47 with a *p*-value < 0.0001 provides strong evidence to reject the null hypothesis that all group means are equal. The regression model explains a significant portion of the total variability in scores.
+
 
 ## Visualization and Outputs
 
@@ -130,3 +278,4 @@ summary(fit)
 :::{layout-ncol=2}
 ![Calibration Interval (Individual)](images/notes_9_8.png)
 :::
+

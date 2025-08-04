@@ -1,0 +1,164 @@
+---
+title: "Appendix C: Hypothesis Test Flowchart"
+appendix: true
+format: html
+---
+
+## Hypothesis Test Selection
+
+Use the following flowcharts to help guide your choice of hypothesis test based on study design, sample size, and assumptions. These decision tools support the logic discussed across several chapters in this book.
+
+---
+
+### One-Sample Test Selection
+
+:::: {.callout-note}
+Are you comparing a single sample to a fixed or known value?
+
+- If the sample is approximately normal → use a **one-sample *t*-test**
+- If not normal but large sample size → use a **one-sample *t*-test** (CLT)
+- If not normal and small sample size:
+  - Try a transformation  
+  - If still non-normal → use **Wilcoxon** or **Sign Test**
+::::
+
+```{mermaid}
+flowchart TD
+    A["One sample<br/>(single group)"] --> B["Compare to<br/>fixed value"]
+    B --> C["Check distribution"]
+    C --> D["Normal<br/>→ one-sample t-test"]
+    C --> E["Not normal, large n<br/>→ t-test (CLT)"]
+    C --> F["Not normal,<br/>small n"]
+    F --> G["Try transformation"]
+    G --> H["Still non-normal<br/>→ Wilcoxon / Sign Test"]
+
+    class C,F,G decision;
+    class D,E param;
+    class H nonparam;
+
+    classDef param fill:#e6f0fa,stroke:#336699,color:#000;
+    classDef nonparam fill:#fff3e0,stroke:#cc6600,color:#000;
+    classDef decision fill:#f0f0f0,stroke:#666,color:#000;
+```
+
+---
+
+### Paired-Sample Test Selection
+
+:::: {.callout-note}
+Are you comparing before-and-after measurements on the same units?
+
+- If differences are approximately normal → use a **paired *t*-test**
+- If not normal but sample size is large → use a **paired *t*-test** (CLT)
+- If not normal and small sample size → use a **Wilcoxon Signed Rank Test**
+::::
+
+```{mermaid}
+flowchart TD
+    A["Paired samples<br/>(same units)"] --> B["Check distribution<br/>of differences"]
+    B --> C["Normal<br/>→ paired t-test"]
+    B --> D["Not normal, large n<br/>→ paired t-test (CLT)"]
+    B --> E["Not normal, small n<br/>→ Wilcoxon Signed Rank"]
+
+    class B decision;
+    class C,D param;
+    class E nonparam;
+
+    classDef param fill:#e6f0fa,stroke:#336699,color:#000;
+    classDef nonparam fill:#fff3e0,stroke:#cc6600,color:#000;
+    classDef decision fill:#f0f0f0,stroke:#666,color:#000;
+```
+
+---
+
+### Two Independent Samples Test Selection
+
+:::: {.callout-note}
+Are you comparing two independent groups?
+
+- If both groups are normal:
+  - Equal variances → use a **pooled *t*-test**
+  - Unequal variances → use **Welch's *t*-test**
+- If not normal but sample sizes are large → **Welch's *t*-test** (CLT)
+- If not normal and small sample size:
+  - Try a transformation  
+  - If still non-normal → use **Mann-Whitney U Test**
+::::
+
+```{mermaid}
+flowchart TD
+    A["Two independent<br/>groups"] --> B["Check group<br/>distributions"]
+    B --> C["Normal, equal variances<br/>→ pooled t-test"]
+    B --> D["Normal, unequal variances<br/>→ Welch's t-test"]
+    B --> E["Not normal, large n<br/>→ Welch's t-test (CLT)"]
+    B --> F["Not normal,<br/>small n"]
+    F --> G["Try transformation"]
+    G --> H["Still non-normal<br/>→ Mann-Whitney U"]
+
+    class B,F,G decision;
+    class C,D,E param;
+    class H nonparam;
+
+    classDef param fill:#e6f0fa,stroke:#336699,color:#000;
+    classDef nonparam fill:#fff3e0,stroke:#cc6600,color:#000;
+    classDef decision fill:#f0f0f0,stroke:#666,color:#000;
+```
+
+---
+
+### More Than Two Groups
+
+:::: {.callout-note}
+Are you comparing means across three or more independent groups?
+
+- If all groups are normal:
+  - Equal variances → use **One-Way ANOVA**
+  - Unequal variances → use **Welch's ANOVA**
+- If not normal but large samples → **Welch's ANOVA** (CLT)
+- If not normal and small samples:
+  - Try a transformation  
+  - If still non-normal → use **Kruskal-Wallis Test**
+
+If the omnibus ANOVA is significant, use post hoc comparisons (e.g., Tukey HSD, Bonferroni, Dunnett).
+::::
+
+```{mermaid}
+flowchart TD
+    A["Three or more<br/>groups"] --> B["Check group<br/>distributions"]
+    B --> C["Normal, equal variances<br/>→ One-Way ANOVA"]
+    B --> D["Normal, unequal variances<br/>→ Welch's ANOVA"]
+    B --> E["Not normal, large n<br/>→ Welch's ANOVA (CLT)"]
+    B --> F["Not normal,<br/>small n"]
+    F --> G["Try transformation"]
+    G --> H["Still non-normal<br/>→ Kruskal-Wallis"]
+    C --> I["Post hoc tests"]
+    D --> I
+    E --> I
+
+    class B,F,G decision;
+    class C,D,E param;
+    class H nonparam;
+    class I posthoc;
+
+    classDef param fill:#e6f0fa,stroke:#336699,color:#000;
+    classDef nonparam fill:#fff3e0,stroke:#cc6600,color:#000;
+    classDef decision fill:#f0f0f0,stroke:#666,color:#000;
+    classDef posthoc fill:#e0f8e0,stroke:#339933,color:#000;
+```
+
+---
+
+### Hypothesis Testing: Step-by-Step
+
+:::: {.callout-tip title="Hypothesis Testing: Step-by-Step"}
+1. **Understand the study design.** Is it a randomized experiment or observational?  
+2. **Visualize the data.** Use histograms, boxplots, and Q-Q plots.  
+3. **Select an appropriate test.** Based on design, assumptions, and sample size.  
+4. **State the hypotheses.** Null ($H_0$) and alternative ($H_A$), one- or two-sided.  
+5. **Choose a significance level.** Typically $\alpha = 0.05$.  
+6. **Sketch the reference distribution.** Show critical regions.  
+7. **Calculate the test statistic and *p*-value.**  
+8. **Make a decision.** Reject or fail to reject $H_0$ (never accept it).  
+9. **If needed, perform post hoc testing.**  
+10. **Interpret the result in context.** Communicate clearly in applied terms.
+::::
