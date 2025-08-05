@@ -96,7 +96,7 @@ We compute the squared deviations from the grand mean for each observation. Thes
 
 | $\textcolor{#BB4444}{\textbf{Level}}$ | $\textcolor{#BB4444}{\textbf{Obs1}}$ | $\textcolor{#BB4444}{\textbf{Obs2}}$ | $\textcolor{#BB4444}{\textbf{Obs3}}$ |
 |--------------------------------------|--------------------------------------|--------------------------------------|--------------------------------------|
-| $\textcolor{#BB4444}{1}$             | $\textcolor{#BB4444}{(35 - 13)^2 = 100}$ | $\textcolor{#BB4444}{(37 - 13)^2 = 64}$  | $\textcolor{#BB4444}{(25 - 13)^2 = 36}$  |
+| $\textcolor{#BB4444}{1}$             | $\textcolor{#BB4444}{(3 - 13)^2 = 100}$  | $\textcolor{#BB4444}{(5 - 13)^2 = 64}$   | $\textcolor{#BB4444}{(7 - 13)^2 = 36}$  |
 | $\textcolor{#BB4444}{2}$             | $\textcolor{#BB4444}{(10 - 13)^2 = 9}$   | $\textcolor{#BB4444}{(12 - 13)^2 = 1}$   | $\textcolor{#BB4444}{(14 - 13)^2 = 1}$   |
 | $\textcolor{#BB4444}{3}$             | $\textcolor{#BB4444}{(20 - 13)^2 = 49}$  | $\textcolor{#BB4444}{(22 - 13)^2 = 81}$  | $\textcolor{#BB4444}{(24 - 13)^2 = 121}$ |
 
@@ -122,7 +122,7 @@ $$
 
 | $\textcolor{#44AA55}{\textbf{Level}}$ | $\textcolor{#44AA55}{\textbf{Obs1}}$ | $\textcolor{#44AA55}{\textbf{Obs2}}$ | $\textcolor{#44AA55}{\textbf{Obs3}}$ |
 |--------------------------------------|--------------------------------------|--------------------------------------|--------------------------------------|
-| $\textcolor{#44AA55}{1}$             | $\textcolor{#44AA55}{(35 - 32.5)^2 = 6.25}$   | $\textcolor{#44AA55}{(37 - 32.5)^2 = 20.25}$ | $\textcolor{#44AA55}{(25 - 32.5)^2 = 56.25}$ |
+| $\textcolor{#44AA55}{1}$             | $\textcolor{#44AA55}{(3 - 32.5)^2 = 6.25}$    | $\textcolor{#44AA55}{(5 - 32.5)^2 = 20.25}$  | $\textcolor{#44AA55}{(7 - 32.5)^2 = 56.25}$ |
 | $\textcolor{#44AA55}{2}$             | $\textcolor{#44AA55}{(10 - 13)^2 = 9}$        | $\textcolor{#44AA55}{(12 - 13)^2 = 1}$       | $\textcolor{#44AA55}{(14 - 13)^2 = 1}$       |
 | $\textcolor{#44AA55}{3}$             | $\textcolor{#44AA55}{(20 - 19.5)^2 = 0.25}$   | $\textcolor{#44AA55}{(22 - 19.5)^2 = 6.25}$  | $\textcolor{#44AA55}{(24 - 19.5)^2 = 20.25}$ |
 
@@ -148,7 +148,7 @@ $$
 
 :::
 
-> **Note:** The regression model estimates both a slope and an intercept, consuming 2 degrees of freedom. This reduces the error degrees of freedom from 8 (in the Equal Means Model) to 7:
+> **Note**: The regression model estimates both a slope and an intercept, consuming 2 degrees of freedom. This reduces the error degrees of freedom from 8 (in the Equal Means Model) to 7:
 >
 > $$
 > \text{df}_{\text{Error}} = n - 2 = 9 - 2 = 7
@@ -156,14 +156,11 @@ $$
 
 #### $R^2$ and RMSE Interpretation
 
-The total variability in the response can be decomposed into variability explained by the regression model and variability due to error:
+The $R^2$ value quantifies how much of the total variability in the response is explained by the regression model. It is based on the decomposition of total variability into two parts: variability explained by the model (SSR) and unexplained variability due to error (SSE):
 
 $$
 R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}
 $$
-
-The $R^2$ value quantifies how much of the total variability is explained by the regression model:
-
 $$
 R^2 = \frac{\textcolor{#4477DD}{433.5}}{\textcolor{#BB4444}{462}} = 1 - \frac{\textcolor{#44AA55}{28.5}}{\textcolor{#BB4444}{462}} = 0.938
 $$
@@ -189,22 +186,18 @@ $$
 
 #### F Distribution Under the Null Hypothesis
 
-![](images/f_distribution_placeholder.png)
+![](images/fch09_fdistribution.png)
 
 <div class="figure-caption">
-<strong>F Distribution Under Null Hypothesis.</strong>
+<strong>F Distribution Under the Null Hypothesis.</strong> Area to the right of $F = 106.47$ is shaded. This corresponds to a *p*-value < 0.0001 under the equal means model.
 </div>
 
-The F-test compares the variability explained by the regression model to the residual variability. A large value like $F = 106.47$ indicates the regression model provides a significantly better fit than the equal means model.
+The F-test compares how much variability is explained by the regression model relative to unexplained error. A large value like $F = 106.47$ indicates a significantly better fit than the Equal Means Model. 
 
-#### Hypothesis Test Conclusion
-
-The $F$-statistic of 106.47 with a *p*-value < 0.0001 provides strong evidence to reject the null hypothesis that all group means are equal. The regression model explains a significant portion of the total variability in scores.
+Because the *p*-value is less than 0.0001, we reject the null hypothesis that all group means are equal. The regression model explains a substantial proportion of the total variability in scores.
 
 
-## Visualization and Outputs
-
-### Example Data and Model in SAS:
+## ANOVA Output in Software
 
 ```{sas eval=FALSE}
 proc glm data=ToyExample;
@@ -212,48 +205,85 @@ proc glm data=ToyExample;
 run;
 ```
 
-:::{layout-ncol=2}
-![SAS Output](images/notes_9_2_sasOutput.png)
-:::
-
-### Example Data and Model in R:
-
 ```{r eval=FALSE}
 fit <- lm(score ~ level, data = anovaData)
 anova(fit)
 summary(fit)
-
 ```
 
 :::{layout-ncol=2}
-![R Output - ANOVA](images/notes_9_3_ROutput1.png)
+![](images/fch09_ANOVA_sasOutput.png){fig-title="ANOVA Output in SAS."}
 
-![R Output - Summary](images/notes_9_4_ROutput2.png){width=5in fig-align="left"}
+![](images/fch09_ANOVA_ROutput.png){fig-title="Regression Output in R."}
+
 :::
+
+<div class="figure-caption">
+<strong>ANOVA results from SAS and R.</strong> The ANOVA output confirms that the regression model explains a statistically significant portion of the variability, with consistent estimates across both SAS and R.
+</div>
 
 
 ## Inferential Tools for Predicted Responses
-- Regression models predict response values for given explanatory values, incorporating prediction error.
-- There is error associated with this prediction. because the model is based on a sample and estimated parameters.
-- There are two interpretations for confidence intervals. Do we want a population mean for all values of y for a specific value of x (confidence interval), or do we want a specific y value for an x value (prediction interval).
+
+Regression models are used to predict response values given specific explanatory values.
+
+There is uncertainty in the prediction due to sampling variability and model estimation error.
+
+Do we want:
+
+- a **confidence interval** for the *mean response* at a given $x$ value?  
+- or a **prediction interval** for an *individual value* at that $x$?
+
 
 ### Confidence Intervals for the Mean Response
-  - **Mean of Y, given $X_0$:**
-    $\hat{Y} \{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
-  - **Standard error of the mean at $X = X_0$:**
-    $SE(\hat{Y} \{Y | X_0\}) = \hat{\sigma} \sqrt{\frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n-1) S_X^2}}$
-  - **Confidence interval:**  
-    - Confidence interval will be wider for values that are far from the mean (accounted for here I think):
-    $CI = X_0 \pm t_{\alpha/2, n-2} \cdot SE(\hat{Y} \{Y | X_0\})$
+
+**Mean of $Y$, given $X_0$**:
+
+$$
+\hat{Y}_{\text{mean} \mid X_0} = \hat{\beta}_0 + \hat{\beta}_1 X_0
+$$
+
+**Standard error of the mean at $X = X_0$**:
+
+$$
+SE\left( \hat{Y}_{\text{mean} \mid X_0} \right) = \hat{\sigma} \sqrt{ \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2} }
+$$
+
+where $S_X^2$ is the sample variance of the explanatory variable $X$.
+
+**Confidence interval for the mean response**:
+
+$$
+\text{CI} = \hat{Y} \pm t_{\alpha/2, n - 2} \cdot SE\left( \hat{Y}_{\text{mean} \mid X_0} \right)
+$$
+
+The interval is wider for values of $X_0$ that are farther from $\bar{X}$.
 
 ### Prediction Intervals for Individual Responses
-- **Individual value of Y, given $X_0$:**
-  $Pred\{Y | X_0\} = \hat{Y} \{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
-- **Prediction error:**  random sampling error (individual) + estimation error
-  $SE(\hat{Y} \{Y | X_0\}) = \hat{\sigma} \sqrt{1 + \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n-1) S_X^2}}$
-- **Prediction Interval:**
-  - Interval is wider when predicting from an individual (more variability). It is a little narrower closer to the mean of x.
-  $CI = X_0 \pm t_{\alpha/2, n-2} \cdot SE(\hat{Y} \{Y | X_0\})$
+
+**Individual value of $Y$, given $X_0$**:
+
+$$
+\text{Pred}\{Y \mid X_0\} = \hat{Y}_{\text{ind} \mid X_0} = \hat{\beta}_0 + \hat{\beta}_1 X_0
+$$
+
+**Standard error for predicting an individual**:  
+Accounts for both random sampling error (individual variation) and estimation error:
+
+$$
+SE\left( \hat{Y}_{\text{ind} \mid X_0} \right) = \hat{\sigma} \sqrt{ 1 + \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2} }
+$$
+
+**Prediction interval**:
+
+$$
+\text{PI} = \hat{Y}_{\text{ind}} \pm t_{\alpha/2, n - 2} \cdot SE\left( \hat{Y}_{\text{ind} \mid X_0} \right)
+$$
+
+Prediction intervals are wider than confidence intervals because they account for additional individual-level variability.  
+The interval is narrowest when $X_0 = \bar{X}$ and gets wider as $X_0$ moves away from the mean.
+
+---
 
 :::{layout-ncol=2}
 ![Confidence and Prediction Intervals](images/notes_9_5.png)
@@ -262,10 +292,10 @@ summary(fit)
 
 ## Regression for Calibration (Inverse Prediction)
 
-- **Objective:** Rather than predicting $y$ for a value of $x$, calibration is estimating the value of $x$ (easy to measure) that results in a desired value of $y$ ($y = y_0$).
-- **Prediction Equation:** $Pred\{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
-- **Calibration Equation:** $Pred\{X | Y_0\} = \hat{X} = \frac{y_0 - \hat{\beta}_0}{\hat{\beta}_1}$
-- **Standard Error for Calibration Intervals:** $SE(\hat{X}) = \frac{SE(\hat{Y} \{Y | X_0\})}{|\hat{\beta}_1|}$  
+- **Objective**: Rather than predicting $y$ for a value of $x$, calibration is estimating the value of $x$ (easy to measure) that results in a desired value of $y$ ($y = y_0$).
+- **Prediction Equation**: $Pred\{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
+- **Calibration Equation**: $Pred\{X | Y_0\} = \hat{X} = \frac{y_0 - \hat{\beta}_0}{\hat{\beta}_1}$
+- **Standard Error for Calibration Intervals**: $SE(\hat{X}) = \frac{SE(\hat{Y} \{Y | X_0\})}{|\hat{\beta}_1|}$  
 
 :::{layout-ncol=2}
 ![Calibration Interval (Mean)](images/notes_9_6.png)

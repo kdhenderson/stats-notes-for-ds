@@ -148,7 +148,7 @@ See the summary figure below for a visual breakdown of how these components are 
      = \frac{\text{Extra SS} / \text{Extra df}}{\text{MSE}} 
      = \frac{\text{Variation Explained}}{\text{Variation Left to Explain}}
    $$
-   Where:
+   where:
    - $\text{MS}_{\text{between}} = \frac{\text{Extra SS}}{\text{Extra df}}$
    - $\text{MS}_{\text{within}} = \text{MSE} = \frac{\text{Error SS}}{\text{Error df}}$
 4. **Determine p-value**:
