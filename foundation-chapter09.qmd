@@ -207,20 +207,24 @@ run;
 
 ```{r eval=FALSE}
 fit <- lm(score ~ level, data = anovaData)
-anova(fit)
-summary(fit)
+anova(fit)      # ANOVA table: sums of squares, F-stat
+summary(fit)    # Coefficient table, t-tests, R², F-stat
 ```
 
 :::{layout-ncol=2}
 ![](images/fch09_ANOVA_sasOutput.png){fig-title="ANOVA Output in SAS."}
 
-![](images/fch09_ANOVA_ROutput.png){fig-title="Regression Output in R."}
+![](images/fch09_ANOVA_ROutput.png){fig-title="ANOVA Output in R."}
 
 :::
 
-<div class="figure-caption">
-<strong>ANOVA results from SAS and R.</strong> The ANOVA output confirms that the regression model explains a statistically significant portion of the variability, with consistent estimates across both SAS and R.
-</div>
+:::{layout-ncol=2}
+
+![](images/fch09_regression_ROutput.png){fig-title="Regression Summary from summary(fit) in R."}
+
+:::
+
+<div class="figure-caption"> <strong>ANOVA and Regression Output from SAS and R.</strong> The top row compares ANOVA tables from SAS and `anova(fit)` in R, both showing the F-statistic and *p*-value for the model. The lower R output from `summary(fit)` includes the regression coefficients, $t$-tests, $R^2$, and overall F-test.</div>
 
 
 ## Inferential Tools for Predicted Responses
@@ -237,11 +241,15 @@ Do we want:
 
 ### Confidence Intervals for the Mean Response
 
+The regression line is modeling the mean of $Y$ at values of $X$.
+
 **Mean of $Y$, given $X_0$**:
 
 $$
 \hat{Y}_{\text{mean} \mid X_0} = \hat{\beta}_0 + \hat{\beta}_1 X_0
 $$
+
+We want to know how confident we are that $\hat{Y}$ is near the true $Y$ value.
 
 **Standard error of the mean at $X = X_0$**:
 
@@ -250,6 +258,24 @@ SE\left( \hat{Y}_{\text{mean} \mid X_0} \right) = \hat{\sigma} \sqrt{ \frac{1}{n
 $$
 
 where $S_X^2$ is the sample variance of the explanatory variable $X$.
+
+As $X_0 \to \bar{X}$:
+
+$$
+SE\left( \hat{Y}_{\text{mean} \mid X_0} \right) = SE\left( \bar{Y} \right) = \hat{\sigma} \sqrt{ \frac{1}{n} + 0}
+$$
+
+::: {.callout-note}
+See the [Study Hours and Exam Grades example](foundation-chapter08.html#example-study-hours-and-exam-grades) for a worked calculation of 
+$\bar{X}$, $s_X^2$, and $\hat{\sigma}$, which are used in computing 
+$SE\left( \hat{Y}_{\text{mean} \mid X_0} \right)$.
+:::
+
+![](images/fch09_se_meanResponse.png)
+
+<div class="figure-caption">
+<strong>Sampling Distribution of the Mean Response at $X_0$.</strong> The dot marks the predicted mean response $\hat{Y}_{\text{mean} \mid X_0}$ from the regression line. The sideways bell curve illustrates its sampling distribution across repeated samples. The vertical lines mark one standard error above and below the mean response; this is narrower than the full 95% confidence interval.
+</div>
 
 **Confidence interval for the mean response**:
 
@@ -267,12 +293,41 @@ $$
 \text{Pred}\{Y \mid X_0\} = \hat{Y}_{\text{ind} \mid X_0} = \hat{\beta}_0 + \hat{\beta}_1 X_0
 $$
 
+This is the predicted *mean* response at $X_0$, obtained from the regression line. To estimate how far an individual observation might deviate from the predicted value, we must account for uncertainty in both the regression model and the individual value.
+
 **Standard error for predicting an individual**:  
-Accounts for both random sampling error (individual variation) and estimation error:
+
+Combines uncertainty from estimating the mean (estimation error) and natural variability in individuals (random sampling error):
 
 $$
-SE\left( \hat{Y}_{\text{ind} \mid X_0} \right) = \hat{\sigma} \sqrt{ 1 + \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2} }
+SE\left( \hat{Y}_{\text{ind} \mid X_0} \right) = \hat{\sigma} \sqrt{ 
+1 + \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2} }
 $$
+
+To highlight the two sources of uncertainty:
+
+$$
+SE\left( \hat{Y}_{\text{ind} \mid X_0} \right) = \hat{\sigma} \sqrt{ 
+\underbrace{1}_{\text{individual variability}} + 
+\underbrace{\frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2}}_{\text{estimation uncertainty}} }
+$$
+
+Note that the second term under the square root matches the formula for the standard error of the mean response at $X_0$:
+
+$$
+SE\left( \hat{Y}_{\text{mean} \mid X_0} \right)^2 = \hat{\sigma}^2 \left( 
+\frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2} \right)
+$$
+Thus:
+
+$$
+SE\left( \hat{Y}_{\text{ind} \mid X_0} \right) = \hat{\sigma} 
+\sqrt{\underbrace{1}_{\text{individual variability}} + 
+\underbrace{\text{estimation variance}}_{\text{mean response}}}
+$$
+
+- The 1 reflects random variation in individual responses. Even if we knew the true mean exactly, individuals naturally vary around it.
+- The remaining terms reflect sampling variability in the regression coefficients used to compute $\hat{Y}_{\text{ind} \mid X_0}$.
 
 **Prediction interval**:
 
@@ -280,32 +335,101 @@ $$
 \text{PI} = \hat{Y}_{\text{ind}} \pm t_{\alpha/2, n - 2} \cdot SE\left( \hat{Y}_{\text{ind} \mid X_0} \right)
 $$
 
-Prediction intervals are wider than confidence intervals because they account for additional individual-level variability.  
-The interval is narrowest when $X_0 = \bar{X}$ and gets wider as $X_0$ moves away from the mean.
+Prediction intervals are wider than confidence intervals because they include additional uncertainty for individual outcomes.  
+They are narrowest when $X_0 = \bar{X}$ and widen as $X_0$ moves farther from the sample mean.
 
----
+![](images/fch09_CI_PI_intervals.png)
 
-:::{layout-ncol=2}
-![Confidence and Prediction Intervals](images/notes_9_5.png)
-:::
+<div class="figure-caption">
+<strong>Regression Line with Confidence and Prediction Intervals.</strong> The dotted blue line shows the fitted regression line, and the vertical dotted line marks the sample mean $\overline{X}$. The shaded green band represents the 95% confidence interval (CI) for the mean response $\hat{Y}$, while the shaded orange band shows the 95% prediction interval (PI) for an individual response. The solid blue bell curve represents the sampling distribution of the predicted mean response at $\overline{X}$ under repeated sampling. The center dot marks $\hat{Y}(\overline{X})$, and the upper and lower green dots indicate the 95% CI bounds, $\hat{Y} \pm t \cdot SE_{\text{mean}}$. The green bell-shaped curves mirror these bounds, visually suggesting the plausible range of values that the mean response might take across repeated samples.
+</div>
 
+**Understanding the Confidence Interval**:
+
+See supplementary figure below for an illustration of how the confidence interval represents plausible sampling distributions of the *mean* response.
+
+![](images/fch09_CI_mean_distributions.png)
+
+<div class="figure-caption">
+<strong>Plausible Sampling Distributions for the Mean Response at $\bar{X}$.</strong> Each curve represents a possible sampling distribution of $\hat{Y}(\bar{X})$ if the true population mean were at that location. The central blue distribution corresponds to the sample estimate, while the green curves show other plausible means consistent with the 95% confidence interval. The confidence interval for the mean spans the horizontal segment beneath the distributions.
+</div>
 
 ## Regression for Calibration (Inverse Prediction)
 
-- **Objective**: Rather than predicting $y$ for a value of $x$, calibration is estimating the value of $x$ (easy to measure) that results in a desired value of $y$ ($y = y_0$).
-- **Prediction Equation**: $Pred\{Y | X_0\} = \hat{\beta}_0 + \hat{\beta}_1 X_0$
-- **Calibration Equation**: $Pred\{X | Y_0\} = \hat{X} = \frac{y_0 - \hat{\beta}_0}{\hat{\beta}_1}$
-- **Standard Error for Calibration Intervals**: $SE(\hat{X}) = \frac{SE(\hat{Y} \{Y | X_0\})}{|\hat{\beta}_1|}$  
+Rather than predicting $y$ for a given $x$, **calibration** estimates the $x$ value, a value that is easy to measure, that would produce a desired $y$ (i.e., solve for $x$ when $y = y_0$).
 
-:::{layout-ncol=2}
-![Calibration Interval (Mean)](images/notes_9_6.png)
+**Prediction equation**:
 
-![](images/notes_9_7.png)
-:::
+$$
+\text{Pred}\{Y \mid X_0\} = \hat{Y}_{\text{ind} \mid X_0} = \hat{\beta}_0 + \hat{\beta}_1 X_0
+$$
 
----
+**Calibration equation** (solving for $X_0$ given $y_0$):
 
-:::{layout-ncol=2}
-![Calibration Interval (Individual)](images/notes_9_8.png)
-:::
+$$
+\hat{X} = \frac{y_0 - \hat{\beta}_0}{\hat{\beta}_1}
+$$
 
+### Confidence Interval for the Mean (Calibration Target)
+
+Given a desired outcome (e.g., a grade of $y = 75$), we can estimate the value of $X$, the number of study hours that would produce it:
+
+$$
+\hat{X} = \frac{75 - 40.99}{6.71} = 5.07
+$$
+
+To construct a confidence interval for the mean $X$, we treat this as an inverse prediction problem and quantify the uncertainty in the estimate of $\hat{X}$.
+
+**Standard error of the calibration estimate**:
+
+$$
+SE(\hat{X}) = \frac{SE\left( \hat{Y}_{\text{mean} \mid X_0} \right)}{|\hat{\beta}_1|}
+$$
+
+Using:
+
+- $n = 13$, $\bar{X} = 3.92$, $S_X^2 = 5.74$
+- $\hat{\sigma} = 11.65$ (from MSE $ = 135.62$)
+- $\hat{X} = 5.07$
+- $\hat{\beta}_1 = 6.71$
+
+Compute $SE(\hat{X})$:
+
+$$
+SE(\hat{X}) = \frac{11.65}{|6.71|} \sqrt{ \frac{1}{13} + \frac{(5.07 - 3.92)^2}{(13 - 1) \cdot 5.74} } = \frac{11.65}{|6.71|} \cdot \sqrt{0.0889} = 0.538
+$$
+
+**95% Confidence Interval for $\hat{X}$**:
+
+Using $t_{0.975, n-2} \approx 2.02$:
+
+$$
+\text{95% CI} = \hat{X} \pm t_{0.975, n-2} \cdot SE(\hat{X}) = 5.07 \pm 2.02 \cdot 0.538 = (3.983,\ 6.157)
+$$
+
+Interpretation:
+
+> We are 95% confident that the number of study hours a student would need to earn a mean grade of 75 is in the interval (3.983, 6.157) hours.
+
+### Prediction Interval for an Individual $X$
+
+Sometimes we want to predict the $X$ value associated with **a single observation** that yields a specific $y$.
+
+We still estimate:
+
+$$
+\hat{X} = 5.07
+$$
+
+But the standard error includes an extra term for individual-level variation:
+
+$$
+SE\left( \hat{Y}_{\text{ind} \mid X_0} \right) = \hat{\sigma} \sqrt{ 1 + \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2} }
+$$
+
+Then:
+
+$$
+SE(\hat{X}) = \frac{SE\left( \hat{Y}_{\text{ind} \mid X_0} \right)}{|\hat{\beta}_1|}
+$$
+This yields a wider interval than the confidence interval for the mean, because it reflects both model error and individual-level error.
