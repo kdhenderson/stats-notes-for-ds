@@ -47,16 +47,16 @@ execute:
 ## Influential and Outlying Observations
 
 ### Key Concepts
-- **Influential observations:** These are points that, if added or removed, substantially change the regression line (e.g., the slope or intercept).
-- **Leverage:** A measure of how far an observation’s $x$ value is from the mean of all $x$ values ($\bar{x}$).
+- **Influential observations**: These are points that, if added or removed, substantially change the regression line (e.g., the slope or intercept).
+- **Leverage**: A measure of how far an observation’s $x$ value is from the mean of all $x$ values ($\bar{x}$).
   - Points farther from $\bar{x}$ have higher leverage.
   - Mathematically, leverage increases with the squared distance from $x_i$ to $\bar{x}$, relative to the total sum of squares in $x$. This is closely related to how many standard deviations $x_i$ is from the mean.
   - Leverage is based on the $x$ values alone;it does **not** depend on $y$.
 
 ### Impact of Outliers
-- **Low leverage, low influence:** Minimal effect on estimates.
-- **High leverage, low influence:** Far from most data but consistent with the trend; minimal effect on the correlation, standard errors, and regression estimates.
-- **High leverage, high influence:** Can distort results by pulling the regression line toward the outlier, resulting in different parameter estimates.
+- **Low leverage, low influence**: Minimal effect on estimates.
+- **High leverage, low influence**: Far from most data but consistent with the trend; minimal effect on the correlation, standard errors, and regression estimates.
+- **High leverage, high influence**: Can distort results by pulling the regression line toward the outlier, resulting in different parameter estimates.
 
 ### Detecting Influential Observations
 
