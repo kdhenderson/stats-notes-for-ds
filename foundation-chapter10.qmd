@@ -5,72 +5,79 @@ execute:
 ---
 
 ## Objectives
+
 - Calculate and interpret residuals, standardized residuals, and studentized residuals.
 - Use residuals to check regression assumptions.
 - Apply necessary remedies when assumptions are violated.
-- Understand the robustness of assumptions (i.e. what can you get away with?).
+- Understand the robustness of assumptions (i.e., what can you get away with?)
 
 
 ## Robustness of Regression Assumptions
 
 ### Linearity
-- Parameter estimates will be misleading if a straight-line model is inadequate or fits only part of the data. Predictions will be biased, and confidence intervals (CI) will not appropriately reflect uncertainty.
-- **Remedy:** Consider adding polynomial terms (quadratic or cubic) to improve model fit.
+- Parameter estimates will be misleading if a straight-line model is inadequate or fits only part of the data.
+- Predictions will be biased, and confidence intervals (CIs) will not appropriately reflect uncertainty.
+- **Remedy**: Consider adding polynomial terms (quadratic or cubic) to improve model fit.
 
 ### Normality
 - Transformations that correct for normality often address constant variance as well.
-- **Effects of non-normality:**
-  - **Coefficient estimates & standard errors:** Robust, except with many outliers and small sample sizes.
-  - **Confidence intervals:** Affected primarily by outliers (long tails).
-  - **Prediction intervals:** Sensitive to non-normality due to their reliance on normal distributions.
+- **Effects of non-normality**:
+  - **Coefficient estimates and standard errors**: Robust, except with many outliers and small sample sizes.
+  - **Confidence intervals**: Affected primarily by outliers (long tails).
+  - **Prediction intervals**: Sensitive to non-normality due to reliance on normal distributions.
 
-### Constant Variance (Homoscedasticity): for every value of x, the spread of y is the same.
-- Least squares estimates remain unbiased with slight violations. However, large violations cause standard errors to misrepresent uncertainty.
-- **Remedy:** Large violations should be corrected using a transformation.
+### Constant Variance (Homoscedasticity)
+- For every value of $x$, the spread of $y$ should be the same.
+- Least squares estimates remain unbiased with slight violations.
+- Large violations can cause standard errors to underestimate or overestimate uncertainty, leading to misleading confidence intervals and hypothesis tests.
+- **Remedy**: Large violations should be corrected using a transformation.
 
 ### Independence
-- **Parameter estimates:** Not affected by violations.
-- **Standard errors:** Affected significantly. Smaller standard errors make hypothesis testing misleading (make it easier to reject).
-- **Remedy:** Serial and cluster effects require different models.
+- **Parameter estimates**: Not affected by violations.
+- **Standard errors**: Affected significantly. Violations can lead to underestimated standard errors, which inflate *t*-statistics and make it easier to incorrectly reject the null hypothesis.
+- **Remedy**: Serial and cluster effects require different models.
 
-### How much deviation from assumptions still give accurate estimates?
-- Small violations are acceptable.
-- Transformations can often help.
-- Only severe departures from linearity or normality (due to outliers) require alternative methods.
+### How Much Deviation Is Acceptable?
+- Small violations of assumptions generally do not invalidate regression results.
+- However, large deviations can lead to inaccurate estimates, especially for standard errors, confidence intervals, and p-values.
+- Transformations can often correct violations and improve interpretability.
+- Only severe departures from linearity or normality (e.g., due to outliers) typically require alternative methods.
 
 
 ## Influential and Outlying Observations
 
 ### Key Concepts
-- **Influential observations:** Does adding one point change the slope?
-- **Leverage:** Reflects how far a point is from $\bar{x}$. Points that are farther have higher leverage.
-  - Function of distance from $x_i$ to $\bar{x}$ in standard deviations.
-  - Function of the proportion of total sum of squares contributed by $x_i$.
+- **Influential observations:** These are points that, if added or removed, substantially change the regression line (e.g., the slope or intercept).
+- **Leverage:** A measure of how far an observation’s $x$ value is from the mean of all $x$ values ($\bar{x}$).
+  - Points farther from $\bar{x}$ have higher leverage.
+  - Mathematically, leverage increases with the squared distance from $x_i$ to $\bar{x}$, relative to the total sum of squares in $x$. This is closely related to how many standard deviations $x_i$ is from the mean.
+  - Leverage is based on the $x$ values alone;it does **not** depend on $y$.
 
 ### Impact of Outliers
 - **Low leverage, low influence:** Minimal effect on estimates.
-- **High leverage, low influence:** Far from most data but consistent with trend; minimal effect on correlation, standard error, and estimates.
-- **High leverage, high influence:** Can distort results by pulling the regression line toward the outlier resulting in different parameter estimates.
+- **High leverage, low influence:** Far from most data but consistent with the trend; minimal effect on the correlation, standard errors, and regression estimates.
+- **High leverage, high influence:** Can distort results by pulling the regression line toward the outlier, resulting in different parameter estimates.
 
-### How do we detect them? How far is too far?
+### Detecting Influential Observations
 
 #### Leverage Statistic, $h_{ii}$
-- Measures the influence of $x$ values on predictions (how far the $x$ values are from the $\bar{x}$).
-- **High leverage:** When $h_{ii} > \frac{2p}{n}$ (where $p$ is the number of parameters).
-- Calculation:
+- Measures how far the $x$ value for an observation is from the mean $\bar{x}$, in relation to the total spread of $x$ values. Larger values of $h_{ii}$ indicate higher leverage.
+- An observation is considered to have high leverage if $h_{ii} > \dfrac{2p}{n}$, where $p$ is the number of parameters in the model (including the intercept).
+- Formula:
   $$
   h_{ii} = \frac{1}{n} + \frac{(X_i - \bar{X})^2}{\sum_{j=1}^{n} (X_j - \bar{X})^2}
   $$
-  **or**
+  or
   $$
-  h_{ii} = \frac{1}{n-1} \left[ \frac{(X_i - \bar{X})}{s_x} \right]^2 + \frac{1}{n}
+  h_{ii} = \frac{1}{n - 1} \left[ \frac{(X_i - \bar{X})}{s_x} \right]^2 + \frac{1}{n}
   $$
 
+---
 
 ## Types of Residuals
-- **Standardized:** $e_i / \text{RMSE}$
-- **Studentized:** $e_i / \sqrt{\text{MSE} \cdot (1 - h_{ii})}$
-- **Studentized-deleted (R-student):**
+- **Standardized**: $e_i / \text{RMSE}$
+- **Studentized**: $e_i / \sqrt{\text{MSE} \cdot (1 - h_{ii})}$
+- **Studentized-deleted (R-student)**:
   - Remove an observation, recalculate the regression, and compute the studentized residual.
   - Standard deviation is calculated without the point in question.
   - Large residual values indicate influential points.
@@ -171,16 +178,16 @@ Source: @ramsey2012statistical.
 
 ## Log Transformation: They Work & Are Easy to Interpret
 
-- **Log on response (log-linear):**  
+- **Log on response (log-linear)**:  
   $\log\hat{Y}_i = \beta_0 + \beta_1 X_i$
   - Mean of the response is log-linearly related to the explanatory variable.
   - $\text{Median}\{Y|X\} = \exp(\beta_0) \exp(\beta_1 X)$
   - One unit increase in $X$ → multiplicative change in $\exp(\beta_1)$ in the median of $Y|X$.
   - $\text{Median}\{Y|(X + 1)\} / \text{Median}\{Y|X\} = \exp(\beta_1)$
-- **Log on explanatory variable (linear-log):**  
+- **Log on explanatory variable (linear-log)**:  
   $\hat{Y}_i = \beta_0 + \beta_1 \log X_i$
   - Depends on log base (e.g. $2$ → doubling, $10$ → ten-fold).
-- **Both logged (log-log):**  
+- **Both logged (log-log)**:  
   $\log\hat{Y}_i = \beta_0 + \beta_1 \log X_i$
   - **Complicated** :/
   - Doubling (or tenfold increase) of $X$ is associated with a change of $2^{\beta_1}$ (or $10^{\beta_1}$) in the median of $Y$.
@@ -188,13 +195,13 @@ Source: @ramsey2012statistical.
 
 ## Interpretations of Log Transformation Varieties
 
-- **Log-linear model:**  
+- **Log-linear model**:  
   A one unit increase in $X$ is associated with a multiplicative change of $e^{\beta_1}$ in the median of $Y|X$.
-- **Linear-log model:**  
+- **Linear-log model**:  
   A doubling of $X$ is associated with a $\beta_1 \log(2)$ unit change in the mean of $Y|X$.
-- **Log-log model:**  
+- **Log-log model**:  
   A doubling of $X$ is associated with a $2^{\beta_1}$ multiplicative change in the median of $Y|X$.
-- **Remember:** Logging $Y$ → median.
+- **Remember**: Logging $Y$ → median.
 
 
 ::: {layout-ncol=2}
@@ -210,7 +217,7 @@ Source: @ramsey2012statistical.
 :::
 
 ## Formal Test for Lack of Fit
-- **Use:** different values of Y for replicated observations of X
+- **Use**: different values of Y for replicated observations of X
 - **F-test for lack of fit** has the usual assumptions:
   - Normality of $Y|X$,
   - Independence of $(X, Y)$ pairs,
