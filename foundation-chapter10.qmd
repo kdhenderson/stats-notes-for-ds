@@ -72,73 +72,84 @@ execute:
   h_{ii} = \frac{1}{n - 1} \left[ \frac{(X_i - \bar{X})}{s_x} \right]^2 + \frac{1}{n}
   $$
 
----
 
 ## Types of Residuals
-- **Standardized**: $e_i / \text{RMSE}$
-- **Studentized**: $e_i / \sqrt{\text{MSE} \cdot (1 - h_{ii})}$
-- **Studentized-deleted (R-student)**:
+- **Standardized:** $e_i / \text{RMSE}$
+- **Studentized:** $e_i / \sqrt{\text{MSE} \cdot (1 - h_{ii})}$
+- **Studentized-deleted (R-student):**
   - Remove an observation, recalculate the regression, and compute the studentized residual.
-  - Standard deviation is calculated without the point in question.
-  - Large residual values indicate influential points.
+  - The standard deviation is calculated without the point in question.
+  - Large residual values indicate potentially influential points.
   - Formula:
     $$
     \text{RSTUDENT} = \frac{\text{res}_i}{s_i \sqrt{1 - h_i}}
     $$
-- **Why different types?** To normalize variance and make residuals comparable.
+- **Why different types?** All three aim to normalize variance to make residuals for comparability, but they differ in how they estimate the error term:
+  - **Standardized:** Uses a single overall RMSE.
+  - **Studentized:** Adjusts for leverage via $(1 - h_{ii})$.
+  - **R-student:** Recalculates without the observation for more accurate influence detection.
 
 
-## Leave-One-Out Statistics  
-$\hat{Y}_{i(i)}$ is the predicted value of $Y_i$ when the $i$-th observation is left out of the regression model.
+## Leave-One-Out Statistics
+
+These measures assess the impact of each observation by considering the model fit when that observation is omitted.
+
+Let $\hat{Y}_{i(i)}$ be the predicted value of $Y_i$ when the $i$-th observation is left out of the regression model.
 
 ### PRESS (Predicted Residual Sum of Squares)
 $$
 \text{PRESS}_p = \sum_{i=1}^n \left(Y_i - \hat{Y}_{i(i)}\right)^2 = \sum e_{i(i)}^2
 $$
-- A smaller PRESS value indicates a better-fitting model.
+- Smaller PRESS values indicate better-fitting models.
 
 ### Cook’s Distance ($D_i$)
-- Blends residuals and leverage:
+- Combines information on residual size and leverage, and is equivalent to comparing predictions from the full model to those from a leave-one-out model:
 $$
 D_i = \sum_{i=1}^n \frac{\left(\hat{Y}_{i(i)} - \hat{Y}_i\right)^2}{p \cdot \text{MSE}} = \frac{1}{p} (\text{studres}_i)^2 \left[\frac{h_i}{1 - h_i}\right]
 $$
-- $p =$ number of parameters.
+- Here, $p$ is the number of parameters in the model (including the intercept).
 
 
 ## Durbin-Watson Test for Independence
+
 $$
 d = \frac{\sum_{i=1}^n (e_i - e_{i-1})^2}{\sum_{i=1}^n e_i^2}
 $$
-- Values near 0 indicate positive correlation; values near 4 indicate negative correlation. Distributed symmetrically about 2.
+- Values near 0 indicate positive correlation; values near 4 indicate negative correlation. The distribution is symmetric about 2.
 - Available in R and SAS.
 
 
-## Recap
+## Residual Types Summary
 
-| **Name**                | **Expression**                                       | **Use**                        |
-|-------------------------|-----------------------------------------------------|--------------------------------|
-| **Residual**            | $e_i = y_i - \hat{y}_i$                              | Residual plots                |
-| **Standardized residual** | $r_i = \frac{e_i}{s \sqrt{1 - h_{ii}}}$            | Identify outliers             |
-| **Studentized residual** | $t_i = \frac{e_i}{s_{(i)} \sqrt{1 - h_{ii}}}$       | Test outlying $Y$’s           |
-| **Deleted residual**     | $e_{i(i)} = y_i - \hat{y}_{i(i)} = \frac{e_i}{1 - h_{ii}}$ | Calculate PRESS               |
+| **Name**                  | **Expression**                                           | **Use**                        |
+|---------------------------|-----------------------------------------------------------|--------------------------------|
+| **Residual**              | $e_i = y_i - \hat{y}_i$                                   | Residual plots                 |
+| **Standardized residual** | $r_i = \frac{e_i}{s \sqrt{1 - h_{ii}}}$                   | Identify outliers              |
+| **Studentized residual**  | $t_i = \frac{e_i}{s_{(i)} \sqrt{1 - h_{ii}}}$             | Test outlying $Y$ values       |
+| **Deleted residual**      | $e_{i(i)} = y_i - \hat{y}_{i(i)} = \frac{e_i}{1 - h_{ii}}$ | Calculate PRESS                |
 
-> At $\alpha = 0.05$, we expect 5% of studentized residuals to be greater than 2 or less than -2.
+> At $\alpha = 0.05$, we expect 5% of studentized residuals to be greater than 2 or less than –2.
 
-![Residual Panel](images/notes_10_1_residual_panel.png)
+![](images/fch10_residualPanel.png){fig-title="Residual Diagnostics Panel."}
+
+<div class="figure-caption">
+<strong>Residual diagnostics panel.</strong> A collection of plots used to assess regression assumptions and identify potential problems. Several plots use standardized, studentized, or studentized-deleted (R-student) residuals to improve comparability across observations. These include: residuals vs. predicted values (checking for nonlinearity or heteroscedasticity), R-studentized residuals vs. predicted values (highlighting outliers), and R-studentized residuals vs. leverage (identifying high-leverage outliers). Other diagnostics include the normal QQ plot and histogram of residuals (assessing normality), predicted values vs. observed values (evaluating fit), Cook’s distance by observation (identifying influential points by combining leverage and residual size), and QQ plots of fitted means and residuals. Together, these diagnostics help evaluate model adequacy and guide possible remedies.
+</div>
 
 
 ## Graphical Assessment of Residuals
 
-| **Pattern**             | **Potential Issue** | **Solution** |
-|-------------------------|--------------------|-------------|
-| Linear means, constant SD | Model fits well | No action needed |
-| Curved means, equal SD | Nonlinearity | Transform $X$ |
-| Curved means, increasing SD | Nonlinearity + heteroscedasticity | Transform $Y$ |
-| Skewed residuals | Non-normality | Can model mean, but CIs/PIs unreliable. Consider transformations. |
-| Linear means, increasing SD | Heteroscedasticity | Use weighted regression |
+| **Pattern**                    | **Potential Issue**        | **Solution**                  |
+|--------------------------------|----------------------------|-------------------------------|
+| Linear means, constant SD      | Model fits well            | No action needed              |
+| Curved means, equal SD         | Nonlinearity               | Transform $X$                 |
+| Curved means, increasing SD    | Nonlinearity + heteroscedasticity | Transform $Y$        |
+| Skewed residuals               | Non-normality              | Can still model the mean, but CIs/PIs may be unreliable. Consider transformations. |
+| Linear means, increasing SD    | Heteroscedasticity         | Use weighted regression       |
 
-![Regression Patterns](images/notes_10_2_regression_patterns.png){width=5in fig-align="left"} 
+---
 
+![Regression Patterns](images/notes_10_2_regression_patterns.png){width=5in fig-align="left"}
 
 ## Transformation Recommendations
 1. Log
