@@ -147,62 +147,108 @@ $$
 | Skewed residuals               | Non-normality              | Can still model the mean, but CIs/PIs may be unreliable. Consider transformations. |
 | Linear means, increasing SD    | Heteroscedasticity         | Use weighted regression       |
 
----
 
-![Regression Patterns](images/notes_10_2_regression_patterns.png){width=5in fig-align="left"}
+## Remedies for Violations
 
-## Transformation Recommendations
+### Nonlinearity
+- Add more complexity to the model.
+- Apply a transformation to $X$.
+- Add another variable, which may also help nonconstant variance.
+
+### Nonconstant Variance
+- Transform $Y$.
+- Use weighted least squares to down-weight observations with larger variance so they don’t influence the regression model as much as observations closer to the line.
+
+### Correlated Errors
+- Often detected via residual plots, where you may see small values follow small values, and large follow large.
+- Use time series or spatial models for serial effects within data.
+
+### Outliers
+- Use robust regression.
+- Check for data entry or other errors. Only delect observations in this situation.
+
+### Non-normality
+- Usually fixed via the above methods, so wait to fix until last.
+- Consider transforming the data.
+
+:::{layout-ncol=2}
+
+![](images/fch10_residuals_a.png){fig-title="(a) Check distribution of $Y$ at different $X$ values"}
+
+![](images/fch10_residuals_b.png){fig-title="(b) Curvature $\rightarrow$ Consider transforming $X$"}
+
+![](images/fch10_residuals_c.png){fig-title="(c) Quadratic trend $\rightarrow$ Add $X^2$"}
+
+![](images/fch10_residuals_d.png){fig-title="(d) Fan-shaped spread $\rightarrow$ Transform $Y$"}
+
+![](images/fch10_residuals_e.png){fig-title="(e) Skewed residuals $\rightarrow$ Report skewness"}
+
+![](images/fch10_residuals_f.png){fig-title="(f) Spread depends on $X$ $\rightarrow$ Weighted regression"}
+
+:::
+
+<div class="figure-caption">
+<strong>Residual patterns to watch for.</strong> Each panel shows a scatter with bin-wise means and standard deviations (dark line and bars). Patterns suggest remedies: (a) compare the distribution of $Y$ across $X$; (b) curvature may call for transforming $X$; (c) symmetric curvature suggests adding a quadratic term; (d) fan-shaped spread indicates transforming $Y$; (e) right-skewed residuals should be reported; (f) variance that changes with $X$ motivates weighted regression.
+</div>
+
+
+## Nonconstant Variance and Transformations
+
+When the spread of residuals changes with fitted values, a transformation of $Y$ can often stabilize variance.
+
+### Transformation Recommendations
 1. Log
 2. Square root
 3. Other
 
+:::{layout-ncol=2}
+
+![](images/fch10_YTransforms_log.png)
+
+![](images/fch10_YTransforms_sqrt.png)
+
+![](images/fch10_YTransforms_reciprocal.png)
+:::
+
+<div class="figure-caption">
+<strong>Examples of variance-stabilizing transformations.</strong> When the spread of residuals changes with the fitted values, transforming the response variable $Y$ can help stabilize variance. The panels illustrate three common recommendations: (a) a log transformation for decreasing variance, (b) a square root transformation for increasing variance, and (c) a reciprocal transformation for variance proportional to the mean. These transformations change the interpretation of model coefficients, and results may need to be back-transformed for reporting.
+</div>
+
 ### Interpretation Considerations
-- Adjust wording for the audience and transformed variables.
-- Back-transform results if needed.
+- Adjust interpretation to fit the audience and the type of transformation and variables transformed.
+- Back-transform results if necessary.
 
 
-## Remedies for Violations
+## Log Transformations: Types and Interpretations
 
-### Nonlinearity: 
-- More complicated models
-- Transformation on X
-- Add another variable (might help nonconstant variance too)
+Log transformations can be very useful and effective and provide easy interpretation.
 
-### Nonconstant variance:
-- Transformation on Y
-- Weighted least squares – down weight observations with larger variance, so they don’t influence the regression model as much as observations closer to the line
-
-### Correlated errors: In residual plots, you may see small values follow small values, and large follow large.
-- Serial effects within data -> time series or spatial models
-
-### Outliers
-- Use robust regression procedures
-- Check for data entry or other errors (only delete in this situation)
-
-### Non-normality
-- Fix last, usually fixed with the above
-- Transform the data
-
-![Residual Patterns](images/notes_10_3_regression_patterns.png){width=6in fig-align="left"} 
-Source: @ramsey2012statistical.
-
-
-## Log Transformation: They Work & Are Easy to Interpret
-
-- **Log on response (log-linear)**:  
-  $\log\hat{Y}_i = \beta_0 + \beta_1 X_i$
-  - Mean of the response is log-linearly related to the explanatory variable.
+### Log-Linear Model (Log on Response)
+$$
+\log\hat{Y}_i = \beta_0 + \beta_1 X_i
+$$
+- $\text{Median}(Y|X) = \exp(\beta_0 + \beta_1 X)$
+- Mean of the response is log-linearly related to the explanatory variable.
   - $\text{Median}\{Y|X\} = \exp(\beta_0) \exp(\beta_1 X)$
-  - One unit increase in $X$ → multiplicative change in $\exp(\beta_1)$ in the median of $Y|X$.
+- One unit increase in $X$ results in a multiplicative change of $\exp(\beta_1)$ in the median of $Y|X$.
   - $\text{Median}\{Y|(X + 1)\} / \text{Median}\{Y|X\} = \exp(\beta_1)$
-- **Log on explanatory variable (linear-log)**:  
-  $\hat{Y}_i = \beta_0 + \beta_1 \log X_i$
-  - Depends on log base (e.g. $2$ → doubling, $10$ → ten-fold).
-- **Both logged (log-log)**:  
-  $\log\hat{Y}_i = \beta_0 + \beta_1 \log X_i$
-  - **Complicated** :/
-  - Doubling (or tenfold increase) of $X$ is associated with a change of $2^{\beta_1}$ (or $10^{\beta_1}$) in the median of $Y$.
 
+### Linear-Log Model (Log on Explanatory Variable)
+$$
+\hat{Y}_i = \beta_0 + \beta_1 \log X_i
+$$
+- A doubling of $X$ leads to a $\beta_1 \log(2)$ unit change in the mean of $Y$.
+  - Interpretation depends on log base (e.g., $2$ → doubling, $10$ → ten-fold).
+
+### Log-Log Model (Both Explanatory and Response Variables Logged)
+$$
+\log\hat{Y}_i = \beta_0 + \beta_1 \log X_i
+$$
+- More complicated than the other two log transformations.
+- A doubling of $X$ is associated with a $2^{\beta_1}$ change in the median of $Y$.
+  - Or this may be a tenfold increase of $X$ with a change of $10^{\beta_1}$ in the median of $Y$.
+
+---
 
 ## Interpretations of Log Transformation Varieties
 
