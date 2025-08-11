@@ -201,7 +201,7 @@ When the spread of residuals changes with fitted values, transforming the respon
 2. Square root transformation
 3. Other transformations (e.g., reciprocal)
 
-:::{layout-ncol=2}
+:::{layout-ncol=3}
 
 ![](images/fch10_YTransforms_log.png)
 
