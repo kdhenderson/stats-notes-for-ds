@@ -1,5 +1,6 @@
 project:
   type: book
+  output-dir: _book
   title: "Henderson's Statistics Notes for Data Science"
 
 bibliography: references.bib 

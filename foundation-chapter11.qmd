@@ -26,13 +26,13 @@ title: "Multiple Linear Regression"
 ## Exploratory Approaches to Adding a Third Variable
 
 - **Scatterplots**:
-  - Plot each pair: $(X_1, X_2, Y)$.
+  - Plot each pair: $(X_1, X_2, Y)$
   - Identify potential linear relationships.
   - Explanatory variables can be weakly correlated but should have a strong linear relationship with the response variable.
 - **Pearson correlation**:
   - Calculate correlation between all pairs of variables.
   - Correlation between explanatory variables should ideally be weaker than each variable’s correlation with the response variable.
-  - If the correlation between explanatory variables is too strong, they may be redundant (**multicollinearity**).
+  - If the correlation between explanatory variables is too strong, they may be redundant, indicating multicollinearity.
 - **Multicollinearity**:
   - Occurs when explanatory variables are highly correlated, violating the independence assumption.
 
@@ -119,8 +119,9 @@ The following equations illustrate several ways that explanatory variables can e
 
 ![](images/fch11_regression_plane_plot.png){fig-title="Regression Plane with $\beta_1$ and $\beta_2$ Effects" fig-align="center"} 
 <div class="figure-caption">
-<strong>Interpretation of regression coefficients in a multiple linear regression model with two explanatory variables.</strong> The planar surface represents the fitted model $\hat{Y} = \beta_0 + \beta_1 X_1 + \beta_2 X_2$, where $X_1$ is light intensity and $X_2$ is time. Each bell curve shows the distribution of flowers per plant at a fixed $X_1$ and $X_2$ value. The slope $\beta_1$ is the change in mean response per unit increase in $X_1$, holding $X_2$ constant (illustrated by the gray line through the back row of means). The slope $\beta_2$ is the change in mean response per unit increase in $X_2$, holding $X_1$ constant (illustrated by the purple connector between two bells at the same $X_1$).
+<strong>Interpretation of regression coefficients in an additive multiple linear regression model with two explanatory variables.</strong> The planar surface represents the fitted model $\hat{Y} = \beta_0 + \beta_1 X_1 + \beta_2 X_2$. Each bell curve shows the distribution of $Y$ at a fixed $X_1$ and $X_2$ value. The slope $\beta_1$ is the change in mean response per unit increase in $X_1$, holding $X_2$ constant (illustrated by the gray line through the back row of means). The slope $\beta_2$ is the change in mean response per unit increase in $X_2$, holding $X_1$ constant (illustrated by the purple connector between two bells at the same $X_1$).
 </div>
+
 
 ## Parallel Lines Regression Model
 
@@ -142,7 +143,7 @@ The following equations illustrate several ways that explanatory variables can e
     - Intercept: Adjusted by $\beta_2$ between the two groups.  
     - Intercept where $\text{pred}_2 = 0$ is $\beta_0$, and intercept where $\text{pred}_2 = 1$ is $\beta_0 + \beta_2$.  
     - The two lines are separated by a constant vertical distance of $\beta_2$.  
-    - The coefficient of the indicator variable is the difference between the mean response for the indicated category (= 1) and the reference category (= 0), at fixed values of the other explanatory variables.
+    - The coefficient of the indicator variable is the difference between the mean response for the indicated category (1) and the reference category (0), at fixed values of the other explanatory variables.
   
 
 ## Indicator Variables for Categorical Variables with 3+ Categories
@@ -172,7 +173,7 @@ The following equations illustrate several ways that explanatory variables can e
 
 **Parameter Estimates**  
 
-| Variable   | DF | Est   | SE     | *t*    | Pr > |*t*| |
+| Variable   | DF | Est   | SE     | *t*    | Pr > \|*t* \| |
 |------------|----|-------|--------|--------|------------|
 | Intercept  | 1  | 34.19 | 1.22   | 28.04  | <0.0001    |
 | Gender     | 1  | 3.35  | 1.46   | 2.29   | 0.0263     |
@@ -209,7 +210,7 @@ Parallel lines with different intercepts:
 ![](images/fch11_gender_salaries_parallelLines.png){fig-title="Parallel lines regression model for salary by gender" fig-align="center"}
 
 <div class="figure-caption">
-<strong>Parallel lines regression model for salary by gender, controlling for years of experience.</strong> The vertical distance between the two lines (\(\Delta = \beta_2 = 3.35\)) represents the estimated average difference in salary between males and females for the same number of years of experience.
+<strong>Parallel lines regression model for salary by gender, controlling for years of experience.</strong> The vertical distance between the two lines $(\Delta = \beta_2 = 3.35)$ represents the estimated average difference in salary between males and females for the same number of years of experience.
 </div>
 
 Interpretation: After accounting for years of experience, the estimated difference in mean salaries between males and females is \$3,350, with males earning more on average.
@@ -222,7 +223,7 @@ Interpretation: After accounting for years of experience, the estimated differen
 
 **Parameter Estimates**
 
-| Variable     | DF | Est  | SE   | *t*   | Pr > |*t*| |
+| Variable     | DF | Est  | SE   | *t*   | Pr > \|*t* \| |
 |--------------|----|------|------|-------|-------------|
 | Intercept    | 1  | 35.12| 1.67 | 20.97 | <0.0001     |
 | Years        | 1  | 1.24 | 0.28 | 4.38  | <0.0001     |
@@ -230,6 +231,7 @@ Interpretation: After accounting for years of experience, the estimated differen
 | Gender × Years | 1 | 0.26 | 0.08 | 3.19  | 0.0025      |
 
 **Gender coding (indicator variable)**  
+
 - 0 = Female (reference group)  
 - 1 = Male (comparison group)
 
@@ -251,13 +253,15 @@ $$
   $$
   \mu(\text{Salary} \mid \text{Years}, 1)
   = (\beta_0 + \beta_2) + (\beta_1 + \beta_3)\cdot \text{Years}
+  $$
+  $$
   = (35.12 + 1.94) + (1.24 + 0.26)\cdot \text{Years}
   = 37.06 + 1.50 \cdot \text{Years}
   $$
 
 **Interpretation**
 
-- **Intercept difference at 0 years**: $\beta_2 = 1.94$.  
+- **Intercept difference at 0 years** (male vs. female): $\beta_2 = 1.94$.  
 - **Slope difference** (male vs. female): $\beta_3 = 0.26$.  
 - **Vertical difference at a fixed number of years $x$**:  
   $\Delta(x) = \beta_2 + \beta_3 x$.  
