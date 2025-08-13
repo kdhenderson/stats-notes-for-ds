@@ -154,7 +154,7 @@ flowchart TD
 1. **Understand the study design.** Is it a randomized experiment or observational?  
 2. **Visualize the data.** Use histograms, boxplots, and Q-Q plots.  
 3. **Select an appropriate test.** Based on design, assumptions, and sample size.  
-4. **State the hypotheses.** Null ($H_0$) and alternative ($H_A$), one- or two-sided.  
+4. **State the hypotheses.** Null ($H_0$) and alternative ($H_a$), one- or two-sided.  
 5. **Choose a significance level.** Typically $\alpha = 0.05$.  
 6. **Sketch the reference distribution.** Show critical regions.  
 7. **Calculate the test statistic and *p*-value.**  

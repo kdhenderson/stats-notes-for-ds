@@ -65,7 +65,7 @@ title: "Logistic Regression"
 ### Hypothesis Testing
 - To understand the relationship between a predictor and the response, test the slope coefficient:
   - $H_0$: $\beta_1 = 0$  
-  - $H_A$: $\beta_1 \ne 0$  
+  - $H_a$: $\beta_1 \ne 0$  
 - Test statistic (*z*-statistic): $Z = \frac{\hat{\beta}_1}{SE(\hat{\beta}_1)}$
 - 95% confidence interval: $\hat{\beta}_1 \pm z_{\alpha/2} \cdot SE(\hat{\beta}_1)$
 - The null distribution is standard normal: $Z \sim N(0, 1)$  
@@ -167,7 +167,7 @@ Example:
     - Do the estimated effects align with what you saw during EDA?
   - Use the **Hosmer-Lemeshow test**:
     - $H_0$: model fits well  
-    - $H_A$: model does not fit well
+    - $H_a$: model does not fit well
 
 ### If the Fit Is Poor
 - Unusual trends in EDA may signal that the linearity of log odds assumption is violated.  

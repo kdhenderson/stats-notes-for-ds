@@ -267,7 +267,7 @@ This value provides evidence of a strong positive linear association between stu
 
 ### 1. Hypotheses (Testing $\rho$, the Population Correlation Coefficient)
 - $H_0$: $\rho = 0$ (no linear correlation in the population)
-- $H_A$: $\rho \ne 0$ (a linear correlation exists in the population)
+- $H_a$: $\rho \ne 0$ (a linear correlation exists in the population)
 
 ### 2. Critical Value (From a *t*-Distribution)
 - $\pm t_{0.975, 13 - 2} = \pm 2.201$

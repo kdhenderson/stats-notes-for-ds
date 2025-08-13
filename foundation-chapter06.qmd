@@ -23,7 +23,7 @@ title: "Comparisons Among Several Samples"
   - Independence within (achieved automatically with random samples) and between samples.
 - **Hypotheses**:
   - $H_0$: All population means are equal.
-  - $H_A$: At least one population mean differs from another.
+  - $H_a$: At least one population mean differs from another.
 - ANOVA is a preliminary test; if significant, it indicates that at least one mean differs. Specific pairwise differences can be explored using post-hoc tests (not covered in detail here).
 
 ### Comparing Models in ANOVA
@@ -32,7 +32,7 @@ title: "Comparisons Among Several Samples"
   - **Separate means model (SMM)**: Assumes each group has its own mean (alternative hypothesis).
 - **Hypotheses**:
   - $H_0$: $\mu_1 = \mu_2 = \mu_3$ 
-  - $H_A$: At least one pair of means differs
+  - $H_a$: At least one pair of means differs
 - A **residual** is defined as: $\text{  Residual} = \text{Observed} - \text{Predicted}$
 
 ![**Equal Means vs. Separate Means Models.** 
@@ -134,7 +134,7 @@ See the summary figure below for a visual breakdown of how these components are 
 
 1. **Define Hypotheses**:
    - $H_0: \mu_1 = \mu_2 = \mu_3 = \dots$ (equal means model)
-   - $H_A$: At least one pair of means is different
+   - $H_a$: At least one pair of means is different
    - The null model assumes all observations are drawn from a single population with the same mean (grand mean).
    - The alternative allows group-specific distributions with different means (separate means model).
    - Models are compared using the sum of squared residuals: a good fitting model has smaller residuals (observed − predicted).

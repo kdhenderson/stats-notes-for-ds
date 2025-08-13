@@ -522,7 +522,7 @@ run;
 :::
 
 - $H_0$: Linear regression model fits well (no lack of fit).
-- $H_A$: Separate means model fits better (lack of fit).
+- $H_a$: Separate means model fits better (lack of fit).
 
 **Conclusion**: The lack-of-fit test compares the linear regression model (reduced) to the separate means model (full).
 There is strong evidence, to suggest the linear regression model lacks fit with respect to the separate means model, *p*-value = 0.0009.

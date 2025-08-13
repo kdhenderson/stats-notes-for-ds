@@ -142,7 +142,7 @@ Illustration of continuity correction in a rank-based test. The gray bars show t
 **Hypotheses**:
 
 - $H_0$: $\text{mileage}_5 = \text{mileage}_4$
-- $H_A$: $\text{mileage}_5 > \text{mileage}_4$ (one-sided)
+- $H_a$: $\text{mileage}_5 > \text{mileage}_4$ (one-sided)
 
 | Employee | 5-day Mileage | 4-day Mileage | Difference ($d$) | Rank | $d > 0$? |
 |----------|---------------|---------------|------------------|------|----------|
@@ -222,7 +222,7 @@ $$
 **Hypothesis**:
 
 - $H_0$: Groups have equal spread (variance).
-- $H_A$: At least one group differs in spread.  
+- $H_a$: At least one group differs in spread.  
 
 **Procedure**:
 

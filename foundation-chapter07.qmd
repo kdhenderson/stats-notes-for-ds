@@ -196,7 +196,7 @@ There is no visual evidence to suggest these assumptions are violated.
 Let  
 
 - $H_0$: $\mu_1 = \mu_2 = \mu_3 = \mu_4 = \mu_5$ (equal means model)  
-- $H_A$: At least one $\mu_i \ne \mu_j$ for some $i \ne j$
+- $H_a$: At least one $\mu_i \ne \mu_j$ for some $i \ne j$
 
 **Results**:  
 
