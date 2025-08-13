@@ -51,7 +51,7 @@ execute:
 - **Leverage**: A measure of how far an observation’s $x$ value is from the mean of all $x$ values ($\bar{x}$).
   - Points farther from $\bar{x}$ have higher leverage.
   - Mathematically, leverage increases with the squared distance from $x_i$ to $\bar{x}$, relative to the total sum of squares in $x$. This is closely related to how many standard deviations $x_i$ is from the mean.
-  - Leverage is based on the $x$ values alone;it does **not** depend on $y$.
+  - Leverage is based on the $x$ values alone; it does *not* depend on $y$.
 
 ### Impact of Outliers
 - **Low leverage, low influence**: Minimal effect on estimates.
@@ -84,7 +84,7 @@ execute:
     $$
     \text{RSTUDENT} = \frac{\text{res}_i}{s_i \sqrt{1 - h_i}}
     $$
-- **Why different types?** All three aim to normalize variance to make residuals for comparability, but they differ in how they estimate the error term:
+- **Why different types?** All three aim to stabilize variance so that residuals are comparable, but they differ in how they estimate the error term:
   - **Standardized:** Uses a single overall RMSE.
   - **Studentized:** Adjusts for leverage via $(1 - h_{ii})$.
   - **R-student:** Recalculates without the observation for more accurate influence detection.
@@ -100,6 +100,7 @@ Let $\hat{Y}_{i(i)}$ be the predicted value of $Y_i$ when the $i$-th observation
 $$
 \text{PRESS}_p = \sum_{i=1}^n \left(Y_i - \hat{Y}_{i(i)}\right)^2 = \sum e_{i(i)}^2
 $$
+
 - Smaller PRESS values indicate better-fitting models.
 
 ### Cook’s Distance ($D_i$)
@@ -115,6 +116,7 @@ $$
 $$
 d = \frac{\sum_{i=1}^n (e_i - e_{i-1})^2}{\sum_{i=1}^n e_i^2}
 $$
+
 - Values near 0 indicate positive correlation; values near 4 indicate negative correlation. The distribution is symmetric about 2.
 - Available in R and SAS.
 
@@ -128,7 +130,10 @@ $$
 | **Studentized residual**  | $t_i = \frac{e_i}{s_{(i)} \sqrt{1 - h_{ii}}}$             | Test outlying $Y$ values       |
 | **Deleted residual**      | $e_{i(i)} = y_i - \hat{y}_{i(i)} = \frac{e_i}{1 - h_{ii}}$ | Calculate PRESS                |
 
-> At $\alpha = 0.05$, we expect 5% of studentized residuals to be greater than 2 or less than –2.
+> For studentized residuals, at $\alpha = 0.05$ we expect about 5% to be greater than 2 or less than –2.
+
+
+## Residual Diagnostics Panel
 
 ![](images/fch10_residualPanel.png){fig-title="Residual Diagnostics Panel."}
 
@@ -170,6 +175,9 @@ $$
 ### Non-normality
 - Usually fixed via the above methods, so wait to fix until last.
 - Consider transforming the data.
+
+
+## Residual Patterns and Suggested Remedies
 
 :::{layout-ncol=2}
 
@@ -225,6 +233,7 @@ Log transformations can be highly effective and may yield more interpretable reg
 The three most common forms are log-linear, linear-log, and log-log models.
 
 ::: {.callout-tip}
+
 ### Useful Properties for Log Transformations
 1. If $X \sim N(\mu, \sigma)$, then $\text{mean}(X) = \text{median}(X)$  
 2. $\log(\text{median}(X)) = \text{median}(\log(X))$  
@@ -312,10 +321,6 @@ $$
    $$
    \mu\{Y \mid \log(2X)\} = \beta_0 + \beta_1 \log(2X)
    $$
-$$
-\mu\{Y \mid \log(2X)\} - \mu\{Y \mid \log(X)\}
-= \big[ \beta_0 + \beta_1 \log(2X) \big] - \big[ \beta_0 + \beta_1 \log(X) \big]
-$$
 3. Difference in means:
    $$
    \mu\{Y \mid \log(2X)\} - \mu\{Y \mid \log(X)\} = \big[ \beta_0 + \beta_1 \log(2X) \big] - \big[ \beta_0 + \beta_1 \log(X) \big]
