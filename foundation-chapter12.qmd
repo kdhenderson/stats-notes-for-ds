@@ -10,175 +10,259 @@ title: "Inferences for Multiple Linear Regression"
 
 ## Multiple Linear Regression (MLR) with a Single Predictor: Polynomial Regression
 
-- Still a linear model:
-  - Captures curvilinear trends.
-  - Linear in the $\beta_i X^j$ term: for every one-unit increase in $X^j$, $Y$ changes by a constant $\beta_i$. 
-  - If the quadratic coefficient is significant but the linear term is not, still include the linear/lower-order terms as they form a singular idea.
+- This is still considered a linear model.  
+  - It can capture curvilinear trends.  
+  - It is linear in the $\beta_i X^j$ term: for every one-unit increase in $X^j$, $Y$ changes by a constant $\beta_i$.  
+  - If the quadratic coefficient is significant but the linear term is not, the linear (lower-order) terms should still be included because they form a singular idea.  
   - Interpretation can be difficult, especially with higher-order terms.
 
-- Interpretation of a quadratic model:
-  - Find the vertex (absolute max/min) using:$x_{\text{vertex}} = \frac{-\beta_1}{2\beta_2}$
-  - This suggests that the mean $X$ at which $Y$ stops increasing or decreasing is given by $-\beta_1 / 2\beta_2$ based on a quadratic regression model.
+- In interpreting a quadratic model:  
+  - The vertex (absolute maximum or minimum) can be found using:
+    $$
+    x_{\text{vertex}} = \frac{-\beta_1}{2\beta_2}
+    $$
+  - This value of $X$ represents the point at which $Y$ stops increasing or decreasing, based on the quadratic regression model.
 
 
-## Coefficient of Determination: $R^2$
+## Coefficient of Determination ($R^2$)
 
-- A measure of effect size for both SLR and MLR.
-- Represents the proportion of variance in the response variable explained by the model.
+- $R^2$ is a measure of effect size for both simple linear regression (SLR) and MLR.
+- It represents the proportion of variance in the response variable explained by the model.
 
-### Calculation in MLR:
-- **Multiple $R^2$:** Find the squared correlation between observed $Y$ and predicted $Y$.
-- **Partition of sums of squares:**
+### Calculation in MLR
+- **Multiple $R^2$**: This is the squared correlation between the observed values of $Y$ and the predicted values of $Y$.
+- **Partition of sums of squares**:
   $$
-  R^2 = \frac{\text{SS}_{\text{total}} - \text{SS}_{\text{residual}}}{\text{SS}_{\text{total}}} = 1 – \frac{\text{SS}_{\text{residual}}}{\text{SS}_{\text{total}}}
+  R^2 = \frac{\text{SS}_{\text{total}} - \text{SS}_{\text{residual}}}{\text{SS}_{\text{total}}} = 1 - \frac{\text{SS}_{\text{residual}}}{\text{SS}_{\text{total}}}
   $$
 
-### Relationship with the Overall F-Test:
-- The F-test statistic can be rewritten in terms of $R^2$.
-- Testing if all parameters equal zero is equivalent to testing if $R^2 = 0$.
+### Relationship with the Overall F-test
+- The F-test statistic can be rewritten in terms of $R^2$.  
+- Testing whether all parameters equal zero is equivalent to testing whether $R^2 = 0$.
 
-### $R^2$ and Parsimony:
-- Adding more predictors increases $R^2$.
-- An oversaturated model can have $R^2 = 1$ even if predictors do not contribute meaningfully.
-- The goal is a parsimonious model—one that is as simple as possible while still maximizing $R^2$.
+### $R^2$ and Parsimony
+- Adding more predictors will always increase $R^2$.  
+- An oversaturated model can have $R^2 = 1$ even if the predictors do not contribute meaningfully.  
+- The goal is to create a **parsimonious** model---one that is as simple as possible while still maximizing $R^2$.
 
-### Adjusted $R^2$:
-- Accounts for the number of predictors ($k$) and sample size ($n$).
-- Formula: $R^2_{\text{adj}} = R^2 – (1 - R^2) \frac{k}{n-k-1}$
-- Penalizes unnecessary predictors and small sample sizes. Rewards variables that significantly improve model fit, resulting in a net positive if a predictor variable explains a lot of the variance.
-- Is a better measure of effect size in MLR.
-
+### Adjusted $R^2$
+- Adjusted $R^2$ accounts for the number of predictors ($k$) and the sample size ($n$).
+- The formula is:
+  $$
+  R^2_{\text{adj}} = R^2 - (1 - R^2) \frac{k}{n-k-1}
+  $$
+- Adjusted $R^2$ penalizes unnecessary predictors and small sample sizes.  
+- It rewards variables that significantly improve model fit, resulting in a net increase if a predictor explains a substantial proportion of the variance.  
+- It is generally a better measure of effect size than $R^2$ in MLR.
 
 ## Overfitting
 
-- $R^2$ can always be made 1, but that does not indicate good predictive power.
-- Overfitting means the model fits both noise and signal in the sample data.
-- A high $R^2$ does not guarantee that the model generalizes well to new data.
+- A value of $R^2$ equal to 1 can always be achieved, but this does not indicate good predictive power.  
+- Overfitting occurs when the model fits both the noise and the signal in the sample data.  
+- A high $R^2$ value does not guarantee that the model will generalize well to new data.
 
 
 ## Controlling for Other Variables in MLR
 
-- When holding $X_2$ constant (i.e. looking at a subpopulation with similar $X_2$ values), we can examine the effect of changes in $X_1$ on $Y$.
+- When we hold $X_2$ constant (i.e., look at a subpopulation with similar $X_2$ values), we can examine the effect of changes in $X_1$ on $Y$.
 
 
-## Overall F-Test
+## Overall F-test
 
-- Tests whether the model is statistically significant.
-- **Hypotheses:**
-  - $H_0$: All slopes are equal to 0 (i.e. $R^2 = 0$).
+- The overall F-test evaluates whether the model is statistically significant.
+- **Hypotheses**:  
+  - $H_0$: All slopes are equal to 0 (i.e., $R^2 = 0$).  
   - $H_a$: At least one slope is not zero.
-- **F-statistic formula:** $F = \frac{\text{SS}_{\text{regression}} / k}{\text{SS}_{\text{residual}} / (n - k - 1)} = \frac{\text{MS}_{\text{regression}}}{\text{MS}_{\text{error}}}$
-- Can also be expressed in terms of $R^2$.
+- **F-statistic formula**:
+  $$
+  F = \frac{\text{SS}_{\text{regression}} / k}{\text{SS}_{\text{residual}} / (n - k - 1)} = \frac{\text{MS}_{\text{regression}}}{\text{MS}_{\text{error}}}
+  $$
+- This test can also be expressed in terms of $R^2$.
 
 
-## Partial F-Test (Extra-Sum-of-Squares)
+## Partial F-test (Extra Sum of Squares)
 
-- Used when a subset of $k$ predictors does not have statistically significant slopes, i.e. to examine a reduced model with $g$ of $k$ predictors.
-- **Hypotheses:**
-  - $H_0$: The extra $k-g$ predictors do not contribute (all their slopes are 0).
+- The partial F-test is used when a subset of $k$ predictors does not have statistically significant slopes. In other words, it examines a reduced model with $g$ of the $k$ predictors.
+- **Hypotheses**:  
+  - $H_0$: The extra $k-g$ predictors do not contribute (all their slopes are 0).  
   - $H_a$: At least one of the extra predictors has a nonzero slope.
-- Simultaneously tests whether additional predictors improve the model.
+- This test simultaneously evaluates whether additional predictors improve the model.
 
-::: {layout-ncol=2}
-![Extra-Sum-of-Squares F-Test Example](images/notes_12_1.png)  
-*Figure: Extra sum of squares F-test example, including full and reduced models for log(cost) with and without age and gender, and interpretation.*
+::: {.example}
+
+### Example: Partial F-test Using Extra Sum of Squares
+
+**Full model**:  
+$\log(\text{cost}) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \beta_3 X_3 + \beta_4 X_4 + \beta_5 X_5 + \beta_6 X_6$
+
+| Source | DF  | SS     | MS     | F      | p-value  |
+|--------|-----|--------|--------|--------|----------|
+| Model  | 6   | 1532   | 255    | 164    | <0.0001  |
+| Error  | 778 | 1208   | 1.55   |        |          |
+| Total  | 784 | 2740   |        |        |          |
+
+**Reduced model**:  
+$\log(\text{cost}) = \beta_0 + \beta_3 X_3 + \beta_5 X_5 + \beta_6 X_6$
+
+| Source | DF  | SS     | MS     | F      | p-value  |
+|--------|-----|--------|--------|--------|----------|
+| Model  | 3   | 1523   | 508    | 326    | <0.0001  |
+| Error  | 781 | 1217   | 1.56   |        |          |
+| Total  | 784 | 2740   |        |        |          |
+
+**Hypotheses**:  
+
+- $H_0$: The extra coefficients are all zero (e.g., $\beta_1 = \beta_2 = \beta_4 = 0$).  
+- $H_a$: At least one of the extra coefficients is nonzero.
+
+**Partial F-test comparison**:  
+
+| Model   | Error DF | SSE     | MSE   | F    | p-value |
+|---------|----------|---------|-------|------|---------|
+| M           | 3        | 9     | 3     | 1.94 | 0.1216  |
+| Full (E)    | 778      | 1208  | 1.55  |      |         |
+| Reduced (T) | 781      | 1217  |       |      |         |
+
+**Partial F-test results**:  
+
+- Critical value ($\alpha = 0.05$): $F_{0.05, 3, 778} = 2.62$
+- Observed statistic: $F = 1.94$  
+- Right-tail *p*-value: $p = 0.1216$  
+- Decision: Since $F_{\text{obs}} < F_{\text{crit}}$ and $p > 0.05$, fail to reject $H_0$.
+
+**Interpretation**:  
+There is not enough evidence to suggest that the extra predictors (e.g., $X_1$, $X_2$, $X_4$) explain a significant additional portion of variability in $\log(\text{cost})$ beyond the reduced model.
+
+![**Partial F-test.**  F-distribution with $df_1=3$ and $df_2=778$ for the partial F-test. The vertical dashed line marks the observed statistic ($F = 1.94$), and the shaded region shows the right-tail *p*-value. For $\alpha = 0.05$, the critical value is $F_{0.05, 3, 778} \approx 2.62$.](images/fch12_partial_f_test_tail.png)  
+
 :::
 
-## Significance Tests for Each Predictor (t-tests)
+---
 
-- **Hypotheses:**
-  - $H_0: \beta_i = 0$ (predictor has no effect)
-  - $H_a: \beta_i \neq 0$ (predictor has an effect)
-- **Test statistic:** $t = \frac{b_i}{SE_{b_i}}, \quad \text{with } df = n - k - 1$
-- **Standard error calculation:** $SE = \frac{\hat{\sigma}}{\sqrt{\sum_{i=1}^{n} (X_i - \bar{X})^2}}, \quad \hat{\sigma} = \sqrt{\frac{\text{SSR}}{(n - k - 1)}}$
+## Significance Tests for Each Predictor (*t*-tests)
+
+- **Hypotheses**:  
+  - $H_0: \beta_i = 0$ (the predictor has no effect).  
+  - $H_a: \beta_i \neq 0$ (the predictor has an effect).
+- **Test statistic**:
+  $$
+  t = \frac{b_i}{SE_{b_i}}, \quad df = n - k - 1
+  $$
+- **Standard error calculation**:
+  $$
+  SE = \frac{\hat{\sigma}}{\sqrt{\sum_{i=1}^{n} (X_i - \bar{X})^2}}, \quad \hat{\sigma} = \sqrt{\frac{\text{SSR}}{n - k - 1}}
+  $$
 
 
 ## Testing Intercept and Slope Differences in Regression Models (Bat Echolocation Example)
 
-- **Question of Interest 1:**  
+- **Question of interest 1**:  
   Do echolocating and non-echolocating bats have equal slopes?  
   - Models for echolocating bats, non-echolocating bats, and birds are written out.  
-  - Null and alternative hypotheses:
-    - $H_0$: Slopes are equal
-    - $H_a$: Slopes are not equal
+  - **Hypotheses**:  
+    - $H_0$: The slopes are equal.  
+    - $H_a$: The slopes are not equal.
 
 ::: {layout-ncol=2}
+
 ![Bat Echolocation Example](images/notes_12_2.png)  
 *Figure: Model setup and hypothesis for testing slope differences in echolocating and non-echolocating bats.*
 
-- **Continuation:**  
-  SAS output tables for full and reduced models with interpretation.
+**Continuation**:  
+SAS output tables for full and reduced models with interpretation.
 
 ![Bat Example - Full and Reduced Models](images/notes_12_3.png)  
 *Figure: SAS output tables for full and reduced models, testing slope differences in echolocating and non-echolocating bats.*
+
 :::
 
-- **Next Question of Interest:**  
+- **Next question of interest**:  
   Are the intercepts for bat types different?  
-  - Null and alternative hypotheses:
-    - $H_0$: Intercepts are equal
-    - $H_a$: Intercepts are different
+  - **Hypotheses**:  
+    - $H_0$: The intercepts are equal.  
+    - $H_a$: The intercepts are different.
 
 ::: {layout-ncol=2}
+
 ![Parameter Estimates for Bat Example](images/notes_12_4.png)  
 *Figure: Parameter estimate table with interpretation and p-value.*
+
 :::
 
 
 ## Confidence Intervals for Linear Combinations of Coefficients
 
-- 95% CI for difference in intercepts:  
-  $$ (\hat{\beta}_2 + \hat{\beta}_3) - \hat{\beta}_0 $$
-- To find the SE (**Variance calculation**):  
-  $$ \text{Var}(\hat{\beta}_2 + \hat{\beta}_3) = \text{Var}(\hat{\beta}_2) + \text{Var}(\hat{\beta}_3) + 2 \text{Cov}(\hat{\beta}_2, \hat{\beta}_3) $$
-- Compute the CI:
-    $$
-    (\hat{\beta}_2 + \hat{\beta}_3) \pm t_{0.975, df} \times SE(\hat{\beta}_2 + \hat{\beta}_3)
-    $$
+- **Example**: A 95% CI for the difference in intercepts is:
+  $$
+  (\hat{\beta}_2 + \hat{\beta}_3) - \hat{\beta}_0
+  $$
+- **Variance calculation**: First, compute the variance of the linear combination:
+  $$
+  \text{Var}(\hat{\beta}_2 + \hat{\beta}_3) = \text{Var}(\hat{\beta}_2) + \text{Var}(\hat{\beta}_3) + 2\,\text{Cov}(\hat{\beta}_2, \hat{\beta}_3)
+  $$
+- **Standard error**: The standard error is the square root of the variance:
+  $$
+  SE(\hat{\beta}_2 + \hat{\beta}_3) = \sqrt{\text{Var}(\hat{\beta}_2 + \hat{\beta}_3)}
+  $$
+- **Compute the CI**:
+  $$
+  (\hat{\beta}_2 + \hat{\beta}_3) \pm t_{0.975, df} \times SE(\hat{\beta}_2 + \hat{\beta}_3)
+  $$
 
 ::: {layout-ncol=2}
+
 ![CIs for Linear Combinations of Coefficients](images/notes_12_6.png)  
 *Figure: Confidence interval calculations for linear combinations of coefficients, applied to the bat echolocation example.*
+
 :::
 
 
 ## Variance of Sum and Difference of Random Variables
 
-- Formula: $\text{Var}(aX + bY) = a^2 \text{Var}(X) + b^2 \text{Var}(Y) + 2ab \text{Cov}(X, Y)$
-- Used to compute the variance of estimates in regression.
+- The variance of a sum or difference of random variables is given by:
+  $$
+  \text{Var}(aX + bY) = a^2 \text{Var}(X) + b^2 \text{Var}(Y) + 2ab \text{Cov}(X, Y)
+  $$
+- This formula is used to compute the variance of estimates in regression.
 
 ::: {layout-ncol=2}
+
 ![Variance of Sum and Difference of Random Variables](images/notes_12_5.png)  
 *Figure: Variance of sum and difference of random variables, discussing covariance and its use in confidence intervals.*
+
 :::
 
 
-## Interpreting p-values in Regression Output
+## Interpreting *p*-values in Regression Output
 
-- Example p-value interpretation for testing equality of mean energy expenditures:
-  - $p = 0.7030$ suggests no significant difference.
+- Example: A *p*-value of 0.7030 suggests that there is no significant difference in mean energy expenditures.
 
 ::: {layout-ncol=2}
+
 ![Parameter Estimate and Covariance Table](images/notes_12_7.png)  
 *Figure: Parameter estimate table and covariance table with interpretation for the bat echolocation example.*
+
 :::
+
 
 ## Prediction in MLR
 
-- Predicted values are the same as estimated means
-- To get confidence (predicted mean) and prediction (individual prediction) intervals, use software because all variables need to be in the model.
+- Predicted values in MLR are the same as estimated means.  
+- To obtain confidence intervals for the mean or prediction intervals for individual predictions, statistical software must be used because all variables in the model must be specified.
 
 
 ## Testing Intercept Differences in Regression Models
 
-- Example: Testing whether intercepts differ between bat types:
-  - $H_0: \beta_3 = 0$ (no difference)
-  - $H_a: \beta_3 \neq 0$ (significant difference)
+- Example: Testing whether intercepts differ between bat types involves the hypotheses:  
+  - $H_0: \beta_3 = 0$ (no difference).  
+  - $H_a: \beta_3 \neq 0$ (significant difference).
 
 
 ## Least Squares Estimates and Standard Errors
 
-- The least squares estimates of $\beta$s are in the coefficient column of the parameter estimate table.
-- The estimate of $\sigma^2$ is given by:
-  $$ \frac{\text{sum of squared residuals (SSE)}}{\text{df} (n-p)} = \text{MSE} $$
-- The square root of MSE gives residual SE (or RMSE).
+- The least squares estimates of the $\beta$s appear in the coefficient column of the parameter estimate table.
+- The estimate of $\sigma^2$ is calculated as:
+  $$
+  \frac{\text{sum of squared residuals (SSE)}}{\text{df} (n-p)} = \text{MSE}
+  $$
+- The square root of MSE gives the residual standard error (or RMSE).
