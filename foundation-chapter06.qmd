@@ -36,7 +36,7 @@ title: "Comparisons Among Several Samples"
 - A **residual** is defined as: $\text{  Residual} = \text{Observed} - \text{Predicted}$
 
 ![**Equal Means vs. Separate Means Models.** 
-Comparison of two models: one assumes all groups share a single population mean (equal means model), and the other estimates a separate mean for each group (separate means model). Brackets illustrate residuals from observed values to the grand mean.](images/fch06_equal_and_separate_means_models.png){fig-title=""}
+Comparison of two models: one assumes all groups share a single population mean (equal means model), and the other estimates a separate mean for each group (separate means model). Brackets illustrate residuals from observed values to the grand mean.](images/fch06_equal_and_separate_means_models.png)
 
 #### Equal Means Model (EMM)
 - All observations are predicted using the grand mean: $\bar{X} = 13$
@@ -117,7 +117,7 @@ The $F$-statistic is compared to an $F$-distribution with 2 and 6 degrees of fre
 - Critical value at $\alpha = 0.05$: $F_{2,6}^{*} \approx 5.14$
 - The region to the right of 54.75 under the curve gives the $p$-value, which is very small ($p = 0.0001$), indicating strong evidence against the null model (EMM).
 
-![**$F$-distribution.** Right-skewed $F_{2,6}$ distribution showing critical value (5.14), observed test statistic (54.75), and rejection region representing $p$-value (0.0001).](images/fch06_fdistribution.png){fig-title=""}
+![**$F$-distribution.** Right-skewed $F_{2,6}$ distribution showing critical value (5.14), observed test statistic (54.75), and rejection region representing $p$-value (0.0001).](images/fch06_fdistribution.png)
 
 #### Interpretation
 - The top row of the ANOVA table shows how much variability is explained by the model.
@@ -127,7 +127,7 @@ The $F$-statistic is compared to an $F$-distribution with 2 and 6 degrees of fre
 
 See the summary figure below for a visual breakdown of how these components are computed and interpreted.
 
-![**ANOVA Table Breakdown.** Visual summary of how degrees of freedom, sum of squares, mean squares, and the $F$-statistic are calculated and interpreted for the model, error, and total variation.](images/fch06_anova_table_breakdown.png){fig-title=""}
+![**ANOVA Table Breakdown.** Visual summary of how degrees of freedom, sum of squares, mean squares, and the $F$-statistic are calculated and interpreted for the model, error, and total variation.](images/fch06_anova_table_breakdown.png)
 
 
 ## ANOVA: Six-Step Hypothesis Test
@@ -189,6 +189,7 @@ run;
 ```
 
 ::: {.example}
+
 ### SAS ANOVA Output Summary
 
 SAS provides the $R^2$, root MSE, and coefficient of variation in its ANOVA output. See the example output below for how these metrics are reported.
@@ -220,6 +221,7 @@ SAS provides the $R^2$, root MSE, and coefficient of variation in its ANOVA outp
 - The model (group membership) explains 94.8% of the total variability in the response ($R^2 = 0.948$).
 - RMSE = 2 indicates the estimated standard deviation of residuals, the typical size of the model residuals.
 - CV ≈ 15.38% indicates moderate relative variability around the grand mean. This matches the SAS output: `Coeff Var = 15.38462`.
+
 :::
 
 
@@ -232,7 +234,6 @@ fit = aov(responseVar ~ groupingVar, data = dataSet)
 summary(fit)
 ```
 
----
 
 ## ANOVA Assumptions and Robustness
 

@@ -178,19 +178,11 @@ $$
 
 #### Visual Comparison of Models
 
-![](images/fch09_residualAnalysis.png)
-
-<div class="figure-caption">
-<strong>Visual Comparison of Residuals: EMM vs. Regression Model.</strong> The regression model reduces residual error compared to the EMM. Residuals from both models are shown for a single point to illustrate how $R^2$ captures relative model improvement.
-</div>
+![**Visual Comparison of Residuals: EMM vs. Regression Model.** The regression model reduces residual error compared to the EMM. Residuals from both models are shown for a single point to illustrate how $R^2$ captures relative model improvement.](images/fch09_residualAnalysis.png)
 
 #### F Distribution Under the Null Hypothesis
 
-![](images/fch09_fdistribution.png)
-
-<div class="figure-caption">
-<strong>F Distribution Under the Null Hypothesis.</strong> Area to the right of $F = 106.47$ is shaded. This corresponds to a *p*-value < 0.0001 under the equal means model.
-</div>
+![**F Distribution Under the Null Hypothesis.** Area to the right of $F = 106.47$ is shaded. This corresponds to a *p*-value < 0.0001 under the equal means model.](images/fch09_fdistribution.png)
 
 The F-test compares how much variability is explained by the regression model relative to unexplained error. A large value like $F = 106.47$ indicates a significantly better fit than the Equal Means Model. 
 
@@ -213,14 +205,15 @@ anova(fit)      # ANOVA table: sums of squares, F-stat
 summary(fit)    # Coefficient table, t-tests, R², F-stat
 ```
 
-:::{layout-ncol=2}
+::: {layout-ncol=2}
+
 ![](images/fch09_ANOVA_sasOutput.png){fig-title="ANOVA Output in SAS."}
 
 ![](images/fch09_ANOVA_ROutput.png){fig-title="ANOVA Output in R."}
 
 :::
 
-:::{layout-ncol=2}
+::: {layout-ncol=2}
 
 ![](images/fch09_regression_ROutput.png){fig-title="Regression Summary from summary(fit) in R."}
 
@@ -268,16 +261,14 @@ SE\left( \hat{Y}_{\text{mean} \mid X_0} \right) = SE\left( \bar{Y} \right) = \ha
 $$
 
 ::: {.callout-note}
+
 See the [Study Hours and Exam Grades example](foundation-chapter08.html#example-study-hours-and-exam-grades) for a worked calculation of 
 $\bar{X}$, $s_X^2$, and $\hat{\sigma}$, which are used in computing 
 $SE\left( \hat{Y}_{\text{mean} \mid X_0} \right)$.
+
 :::
 
-![](images/fch09_se_meanResponse.png)
-
-<div class="figure-caption">
-<strong>Sampling Distribution of the Mean Response at $X_0$.</strong> The dot marks the predicted mean response $\hat{Y}_{\text{mean} \mid X_0}$ from the regression line. The sideways bell curve illustrates its sampling distribution across repeated samples. The vertical lines mark one standard error above and below the mean response; this is narrower than the full 95% confidence interval.
-</div>
+![**Sampling Distribution of the Mean Response at $X_0$.** The dot marks the predicted mean response $\hat{Y}_{\text{mean} \mid X_0}$ from the regression line. The sideways bell curve illustrates its sampling distribution across repeated samples. The vertical lines mark one standard error above and below the mean response; this is narrower than the full 95% confidence interval.](images/fch09_se_meanResponse.png)
 
 **Confidence interval for the mean response**:
 
@@ -340,21 +331,14 @@ $$
 Prediction intervals are wider than confidence intervals because they include additional uncertainty for individual outcomes.  
 They are narrowest when $X_0 = \bar{X}$ and widen as $X_0$ moves farther from the sample mean.
 
-![](images/fch09_CI_PI_intervals.png)
-
-<div class="figure-caption">
-<strong>Regression Line with Confidence and Prediction Intervals.</strong> The dotted blue line shows the fitted regression line, and the vertical dotted line marks the sample mean $\overline{X}$. The shaded green band represents the 95% confidence interval (CI) for the mean response $\hat{Y}$, while the shaded orange band shows the 95% prediction interval (PI) for an individual response. The solid blue bell curve represents the sampling distribution of the predicted mean response at $\overline{X}$ under repeated sampling. The center dot marks $\hat{Y}(\overline{X})$, and the upper and lower green dots indicate the 95% CI bounds, $\hat{Y} \pm t \cdot SE_{\text{mean}}$. The green bell-shaped curves mirror these bounds, visually suggesting the plausible range of values that the mean response might take across repeated samples.
-</div>
+![**Regression Line with Confidence and Prediction Intervals.** The dotted blue line shows the fitted regression line, and the vertical dotted line marks the sample mean $\overline{X}$. The shaded green band represents the 95% confidence interval (CI) for the mean response $\hat{Y}$, while the shaded orange band shows the 95% prediction interval (PI) for an individual response. The solid blue bell curve represents the sampling distribution of the predicted mean response at $\overline{X}$ under repeated sampling. The center dot marks $\hat{Y}(\overline{X})$, and the upper and lower green dots indicate the 95% CI bounds, $\hat{Y} \pm t \cdot SE_{\text{mean}}$. The green bell-shaped curves mirror these bounds, visually suggesting the plausible range of values that the mean response might take across repeated samples.](images/fch09_CI_PI_intervals.png)
 
 **Understanding the Confidence Interval**:
 
 See supplementary figure below for an illustration of how the confidence interval represents plausible sampling distributions of the *mean* response.
 
-![](images/fch09_CI_mean_distributions.png)
+![**Plausible Sampling Distributions for the Mean Response at $\bar{X}$.** Each curve represents a possible sampling distribution of $\hat{Y}(\bar{X})$ if the true population mean were at that location. The central blue distribution corresponds to the sample estimate, while the green curves show other plausible means consistent with the 95% confidence interval. The confidence interval for the mean spans the horizontal segment beneath the distributions.](images/fch09_CI_mean_distributions.png)
 
-<div class="figure-caption">
-<strong>Plausible Sampling Distributions for the Mean Response at $\bar{X}$.</strong> Each curve represents a possible sampling distribution of $\hat{Y}(\bar{X})$ if the true population mean were at that location. The central blue distribution corresponds to the sample estimate, while the green curves show other plausible means consistent with the 95% confidence interval. The confidence interval for the mean spans the horizontal segment beneath the distributions.
-</div>
 
 ## Regression for Calibration (Inverse Prediction)
 

@@ -260,7 +260,7 @@ The correlation coefficient is: $r = 0.8217$
 
 This value provides evidence of a strong positive linear association between study hours and test score.
 
-![**Scatterplot of test score vs. study hours with best-fit line.**](images/fch08_pearsonR.png){fig-title=""}
+![**Scatterplot of test score vs. study hours with best-fit line.**](images/fch08_pearsonR.png)
 
 
 ## Pearson’s $r$ and the Six-Step Hypothesis Test
@@ -300,10 +300,12 @@ run;
 cor.test(StudyTime$StudyHours, StudyTime$ExamScore)
 ```
 
-:::{layout-ncol=2}
+::: {layout-ncol=2}
+
 ![](images/fch08_pearsonsR_SAS.png){fig-title="Pearson’s Correlation Output in SAS."}
 
 ![](images/fch08_pearsonsR_R.png){fig-title="Pearson’s Correlation Output in R."}
+
 :::
 
 <div class="figure-caption">
@@ -342,6 +344,7 @@ $$
 $$
 
 ::: {.example}
+
 ### Hand Calculation of Coefficients
 
 | $Y_i\ \text{(Grade)}$ | $X_i\ \text{(Hours)}$ | $X_i - \bar{X}$ | $Y_i - \bar{Y}$ | $(X_i - \bar{X})(Y_i - \bar{Y})$ | $(X_i - \bar{X})^2$ |
@@ -380,6 +383,7 @@ $$
 $$
 \widehat{\text{Grade}} = 40.993 + 6.708 \times \text{StudyHours}
 $$
+
 :::
 
 
@@ -409,10 +413,12 @@ fit = lm(ExamScore ~ StudyHours, data = StudyTime)
 summary(fit)
 ```
 
-:::{layout-ncol=2}
+::: {layout-ncol=2}
+
 ![](images/fch08_parameterEstimateTable_SAS.png){fig-title="Regression Output in SAS."}
 
 ![](images/fch08_parameterEstimateTable_R.png){fig-title="Regression Output in R."}
+
 :::
 
 <div class="figure-caption">
@@ -473,6 +479,7 @@ where:
 These formulas assume the regression model meets the standard assumptions (linearity, independence, equal variance, and normality of errors).
 
 ::: {.example}
+
 ### Example: Study Hours and Exam Grades
 
 From the regression of 13 students’ exam grades on study hours, we are given or calculated:
@@ -500,6 +507,7 @@ $$
 This is the square root of the **mean squared error (MSE)** from the regression and is used to quantify residual variability.
 
 ::: {.callout-note collapse="true"}
+
 ##### How is the sum of squared residuals (SSE) calculated?
 
 To compute the **sum of squared residuals** (also called **SSE** or **Sum of Squared Errors**), we use the fitted regression line:
@@ -529,6 +537,7 @@ Substituting back into the formula:
 $$
 \hat{\sigma} = \sqrt{\dfrac{1491.799}{13 - 2}} = \sqrt{\dfrac{1491.799}{11}} = 11.646
 $$
+
 :::
 
 #### 3. Standard Error of the Slope
@@ -556,15 +565,12 @@ $$
 - $\text{SE}(\hat{\beta}_0) = 6.381$
 
 These values describe the variability in slope and intercept estimates across hypothetical repeated samples.
+
 :::
 
 ### Sampling Distributions of Regression Coefficients
 
-![](images/fch08_sampling_distributions_coefficients.png){fig-title="Sampling Distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$."}
-
-<div class="figure-caption">
-<strong>Sampling distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$.</strong> Under the assumptions of simple linear regression, the sampling distributions of the slope and intercept are approximately normal. Their centers are the true population coefficients ($\beta_0$ and $\beta_1$), and their spread depends on sample size ($n$), the variability in the explanatory variable ($X$), and the residual variability ($\hat{\sigma}^2$). These distributions are the foundation for *t*-tests and confidence intervals in regression.
-</div>
+![**Sampling distributions of $\hat{\beta}_0$ and $\hat{\beta}_1$.** Under the assumptions of simple linear regression, the sampling distributions of the slope and intercept are approximately normal. Their centers are the true population coefficients ($\beta_0$ and $\beta_1$), and their spread depends on sample size ($n$), the variability in the explanatory variable ($X$), and the residual variability ($\hat{\sigma}^2$). These distributions are the foundation for *t*-tests and confidence intervals in regression.](images/fch08_sampling_distributions_coefficients.png)
 
 
 ## Hypothesis Testing for Slope and Intercept
@@ -638,11 +644,8 @@ We are 95% confident that for each 1-hour increase in study time, the mean exam 
 
 > **Note**: A similar *t*-test and confidence interval can be constructed for the intercept $\beta_0$, using the same degrees of freedom and standard error of the intercept. Most software packages report both tests automatically.
 
-![](images/fch08_ttestSlope.png){fig-title="Two-tailed *t*-test for slope."}
+![**Two-tailed *t*-test for slope coefficient.** The red line shows the observed test statistic ($t = 4.78$). Shaded regions represent the critical regions at $\alpha = 0.05$ for a two-tailed test with 11 degrees of freedom. The slope coefficient is statistically significant (*p*-value = 0.0006).](images/fch08_ttestSlope.png)
 
-<div class="figure-caption">
-<strong>Two-tailed *t*-test for slope coefficient.</strong> The red line shows the observed test statistic ($t = 4.78$). Shaded regions represent the critical regions at $\alpha = 0.05$ for a two-tailed test with 11 degrees of freedom. The slope coefficient is statistically significant (*p*-value = 0.0006).
-</div>
 
 ## Summary: Steps in Simple Linear Regression
 

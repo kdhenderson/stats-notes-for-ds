@@ -117,10 +117,7 @@ The following equations illustrate several ways that explanatory variables can e
 
 ### Illustration of Regression Plane
 
-![](images/fch11_regression_plane_plot.png){fig-title="Regression Plane with $\beta_1$ and $\beta_2$ Effects" fig-align="center"} 
-<div class="figure-caption">
-<strong>Interpretation of regression coefficients in an additive multiple linear regression model with two explanatory variables.</strong> The planar surface represents the fitted model $\hat{Y} = \beta_0 + \beta_1 X_1 + \beta_2 X_2$. Each bell curve shows the distribution of $Y$ at a fixed $X_1$ and $X_2$ value. The slope $\beta_1$ is the change in mean response per unit increase in $X_1$, holding $X_2$ constant (illustrated by the gray line through the back row of means). The slope $\beta_2$ is the change in mean response per unit increase in $X_2$, holding $X_1$ constant (illustrated by the purple connector between two bells at the same $X_1$).
-</div>
+![**Interpretation of regression coefficients in an additive multiple linear regression model with two explanatory variables.** The planar surface represents the fitted model $\hat{Y} = \beta_0 + \beta_1 X_1 + \beta_2 X_2$. Each bell curve shows the distribution of $Y$ at a fixed $X_1$ and $X_2$ value. The slope $\beta_1$ is the change in mean response per unit increase in $X_1$, holding $X_2$ constant (illustrated by the gray line through the back row of means). The slope $\beta_2$ is the change in mean response per unit increase in $X_2$, holding $X_1$ constant (illustrated by the purple connector between two bells at the same $X_1$).](images/fch11_regression_plane_plot.png){fig-align="center"}
 
 
 ## Parallel Lines Regression Model
@@ -167,7 +164,7 @@ The following equations illustrate several ways that explanatory variables can e
     - $\beta_3$: Difference in slopes between groups.
 
 
-:::{.example}
+::: {.example}
 
 ## Example: Gender, Salary, and Years Model
 
@@ -207,17 +204,13 @@ Parallel lines with different intercepts:
 - Female: $\text{Salary} = 34.19 + 1.44 \cdot \text{Years}$
 - Male: $\text{Salary} = (34.19 + 3.35) + 1.44 \cdot \text{Years} = 37.54 + 1.44 \cdot \text{Years}$
 
-![](images/fch11_gender_salaries_parallelLines.png){fig-title="Parallel lines regression model for salary by gender" fig-align="center"}
-
-<div class="figure-caption">
-<strong>Parallel lines regression model for salary by gender, controlling for years of experience.</strong> The vertical distance between the two lines $(\Delta = \beta_2 = 3.35)$ represents the estimated average difference in salary between males and females for the same number of years of experience.
-</div>
+![**Parallel lines regression model for salary by gender, controlling for years of experience.** The vertical distance between the two lines $(\Delta = \beta_2 = 3.35)$ represents the estimated average difference in salary between males and females for the same number of years of experience.](images/fch11_gender_salaries_parallelLines.png){fig-align="center"}
 
 Interpretation: After accounting for years of experience, the estimated difference in mean salaries between males and females is \$3,350, with males earning more on average.
 
 :::
 
-:::{.example}
+::: {.example}
 
 ## Example: Gender × Years Interaction Model
 
@@ -267,10 +260,6 @@ $$
   $\Delta(x) = \beta_2 + \beta_3 x$.  
   For example, at 10 years, $\Delta(10) = 1.94 + 0.26(10) = 4.54$.
 
-![](images/fch11_gender_salaries_interaction.png){fig-title="Interaction model: salary by gender with different slopes" fig-align="center"}
-
-<div class="figure-caption">
-<strong>Interaction model for salary by gender, controlling for years of experience.</strong> Lines are not parallel because the slope differs by gender. The intercept difference at 0 years is $\beta_2=1.94$; the slope difference is $\beta_3=0.26$. The vertical gap at a fixed number of years $x$ equals $\Delta(x)=\beta_2+\beta_3x$ (e.g., 4.54 at 10 years).
-</div>
+![**Interaction model for salary by gender, controlling for years of experience.** Lines are not parallel because the slope differs by gender. The intercept difference at 0 years is $\beta_2=1.94$; the slope difference is $\beta_3=0.26$. The vertical gap at a fixed number of years $x$ equals $\Delta(x)=\beta_2+\beta_3x$ (e.g., 4.54 at 10 years).](images/fch11_gender_salaries_interaction.png){fig-align="center"}
 
 :::

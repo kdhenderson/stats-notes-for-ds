@@ -135,11 +135,7 @@ $$
 
 ## Residual Diagnostics Panel
 
-![](images/fch10_residualPanel.png){fig-title="Residual Diagnostics Panel."}
-
-<div class="figure-caption">
-<strong>Residual diagnostics panel.</strong> A collection of plots used to assess regression assumptions and identify potential problems. Several plots use standardized, studentized, or studentized-deleted (R-student) residuals to improve comparability across observations. These include: residuals vs. predicted values (checking for nonlinearity or heteroscedasticity), R-studentized residuals vs. predicted values (highlighting outliers), and R-studentized residuals vs. leverage (identifying high-leverage outliers). Other diagnostics include the normal QQ plot and histogram of residuals (assessing normality), predicted values vs. observed values (evaluating fit), Cook’s distance by observation (identifying influential points by combining leverage and residual size), and QQ plots of fitted means and residuals. Together, these diagnostics help evaluate model adequacy and guide possible remedies.
-</div>
+![**Residual diagnostics panel.** A collection of plots used to assess regression assumptions and identify potential problems. Several plots use standardized, studentized, or studentized-deleted (R-student) residuals to improve comparability across observations. These include: residuals vs. predicted values (checking for nonlinearity or heteroscedasticity), R-studentized residuals vs. predicted values (highlighting outliers), and R-studentized residuals vs. leverage (identifying high-leverage outliers). Other diagnostics include the normal QQ plot and histogram of residuals (assessing normality), predicted values vs. observed values (evaluating fit), Cook’s distance by observation (identifying influential points by combining leverage and residual size), and QQ plots of fitted means and residuals. Together, these diagnostics help evaluate model adequacy and guide possible remedies.](images/fch10_residualPanel.png)
 
 
 ## Graphical Assessment of Residuals
@@ -179,7 +175,7 @@ $$
 
 ## Residual Patterns and Suggested Remedies
 
-:::{layout-ncol=2}
+::: {layout-ncol=2}
 
 ![](images/fch10_residuals_a.png){fig-title="(a) Check distribution of $Y$ at different $X$ values"}
 
@@ -209,13 +205,14 @@ When the spread of residuals changes with fitted values, transforming the respon
 2. Square root transformation
 3. Other transformations (e.g., reciprocal)
 
-:::{layout-ncol=3}
+::: {layout-ncol=3}
 
 ![](images/fch10_YTransforms_log.png)
 
 ![](images/fch10_YTransforms_sqrt.png)
 
 ![](images/fch10_YTransforms_reciprocal.png)
+
 :::
 
 <div class="figure-caption">
@@ -482,17 +479,9 @@ run;
 
 ```
 
-![](images/fch10_ironcor_fitplot_SAS.png){fig-title="Boxplot showing the spread of corrosion at each iron content level." width=5in fig-align="center"}
+![**Boxplot showing variation in corrosion measurements at each iron content level, used in assessing model fit.**](images/fch10_ironcor_fitplot_SAS.png){width=5in fig-align="center"}
 
-<div class="figure-caption">
-<strong>Boxplot showing variation in corrosion measurements at each iron content level, used in assessing model fit.</strong>
-</div>
-
-![](images/fch10_ironcor_boxplot_SAS.png){fig-title="Scatterplot with fitted regression line." width=5in fig-align="center"}
-
-<div class="figure-caption">
-<strong>Fit plot with 95% confidence and prediction intervals for the linear regression model of corrosion versus iron content.</strong>
-</div>
+![**Fit plot with 95% confidence and prediction intervals for the linear regression model of corrosion versus iron content.**](images/fch10_ironcor_boxplot_SAS.png){width=5in fig-align="center"}
 
 ---
 
@@ -505,6 +494,7 @@ run;
 ![](images/fch10_lm_ANOVA_SAS.png){fig-title="Linear Regression Model ANOVA Table Output from SAS."}
 
 ![](images/fch10_smm_ANOVA_SAS.png){fig-title="Separate Means Model ANOVA Table Output from SAS."}
+
 :::
 
 ::: {.mytableblock title="Extra-Sum-of-Squares / Lack-of-Fit Test"}

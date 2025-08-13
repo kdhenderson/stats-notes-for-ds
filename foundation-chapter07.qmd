@@ -279,6 +279,7 @@ To evaluate this question, we use a linear contrast to compare combined group me
   where $N$ is the total number of observations and $I$ is the number of groups.
 
 ::: {.example}
+
 ### Worked Example: Difference of Sums
 - **Hypotheses**:
   $$
@@ -341,9 +342,11 @@ There is sufficient evidence that the sum of points assigned to the Amputee and 
 
 We conclude that the Amputee and Hearing groups were rated significantly lower, on average, than the Crutch and Wheelchair groups.
 )
+
 :::
 
 ::: {.example}
+
 ### Hypothesis Test---Sums
 1. **Hypotheses**:
    $$
@@ -365,9 +368,11 @@ We conclude that the Amputee and Hearing groups were rated significantly lower, 
 6. **Conclusion**:
 
    There is strong evidence to suggest that the sum of the means of the Amputee and Hearing groups is less than that of the Crutch and Wheelchair groups (*p*-value = 0.0022). The 95% confidence interval for the difference of sums is $(-4.529, -1.043)$ points.
+
 :::
 
 ::: {.example}
+
 ### Hypothesis Test---Means (Not Sums)
 
 1. **Hypotheses**:
@@ -403,6 +408,7 @@ We conclude that the Amputee and Hearing groups were rated significantly lower, 
 There is strong evidence to suggest that the average of the means of the Amputee and Hearing groups is less than the average of the means of the Crutches and Wheelchair groups (*p*-value = 0.0022).
 
 We are 95% confident that the average of the mean scores of the Crutches and Wheelchair groups is between 0.5215 and 2.2605 points greater than the average of the mean points of the Amputee and Hearing groups.
+
 :::
 
 ### Why We Do a Multiple Comparison Correction — The Bonferroni
@@ -439,6 +445,7 @@ P(\text{at least 1 H}) = 1 - P(\text{no heads}) = 1 - P(\text{TT}) = 1 - 0.25 = 
 $$
 
 ::: {.example}
+
 ### Multiple Testing Analogy: Coin Flips
 This parallels the logic behind multiple testing:
 
@@ -448,6 +455,7 @@ This parallels the logic behind multiple testing:
 Just like the probability of getting at least one head increases with more coin flips, the probability of making at least one Type I error increases with more hypothesis tests — unless we adjust for it.
 
 This illustrates how running multiple independent tests increases the probability of rejecting at least one true null---even if *all* nulls are actually true. That’s why corrections like the Bonferroni adjustment are necessary.
+
 :::
 
 ### Familywise Error Rate With Multiple Tests

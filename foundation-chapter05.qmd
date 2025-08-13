@@ -104,7 +104,7 @@ When the rank sum distribution is approximated by a normal curve, a continuity c
 - The continuity correction shifts the normal cutoff to the center of the bar, improving the approximation.
 
 ![**How continuity correction improves normal approximation.**  
-Illustration of continuity correction in a rank-based test. The gray bars show the exact (discrete) distribution of the test statistic. The black curve represents the normal approximation. The dashed vertical line at 7 is the unadjusted threshold; the dotted red line at 7.5 shows the continuity-corrected threshold, which more accurately aligns the area under the normal curve (red shaded) with the area of the histogram bars.](images/fch05_continuity_correction.png){fig-title=""}
+Illustration of continuity correction in a rank-based test. The gray bars show the exact (discrete) distribution of the test statistic. The black curve represents the normal approximation. The dashed vertical line at 7 is the unadjusted threshold; the dotted red line at 7.5 shows the continuity-corrected threshold, which more accurately aligns the area under the normal curve (red shaded) with the area of the histogram bars.](images/fch05_continuity_correction.png)
 
 
 ## Alternatives to the Paired *t*-Test
@@ -136,6 +136,7 @@ Illustration of continuity correction in a rank-based test. The gray bars show t
 - More powerful than the sign test, especially when magnitude matters.
 
 ::: {.example}
+
 ### Wilcoxon Signed-Rank Test Example
 **Scenario**: An employer compares mileage from a 5-day and 4-day work week for 7 employees. The goal is to test whether mileage is lower under the 4-day week (i.e., higher under the 5-day week).
 
@@ -182,7 +183,8 @@ Illustration of continuity correction in a rank-based test. The gray bars show t
 - Interpretation: There is insufficient evidence to reject $H_0$ at a typical 0.05 level.
 
 ![**Normal approximation to the Wilcoxon signed-rank test statistic $S$ with continuity correction.** 
-The curve represents the null distribution with $\text{Mean}(S) = 14$ and $\text{SD}(S) \approx 5.92$. The dashed line at $S = 22$ is the observed value; the dotted line at $S - 0.5 = 21.5$ reflects the continuity-corrected value. The shaded region corresponds to a one-sided *p*-value of approximately 0.1024, indicating insufficient evidence to reject $H_0$.](images/fch05_signed_rank_normal_approx.png){fig-title=""}
+The curve represents the null distribution with $\text{Mean}(S) = 14$ and $\text{SD}(S) \approx 5.92$. The dashed line at $S = 22$ is the observed value; the dotted line at $S - 0.5 = 21.5$ reflects the continuity-corrected value. The shaded region corresponds to a one-sided *p*-value of approximately 0.1024, indicating insufficient evidence to reject $H_0$.](images/fch05_signed_rank_normal_approx.png)
+
 :::
 
 ### Sign Test
