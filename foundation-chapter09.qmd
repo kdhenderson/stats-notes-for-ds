@@ -17,8 +17,8 @@ title: "Quantifying Uncertainty: Confidence, Prediction and Calibration Interval
 ## Statistical Relationships
 
 - Key Insight: The value of the explanatory variable determines the mean response value.
-- Variability exists around the response variable for a given explanatory value.
-- Slope and intercept have distinct sampling distributions and standard errors.
+- Variability exists in the response variable for a given explanatory value.
+- The slope and intercept each have their own sampling distribution and standard error.
 
 
 ## Formal Assumptions
@@ -37,7 +37,7 @@ title: "Quantifying Uncertainty: Confidence, Prediction and Calibration Interval
   $$
   y = \beta_0 + \beta_1 x + \varepsilon
   $$
-  - $y = \text{mean} \pm \text{residual}$, where the residual represents the difference between the observed value and the mean.
+  - $y =$ mean $\pm$ residual, where the residual represents the difference between the observed value and the mean.
   - Residuals ($\varepsilon$) follow a normal distribution with mean zero and constant variance ($\sigma^2$).
 - **Regression line (estimated values)**: $\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x$
 - **Residuals**: $e_i = y_i - \hat{y}_i = y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i)$
@@ -148,7 +148,7 @@ $$
 
 :::
 
-> **Note**: The regression model estimates both a slope and an intercept, consuming 2 degrees of freedom. This reduces the error degrees of freedom from 8 (in the Equal Means Model) to 7:
+> **Note**: The regression model estimates both a slope and an intercept, using 2 degrees of freedom. This reduces the error degrees of freedom from 8 (in the Equal Means Model) to 7:
 >
 > $$
 > \text{df}_{\text{Error}} = n - 2 = 9 - 2 = 7
@@ -199,12 +199,14 @@ Because the *p*-value is less than 0.0001, we reject the null hypothesis that al
 
 ## ANOVA Output in Software
 
+### SAS Code
 ```{sas eval=FALSE}
 proc glm data=ToyExample;
   model score = level / solution;
 run;
 ```
 
+### R Code
 ```{r eval=FALSE}
 fit <- lm(score ~ level, data = anovaData)
 anova(fit)      # ANOVA table: sums of squares, F-stat
@@ -356,7 +358,7 @@ See supplementary figure below for an illustration of how the confidence interva
 
 ## Regression for Calibration (Inverse Prediction)
 
-Rather than predicting $y$ for a given $x$, **calibration** estimates the $x$ value, a value that is easy to measure, that would produce a desired $y$ (i.e., solve for $x$ when $y = y_0$).
+Rather than predicting $y$ for a given $x$, **calibration** estimates the $x$ value that would produce a desired $y$ (i.e., solve for $x$ when $y = y_0$).
 
 **Prediction equation**:
 
@@ -389,7 +391,7 @@ $$
 Using:
 
 - $n = 13$, $\bar{X} = 3.92$, $S_X^2 = 5.74$
-- $\hat{\sigma} = 11.65$ (from MSE $ = 135.62$)
+- $\hat{\sigma} = 11.65$ (from MSE $= 135.62$)
 - $\hat{X} = 5.07$
 - $\hat{\beta}_1 = 6.71$
 
