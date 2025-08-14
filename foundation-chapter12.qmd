@@ -31,10 +31,16 @@ title: "Inferences for Multiple Linear Regression"
 
 ### Calculation in MLR
 - **Multiple $R^2$**: This is the squared correlation between the observed values of $Y$ and the predicted values of $Y$.
-- **Partition of sums of squares**:
+- **Partition of sums of squares**: The total variation in $Y$ ($\text{SS}_{\text{total}}$) can be split into the variation explained by the model ($\text{SS}_{\text{regression}}$) and the variation left unexplained ($\text{SS}_{\text{residual}}$):
   $$
-  R^2 = \frac{\text{SS}_{\text{total}} - \text{SS}_{\text{residual}}}{\text{SS}_{\text{total}}} = 1 - \frac{\text{SS}_{\text{residual}}}{\text{SS}_{\text{total}}}
+  \text{SS}_{\text{total}} = \text{SS}_{\text{regression}} + \text{SS}_{\text{residual}}
   $$
+  This partition leads to:
+  $$
+  R^2 = \frac{\text{SS}_{\text{total}} - \text{SS}_{\text{residual}}}{\text{SS}_{\text{total}}} = \frac{\text{SS}_{\text{regression}}}{\text{SS}_{\text{total}}} 
+       = 1 - \frac{\text{SS}_{\text{residual}}}{\text{SS}_{\text{total}}}
+  $$
+
 
 ### Relationship with the Overall F-test
 - The F-test statistic can be rewritten in terms of $R^2$.  
@@ -84,7 +90,7 @@ title: "Inferences for Multiple Linear Regression"
 
 - The partial F-test is used when a subset of $k$ predictors does not have statistically significant slopes. In other words, it examines a reduced model with $g$ of the $k$ predictors.
 - **Hypotheses**:  
-  - $H_0$: The extra $k-g$ predictors do not contribute (all their slopes are 0).  
+  - $H_0$: The extra $k-g$ predictors do not contribute. (All their slopes are zero.)  
   - $H_a$: At least one of the extra predictors has a nonzero slope.
 - This test simultaneously evaluates whether additional predictors improve the model.
 
@@ -119,9 +125,9 @@ $\log(\text{cost}) = \beta_0 + \beta_3 X_3 + \beta_5 X_5 + \beta_6 X_6$
 
 | Model   | Error DF | SSE     | MSE   | F    | p-value |
 |---------|----------|---------|-------|------|---------|
-| M           | 3        | 9     | 3     | 1.94 | 0.1216  |
-| Full (E)    | 778      | 1208  | 1.55  |      |         |
-| Reduced (T) | 781      | 1217  |       |      |         |
+| Model           | 3        | 9     | 3     | 1.94 | 0.1216  |
+| Full (Error)    | 778      | 1208  | 1.55  |      |         |
+| Reduced (Total) | 781      | 1217  |       |      |         |
 
 **Partial F-test results**:  
 
@@ -137,7 +143,6 @@ There is not enough evidence to suggest that the extra predictors (e.g., $X_1$, 
 
 :::
 
----
 
 ## Significance Tests for Each Predictor (*t*-tests)
 
@@ -154,108 +159,10 @@ There is not enough evidence to suggest that the extra predictors (e.g., $X_1$, 
   $$
 
 
-## Testing Intercept and Slope Differences in Regression Models (Bat Echolocation Example)
-
-- **Question of interest 1**:  
-  Do echolocating and non-echolocating bats have equal slopes?  
-  - Models for echolocating bats, non-echolocating bats, and birds are written out.  
-  - **Hypotheses**:  
-    - $H_0$: The slopes are equal.  
-    - $H_a$: The slopes are not equal.
-
-::: {layout-ncol=2}
-
-![Bat Echolocation Example](images/notes_12_2.png)  
-*Figure: Model setup and hypothesis for testing slope differences in echolocating and non-echolocating bats.*
-
-**Continuation**:  
-SAS output tables for full and reduced models with interpretation.
-
-![Bat Example - Full and Reduced Models](images/notes_12_3.png)  
-*Figure: SAS output tables for full and reduced models, testing slope differences in echolocating and non-echolocating bats.*
-
-:::
-
-- **Next question of interest**:  
-  Are the intercepts for bat types different?  
-  - **Hypotheses**:  
-    - $H_0$: The intercepts are equal.  
-    - $H_a$: The intercepts are different.
-
-::: {layout-ncol=2}
-
-![Parameter Estimates for Bat Example](images/notes_12_4.png)  
-*Figure: Parameter estimate table with interpretation and p-value.*
-
-:::
-
-
-## Confidence Intervals for Linear Combinations of Coefficients
-
-- **Example**: A 95% CI for the difference in intercepts is:
-  $$
-  (\hat{\beta}_2 + \hat{\beta}_3) - \hat{\beta}_0
-  $$
-- **Variance calculation**: First, compute the variance of the linear combination:
-  $$
-  \text{Var}(\hat{\beta}_2 + \hat{\beta}_3) = \text{Var}(\hat{\beta}_2) + \text{Var}(\hat{\beta}_3) + 2\,\text{Cov}(\hat{\beta}_2, \hat{\beta}_3)
-  $$
-- **Standard error**: The standard error is the square root of the variance:
-  $$
-  SE(\hat{\beta}_2 + \hat{\beta}_3) = \sqrt{\text{Var}(\hat{\beta}_2 + \hat{\beta}_3)}
-  $$
-- **Compute the CI**:
-  $$
-  (\hat{\beta}_2 + \hat{\beta}_3) \pm t_{0.975, df} \times SE(\hat{\beta}_2 + \hat{\beta}_3)
-  $$
-
-::: {layout-ncol=2}
-
-![CIs for Linear Combinations of Coefficients](images/notes_12_6.png)  
-*Figure: Confidence interval calculations for linear combinations of coefficients, applied to the bat echolocation example.*
-
-:::
-
-
-## Variance of Sum and Difference of Random Variables
-
-- The variance of a sum or difference of random variables is given by:
-  $$
-  \text{Var}(aX + bY) = a^2 \text{Var}(X) + b^2 \text{Var}(Y) + 2ab \text{Cov}(X, Y)
-  $$
-- This formula is used to compute the variance of estimates in regression.
-
-::: {layout-ncol=2}
-
-![Variance of Sum and Difference of Random Variables](images/notes_12_5.png)  
-*Figure: Variance of sum and difference of random variables, discussing covariance and its use in confidence intervals.*
-
-:::
-
-
-## Interpreting *p*-values in Regression Output
-
-- Example: A *p*-value of 0.7030 suggests that there is no significant difference in mean energy expenditures.
-
-::: {layout-ncol=2}
-
-![Parameter Estimate and Covariance Table](images/notes_12_7.png)  
-*Figure: Parameter estimate table and covariance table with interpretation for the bat echolocation example.*
-
-:::
-
-
 ## Prediction in MLR
 
 - Predicted values in MLR are the same as estimated means.  
 - To obtain confidence intervals for the mean or prediction intervals for individual predictions, statistical software must be used because all variables in the model must be specified.
-
-
-## Testing Intercept Differences in Regression Models
-
-- Example: Testing whether intercepts differ between bat types involves the hypotheses:  
-  - $H_0: \beta_3 = 0$ (no difference).  
-  - $H_a: \beta_3 \neq 0$ (significant difference).
 
 
 ## Least Squares Estimates and Standard Errors
@@ -266,3 +173,261 @@ SAS output tables for full and reduced models with interpretation.
   \frac{\text{sum of squared residuals (SSE)}}{\text{df} (n-p)} = \text{MSE}
   $$
 - The square root of MSE gives the residual standard error (or RMSE).
+
+
+::: {.example}
+
+## Testing Intercept and Slope Differences in Regression Models (Bat Echolocation Example)
+
+### Question of Interest 1: Equality of Slopes Across All Groups
+
+**Question**: Are the slopes equal across all three groups---birds, echolocating bats (Ebat), and non-echolocating bats (NEbat)---after accounting for body size?
+
+**Approach**:  
+We use an **Extra Sum of Squares F-test**. If slopes are equal (holding body mass constant), the estimated difference in energy expenditure should be the same across groups.
+
+**Full model**:
+$$
+\begin{aligned}
+\mu(\text{lenergy} \mid \text{lmass}, \text{TYPE}) 
+&= \beta_0 + \beta_2 \,\text{bird} + \beta_3 \,\text{Ebat} + \beta_1 \,\text{lmass} \\
+&\quad + \beta_4 (\text{lmass} \times \text{bird}) + \beta_5 (\text{lmass} \times \text{Ebat})
+\end{aligned}
+$$
+
+**Alternative expression**:
+$$
+\mu(\text{lenergy} \mid \text{lmass}, \text{TYPE}) =
+(\beta_0 + \beta_2 \,\text{bird} + \beta_3 \,\text{Ebat}) +
+(\beta_1 + \beta_4 \,\text{bird} + \beta_5 \,\text{Ebat}) \,\text{lmass}
+$$
+
+**Group-specific models**:
+$$
+\begin{aligned}
+\text{NEbat:} & \quad \mu = \beta_0 + \beta_1\,\text{lmass} &\quad &\text{slope: } \beta_1 \\
+\text{Ebat:}  & \quad \mu = (\beta_0 + \beta_3) + (\beta_1 + \beta_5)\,\text{lmass} &\quad &\text{slope: } \beta_1 + \beta_5 \\
+\text{bird:}  & \quad \mu = (\beta_0 + \beta_2) + (\beta_1 + \beta_4)\,\text{lmass} &\quad &\text{slope: } \beta_1 + \beta_4
+\end{aligned}
+$$
+
+**Hypotheses**:  
+$$
+\begin{aligned}
+H_0 &: \text{The slopes are equal} 
+      &&\Leftrightarrow \beta_1 = \beta_1 + \beta_5 = \beta_1 + \beta_4 \\
+     & &&\implies \beta_4 = \beta_5 = 0 \quad\text{(lines are parallel)} \\
+H_a &: \text{The slopes are not all equal} 
+      &&\Leftrightarrow \beta_4 \text{ and } \beta_5 \text{ are not both zero}
+\end{aligned}
+$$
+
+#### Extra Sum of Squares F-test
+
+The tables below show the full model, reduced model, and Extra Sum of Squares results used to test whether slopes differ among birds, Ebats, and NEbats.
+
+**Full Model ANOVA Table**  
+
+| Source  | DF  | Sum of Squares | Mean Square | F Value  | Pr > F  |
+|---------|-----|----------------|-------------|----------|---------|
+| Model   | 5   | 29.4699         | 5.8940      | 163.44   | <.0001  |
+| Error   | 14  | 0.5049          | 0.0361      |          |         |
+| Corrected Total | 19  | 29.9748         |             |          |         |
+
+**Reduced Model ANOVA Table**  
+
+| Source  | DF  | Sum of Squares | Mean Square | F Value  | Pr > F  |
+|---------|-----|----------------|-------------|----------|---------|
+| Model   | 3   | 29.4215         | 9.8072      | 283.59   | <.0001  |
+| Error   | 16  | 0.5533          | 0.0346      |          |         |
+| Corrected Total | 19  | 29.9748         |             |          |         |
+
+**Extra Sum of Squares Table**  
+
+| Source  | DF  | Sum of Squares | Mean Square | F Value  | Pr > F  |
+|---------|-----|----------------|-------------|----------|---------|
+| Model   | 2   | 0.0484          | 0.0242      | 0.6704   | 0.5272  |
+| Error (Full)  | 14  | 0.5049          | 0.0361      |          |         |
+| Total (Reduced) | 16  | 0.5533          |             |          |         |
+
+**Interpretation**: 
+From the output, there is not enough evidence to suggest that the lines are not parallel and have different slopes, *p*-value = 0.5272 from the Extra Sum of Squares F-test.
+
+:::
+
+::: {.example}
+
+### Question of Interest 2: Equality of Intercepts for Bat Types
+
+**Question**: Are the intercepts for Ebat and NEbat different after knowing that the slopes are equal?
+
+**Hypotheses**:  
+$$
+\begin{aligned}
+H_0 &: \text{The intercepts are equal} 
+      &&\Leftrightarrow \beta_3 = 0 \quad \text{(no difference between NEbat and Ebat)} \\
+H_a &: \text{The intercepts are not all equal} 
+      &&\Leftrightarrow \beta_3 \neq 0
+\end{aligned}
+$$
+
+Equivalent form of $H_0$ in intercept terms:
+$$
+\begin{aligned}
+&\text{If the intercept for Ebat is equal to that of NEbat,} \\
+&\text{then } \beta_0 + \beta_3 = \beta_0 \quad \text{or} \quad \beta_3 = 0
+\end{aligned}
+$$
+
+<div class="figure-caption">
+<strong>Parameter Estimate Table</strong>
+</div>
+
+| Parameter                   | Estimate   | Standard Error | t Value  | Pr > |t| |
+|-----------------------------|------------|----------------|----------|-------|
+| Intercept                   | -1.5764    | 0.2872         | -5.49  | <.0001|
+| lmass                       | 0.8150     | 0.0445         | 18.30  | <.0001|
+| Type Ebat      | 0.0787     | 0.2027         | 0.39   | 0.7030|
+| Type bird | 0.1023     | 0.1142         | 0.90   | 0.3837|
+| Type NEbat  | 0.0000     | .              | .        | .     |
+
+**Interpretation**:  
+Data are consistent with the hypothesis of equal intercepts between Ebat and NEbat after accounting for mass (*p*-value = 0.7030).
+
+:::
+
+### Variance of the Sum and Difference of Random Variables
+
+The variance of a linear combination of two random variables $X$ and $Y$ is:
+
+$$
+\text{Var}(aX + bY) = a^2 \,\text{Var}(X) + b^2 \,\text{Var}(Y) + 2ab\,\text{Cov}(X, Y)
+$$
+
+Covariance ($\text{Cov}$) measures how two variables move together: positive ($+$), none ($0$), or negative ($-$).
+
+#### Example with Regression Coefficients
+
+Let $\beta_1$ and $\beta_2$ be regression estimates, treated as random variables.  
+We obtain their variances by squaring the $\text{SE}$ values from the parameter estimate table.
+
+**Sum**:
+$$
+\begin{aligned}
+\text{Var}(\beta_1 + \beta_2) &= 1^2 \, \text{Var}(\beta_1) + 1^2 \, \text{Var}(\beta_2) + 2(1)(1)\text{Cov}(\beta_1, \beta_2) \\
+&= \text{Var}(\beta_1) + \text{Var}(\beta_2) + 2 \, \text{Cov}(\beta_1, \beta_2) \\
+\end{aligned}
+$$
+
+**Difference**:
+$$
+\begin{aligned}
+\text{Var}(\beta_1 - \beta_2) &= 1^2 \, \text{Var}(\beta_1) + (-1)^2 \, \text{Var}(\beta_2) + 2(1)(-1)\text{Cov}(\beta_1, \beta_2) \\
+&= \text{Var}(\beta_1) + \text{Var}(\beta_2) - 2 \, \text{Cov}(\beta_1, \beta_2)
+\end{aligned}
+$$
+
+We will use the difference formula for the next question of interest.
+
+::: {.example}
+
+### Question of Interest 3: Confidence Interval for the Difference in Intercepts (Birds vs. Ebats)
+
+We want a 95% confidence interval for the difference in intercepts between birds and Ebats after accounting for mass.
+
+**Model equation**:  
+$$
+\text{lenergy} = \beta_0 + \beta_1\,\text{lmass} + \beta_2\,\text{bird} + \beta_3\,\text{Ebat}
+$$  
+
+**Modified regression equations**:  
+
+- Birds: $\mu = (\beta_0 + \beta_2) + \beta_1\,\text{lmass}$  
+- Ebats: $\mu = (\beta_0 + \beta_3) + \beta_1\,\text{lmass}$  
+
+**Difference in intercepts**:  
+$$
+(\beta_0 + \beta_2) - (\beta_0 + \beta_3) = \beta_2 - \beta_3
+$$
+
+**95% confidence interval formula**: 
+$$
+\begin{aligned}
+&\hat{\beta}_2 - \hat{\beta}_3 \pm t_{0.975,\, 16} \times \text{SE}(\hat{\beta}_2 - \hat{\beta}_3) \\
+&\hat{\beta}_2 - \hat{\beta}_3 \pm 2.12 \times 0.155
+\end{aligned}
+$$
+
+**Finding the standard error**:  
+
+From the parameter estimates table:
+$$
+\text{Var}(\hat{\beta}_2) = 0.0130, \quad \text{Var}(\hat{\beta}_3) = 0.0410, \quad \text{Cov}(\hat{\beta}_2, \hat{\beta}_3) = 0.0150
+$$
+
+Apply the difference formula:
+$$
+\begin{aligned}
+\text{Var}(\hat{\beta}_2 - \hat{\beta}_3) &= (1)^2 \, \text{Var}(\hat{\beta}_2) + (-1)^2 \, \text{Var}(\hat{\beta}_3) + 2(1)(-1)\text{Cov}(\hat{\beta}_2, \hat{\beta}_3) \\
+&= \text{Var}(\hat{\beta}_2) + \text{Var}(\hat{\beta}_3) - 2 \, \text{Cov}(\hat{\beta}_2, \hat{\beta}_3) \\
+&= 0.013 + 0.041 - 2(0.015) = 0.024
+\end{aligned}
+$$
+
+Thus:
+$$
+\text{SE}(\hat{\beta}_2 - \hat{\beta}_3) = \sqrt{\text{Var}(\hat{\beta}_2 - \hat{\beta}_3)} = \sqrt{0.024} = 0.1549
+$$
+
+**Final 95% CI**:  
+$$
+\begin{aligned}
+\hat{\beta}_2 - \hat{\beta}_3 &\pm 2.12 \times 0.1549 \\
+(0.1023 - 0.0787)  &\pm 2.12 \times 0.1549 = (−0.3048, 0.3520)
+\end{aligned}
+$$
+
+**Interpretation**:  
+The 95% CI includes zero, so there is insufficient evidence to conclude a difference in intercepts between birds and Ebats after adjusting for body mass.
+
+### Alternative Comparison: Birds vs. NEbats
+
+Under the current model coding, `Type NEbat` is the reference group.  
+This means the parameter estimates for `Type bird` and `Type Ebat` are interpreted relative to NEbats.  
+If the goal were to compare birds and Ebats directly (as in QOI 3), the model would need to be refit with `Type Ebat` set as the reference group.
+
+Another way to find the difference in intercepts is to note that in the model:  
+
+$$
+\mu(\text{lenergy} \mid \text{lmass}, \text{TYPE}) = \beta_0 + \beta_1\,\text{lmass} + \beta_2\,\text{bird} + \beta_3\,\text{Ebat}
+$$
+
+The difference in intercepts between birds and the reference group (NEbat) is simply:
+
+$$
+(\beta_0 + \beta_2) - \beta_0 = \beta_2
+$$
+
+So you can use the parameter estimate $\hat{\beta}_2$ directly from the table.
+
+**Parameter Estimate Table**
+
+| Parameter                   | Estimate   | Standard Error | t Value | Pr > |t| |
+|-----------------------------|------------|----------------|---------|------|
+| Intercept                   | -1.5764    | 0.2872         | -5.49   | <.0001 |
+| lmass                       | 0.8150     | 0.0445         | 18.30   | <.0001 |
+| Type bird                   | 0.1023     | 0.1142         | 0.90    | 0.3837 |
+| Type Ebat                    | 0.0787     | 0.2027         | 0.39    | 0.7030 |
+| Type NEbat                   | 0.0000     | .              | .       | .     |
+
+**95% Confidence interval calculation**:  
+Since we are assuming the lines are parallel, we can use $\hat{\beta}_2$ and its standard error to form the CI.  
+
+The 95% CI is:  
+$$
+0.1023 \pm 2.12 \times 0.1142 = (-0.139, 0.344)
+$$
+**Interpretation**: 
+Since the interval contains zero, there is no significant difference in mean energy between birds and NEbats after accounting for mass.
+
+:::
