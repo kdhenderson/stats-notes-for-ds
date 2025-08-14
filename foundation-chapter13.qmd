@@ -4,35 +4,35 @@ title: "Model Selection and Validation"
 
 ## Objectives
 
-- What is the proper order for a regression analysis?
-- How to use residuals to check regression assumptions.
-- How to apply the necessary remedies when the assumptions are violated.
-- How to apply variable selection algorithms and interpret the results.
-- Statistical and conceptual issues for automatic variable selection in multiple linear regression
-
+- Describe the proper order for a regression analysis.
+- Use residuals to check regression assumptions.
+- Apply the necessary remedies when the assumptions are violated.
+- Apply variable selection algorithms and interpret the results.
+- Understand statistical and conceptual issues for automatic variable selection in multiple linear regression.
 
 
 ## Parameter estimates are highly context dependent.
 
-- Magnitude of correlations depends on:
-  - Range of values
-  - Reliability of measurement
-  - Type of participants included in study
-- Specific slope estimate depends on:
-  - Range of x and y scores
-  - Types of participants in sample
-  - Context of specific set of predictor variables
-- Example: tentative model for alcohol metabolism in men and women
-  - Should contain variables whose values best answer the ?s in a straightforward manner
-  - Should include potentially confounding variables
-  - Should include features that capture important relationships found in the initial graphical analysis (all those that are highly correlated with response from scatterplot matrix)
+- The magnitude of a correlation coefficient can vary depending on factors such as:
+  - The range of values observed for the variables.
+  - The precision and reliability of the measurement instruments or techniques.
+  - The characteristics of the units being studied.
+- A specific slope estimate in a regression model can be affected by:
+  - The range of $x$ and $y$ values in the data.
+  - The characteristics of the units or cases in the sample.
+  - The context provided by the specific set of predictor variables included in the model.
+- Example: A tentative model for alcohol metabolism in men and women should:
+  - Contain variables whose values best answer the research questions in a straightforward manner.
+  - Include potentially confounding variables.
+  - Include features that capture important relationships found in the initial graphical analysis (e.g., variables that are highly correlated with the response in a scatterplot matrix).
 
 
 ## Inferences on Partial Slopes
 
-- Look at individual tests for each slope in the model to determine significance. Can exclude if the slope isn’t sig.
-- Variance Inflation Factor (VIF): an R2 which is the proportion of variance in a particular explanatory variable including all other predictor variables. Large R2 means value is well predicted by other variables and isn’t needed. Small means it is needed because it isn’t well predicted.
-
+- Examine individual tests for each slope in the model to determine statistical significance. Variables can be excluded if the slope is not statistically significant.
+- **Variance inflation factor (VIF):** An $R^2$ value that represents the proportion of variance in a particular explanatory variable explained by all other predictor variables.  
+  - A large $R^2$ means the value is well predicted by other variables and may not be needed.  
+  - A small $R^2$ means the variable is not well predicted by others and is likely needed.
 
 ## Collinearity
 
@@ -41,18 +41,108 @@ title: "Model Selection and Validation"
 
 ## First-Pass Model
 
-- Look for variables that aren’t statistically significant (could be 3-way interaction, 2-way interaction, or single variable).
-- Should they be excluded? Look if the variable is collinear with other variables in the model but looking at VIF.
-  - This value is relative(> 10 the variable may be redundant).
-  - Investigate further with partial residual plot.
-- Partial residual plot: 
-  - Fit the model with x1& x2 in the model (e.g. lbody & lgest) for bs
-  - Calculate partial residuals [f(x2)]: pres = y – (b0 + b1x1)
-  - If the partial residual plot looks linear, include the variable x2. If it isn’t a strong linear relationship, consider removing. (The slope of a SLR of x2 on pres matches the MLR model b2).
+- Look for variables that are not statistically significant. These could be three-way interactions, two-way interactions, or single variables.
+- Consider excluding these variables. Check whether the variable is collinear with others in the model by examining the VIF.
+  - This value is relative; if VIF $> 10$, the variable may be redundant.
+  - Investigate further with a partial residual plot.
+- **Partial residual plot**:
+  - Fit the model with $x_1$ and $x_2$ in the model.
+  - Calculate partial residuals for $x_2$: $\text{p}_{\text{res}} = y - (\hat{\beta}_0 + \hat{\beta}_1 x_1)$.
+  - Create a new dataset with $\text{p}_{\text{res}}$ as the response and $x_2$ as the predictor.
+  - Fit a simple linear regression (SLR) of $\text{p}_{\text{res}}$ on $x_2$ to assess the relationship.  
+    If the partial residual plot looks linear, keep $x_2$ in the model; if not, consider removing it.
+
+::: {.callout-tip}
+
+### Computing Partial Residuals for an SLR
+To create the dataset for the simple linear regression of $\text{p}_{\text{res}}$ on $x_2$:
+
+1. **Fit the full multiple linear regression model** with $x_1$ and $x_2$:  
+   $$
+   y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \varepsilon
+   $$
+2. **Compute partial residuals** for $x_2$:  
+   $$
+   \text{p}_{\text{res}} = y - \hat{\beta}_0 - \hat{\beta}_1 x_1
+   $$
+3. **Form a new dataset**:
+   - **Response**: $\text{p}_{\text{res}}$
+   - **Predictor**: $x_2$
+4. **Fit a simple linear regression** of $\text{p}_{\text{res}}$ on $x_2$:  
+   $$
+   \text{p}_{\text{res}} = \beta_0 + \beta_1 x_2 + \varepsilon
+   $$  
+   The slope from this regression should match the $\hat{\beta}_2$ from the full model.
+
+:::
 
 
-![Partial Residuals: Mammal Brain Example](images/display_13_1.png){width=5in fig-align="left"} 
+## Partial Residuals – Mammal Brain Example
 
+We want to understand what is happening after accounting for another variable.
+
+**Suppose we fit the multiple linear regression model**:
+
+$$
+\mu(\text{logBrain} \mid \text{logBody}, \text{logGest}) = \beta_0 + \beta_1 \text{logBody} + \beta_2 \text{logGest}.
+$$
+**To examine the partial effect of `logGest`, we remove the variation explained by `logBody`**:
+
+$$
+\mu(\text{logBrain} \mid \text{logBody}, \text{logGest}) = \beta_0 + \beta_1 \text{logBody} + f(\text{logGest}),
+$$
+
+which can be rewritten as:
+
+$$
+f(\text{logGest}) = \mu(\text{logBrain} \mid \text{logBody}, \text{logGest}) - (\beta_0 + \beta_1 \text{logBody}).
+$$
+
+**We estimate this by looking at the residuals**:
+
+$$
+\text{p}_{\text{res}} = \text{logBrain} - \beta_0 - \beta_1 \text{logBody}.
+$$
+
+Here, $\text{p}_{\text{res}}$ represents what is left after we take out the effect with respect to body size.
+
+**Parameter estimates for the full model**:
+
+| Variable   | DF | Parameter Estimate | Standard Error | t Value | Pr > \|t\| |
+|------------|----|--------------------|----------------|---------|------------|
+| Intercept  | 1  | -0.4573             | 0.4585         | -1.00   | 0.3212     |
+| logGest    | 1  | 0.6678              | 0.1088         | 6.14    | <0.0001    |
+| logBody    | 1  | 0.5512              | 0.0324         | 17.03   | <0.0001    |
+
+The partial residuals are computed as:
+
+$$
+\text{p}_{\text{res}} = \text{logBrain} - (-0.4573) - 0.5512(\text{logBody}).
+$$
+
+**Forming the SLR dataset**:
+
+- **Response variable**: $\text{p}_{\text{res}}$ (one value per observation, from the above formula)
+- **Predictor variable**: `logGest` (same values as in the original dataset)
+
+**We then fit a SLR of $\text{p}_{\text{res}}$ on `logGest`**:
+
+$$
+\text{p}_{\text{res}} = \beta_0 + \beta_1(\text{logGest}).
+$$
+
+**Parameter estimates for the SLR**:
+
+| Variable   | DF | Parameter Estimate | Standard Error | t Value | Pr > \|t\| |
+|------------|----|--------------------|----------------|---------|------------|
+| Intercept  | 1  | 0.00005             | 0.2767         | 0.00    | 0.9999     |
+| logGest    | 1  | 0.6678              | 0.0578         | 11.56   | <0.0001    |
+
+This shows that the information in the partial residuals can be explained by `logGest`.
+
+![**Scatterplot of partial residuals vs. `logGest`.** This plot shows the relationship between `logGest` and the residual variation in `logBrain` after accounting for `logBody`.](images/fch13_mammal_pres.png){width=5in}  
+
+---
 
 ## Dealing with outliers
 
