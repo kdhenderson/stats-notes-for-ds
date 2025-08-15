@@ -26,6 +26,7 @@ _book/
 # Files I will probably delete
 delete_maybe/
 Archive.zip
+images/images_removed/
 
 # # Original images and handwritten notes - these files are kept locally but not tracked in git
 # images/images_removed/
