@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Comparisons Among Several Samples – Henderson's Statistics Notes for Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./foundation-chapter07.html" rel="next">
+<link href="./foundation-chapter05.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-626149efe8f5d16e1d391ba177679bf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./foundation-chapter01.html">Statistical Foundations</a></li><li class="breadcrumb-item"><a href="./foundation-chapter06.html"><span class="chapter-title">Comparisons Among Several Samples</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Henderson’s Statistics Notes for Data Science</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Henderson’s Statistics Notes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Statistical Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Drawing Statistical Conclusions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inference Using T-Distributions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Data Screening, Assumptions, and Transformations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Type I, Type II Error, and Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Alternatives to the T-Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter06.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Comparisons Among Several Samples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Linear Combinations and the Multiple Comparison Problem</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Linear Correlation and Simple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Quantifying Uncertainty: Confidence, Prediction and Calibration Intervals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regression Diagnostics and Model Refinement</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferences for Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Selection and Validation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-review-questions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Review Questions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Applied Statistics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression (MLR) Revisited</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bias Variance Trade-off</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bootstrap</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Communicating with Clients</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Repeated Measures</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Classification</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">2 x 2 Contingency Tables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Principal Component Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Clustering</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-r-code.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix A: R Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-sas-code.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix B: SAS Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix_hypothesis_test_flowchart.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix C: Hypothesis Test Flowchart</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#objectives" id="toc-objectives" class="nav-link active" data-scroll-target="#objectives">Objectives</a></li>
+  <li><a href="#anova-analysis-of-variance" id="toc-anova-analysis-of-variance" class="nav-link" data-scroll-target="#anova-analysis-of-variance">ANOVA: Analysis of Variance</a></li>
+  <li><a href="#anova-six-step-hypothesis-test" id="toc-anova-six-step-hypothesis-test" class="nav-link" data-scroll-target="#anova-six-step-hypothesis-test">ANOVA: Six-Step Hypothesis Test</a></li>
+  <li><a href="#key-metrics-in-anova" id="toc-key-metrics-in-anova" class="nav-link" data-scroll-target="#key-metrics-in-anova">Key Metrics in ANOVA</a></li>
+  <li><a href="#sas-code-for-anova" id="toc-sas-code-for-anova" class="nav-link" data-scroll-target="#sas-code-for-anova">SAS code for ANOVA</a></li>
+  <li><a href="#r-code-for-anova" id="toc-r-code-for-anova" class="nav-link" data-scroll-target="#r-code-for-anova">R code for ANOVA</a></li>
+  <li><a href="#anova-assumptions-and-robustness" id="toc-anova-assumptions-and-robustness" class="nav-link" data-scroll-target="#anova-assumptions-and-robustness">ANOVA Assumptions and Robustness</a></li>
+  <li><a href="#alternatives-to-standard-anova" id="toc-alternatives-to-standard-anova" class="nav-link" data-scroll-target="#alternatives-to-standard-anova">Alternatives to Standard ANOVA</a></li>
+  <li><a href="#power-analysis-for-anova-sas" id="toc-power-analysis-for-anova-sas" class="nav-link" data-scroll-target="#power-analysis-for-anova-sas">Power Analysis for ANOVA (SAS)</a></li>
+  <li><a href="#random-vs.-fixed-effects" id="toc-random-vs.-fixed-effects" class="nav-link" data-scroll-target="#random-vs.-fixed-effects">Random vs.&nbsp;Fixed Effects</a></li>
+  <li><a href="#writing-up-results" id="toc-writing-up-results" class="nav-link" data-scroll-target="#writing-up-results">Writing Up Results</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./foundation-chapter01.html">Statistical Foundations</a></li><li class="breadcrumb-item"><a href="./foundation-chapter06.html"><span class="chapter-title">Comparisons Among Several Samples</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Comparisons Among Several Samples</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="objectives" class="level2">
+<h2 class="anchored" data-anchor-id="objectives">Objectives</h2>
+<ul>
+<li>Explain the purpose of analysis of variance (ANOVA) for comparing means across multiple groups.</li>
+<li>Formulate and interpret hypotheses for ANOVA tests.</li>
+<li>Check model assumptions to ensure the validity of ANOVA results.</li>
+<li>Construct and interpret ANOVA tables using the extra sum of squares principle.</li>
+<li>Compare full and reduced models using <span class="math inline">\(F\)</span>-tests.</li>
+<li>Understand and apply the Kruskal-Wallis test as a non-parametric alternative.</li>
+<li>Distinguish between fixed and random effects in the context of ANOVA.</li>
+<li>Calculate sample sizes needed to detect a specified effect size using power analysis.</li>
+</ul>
+</section>
+<section id="anova-analysis-of-variance" class="level2">
+<h2 class="anchored" data-anchor-id="anova-analysis-of-variance">ANOVA: Analysis of Variance</h2>
+<ul>
+<li><strong>Purpose</strong>: Test equality of means from more than two populations by comparing variability within groups to variability between groups.</li>
+<li><strong>Assumptions</strong>:
+<ul>
+<li>All populations have normal distributions (reasonable symmetry in samples).</li>
+<li>Population standard deviations are equal (to ensure differences in means aren’t confounded by differences in variability).</li>
+<li>Independence within (achieved automatically with random samples) and between samples.</li>
+</ul></li>
+<li><strong>Hypotheses</strong>:
+<ul>
+<li><span class="math inline">\(H_0\)</span>: All population means are equal.</li>
+<li><span class="math inline">\(H_a\)</span>: At least one population mean differs from another.</li>
+</ul></li>
+<li>ANOVA is a preliminary test; if significant, it indicates that at least one mean differs. Specific pairwise differences can be explored using post-hoc tests (not covered in detail here).</li>
+</ul>
+<section id="comparing-models-in-anova" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-models-in-anova">Comparing Models in ANOVA</h3>
+<ul>
+<li><strong>Two competing models</strong>:
+<ul>
+<li><strong>Equal means model (EMM)</strong>: Assumes all groups share the same population mean (null hypothesis).</li>
+<li><strong>Separate means model (SMM)</strong>: Assumes each group has its own mean (alternative hypothesis).</li>
+</ul></li>
+<li><strong>Hypotheses</strong>:
+<ul>
+<li><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\mu_1 = \mu_2 = \mu_3\)</span></li>
+<li><span class="math inline">\(H_a\)</span>: At least one pair of means differs</li>
+</ul></li>
+<li>A <strong>residual</strong> is defined as: <span class="math inline">\(\text{  Residual} = \text{Observed} - \text{Predicted}\)</span></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fch06_equal_and_separate_means_models.png" class="img-fluid figure-img"></p>
+<figcaption><strong>Equal Means vs.&nbsp;Separate Means Models.</strong> Comparison of two models: one assumes all groups share a single population mean (equal means model), and the other estimates a separate mean for each group (separate means model). Brackets illustrate residuals from observed values to the grand mean.</figcaption>
+</figure>
+</div>
+<section id="equal-means-model-emm" class="level4">
+<h4 class="anchored" data-anchor-id="equal-means-model-emm">Equal Means Model (EMM)</h4>
+<ul>
+<li>All observations are predicted using the grand mean: <span class="math inline">\(\bar{X} = 13\)</span></li>
+<li>Sum of squared residuals (SSR): <span class="math inline">\(\text{SSR}_{\text{EMM}} = 462\)</span></li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 29%">
+<col style="width: 29%">
+<col style="width: 29%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>Observation 1</th>
+<th>Observation 2</th>
+<th>Observation 3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><span class="math inline">\((3 - 13)^2 = 100\)</span></td>
+<td><span class="math inline">\((5 - 13)^2 = 64\)</span></td>
+<td><span class="math inline">\((7 - 13)^2 = 36\)</span></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><span class="math inline">\((10 - 13)^2 = 9\)</span></td>
+<td><span class="math inline">\((12 - 13)^2 = 1\)</span></td>
+<td><span class="math inline">\((14 - 13)^2 = 1\)</span></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><span class="math inline">\((20 - 13)^2 = 49\)</span></td>
+<td><span class="math inline">\((22 - 13)^2 = 81\)</span></td>
+<td><span class="math inline">\((24 - 13)^2 = 121\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="separate-means-model-smm" class="level4">
+<h4 class="anchored" data-anchor-id="separate-means-model-smm">Separate Means Model (SMM)</h4>
+<ul>
+<li>Each group has its own sample mean (perfect fit).</li>
+<li>Sum of squared residuals: <span class="math inline">\(\text{SSR}_{\text{SMM}} = 24\)</span></li>
+</ul>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>Observation 1</th>
+<th>Observation 2</th>
+<th>Observation 3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><span class="math inline">\((3 - 5)^2 = 4\)</span></td>
+<td><span class="math inline">\((5 - 5)^2 = 0\)</span></td>
+<td><span class="math inline">\((7 - 5)^2 = 4\)</span></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><span class="math inline">\((10 - 12)^2 = 4\)</span></td>
+<td><span class="math inline">\((12 - 12)^2 = 0\)</span></td>
+<td><span class="math inline">\((14 - 12)^2 = 4\)</span></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><span class="math inline">\((20 - 22)^2 = 4\)</span></td>
+<td><span class="math inline">\((22 - 22)^2 = 0\)</span></td>
+<td><span class="math inline">\((24 - 22)^2 = 4\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes" class="level4">
+<h4 class="anchored" data-anchor-id="notes">Notes</h4>
+<ul>
+<li>A perfect fit means predicted values match the observations exactly, so residuals are zero.</li>
+<li>The <strong>sum of squared residuals (SSR)</strong> quantifies total error: <span class="math display">\[
+\text{SSR} = \sum (\text{Observed} - \text{Predicted})^2 = \sum (\text{Residual})^2
+\]</span></li>
+</ul>
+</section>
+</section>
+<section id="comparing-emm-and-smm-using-an-f-test" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-emm-and-smm-using-an-f-test">Comparing EMM and SMM Using an <span class="math inline">\(F\)</span>-Test</h3>
+<p>To formally compare the equal means model (EMM) and separate means model (SMM), we use an <strong><span class="math inline">\(F\)</span>-test</strong>. This test evaluates whether the extra parameters in the more complex model (SMM) explain a significantly greater portion of the total variability.</p>
+<p>See the ANOVA table below for how these calculations break down.</p>
+<section id="anova-table" class="level4">
+<h4 class="anchored" data-anchor-id="anova-table">ANOVA Table</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>df</th>
+<th>SS</th>
+<th>MS</th>
+<th>F</th>
+<th>P</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Model (Between / Extra)</td>
+<td>2</td>
+<td>438</td>
+<td>219</td>
+<td>54.75</td>
+<td>0.0001</td>
+</tr>
+<tr class="even">
+<td>Error (Within / Full / SMM)</td>
+<td>6</td>
+<td>24</td>
+<td>4</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Total (Reduced / EMM)</td>
+<td>8</td>
+<td>462</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>df</strong>: Degrees of freedom</li>
+<li><strong>SS</strong>: Sum of squares</li>
+<li><strong>MS</strong>: Mean square = SS / df</li>
+<li><strong>F</strong>: Ratio of explained to unexplained variability: <span class="math inline">\(F\)</span>-statistic = <span class="math inline">\(\frac{\text{MS}_{\text{model}}}{\text{MS}_{\text{error}}}\)</span></li>
+<li><strong>P</strong>: <span class="math inline">\(p\)</span>-value from the <span class="math inline">\(F\)</span>-distribution</li>
+</ul>
+</section>
+<section id="notes-1" class="level4">
+<h4 class="anchored" data-anchor-id="notes-1">Notes</h4>
+<ul>
+<li>Degrees of freedom reflect how many means are being estimated.</li>
+<li>Mean square values (MS) are variances: <span class="math inline">\(\text{MS} = \frac{\text{SS}}{\text{df}}\)</span>, which follows the general variance formula: <span class="math inline">\(\text{var}(x) = \frac{\sum (X_i - \bar{X})^2}{n - 1}\)</span></li>
+<li>The top row of the table (Between / Extra) is how much variance is explained by using separate means.</li>
+<li>The <strong>mean square error (MSE)</strong> estimates within-group variance: <span class="math inline">\(\text{MSE} = 4\)</span></li>
+<li>The <strong>root mean square error (RMSE)</strong> is:<span class="math inline">\(\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{4} = 2\)</span></li>
+<li>This is also our estimate of the shared population standard deviation: <span class="math inline">\(\hat{\sigma} = \text{RMSE} = 2\)</span></li>
+</ul>
+</section>
+<section id="understanding-degrees-of-freedom-in-anova" class="level4">
+<h4 class="anchored" data-anchor-id="understanding-degrees-of-freedom-in-anova">Understanding Degrees of Freedom in ANOVA</h4>
+<ul>
+<li>Degrees of freedom reflect how many parameters (means) are estimated and how much data is available to estimate variability.</li>
+<li>In ANOVA, the total degrees of freedom are split into two parts:</li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 13%">
+<col style="width: 60%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Source</strong></th>
+<th><strong>Formula</strong></th>
+<th><strong>Interpretation</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Model (Between Groups)</td>
+<td><span class="math inline">\(k - 1\)</span></td>
+<td>Number of group means (parameters) being estimated minus 1</td>
+</tr>
+<tr class="even">
+<td>Error (Within Groups)</td>
+<td><span class="math inline">\(n - k\)</span></td>
+<td>Leftover variation after estimating <span class="math inline">\(k\)</span> group means</td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td><span class="math inline">\(n - 1\)</span></td>
+<td>Total variation in the dataset</td>
+</tr>
+</tbody>
+</table>
+<p>For example, with 3 groups and 9 total observations:</p>
+<ul>
+<li>Model df = <span class="math inline">\(3 - 1 = 2\)</span></li>
+<li>Error df = <span class="math inline">\(9 - 3 = 6\)</span></li>
+<li>Total df = <span class="math inline">\(9 - 1 = 8\)</span></li>
+</ul>
+</section>
+<section id="visualizing-the-f-test" class="level4">
+<h4 class="anchored" data-anchor-id="visualizing-the-f-test">Visualizing the <span class="math inline">\(F\)</span>-Test</h4>
+<p>The <span class="math inline">\(F\)</span>-statistic is compared to an <span class="math inline">\(F\)</span>-distribution with 2 and 6 degrees of freedom. (Every <span class="math inline">\(F\)</span>-distribution has 2 degrees of freedom.)</p>
+<ul>
+<li><span class="math inline">\(F_{2,6} = 54.75\)</span></li>
+<li>Critical value at <span class="math inline">\(\alpha = 0.05\)</span>: <span class="math inline">\(F_{2,6}^{*} \approx 5.14\)</span></li>
+<li>The region to the right of 54.75 under the curve gives the <span class="math inline">\(p\)</span>-value, which is very small (<span class="math inline">\(p = 0.0001\)</span>), indicating strong evidence against the null model (EMM).</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fch06_fdistribution.png" class="img-fluid figure-img"></p>
+<figcaption><strong><span class="math inline">\(F\)</span>-distribution.</strong> Right-skewed <span class="math inline">\(F_{2,6}\)</span> distribution showing critical value (5.14), observed test statistic (54.75), and rejection region representing <span class="math inline">\(p\)</span>-value (0.0001).</figcaption>
+</figure>
+</div>
+</section>
+<section id="interpretation" class="level4">
+<h4 class="anchored" data-anchor-id="interpretation">Interpretation</h4>
+<ul>
+<li>The top row of the ANOVA table shows how much variability is explained by the model.</li>
+<li>The second row shows how much variability is left over (residual error).</li>
+<li>A high <span class="math inline">\(F\)</span>-value means the SMM explains significantly more variability than the EMM.</li>
+<li>We conclude that at least one group mean differs significantly from the others.</li>
+</ul>
+<p>See the summary figure below for a visual breakdown of how these components are computed and interpreted.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fch06_anova_table_breakdown.png" class="img-fluid figure-img"></p>
+<figcaption><strong>ANOVA Table Breakdown.</strong> Visual summary of how degrees of freedom, sum of squares, mean squares, and the <span class="math inline">\(F\)</span>-statistic are calculated and interpreted for the model, error, and total variation.</figcaption>
+</figure>
+</div>
+</section>
+</section>
+</section>
+<section id="anova-six-step-hypothesis-test" class="level2">
+<h2 class="anchored" data-anchor-id="anova-six-step-hypothesis-test">ANOVA: Six-Step Hypothesis Test</h2>
+<ol type="1">
+<li><strong>Define Hypotheses</strong>:
+<ul>
+<li><span class="math inline">\(H_0: \mu_1 = \mu_2 = \mu_3 = \dots\)</span> (equal means model)</li>
+<li><span class="math inline">\(H_a\)</span>: At least one pair of means is different</li>
+<li>The null model assumes all observations are drawn from a single population with the same mean (grand mean).</li>
+<li>The alternative allows group-specific distributions with different means (separate means model).</li>
+<li>Models are compared using the sum of squared residuals: a good fitting model has smaller residuals (observed − predicted).</li>
+</ul></li>
+<li><strong>Get Critical Value</strong>:
+<ul>
+<li>From an <span class="math inline">\(F\)</span>-distribution</li>
+<li>Degrees of freedom: <span class="math inline">\(df_1\)</span> (model) and <span class="math inline">\(df_2\)</span> (error)</li>
+<li>In R, use <code>qf(1 - alpha, df1, df2)</code> to find the critical value. (Use <span class="math inline">\(1-\alpha\)</span> for a R-tailed test.)</li>
+</ul></li>
+<li><strong>Calculate <span class="math inline">\(F\)</span>-Statistic</strong>: <span class="math display">\[
+F = \frac{\text{MS}_{\text{between}}}{\text{MS}_{\text{within}}}
+  = \frac{\text{Extra SS} / \text{Extra df}}{\text{MSE}}
+  = \frac{\text{Variation Explained}}{\text{Variation Left to Explain}}
+\]</span> where:
+<ul>
+<li><span class="math inline">\(\text{MS}_{\text{between}} = \frac{\text{Extra SS}}{\text{Extra df}}\)</span></li>
+<li><span class="math inline">\(\text{MS}_{\text{within}} = \text{MSE} = \frac{\text{Error SS}}{\text{Error df}}\)</span></li>
+</ul></li>
+<li><strong>Determine p-value</strong>:
+<ul>
+<li>Compare the test statistic to the <span class="math inline">\(F\)</span> distribution.</li>
+<li>If <span class="math inline">\(F\)</span>-statistic is in the upper tail, <span class="math inline">\(p\)</span> will be small.</li>
+</ul></li>
+<li><strong>Decision</strong>:
+<ul>
+<li>Reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(p &lt; \alpha\)</span>.</li>
+</ul></li>
+<li><strong>Interpretation</strong>:
+<ul>
+<li>Rejecting <span class="math inline">\(H_0\)</span> because of a significant result suggests at least one group mean differs.</li>
+</ul></li>
+</ol>
+</section>
+<section id="key-metrics-in-anova" class="level2">
+<h2 class="anchored" data-anchor-id="key-metrics-in-anova">Key Metrics in ANOVA</h2>
+<section id="r2-coefficient-of-determination" class="level3">
+<h3 class="anchored" data-anchor-id="r2-coefficient-of-determination"><span class="math inline">\(R^2\)</span>: Coefficient of Determination</h3>
+<ul>
+<li><span class="math inline">\(R^2 = \dfrac{\text{Explained Variation}}{\text{Total Variation}} = \dfrac{\text{Extra SS}}{\text{Total SS}}\)</span></li>
+<li>Represents the proportion of total variance in the response that is explained by the model (i.e., group membership).</li>
+<li><span class="math inline">\(R\)</span>: Pearson correlation coefficient between observed and predicted values</li>
+</ul>
+</section>
+<section id="rmse-root-mean-square-error" class="level3">
+<h3 class="anchored" data-anchor-id="rmse-root-mean-square-error">RMSE: Root Mean Square Error</h3>
+<ul>
+<li><span class="math inline">\(\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{\text{Unexplained Variation}}\)</span></li>
+<li>Estimates the typical distance between observed and predicted values (i.e., the standard deviation of residuals).</li>
+</ul>
+</section>
+<section id="coefficient-of-variation-cv" class="level3">
+<h3 class="anchored" data-anchor-id="coefficient-of-variation-cv">Coefficient of Variation (CV)</h3>
+<ul>
+<li>A unitless measure of <strong>relative variability</strong> (standard deviation relative to the mean): <span class="math display">\[
+\text{CV} = \frac{\text{RMSE}}{\text{Grand Mean}} \times 100 = \frac{\text{RMSE}}{\bar{X}} \times 100 = \frac{\sqrt{\text{MSE}}}{\bar{X}} \times 100
+\]</span></li>
+</ul>
+</section>
+</section>
+<section id="sas-code-for-anova" class="level2">
+<h2 class="anchored" data-anchor-id="sas-code-for-anova">SAS code for ANOVA</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>* Generalized Linear Model: Extends analysis to multiple groups (e.g., ANOVA for 3+ groups);
+proc glm data = dataSet;
+  class group;
+  model responseVar = groupingVar; * Fits an ANOVA;
+run;</code></pre>
+</details>
+</div>
+<section id="sas-anova-output-summary" class="level3 example">
+<h3 class="anchored" data-anchor-id="sas-anova-output-summary">SAS ANOVA Output Summary</h3>
+<p>SAS provides the <span class="math inline">\(R^2\)</span>, root MSE, and coefficient of variation in its ANOVA output. See the example output below for how these metrics are reported.</p>
+<p><strong>Example SAS Output: ANOVA Summary</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 5%">
+<col style="width: 23%">
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>DF</th>
+<th>Sum of Squares</th>
+<th>Mean Square</th>
+<th>F Value</th>
+<th>Pr &gt; F</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Model (Between / Extra)</td>
+<td>2</td>
+<td>438.0</td>
+<td>219.0</td>
+<td>54.75</td>
+<td>0.0001</td>
+</tr>
+<tr class="even">
+<td>Error (SMM)</td>
+<td>6</td>
+<td>24.0</td>
+<td>4.0</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Corrected Total (EMM)</td>
+<td>8</td>
+<td>462.0</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>R-Square</th>
+<th>Coeff Var</th>
+<th>Root MSE</th>
+<th>Score Mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.948052</td>
+<td>15.38462</td>
+<td>2.0</td>
+<td>13.0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Calculations</strong>:</p>
+<ul>
+<li><span class="math inline">\(R^2 = \dfrac{\text{Explained Variation}}{\text{Total Variation}} = \dfrac{\text{Extra SS}}{\text{Total SS}} = \frac{438}{462} \approx 0.948\)</span></li>
+<li><span class="math inline">\(\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{\text{Unexplained Variation}} = 2\)</span></li>
+<li><span class="math inline">\(\bar{X}\)</span>: grand mean, the mean of all observations (<span class="math inline">\(n\)</span> = 9 in the example above)</li>
+<li>The <strong>Score Mean</strong> reported by SAS is the grand mean (<span class="math inline">\(\bar{X} = 13\)</span>), the average of all observations across all groups.</li>
+<li><span class="math inline">\(\text{CV} = \frac{\text{RMSE}}{\bar{X}} \times 100 = \frac{2}{13} \times 100 \approx 15.38\%\)</span></li>
+</ul>
+<p><strong>Interpretation</strong>:</p>
+<ul>
+<li>Extra sum of squares: variability explained by the full model (SMM)</li>
+<li>Total sum of squares: total variability (that could be explained)</li>
+<li>The model (group membership) explains 94.8% of the total variability in the response (<span class="math inline">\(R^2 = 0.948\)</span>).</li>
+<li>RMSE = 2 indicates the estimated standard deviation of residuals, the typical size of the model residuals.</li>
+<li>CV ≈ 15.38% indicates moderate relative variability around the grand mean. This matches the SAS output: <code>Coeff Var = 15.38462</code>.</li>
+</ul>
+</section>
+</section>
+<section id="r-code-for-anova" class="level2">
+<h2 class="anchored" data-anchor-id="r-code-for-anova">R code for ANOVA</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># aov = analysis of variance</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># numerical response ~ factor groupings</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">aov</span>(responseVar <span class="sc">~</span> groupingVar, <span class="at">data =</span> dataSet)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="anova-assumptions-and-robustness" class="level2">
+<h2 class="anchored" data-anchor-id="anova-assumptions-and-robustness">ANOVA Assumptions and Robustness</h2>
+<section id="assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="assumptions">Assumptions</h3>
+<ul>
+<li><strong>Normality</strong>
+<ul>
+<li>Check with histograms, boxplots, and Q–Q plots.</li>
+<li>ANOVA is fairly robust to non-normality, especially when sample sizes are large and equal across groups.</li>
+</ul></li>
+<li><strong>Equal Standard Deviations</strong>:
+<ul>
+<li>This assumption is crucial for the validity of ANOVA and <span class="math inline">\(F\)</span>-test results.</li>
+<li>ANOVA is less robust to violations of this assumption compared to <span class="math inline">\(t\)</span>-tests.</li>
+<li>Confidence intervals depend on this assumption being met.</li>
+<li>Confidence intervals are widest when the group with the largest standard deviation also has the largest sample size.</li>
+</ul></li>
+<li><strong>Independence</strong>
+<ul>
+<li>Observations must be independent both within and between groups.</li>
+<li>This is generally satisfied through random sampling or random assignment.</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="alternatives-to-standard-anova" class="level2">
+<h2 class="anchored" data-anchor-id="alternatives-to-standard-anova">Alternatives to Standard ANOVA</h2>
+<section id="welchs-anova" class="level3">
+<h3 class="anchored" data-anchor-id="welchs-anova">Welch’s ANOVA</h3>
+<ul>
+<li>A robust alternative to classical ANOVA when standard deviations are unequal.</li>
+<li><em>Still assumes normality</em>.</li>
+<li>Adjusts the degrees of freedom lower to account for unequal variances.</li>
+<li>Output includes adjusted <span class="math inline">\(F\)</span>-statistic and <em>p</em>-value.</li>
+</ul>
+</section>
+<section id="kruskalwallis-test" class="level3">
+<h3 class="anchored" data-anchor-id="kruskalwallis-test">Kruskal–Wallis Test</h3>
+<ul>
+<li>A <strong>non-parametric alternative</strong> to ANOVA that compares medians instead of means.</li>
+<li>Useful for <strong>non-normal</strong> or <strong>skewed</strong> distributions or small sample sizes.</li>
+<li><strong>Assumptions</strong>:
+<ul>
+<li>Does not assume normality.</li>
+<li>Robust to unequal variances.</li>
+<li>Observations must be independent.</li>
+</ul></li>
+<li>The <em>p</em>-value is based on a chi-square distribution.</li>
+</ul>
+</section>
+</section>
+<section id="power-analysis-for-anova-sas" class="level2">
+<h2 class="anchored" data-anchor-id="power-analysis-for-anova-sas">Power Analysis for ANOVA (SAS)</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>proc power;
+  onewayanova test=overall;
+  groupmeans ... ;
+run;</code></pre>
+</details>
+</div>
+</section>
+<section id="random-vs.-fixed-effects" class="level2">
+<h2 class="anchored" data-anchor-id="random-vs.-fixed-effects">Random vs.&nbsp;Fixed Effects</h2>
+<section id="fixed-effects" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-effects">Fixed Effects</h3>
+<ul>
+<li>Levels (e.g., groups or treatments) are <em>explicitly of interest</em> and not intended to generalize beyond the study or represent a larger population.</li>
+<li>Inference applies only to the levels included in the analysis.</li>
+<li>Common in controlled experiments with pre-defined groups or treatments.</li>
+<li>The model estimates a unique mean for each level.</li>
+</ul>
+</section>
+<section id="random-effects" class="level3">
+<h3 class="anchored" data-anchor-id="random-effects">Random Effects</h3>
+<ul>
+<li>Levels represent a <em>random sample</em> from a larger population of possible groups or conditions.</li>
+<li>The goal is to make inferences about the entire population of levels—not just those observed in the study. That is, even if you cannot sample every possible level, the levels in the study are meant to be representative of the population of interest.</li>
+<li>The model accounts for two sources of variation:
+<ul>
+<li><strong>Residual variance</strong> (within-group variability): variance of each observation from the overall mean</li>
+<li><strong>Random effect variance</strong> (between-group variability): variance associated with the random effects</li>
+</ul></li>
+<li>Observations are nested within groups drawn at random.</li>
+<li>There is typically more error associated with random effects models.</li>
+</ul>
+</section>
+<section id="statistical-considerations" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-considerations">Statistical Considerations</h3>
+<ul>
+<li><strong>Random effects models</strong> include additional variability from the group-level random component. This increases standard errors but yields more conservative and generalizable inferences.</li>
+<li><strong>Fixed effects models</strong> do not account for this extra group-level variability, which may lead to underestimated standard errors if used when random effects would be more appropriate.</li>
+<li>Choosing the wrong model type can increase the risk of <strong>Type I</strong> or <strong>Type II errors</strong>.</li>
+</ul>
+<blockquote class="blockquote">
+<p>In short:</p>
+<ul>
+<li>Use <strong>fixed effects</strong> when your levels (e.g., treatments) are all of interest and exhaust the population you care about.<br>
+</li>
+<li>Use <strong>random effects</strong> when your levels are sampled from a larger population and you want to generalize your conclusions.</li>
+</ul>
+</blockquote>
+</section>
+</section>
+<section id="writing-up-results" class="level2">
+<h2 class="anchored" data-anchor-id="writing-up-results">Writing Up Results</h2>
+<p>ANOVA tests whether the <strong>between-group variability</strong> is significantly larger than the <strong>within-group variability</strong>, providing evidence that group means differ.</p>
+<ul>
+<li>The <em><span class="math inline">\(F\)</span>-test</em> indicates <em>whether</em> at least one group mean differs.</li>
+<li>It does <em>not</em> identify <em>which</em> specific means are different or <em>how</em> they differ.</li>
+<li>Additional procedures such as <em>post-hoc tests</em> are required to explore these questions of interest (QOIs).</li>
+</ul>
+<section id="steps-for-writing-results" class="level3">
+<h3 class="anchored" data-anchor-id="steps-for-writing-results">Steps for Writing Results</h3>
+<ol type="1">
+<li><strong>State the research question</strong>, experimental conditions, and context clearly.</li>
+<li><strong>Describe the study design</strong>, including how data were collected, sample sizes, and treatments or groups.</li>
+<li><strong>Check and summarize assumptions</strong>:
+<ul>
+<li>Use graphical tools (e.g., histograms, Q-Q plots, residual plots).</li>
+<li>Note whether normality, equal variance, and independence were reasonable.</li>
+</ul></li>
+<li><strong>Provide descriptive statistics</strong> for each group.</li>
+<li><strong>Report the ANOVA test results</strong>:
+<ul>
+<li>Include the <em><span class="math inline">\(F\)</span>-statistic</em>, degrees of freedom, <em><span class="math inline">\(p\)</span>-value</em>, and relevant effect sizes (e.g., <em><span class="math inline">\(R^2\)</span></em>, RMSE, CV).</li>
+</ul></li>
+<li><strong>Include residual diagnostics</strong>:
+<ul>
+<li>Mention if any transformations were applied.</li>
+<li>Note any violations and how they were addressed (e.g., using Welch’s ANOVA).</li>
+</ul></li>
+<li><strong>Interpret the results in context</strong>:
+<ul>
+<li>Discuss whether the null hypothesis was rejected.</li>
+<li>Relate the findings to the original research question.</li>
+</ul></li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./foundation-chapter05.html" class="pagination-link" aria-label="Alternatives to the T-Tools">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Alternatives to the T-Tools</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./foundation-chapter07.html" class="pagination-link" aria-label="Linear Combinations and the Multiple Comparison Problem">
+        <span class="nav-page-text"><span class="chapter-title">Linear Combinations and the Multiple Comparison Problem</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

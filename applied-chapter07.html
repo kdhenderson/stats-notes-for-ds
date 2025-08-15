@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Classification – Henderson's Statistics Notes for Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./applied-chapter08.html" rel="next">
+<link href="./applied-chapter06.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-626149efe8f5d16e1d391ba177679bf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./applied-chapter01.html">Applied Statistics</a></li><li class="breadcrumb-item"><a href="./applied-chapter07.html"><span class="chapter-title">Classification</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Henderson’s Statistics Notes for Data Science</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Henderson’s Statistics Notes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Statistical Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Drawing Statistical Conclusions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inference Using T-Distributions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Data Screening, Assumptions, and Transformations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Type I, Type II Error, and Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Alternatives to the T-Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Comparisons Among Several Samples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Linear Combinations and the Multiple Comparison Problem</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Linear Correlation and Simple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Quantifying Uncertainty: Confidence, Prediction and Calibration Intervals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regression Diagnostics and Model Refinement</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferences for Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Selection and Validation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-review-questions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Review Questions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Applied Statistics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression (MLR) Revisited</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bias Variance Trade-off</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bootstrap</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Communicating with Clients</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Repeated Measures</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter07.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Classification</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">2 x 2 Contingency Tables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Principal Component Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Clustering</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-r-code.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix A: R Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-sas-code.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix B: SAS Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix_hypothesis_test_flowchart.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix C: Hypothesis Test Flowchart</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#objectives" id="toc-objectives" class="nav-link active" data-scroll-target="#objectives">Objectives</a></li>
+  <li><a href="#regression-vs.-classification" id="toc-regression-vs.-classification" class="nav-link" data-scroll-target="#regression-vs.-classification">Regression vs.&nbsp;Classification</a></li>
+  <li><a href="#predictive-models-for-classification" id="toc-predictive-models-for-classification" class="nav-link" data-scroll-target="#predictive-models-for-classification">Predictive Models for Classification</a></li>
+  <li><a href="#classification-as-a-decision-rule" id="toc-classification-as-a-decision-rule" class="nav-link" data-scroll-target="#classification-as-a-decision-rule">Classification as a Decision Rule</a></li>
+  <li><a href="#important-realizations" id="toc-important-realizations" class="nav-link" data-scroll-target="#important-realizations">Important Realizations</a></li>
+  <li><a href="#terminology" id="toc-terminology" class="nav-link" data-scroll-target="#terminology">Terminology</a></li>
+  <li><a href="#classification-boundaries" id="toc-classification-boundaries" class="nav-link" data-scroll-target="#classification-boundaries">Classification Boundaries</a></li>
+  <li><a href="#discriminant-analysis-lda-qda" id="toc-discriminant-analysis-lda-qda" class="nav-link" data-scroll-target="#discriminant-analysis-lda-qda">Discriminant Analysis (LDA &amp; QDA)</a></li>
+  <li><a href="#bayes-theorem-ldaqda" id="toc-bayes-theorem-ldaqda" class="nav-link" data-scroll-target="#bayes-theorem-ldaqda">Bayes’ Theorem &amp; LDA/QDA</a></li>
+  <li><a href="#complexity-of-qda" id="toc-complexity-of-qda" class="nav-link" data-scroll-target="#complexity-of-qda">Complexity of QDA</a></li>
+  <li><a href="#pros-and-cons-of-ldaqda" id="toc-pros-and-cons-of-ldaqda" class="nav-link" data-scroll-target="#pros-and-cons-of-ldaqda">Pros and Cons of LDA/QDA</a></li>
+  <li><a href="#error-metrics-for-classification" id="toc-error-metrics-for-classification" class="nav-link" data-scroll-target="#error-metrics-for-classification">Error Metrics for Classification</a></li>
+  <li><a href="#scoring-rules" id="toc-scoring-rules" class="nav-link" data-scroll-target="#scoring-rules">Scoring Rules</a></li>
+  <li><a href="#decision-rule-metrics" id="toc-decision-rule-metrics" class="nav-link" data-scroll-target="#decision-rule-metrics">Decision Rule Metrics</a></li>
+  <li><a href="#changing-the-threshold" id="toc-changing-the-threshold" class="nav-link" data-scroll-target="#changing-the-threshold">Changing the Threshold</a></li>
+  <li><a href="#summary-and-takeaways" id="toc-summary-and-takeaways" class="nav-link" data-scroll-target="#summary-and-takeaways">Summary and Takeaways</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./applied-chapter01.html">Applied Statistics</a></li><li class="breadcrumb-item"><a href="./applied-chapter07.html"><span class="chapter-title">Classification</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Classification</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="objectives" class="level2">
+<h2 class="anchored" data-anchor-id="objectives">Objectives</h2>
+<ul>
+<li>Understand the distinction between regression and classification.<br>
+</li>
+<li>Learn about classification boundaries.<br>
+</li>
+<li>Explore classification methods:
+<ul>
+<li><em>k</em>-Nearest Neighbors (KNN)<br>
+</li>
+<li>Linear and Quadratic Discriminant Analysis (LDA/QDA)<br>
+</li>
+</ul></li>
+<li>Evaluate classification performance using error metrics.</li>
+</ul>
+</section>
+<section id="regression-vs.-classification" class="level2">
+<h2 class="anchored" data-anchor-id="regression-vs.-classification">Regression vs.&nbsp;Classification</h2>
+<p>Main distinction: The response variable in classification is <strong>categorical</strong>.</p>
+<ul>
+<li>Binary: Two outcomes (e.g., Yes/No)<br>
+</li>
+<li>Multiclass: More than two categories</li>
+</ul>
+<section id="why-not-use-mlr" class="level3">
+<h3 class="anchored" data-anchor-id="why-not-use-mlr">Why Not Use MLR?</h3>
+<ul>
+<li>Can’t just convert categorical responses into numbers:
+<ul>
+<li>It doesn’t model trends well.</li>
+<li>It violates assumptions due to the discreteness of the response.</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="predictive-models-for-classification" class="level2">
+<h2 class="anchored" data-anchor-id="predictive-models-for-classification">Predictive Models for Classification</h2>
+<p>Classification models work in two steps:</p>
+<ol type="1">
+<li><strong>Predict the probability</strong> that a categorical response will occur, given a set of explanatory variables: <span class="math inline">\(P(Y = \text{Default} \mid X)\)</span></li>
+<li><strong>Convert that probability into a classification decision</strong> based on a threshold.</li>
+</ol>
+<section id="comparison" class="level3">
+<h3 class="anchored" data-anchor-id="comparison">Comparison</h3>
+<ul>
+<li>For continuous responses: <span class="math inline">\(Y = f(X)\)</span></li>
+<li>For categorical responses: <span class="math inline">\(P(Y = \text{Default} \mid X) = f(X)\)</span>
+<ul>
+<li>The model predicts probabilities, not the class itself.<br>
+</li>
+<li>Predictions stay between 0 and 1 (unlike MLR, which can go below 0 or above 1).</li>
+</ul></li>
+</ul>
+</section>
+<section id="why-predict-probabilities" class="level3">
+<h3 class="anchored" data-anchor-id="why-predict-probabilities">Why Predict Probabilities?</h3>
+<ul>
+<li>Predictive models give us finer resolution than a simple yes/no.
+<ul>
+<li>Example: A weather forecast predicting 60% chance of rain is more informative than just “yes” or “no”.</li>
+</ul></li>
+<li>Subtle relationships between predictors and the response lead to variability in predicted probabilities, creating a gray area.
+<ul>
+<li>For instance:
+<ul>
+<li><span class="math inline">\(P(Y = \text{Default} \mid X = 100) = 0.82\)</span></li>
+<li><span class="math inline">\(P(Y = \text{Default} \mid X = 100) = 0.52\)</span></li>
+</ul></li>
+<li>These two predictions might both get classified as “Default”, even though the model sees them very differently.</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="classification-as-a-decision-rule" class="level2">
+<h2 class="anchored" data-anchor-id="classification-as-a-decision-rule">Classification as a Decision Rule</h2>
+<ul>
+<li>Classification forces a definitive decision based on the predicted probability: <span class="math display">\[
+Y =
+\begin{cases}
+\text{Default}, &amp; \text{if } f(X) \geq \text{threshold} \\
+\text{Not}, &amp; \text{otherwise}
+\end{cases}
+\]</span></li>
+<li>This means classification doesn’t distinguish between a predicted probability of 0.52 and 0.82 if the threshold is 0.5.</li>
+</ul>
+<section id="considerations-when-classifying" class="level3">
+<h3 class="anchored" data-anchor-id="considerations-when-classifying">Considerations When Classifying</h3>
+<ul>
+<li>The cost of getting the prediction wrong<br>
+</li>
+<li>The prevalence of the classes (how often each class occurs in the data)</li>
+</ul>
+</section>
+</section>
+<section id="important-realizations" class="level2">
+<h2 class="anchored" data-anchor-id="important-realizations">Important Realizations</h2>
+<ul>
+<li>Assessing how well a model performs is convoluted:
+<ul>
+<li>How well does the model predict the true probability of the response?</li>
+<li>How well does your classification rule behave given the costs and context of your problem?</li>
+</ul></li>
+<li>Metrics commonly reported in software:
+<ul>
+<li>Often assess classification decisions rather than predicted probabilities<br>
+</li>
+<li>Are calculated without explicit consideration of the cost of mistakes</li>
+<li>Are often used to assess model fit, even though they may not reflect probability accuracy</li>
+</ul></li>
+<li>It’s up to you to assess whether your decision rule fits your specific context, especially when the costs of different types of errors are not equal.</li>
+</ul>
+</section>
+<section id="terminology" class="level2">
+<h2 class="anchored" data-anchor-id="terminology">Terminology</h2>
+<ul>
+<li>Positive class (+): The outcome for which you want to predict the probability<br>
+</li>
+<li>Negative class (−): The other possible outcome (in a binary response)<br>
+</li>
+<li>These are mathematically arbitrary but can be practically important depending on the question you’re answering.</li>
+</ul>
+</section>
+<section id="classification-boundaries" class="level2">
+<h2 class="anchored" data-anchor-id="classification-boundaries">Classification Boundaries</h2>
+<section id="parametric-models" class="level3">
+<h3 class="anchored" data-anchor-id="parametric-models">Parametric Models</h3>
+<p>These models have always been of the <strong>predictive probability</strong> type:</p>
+<ul>
+<li>Logistic Regression<br>
+</li>
+<li>Linear Discriminant Analysis (LDA)<br>
+</li>
+<li>Quadratic Discriminant Analysis (QDA)<br>
+</li>
+<li>Naive Bayes</li>
+</ul>
+<section id="classification-rule" class="level4">
+<h4 class="anchored" data-anchor-id="classification-rule">Classification Rule</h4>
+<p>To convert a predictive probability model into a classification rule, apply a <strong>threshold</strong> (commonly 0.5): <span class="math display">\[
+  \hat{P}(Y = + \mid X) \geq 0.5 \Rightarrow \text{Classify as } +
+  \]</span></p>
+<ul>
+<li>The threshold can be adjusted to account for the cost of making a mistake.</li>
+</ul>
+</section>
+</section>
+<section id="nonparametric-models" class="level3">
+<h3 class="anchored" data-anchor-id="nonparametric-models">Nonparametric Models</h3>
+<p>These models originally focused on making <strong>classification decisions</strong> (not probabilities):</p>
+<ul>
+<li>Decision Trees<br>
+</li>
+<li>Random Forests<br>
+</li>
+<li><em>k</em>-Nearest Neighbors (KNN)</li>
+</ul>
+<p>To help standardize functions and workflows, software retroactively added predicted probabilities.</p>
+<section id="knn-classification-rule" class="level4">
+<h4 class="anchored" data-anchor-id="knn-classification-rule">KNN Classification Rule</h4>
+<ul>
+<li>Record the response values of the <span class="math inline">\(k\)</span> nearest neighbors to <span class="math inline">\(x_{\text{new}}\)</span></li>
+<li>Estimate: <span class="math inline">\(\hat{P}(Y = + \mid x_{\text{new}}) = \frac{\text{\# of } + \text{ neighbors}}{k}\)</span></li>
+</ul>
+</section>
+<section id="classification-boundary" class="level4">
+<h4 class="anchored" data-anchor-id="classification-boundary">Classification Boundary</h4>
+<ul>
+<li>Every model, once converted to a classification rule, defines a classification boundary.</li>
+<li>Boundaries help visualize:
+<ul>
+<li>Parametric vs.&nbsp;nonparametric behavior<br>
+</li>
+<li>Simpler vs.&nbsp;more complex models<br>
+</li>
+<li>Sensitivity to changes in thresholds</li>
+</ul></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="discriminant-analysis-lda-qda" class="level2">
+<h2 class="anchored" data-anchor-id="discriminant-analysis-lda-qda">Discriminant Analysis (LDA &amp; QDA)</h2>
+<section id="overview" class="level3">
+<h3 class="anchored" data-anchor-id="overview">Overview</h3>
+<ul>
+<li>Discriminant analysis is a parametric approach for classification.</li>
+<li>Applies only to numeric predictors.</li>
+<li>Assumes predictors follow a multivariate normal (MVN) distribution within each class.</li>
+</ul>
+</section>
+<section id="common-types" class="level3">
+<h3 class="anchored" data-anchor-id="common-types">Common Types</h3>
+<ul>
+<li>Linear Discriminant Analysis (LDA):
+<ul>
+<li>Decision boundaries are linear (hyperplanes).</li>
+</ul></li>
+<li>Quadratic Discriminant Analysis (QDA):
+<ul>
+<li>Decision boundaries are conic sections (typically quadratic).</li>
+</ul></li>
+</ul>
+</section>
+<section id="assumptions" class="level3">
+<h3 class="anchored" data-anchor-id="assumptions">Assumptions</h3>
+<p>In discriminant analysis, the assumptions are on the predictors (not the error terms as in MLR).</p>
+<ul>
+<li><span class="math inline">\(X_+ = (X_1, X_2, \dots, X_p)\)</span> is a set of <span class="math inline">\(p\)</span> numeric predictors for the positive response class.<br>
+</li>
+<li><span class="math inline">\(X_- = (X_1, X_2, \dots, X_p)\)</span> is a set of the same <span class="math inline">\(p\)</span> numeric predictors for the negative response class.</li>
+</ul>
+<section id="lda" class="level4">
+<h4 class="anchored" data-anchor-id="lda">LDA</h4>
+<ul>
+<li><span class="math inline">\(X_+ \sim MVN(\mu_+, \Sigma), \quad X_- \sim MVN(\mu_-, \Sigma)\)</span></li>
+<li>Equal variance-covariance matrices (same <span class="math inline">\(\Sigma\)</span>), i.e., the predictors in each group should have the same variance and correlation.</li>
+<li>Allows different means, i.e., the predictor sets can have different mean vectors for each response. This is desirable for separation between the classes.</li>
+</ul>
+</section>
+<section id="qda" class="level4">
+<h4 class="anchored" data-anchor-id="qda">QDA</h4>
+<ul>
+<li><span class="math inline">\(X_+ \sim MVN(\mu_+, \Sigma_+), \quad X_- \sim MVN(\mu_-, \Sigma_-)\)</span></li>
+<li>Covariance matrices differ by class (relaxes assumptions, i.e., allows different <span class="math inline">\(\Sigma\)</span>s).</li>
+<li>More flexibility, but more parameters to estimate.</li>
+<li>Also allows different means.</li>
+</ul>
+</section>
+<section id="technical-insights" class="level4">
+<h4 class="anchored" data-anchor-id="technical-insights">Technical Insights</h4>
+<ul>
+<li>LDA/QDA uses Bayes’ theorem to perform its predicted probabilities.</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="bayes-theorem-ldaqda" class="level2">
+<h2 class="anchored" data-anchor-id="bayes-theorem-ldaqda">Bayes’ Theorem &amp; LDA/QDA</h2>
+<p>Discriminant analysis (LDA/QDA) uses <strong>Bayes’ theorem</strong> to calculate predicted probabilities:</p>
+<p>Bayes’ theorem for binary classification: <span class="math display">\[
+P(+ \mid X) = \frac{P(X \mid +)P(+)}{P(X \mid +)P(+) + P(X \mid -)P(-)}
+\]</span></p>
+<p>Updated Bayes’ theorem using MVN assumptions: <span class="math display">\[
+P(+ \mid X) = \frac{MVN(\mu_+, \Sigma)P(+)}{MVN(\mu_+, \Sigma)P(+) + MVN(\mu_-, \Sigma)P(-)}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(P(+)\)</span> and <span class="math inline">\(P(-)\)</span> are <strong>prior probabilities</strong> (i.e., class prevalence).</li>
+<li>Classification boundary with threshold = 0.5 results in <strong>linear</strong> (LDA) or <strong>quadratic</strong> (QDA) boundary.</li>
+<li>Outliers and class imbalance affect boundaries.</li>
+</ul>
+<section id="key-insights" class="level3">
+<h3 class="anchored" data-anchor-id="key-insights">Key Insights</h3>
+<p>Bayes’ formula is fully specified using:</p>
+<ul>
+<li>Prior probabilities</li>
+<li>Predictor value <span class="math inline">\(X\)</span></li>
+<li>Class-specific means and covariance matrices<br>
+</li>
+<li>All estimated from the training data</li>
+</ul>
+<p>When using a threshold (e.g., 0.5), LDA’s boundary mathematically reduces to a linear boundary.</p>
+</section>
+<section id="additional-notes-on-classification-boundaries" class="level3">
+<h3 class="anchored" data-anchor-id="additional-notes-on-classification-boundaries">Additional Notes on Classification Boundaries</h3>
+<ul>
+<li>Outliers affect sample means and variances <span class="math inline">\(\rightarrow\)</span> can distort the boundary.<br>
+</li>
+<li>Prior probabilities affect boundary placement, especially when priors are unequal.</li>
+<li>Bayes’ theorem generalizes easily to more than two classes.</li>
+</ul>
+</section>
+</section>
+<section id="complexity-of-qda" class="level2">
+<h2 class="anchored" data-anchor-id="complexity-of-qda">Complexity of QDA</h2>
+<ul>
+<li>More parameters: each class gets its own covariance matrix</li>
+<li>The more predictors, the more parameters:
+<ul>
+<li>In binary classification with <span class="math inline">\(p\)</span> predictors:
+<ul>
+<li>LDA estimates <span class="math inline">\(p + 1\)</span> parameters. Number of parameters increase at same rate as number of predictors.</li>
+<li>QDA estimates <span class="math inline">\(\frac{p(p + 3)}{2} + 1\)</span> parameters.<br>
+</li>
+</ul></li>
+<li>Number of parameters grows much faster than increase in number of predictors.<br>
+</li>
+<li>Greater risk of overfitting, especially with small sample sizes.<br>
+</li>
+<li>Overfitting is mitigated with larger datasets.</li>
+</ul></li>
+</ul>
+</section>
+<section id="pros-and-cons-of-ldaqda" class="level2">
+<h2 class="anchored" data-anchor-id="pros-and-cons-of-ldaqda">Pros and Cons of LDA/QDA</h2>
+<section id="pros" class="level3">
+<h3 class="anchored" data-anchor-id="pros">Pros</h3>
+<ul>
+<li>Handles correlated predictors (i.e., as long as the correlation isn’t perfect)</li>
+<li>Parametric model that works when logistic regression fails due to complete separation of classes in training data</li>
+<li>Optimal when assumptions are met</li>
+</ul>
+</section>
+<section id="cons" class="level3">
+<h3 class="anchored" data-anchor-id="cons">Cons</h3>
+<ul>
+<li>Sensitive to outliers</li>
+<li>Cannot handle categorical predictors due to the MVN assumption</li>
+<li>No built-in feature selection</li>
+<li>Suffers from the curse of dimensionality
+<ul>
+<li>Poor performance with many irrelevant predictors</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="error-metrics-for-classification" class="level2">
+<h2 class="anchored" data-anchor-id="error-metrics-for-classification">Error Metrics for Classification</h2>
+<section id="two-types-of-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="two-types-of-metrics">Two Types of Metrics</h3>
+<ol type="1">
+<li><strong>Scoring Rules</strong>: Evaluate how close the predicted probabilities are to the true outcomes<br>
+</li>
+<li><strong>Decision Rule Metrics</strong>: Assess the accuracy of classification decisions made using a threshold</li>
+</ol>
+</section>
+</section>
+<section id="scoring-rules" class="level2">
+<h2 class="anchored" data-anchor-id="scoring-rules">Scoring Rules</h2>
+<p>These assess the <strong>probability estimates</strong> of your model, not just the final classification.</p>
+<section id="log-loss-a.k.a.-entropy" class="level3">
+<h3 class="anchored" data-anchor-id="log-loss-a.k.a.-entropy">Log Loss (a.k.a. Entropy)</h3>
+<ul>
+<li>Penalizes incorrect, confident predictions more heavily<br>
+</li>
+<li>Increases when predicted probabilities are uncertain (e.g., near 0.5), but the true class is strongly skewed</li>
+<li>Smaller when predicted probabilities are closer to the truth
+<ul>
+<li>e.g., predicted probability = 0.9 when the true class is 1</li>
+</ul></li>
+<li>Formula: <span class="math inline">\(\text{Log Loss} = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \log(\hat{p}_i) + (1 - y_i) \log(1 - \hat{p}_i) \right]\)</span>
+<ul>
+<li><span class="math inline">\(y_i = 1\)</span> if the true class is positive<br>
+</li>
+<li><span class="math inline">\(y_i = 0\)</span> if the true class is negative<br>
+</li>
+<li><span class="math inline">\(\hat{p}_i\)</span> = predicted probability of the positive class</li>
+</ul></li>
+<li>Has nice mathematical properties that guarantee optimality in certain conditions<br>
+</li>
+<li>Used in logistic regression, classification trees, and many other algorithms</li>
+</ul>
+</section>
+<section id="brier-score" class="level3">
+<h3 class="anchored" data-anchor-id="brier-score">Brier Score</h3>
+<ul>
+<li>Measures the <strong>mean squared difference</strong> between predicted probabilities and actual outcomes<br>
+</li>
+<li>Formula: <span class="math inline">\(\text{Brier} = \frac{1}{n} \sum_{i=1}^{n} (\hat{p}_i - y_i)^2\)</span>
+<ul>
+<li>Like an MSE for probabilities</li>
+<li>Intuitive and interpretable</li>
+<li>Can be decomposed into different sources of error (e.g., calibration and refinement)</li>
+</ul></li>
+</ul>
+</section>
+<section id="when-to-use-scoring-rules" class="level3">
+<h3 class="anchored" data-anchor-id="when-to-use-scoring-rules">When to Use Scoring Rules</h3>
+<p>Scoring rules are ideal for:</p>
+<ul>
+<li>Comparing models in feature selection<br>
+</li>
+<li>Tuning parameters (e.g., <span class="math inline">\(k\)</span> in KNN, penalty terms in regularized models, or pruning in trees)<br>
+</li>
+<li>Estimating regression coefficients in logistic regression</li>
+</ul>
+<p>They help ensure that:</p>
+<ul>
+<li>Predicted probabilities are well-calibrated.</li>
+<li>Your model aligns well with the true underlying probabilities.</li>
+</ul>
+</section>
+</section>
+<section id="decision-rule-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="decision-rule-metrics">Decision Rule Metrics</h2>
+<p>These metrics assess how well a model performs after applying a classification threshold to the predicted probabilities.</p>
+<p>They are derived from the <strong>confusion matrix</strong>, which compares predicted vs.&nbsp;actual classifications.</p>
+<section id="confusion-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="confusion-matrix">Confusion Matrix</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 32%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><strong>Actual Positive (+)</strong></th>
+<th><strong>Actual Negative (–)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Predicted Positive</strong></td>
+<td>correctly predicted +</td>
+<td>incorrectly predicted +</td>
+</tr>
+<tr class="even">
+<td><strong>Predicted Negative</strong></td>
+<td>incorrectly predicted –</td>
+<td>correctly predicted –</td>
+</tr>
+</tbody>
+</table>
+<p>This matrix summarizes:</p>
+<ul>
+<li>How often the model predicted correctly</li>
+<li>How often the model made mistakes</li>
+<li>The types of mistakes</li>
+</ul>
+<blockquote class="blockquote">
+<p>Most software may label these as:<br>
+- True Positive (TP), False Positive (FP)<br>
+- False Negative (FN), True Negative (TN)<br>
+These are helpful for shorthand but should be interpreted contextually.</p>
+</blockquote>
+<p>The threshold (e.g., 0.5) determines how probabilities are turned into class predictions, which in turn affects all metrics derived from this table.</p>
+<ul>
+<li>Aggregates and cross references how many times predictions were accurate and how many misclassifications were made using the thresholding strategy.<br>
+</li>
+<li>It will change when the threshold changes (depends on the threshold).<br>
+</li>
+<li>Used to compare models/optimize tuning parameters for techniques that do not produce a predicted probability.</li>
+</ul>
+</section>
+<section id="common-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="common-metrics">Common Metrics</h3>
+<section id="misclassification-rate-mcr" class="level4">
+<h4 class="anchored" data-anchor-id="misclassification-rate-mcr">Misclassification Rate (MCR)</h4>
+<p>The proportion of all observations where the model’s classification was wrong (i.e., the global error rate): <span class="math display">\[
+\text{MCR} = \frac{\text{\# incorrect predictions}}{n} = \frac{\text{FP} + \text{FN}}{n}
+\]</span></p>
+</section>
+<section id="accuracy" class="level4">
+<h4 class="anchored" data-anchor-id="accuracy">Accuracy</h4>
+<p>The proportion of all observations where the model’s classification was correct: <span class="math display">\[
+\text{Accuracy} = \frac{\text{\# correct predictions}}{n} = \frac{\text{TP} + \text{TN}}{n} = 1 - \text{MCR}
+\]</span> &gt; Accuracy is an unconditional metric—it doesn’t distinguish between types of errors or account for class imbalance.</p>
+</section>
+</section>
+<section id="conditional-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-metrics">Conditional Metrics</h3>
+<p>These metrics are <strong>conditioned</strong> on a known true class or prediction. These metrics evaluate accuracy within a subset of observations. They help when accuracy alone is misleading.</p>
+<section id="sensitivity-recall-true-positive-rate" class="level4">
+<h4 class="anchored" data-anchor-id="sensitivity-recall-true-positive-rate">Sensitivity (Recall / True Positive Rate)</h4>
+<blockquote class="blockquote">
+<p><em>“Given that the true class is positive, how often did we predict positive?”</em></p>
+</blockquote>
+<ul>
+<li>Focuses on the <strong>true +</strong> group<br>
+</li>
+<li>Measures how well the model identifies actual positives<br>
+<span class="math display">\[
+\text{Sensitivity} = \frac{\text{correctly predicted +}}{\text{total true +}} = \frac{\text{TP}}{\text{TP} + \text{FN}}
+\]</span></li>
+</ul>
+</section>
+<section id="specificity-true-negative-rate" class="level4">
+<h4 class="anchored" data-anchor-id="specificity-true-negative-rate">Specificity (True Negative Rate)</h4>
+<blockquote class="blockquote">
+<p><em>“Given that the true class is negative, how often did we predict negative?”</em></p>
+</blockquote>
+<ul>
+<li>Focuses on the <strong>true –</strong> group<br>
+</li>
+<li>Measures how well the model avoids false positives<br>
+<span class="math display">\[
+\text{Specificity} = \frac{\text{correctly predicted –}}{\text{total true –}} = \frac{\text{TN}}{\text{TN} + \text{FP}}
+\]</span></li>
+</ul>
+</section>
+<section id="positive-predictive-value-ppv-precision" class="level4">
+<h4 class="anchored" data-anchor-id="positive-predictive-value-ppv-precision">Positive Predictive Value (PPV / Precision)</h4>
+<blockquote class="blockquote">
+<p><em>“Given that we predicted positive, how often was that correct?”</em></p>
+</blockquote>
+<ul>
+<li>Focuses on the <strong>predicted +</strong> group<br>
+</li>
+<li>Measures trustworthiness of a positive prediction <span class="math display">\[
+\text{PPV} = \frac{\text{correctly predicted +}}{\text{total predicted +}} = \frac{\text{TP}}{\text{TP} + \text{FP}}
+\]</span></li>
+</ul>
+</section>
+<section id="negative-predictive-value-npv" class="level4">
+<h4 class="anchored" data-anchor-id="negative-predictive-value-npv">Negative Predictive Value (NPV)</h4>
+<blockquote class="blockquote">
+<p><em>“Given that we predicted negative, how often was that correct?”</em></p>
+</blockquote>
+<ul>
+<li>Focuses on the <strong>predicted –</strong> group<br>
+</li>
+<li>Measures trustworthiness of a negative prediction<br>
+<span class="math display">\[
+\text{NPV} = \frac{\text{correctly predicted –}}{\text{total predicted –}} = \frac{\text{TN}}{\text{TN} + \text{FN}}
+\]</span></li>
+</ul>
+</section>
+</section>
+<section id="why-so-many-metrics" class="level3">
+<h3 class="anchored" data-anchor-id="why-so-many-metrics">Why So Many Metrics?</h3>
+<p>Different metrics highlight different aspects of model performance and practical priorities, which can be especially helpful with imbalanced datasets.</p>
+<p>Example: Predicting whether a patient needs high-risk surgery</p>
+<ul>
+<li>positive class = needs surgery<br>
+</li>
+<li>negative class = does not need surgery</li>
+</ul>
+<p>Suppose:</p>
+<ul>
+<li>Sensitivity = 90% → correctly detects 90% of patients who need surgery<br>
+</li>
+<li>Specificity = 90% → correctly identifies 90% of those who don’t need surgery<br>
+</li>
+<li>PPV = 47% → only 47% of patients predicted to need surgery actually do<br>
+</li>
+<li>NPV = 98.9% → almost all patients predicted not to need it truly don’t</li>
+</ul>
+<blockquote class="blockquote">
+<p>Doctors need <strong>PPV</strong> to decide: “How much trust should I put in a positive prediction?”<br>
+Even with high sensitivity and specificity, <strong>prevalence</strong> affects PPV and NPV.</p>
+</blockquote>
+</section>
+<section id="prevalence-and-thresholding" class="level3">
+<h3 class="anchored" data-anchor-id="prevalence-and-thresholding">Prevalence and Thresholding</h3>
+<ul>
+<li><strong>Prevalence</strong>: The base rate of the + class in the population
+<ul>
+<li>e.g., 1 in 10 people need surgery → prevalence = 10%</li>
+</ul></li>
+<li>Sensitivity and specificity <em>do not</em> depend on prevalence<br>
+</li>
+<li>PPV and NPV <em>do</em> depend on prevalence</li>
+</ul>
+</section>
+</section>
+<section id="changing-the-threshold" class="level2">
+<h2 class="anchored" data-anchor-id="changing-the-threshold">Changing the Threshold</h2>
+<ul>
+<li>Thresholding affects the confusion matrix and all related metrics.<br>
+</li>
+<li>A lower threshold → more positive predictions:
+<ul>
+<li>Increases sensitivity, reduces specificity</li>
+</ul></li>
+<li>A higher threshold → fewer positive predictions:
+<ul>
+<li>Increases specificity, reduces sensitivity</li>
+</ul></li>
+</ul>
+<blockquote class="blockquote">
+<p>Choose a threshold based on costs of different errors.</p>
+</blockquote>
+</section>
+<section id="summary-and-takeaways" class="level2">
+<h2 class="anchored" data-anchor-id="summary-and-takeaways">Summary and Takeaways</h2>
+<ul>
+<li>Scoring rules assess probability estimates.</li>
+<li>Decision rule metrics evaluate classifications.</li>
+<li>Confusion matrices and derived metrics:
+<ul>
+<li>Depend on threshold</li>
+<li>Must reflect real-world context and costs</li>
+</ul></li>
+</ul>
+<blockquote class="blockquote">
+<p>Errors are not always equal. In many applications, the cost of a false positive is different from a false negative.</p>
+</blockquote>
+<ul>
+<li>Focus first on thorough EDA and building a model with good predicted probability estimates.<br>
+</li>
+<li>Then determine the threshold that best meets the needs of the problem.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./applied-chapter06.html" class="pagination-link" aria-label="Repeated Measures">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Repeated Measures</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./applied-chapter08.html" class="pagination-link" aria-label="2 x 2 Contingency Tables">
+        <span class="nav-page-text"><span class="chapter-title">2 x 2 Contingency Tables</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

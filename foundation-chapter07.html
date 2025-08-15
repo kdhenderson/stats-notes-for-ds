@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Linear Combinations and the Multiple Comparison Problem – Henderson's Statistics Notes for Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./foundation-chapter08.html" rel="next">
+<link href="./foundation-chapter06.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-626149efe8f5d16e1d391ba177679bf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./foundation-chapter01.html">Statistical Foundations</a></li><li class="breadcrumb-item"><a href="./foundation-chapter07.html"><span class="chapter-title">Linear Combinations and the Multiple Comparison Problem</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Henderson’s Statistics Notes for Data Science</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Henderson’s Statistics Notes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Statistical Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Drawing Statistical Conclusions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inference Using T-Distributions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Data Screening, Assumptions, and Transformations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Type I, Type II Error, and Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Alternatives to the T-Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Comparisons Among Several Samples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter07.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Linear Combinations and the Multiple Comparison Problem</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Linear Correlation and Simple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Quantifying Uncertainty: Confidence, Prediction and Calibration Intervals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regression Diagnostics and Model Refinement</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferences for Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Selection and Validation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-review-questions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Review Questions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Applied Statistics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression (MLR) Revisited</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bias Variance Trade-off</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bootstrap</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Communicating with Clients</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Repeated Measures</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Classification</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">2 x 2 Contingency Tables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Principal Component Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Clustering</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-r-code.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix A: R Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-sas-code.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix B: SAS Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix_hypothesis_test_flowchart.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix C: Hypothesis Test Flowchart</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#objectives" id="toc-objectives" class="nav-link active" data-scroll-target="#objectives">Objectives</a></li>
+  <li><a href="#fallacies-in-hypothesis-testing" id="toc-fallacies-in-hypothesis-testing" class="nav-link" data-scroll-target="#fallacies-in-hypothesis-testing">Fallacies in Hypothesis Testing</a></li>
+  <li><a href="#linear-combination-of-group-means" id="toc-linear-combination-of-group-means" class="nav-link" data-scroll-target="#linear-combination-of-group-means">Linear Combination of Group Means</a></li>
+  <li><a href="#steps-for-a-linear-contrast-test" id="toc-steps-for-a-linear-contrast-test" class="nav-link" data-scroll-target="#steps-for-a-linear-contrast-test">Steps for a Linear Contrast Test</a></li>
+  <li><a href="#adjusting-for-multiple-comparisons" id="toc-adjusting-for-multiple-comparisons" class="nav-link" data-scroll-target="#adjusting-for-multiple-comparisons">Adjusting for Multiple Comparisons</a></li>
+  <li><a href="#key-considerations-for-post-hoc-comparisons" id="toc-key-considerations-for-post-hoc-comparisons" class="nav-link" data-scroll-target="#key-considerations-for-post-hoc-comparisons">Key Considerations for Post-Hoc Comparisons</a></li>
+  <li><a href="#reporting-results" id="toc-reporting-results" class="nav-link" data-scroll-target="#reporting-results">Reporting Results</a></li>
+  <li><a href="#linear-combination-of-group-means-1" id="toc-linear-combination-of-group-means-1" class="nav-link" data-scroll-target="#linear-combination-of-group-means-1">Linear Combination of Group Means</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./foundation-chapter01.html">Statistical Foundations</a></li><li class="breadcrumb-item"><a href="./foundation-chapter07.html"><span class="chapter-title">Linear Combinations and the Multiple Comparison Problem</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Linear Combinations and the Multiple Comparison Problem</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="objectives" class="level2">
+<h2 class="anchored" data-anchor-id="objectives">Objectives</h2>
+<ul>
+<li>Recognize the limitations of the alternative hypothesis in an ANOVA <em>F</em>-test.<br>
+</li>
+<li>Construct and interpret linear combinations of group means.<br>
+</li>
+<li>Understand the need for multiple comparison procedures and when to apply them.<br>
+</li>
+<li>Apply methods such as Bonferroni and Dunnett to test planned and unplanned comparisons.</li>
+</ul>
+</section>
+<section id="fallacies-in-hypothesis-testing" class="level2">
+<h2 class="anchored" data-anchor-id="fallacies-in-hypothesis-testing">Fallacies in Hypothesis Testing</h2>
+<ol type="1">
+<li><strong>False causality</strong>: A small <em>p</em>-value does not indicate causation. Causality can only be inferred from randomized experiments, not observational studies.</li>
+<li><strong>Accepting the null</strong>: We should say there is “no evidence of a difference,” not that the null hypothesis is true. There is not enough evidence to suggest the observed difference is due to anything other than chance.</li>
+<li><strong>Statistical vs.&nbsp;practical significance</strong>: Statistical significance does not imply practical importance. Evaluate practical significance using power, effect size, and confidence intervals.
+<ul>
+<li>Differences that are statistically but not practically significant may arise due to large sample sizes.<br>
+</li>
+<li>If a difference is practically significant but not statistically significant, more data may be needed.</li>
+</ul></li>
+<li><strong>Data dredging</strong>: Avoid fishing for significance (data snooping). This can lead to publication bias against negative results.</li>
+<li><strong>Good statistics from bad data</strong>: Biased or non-random data compromise conclusions. Experimental design determines which inferences and statistical methods are valid.</li>
+</ol>
+</section>
+<section id="linear-combination-of-group-means" class="level2">
+<h2 class="anchored" data-anchor-id="linear-combination-of-group-means">Linear Combination of Group Means</h2>
+<ul>
+<li>ANOVA allows only pairwise comparisons of means and does not account for meaningful structure across groups. In practice, you may wish to compare the average of several means to a single group, or to the average of others.<br>
+</li>
+<li>The ANOVA <em>F</em>-test serves as an initial screening tool for detecting any overall differences in means. If the <em>F</em>-test is significant, follow-up tests can be considered.</li>
+</ul>
+<section id="linear-contrasts" class="level3">
+<h3 class="anchored" data-anchor-id="linear-contrasts">Linear Contrasts</h3>
+<ul>
+<li>A <strong>linear combination</strong> of group means is defined as: <span class="math display">\[
+\gamma = C_1\mu_1 + C_2\mu_2 + \dots + C_I\mu_I
+\]</span> where <span class="math inline">\(\gamma\)</span> represents the linear combination and the <span class="math inline">\(C_i\)</span> are coefficients. When the coefficients sum to zero, the combination is called a <strong>contrast</strong>.</li>
+<li>Estimate <span class="math inline">\(\gamma\)</span> using <span class="math inline">\(g = C_1\bar{x}_1 + C_2\bar{x}_2 + \dots + C_I\bar{x}_I\)</span>, where <span class="math inline">\(\bar{x}_i\)</span> are group sample means.</li>
+<li>The standard error of <span class="math inline">\(g\)</span>, denoted <span class="math inline">\(SE(g)\)</span>, is given by: <span class="math display">\[
+SE(g) = S_p \sqrt{\frac{C_1^2}{n_1} + \frac{C_2^2}{n_2} + \dots + \frac{C_I^2}{n_I}}
+\]</span> where <span class="math inline">\(S_p\)</span> is the pooled standard deviation.<br>
+Even when comparing only two groups (i.e., the other coefficients and terms under the square root are zero), the pooled standard deviation is used under the assumption of equal variances across all groups.</li>
+<li>The <em>t</em>-statistic for testing contrasts is: <span class="math display">\[
+t_{\alpha, df} = \frac{g - \gamma}{SE(g)}
+\]</span> where <span class="math inline">\(g\)</span> is the observed linear combination, <span class="math inline">\(\gamma\)</span> is the hypothesized value (e.g., <span class="math inline">\(\gamma = 0\)</span>), and <span class="math inline">\(df\)</span> is the degrees of freedom associated with <span class="math inline">\(S_p\)</span>.</li>
+</ul>
+</section>
+</section>
+<section id="steps-for-a-linear-contrast-test" class="level2">
+<h2 class="anchored" data-anchor-id="steps-for-a-linear-contrast-test">Steps for a Linear Contrast Test</h2>
+<ol type="1">
+<li><strong>Summarize the data</strong>: Obtain group means, sample sizes, and the pooled standard deviation from the ANOVA model (e.g., RMSE).</li>
+<li><strong>Specify the coefficients</strong>: Choose <span class="math inline">\(C_i\)</span> values such that <span class="math inline">\(\sum C_i = 0\)</span>.</li>
+<li><strong>Estimate the contrast</strong>: Compute the linear combination <span class="math inline">\(g\)</span> using the sample means and chosen coefficients.</li>
+<li><strong>Compute the standard error</strong>: Calculate <span class="math inline">\(SE(g)\)</span> using the formula above.</li>
+<li><strong>Construct confidence intervals</strong>: <span class="math display">\[
+CI = g \pm t_{\alpha, df} \cdot SE(g)
+\]</span></li>
+<li><strong>Perform the test</strong>: Calculate the <em>t</em>-statistic to assess the contrast.</li>
+</ol>
+<section id="simultaneous-inferences" class="level3">
+<h3 class="anchored" data-anchor-id="simultaneous-inferences">Simultaneous Inferences</h3>
+<ul>
+<li>When testing multiple contrasts or pairwise comparisons, the risk of a <strong>Type I error</strong> increases. Adjustments to significance levels or <em>p</em>-values are needed to maintain the overall error rate.</li>
+<li>Distinguish between:
+<ul>
+<li><strong>Individual confidence level</strong>: The probability that a single interval captures its parameter (<span class="math inline">\(1 - \alpha\)</span>).</li>
+<li><strong>Familywise confidence level</strong>: The probability that all intervals simultaneously capture their parameters. This probability is less than <span class="math inline">\(1 - \alpha\)</span> unless corrections are applied.</li>
+</ul></li>
+</ul>
+</section>
+<section id="common-applications-of-linear-contrasts" class="level3">
+<h3 class="anchored" data-anchor-id="common-applications-of-linear-contrasts">Common Applications of Linear Contrasts</h3>
+<ol type="1">
+<li>Comparing average values, e.g., the mean of groups 1 and 2 versus group 3.</li>
+<li>Comparing response rates across treatments, such as dietary interventions in animals.</li>
+<li>Testing specific hypotheses about structured combinations of group means.</li>
+</ol>
+</section>
+</section>
+<section id="adjusting-for-multiple-comparisons" class="level2">
+<h2 class="anchored" data-anchor-id="adjusting-for-multiple-comparisons">Adjusting for Multiple Comparisons</h2>
+<p>When conducting multiple tests, it is important to control the <strong>familywise error rate</strong> (FWER). Common post-hoc procedures are outlined below.</p>
+<section id="procedures-for-all-pairwise-differences-in-means" class="level3">
+<h3 class="anchored" data-anchor-id="procedures-for-all-pairwise-differences-in-means">Procedures for All Pairwise Differences in Means</h3>
+<ol type="1">
+<li><strong>Bonferroni adjustment</strong>
+<ul>
+<li>Adjusts the significance level: <span class="math display">\[
+\text{Adjusted } \alpha = \frac{\alpha}{\# \text{ comparisons}}
+\]</span></li>
+<li>Example: For 4 groups, there are <span class="math inline">\(\binom{4}{2} = 6\)</span> pairwise comparisons (i.e., 4 choose 2): <span class="math display">\[
+\alpha' = \frac{0.05}{6} = 0.0083
+\]</span></li>
+<li><strong>Strengths</strong>: Simple, widely applicable<br>
+</li>
+<li><strong>Weaknesses</strong>: Very conservative; reduces power</li>
+</ul></li>
+<li><strong>Tukey’s Honestly Significant Difference (HSD)</strong>
+<ul>
+<li>Used to construct simultaneous confidence intervals for all pairwise mean differences<br>
+</li>
+<li>Based on the <strong>studentized range statistic</strong>: <span class="math display">\[
+q = \frac{\bar{X}_{\text{largest}} - \bar{X}_{\text{smallest}}}{\sqrt{\frac{MSE}{n}}}
+\]</span> (for groups with equal <span class="math inline">\(n\)</span>)<br>
+</li>
+<li>Confidence intervals: <span class="math display">\[
+(\bar{X}_i - \bar{X}_j) \pm q_{\alpha, (k, N-k)} \cdot \sqrt{\frac{MSE}{n}}
+\]</span>
+<ul>
+<li>When group sizes are unequal, use the <strong>harmonic mean</strong> of <span class="math inline">\(n_i\)</span> and <span class="math inline">\(n_j\)</span> (as done in SAS): <span class="math display">\[
+n_{ij} = \frac{2 \cdot n_i \cdot n_j}{n_i + n_j}
+\]</span></li>
+</ul></li>
+<li><strong>Strengths</strong>: Maintains FWER; easy to interpret<br>
+</li>
+<li><strong>Weaknesses</strong>: Assumes equal variances (can be extended via Tukey-Kramer)</li>
+</ul></li>
+<li><strong>Ryan-Elliot-Gabriel-Welsch Q (REGWQ) procedure</strong>
+<ul>
+<li>Recommended by SAS; balances power and Type I error control<br>
+</li>
+<li><strong>Method</strong>:
+<ol type="1">
+<li>Order the group means in descending order</li>
+<li>Reject <span class="math inline">\(H_0\)</span> if: <span class="math display">\[
+\text{Difference} &gt; q_{\text{critical}} \cdot \text{Studentized range}
+\]</span></li>
+<li>Adjust the <em>p</em>-values for the number of comparisons<br>
+</li>
+</ol></li>
+<li><strong>Strengths</strong>: High power; nominal Type I error<br>
+</li>
+<li><strong>Weaknesses</strong>: Algorithmically complex</li>
+</ul></li>
+</ol>
+</section>
+<section id="procedures-for-pairwise-differences-vs.-control" class="level3">
+<h3 class="anchored" data-anchor-id="procedures-for-pairwise-differences-vs.-control">Procedures for Pairwise Differences vs.&nbsp;Control</h3>
+<ol type="1">
+<li><strong>Dunnett’s procedure</strong>
+<ul>
+<li>Compares each treatment group to a single control group</li>
+<li>Uses the <strong><span class="math inline">\(D\)</span>-statistic</strong>: <span class="math display">\[
+D = d_{(k-1, N-k)} \cdot \sqrt{\frac{2 \cdot MSE}{n_{\text{harmonic}}}}
+\]</span></li>
+<li>Degrees of freedom: <span class="math display">\[
+df = (k - 1, N - k)
+\]</span> where <span class="math inline">\(k - 1\)</span> is the between-groups degrees of freedom and <span class="math inline">\(N - k\)</span> is the within-groups degrees of freedom</li>
+<li><strong>Strengths</strong>: Targets control comparisons directly<br>
+</li>
+<li><strong>Weaknesses</strong>: Not designed for all pairwise tests and limited to control-versus-treatment tests</li>
+</ul></li>
+</ol>
+</section>
+<section id="procedures-for-all-possible-comparisons" class="level3">
+<h3 class="anchored" data-anchor-id="procedures-for-all-possible-comparisons">Procedures for All Possible Comparisons</h3>
+<ol type="1">
+<li><strong>Scheffé’s method</strong>
+<ul>
+<li>Allows for testing <em>any</em> linear combination of means</li>
+<li>Used for all possible comparisons, including non-pairwise contrasts</li>
+<li>Based on the <em>F</em>-distribution<br>
+</li>
+<li><strong>Strengths</strong>: Flexible, ideal for complex non-pairwise hypotheses, and less conservative than Bonferroni</li>
+<li><strong>Weaknesses</strong>: Less powerful for simple pairwise tests</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="key-considerations-for-post-hoc-comparisons" class="level2">
+<h2 class="anchored" data-anchor-id="key-considerations-for-post-hoc-comparisons">Key Considerations for Post-Hoc Comparisons</h2>
+<ol type="1">
+<li><strong>Type I Error Control</strong>
+<ul>
+<li>Multiple tests increase the chance of a false positive (Type I error).<br>
+</li>
+<li>Even if all null hypotheses are true, testing too many comparisons increases the likelihood of finding a “significant” result by chance.<br>
+</li>
+<li>Post-hoc adjustments help control the overall Type I error rate.</li>
+</ul></li>
+<li><strong>Planned vs.&nbsp;unplanned comparisons</strong>
+<ul>
+<li>Use <strong>planned comparisons</strong> when testing specific hypotheses defined in advance.<br>
+</li>
+<li>Use <strong>unplanned post-hoc comparisons</strong> when no prior hypotheses were made, but the ANOVA is significant.</li>
+</ul></li>
+<li><strong>Decision framework after ANOVA</strong>
+<ul>
+<li>If the <strong><em>F</em>-statistic is not significant</strong>, no further testing is needed. There is no evidence that group means differ.</li>
+<li>If the <strong><em>F</em>-statistic is significant</strong>, then post-hoc comparisons are appropriate. The choice of follow-up method depends on:
+<ul>
+<li>Whether there is meaningful structure in the groups (e.g., contrasts like “average of groups A and B vs.&nbsp;group C”).</li>
+<li>Whether pairwise comparisons or structured contrasts best address your research question.</li>
+</ul></li>
+</ul></li>
+</ol>
+<section id="summary-table-of-post-hoc-methods" class="level3">
+<h3 class="anchored" data-anchor-id="summary-table-of-post-hoc-methods">Summary Table of Post-Hoc Methods</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 24%">
+<col style="width: 32%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Procedure</strong></th>
+<th><strong>Purpose</strong></th>
+<th><strong>Strengths</strong></th>
+<th><strong>Weaknesses</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bonferroni Adjustment</td>
+<td>Controls Type I error for pairwise tests</td>
+<td>Simple, widely applicable</td>
+<td>Very conservative, reduced power</td>
+</tr>
+<tr class="even">
+<td>Tukey’s HSD</td>
+<td>All pairwise differences</td>
+<td>Maintains familywise error rate, easy interpretation</td>
+<td>Assumes equal variances</td>
+</tr>
+<tr class="odd">
+<td>Dunnett’s Procedure</td>
+<td>Compare to control group</td>
+<td>Focused on control vs.&nbsp;treatments</td>
+<td>Not suitable for all pairwise comparisons</td>
+</tr>
+<tr class="even">
+<td>REGWQ Procedure</td>
+<td>Pairwise differences</td>
+<td>Good power, recommended by SAS</td>
+<td>Requires algorithmic implementation</td>
+</tr>
+<tr class="odd">
+<td>Scheffé’s Method</td>
+<td>All possible comparisons (non-pairwise)</td>
+<td>Flexible, good for complex comparisons</td>
+<td>Less powerful for pairwise differences</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="reporting-results" class="level2">
+<h2 class="anchored" data-anchor-id="reporting-results">Reporting Results</h2>
+<ul>
+<li>Discuss the research question, design, and assumptions.</li>
+<li>Summarize the exploratory data analysis (EDA).</li>
+<li>Report ANOVA results: <em>F</em>-statistic, degrees of freedom, and <em>p</em>-value.</li>
+<li>Describe the effect size and post-hoc analysis used.</li>
+<li>Conclude in the context of the original research question.</li>
+</ul>
+</section>
+<section id="linear-combination-of-group-means-1" class="level2">
+<h2 class="anchored" data-anchor-id="linear-combination-of-group-means-1">Linear Combination of Group Means</h2>
+<section id="handicap-capability-study-anova-and-follow-up-contrast" class="level3">
+<h3 class="anchored" data-anchor-id="handicap-capability-study-anova-and-follow-up-contrast">Handicap &amp; Capability Study: ANOVA and Follow-Up Contrast</h3>
+<section id="global-question-of-interest" class="level4">
+<h4 class="anchored" data-anchor-id="global-question-of-interest">Global Question of Interest</h4>
+<p><strong>Goal</strong>:<br>
+How do physical handicaps affect perception of employment qualification?</p>
+<p><strong>Assumptions</strong>:<br>
+- Independent observations<br>
+- Normal distributions<br>
+- Equal variances</p>
+<p>There is no visual evidence to suggest these assumptions are violated.</p>
+<p><strong>ANOVA Setup</strong>:<br>
+Let</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\mu_1 = \mu_2 = \mu_3 = \mu_4 = \mu_5\)</span> (equal means model)<br>
+</li>
+<li><span class="math inline">\(H_a\)</span>: At least one <span class="math inline">\(\mu_i \ne \mu_j\)</span> for some <span class="math inline">\(i \ne j\)</span></li>
+</ul>
+<p><strong>Results</strong>:</p>
+<ul>
+<li><em>F</em>-statistic: <span class="math inline">\(F_{4,65} = 2.85\)</span><br>
+</li>
+<li><em>p</em>-value: 0.0301<br>
+</li>
+<li><strong>Decision</strong>: Reject <span class="math inline">\(H_0\)</span></li>
+</ul>
+<p><strong>Conclusion</strong>:<br>
+There is sufficient evidence to suggest that at least two group means differ (<em>p</em> = 0.0301 from a one-way ANOVA).</p>
+</section>
+</section>
+<section id="targeted-contrast-comparing-two-group-averages" class="level3">
+<h3 class="anchored" data-anchor-id="targeted-contrast-comparing-two-group-averages">Targeted Contrast: Comparing Two Group Averages</h3>
+<p>We now test whether the average score of the Amputee and Hearing groups differs from that of the Crutch and Wheelchair groups.</p>
+<section id="hypotheses" class="level4">
+<h4 class="anchored" data-anchor-id="hypotheses">Hypotheses</h4>
+<p><span class="math display">\[
+H_0: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} = \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2}
+\]</span> <span class="math display">\[
+H_A: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} \ne \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2}
+\]</span></p>
+<p>Rewritten by subtraction: <span class="math display">\[
+H_0: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} - \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2} = 0
+\]</span> <span class="math display">\[
+H_A: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} - \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2} \ne 0
+\]</span></p>
+<p>Multiply both sides by 2: <span class="math display">\[
+H_0: \mu_{\text{Amp}} + \mu_{\text{Hear}} - \mu_{\text{Crutch}} - \mu_{\text{Wheel}} = 0
+\]</span> <span class="math display">\[
+H_A: \mu_{\text{Amp}} + \mu_{\text{Hear}} - \mu_{\text{Crutch}} - \mu_{\text{Wheel}} \ne 0
+\]</span></p>
+</section>
+<section id="defining-the-contrast" class="level4">
+<h4 class="anchored" data-anchor-id="defining-the-contrast">Defining the Contrast</h4>
+<p>This contrast compares the average of the Amputee and Hearing groups to the average of the Crutch and Wheelchair groups, excluding the None group. The coefficients (weights) are assigned based on the groupings of interest. The group labels are listed alphabetically, which is the default in most statistical software.</p>
+<p><span class="math display">\[
+\gamma = 1\mu_{\text{Amp}} - 1\mu_{\text{Crutch}} + 1\mu_{\text{Hear}} + 0\mu_{\text{None}} - 1\mu_{\text{Wheel}}
+\]</span></p>
+<p>Here, <span class="math inline">\(\gamma\)</span> represents the <em>population value</em> of the contrast—a linear combination of group means. A value of <span class="math inline">\(\gamma = 0\)</span> would indicate no difference between the two averaged group sets.</p>
+</section>
+<section id="method-linear-contrast-formulas-and-test-statistic" class="level4">
+<h4 class="anchored" data-anchor-id="method-linear-contrast-formulas-and-test-statistic">Method: Linear Contrast Formulas and Test Statistic</h4>
+<p>To evaluate this question, we use a linear contrast to compare combined group means.</p>
+<ul>
+<li><strong>Hypotheses</strong>: <span class="math display">\[
+H_0: \gamma = 0 \quad \text{vs.} \quad H_A: \gamma \ne 0
+\]</span></li>
+<li><strong>General definition of a contrast</strong>: <span class="math display">\[
+\gamma = C_1\mu_1 + C_2\mu_2 + \dots + C_I\mu_I
+\]</span> where <span class="math inline">\(C_i\)</span> are the contrast weights and must satisfy the constraint:<br>
+<span class="math display">\[
+\sum C_i = 0
+\]</span></li>
+<li><strong>Contrast estimate</strong>: <span class="math display">\[
+g = C_1\bar{x}_1 + C_2\bar{x}_2 + \dots + C_I\bar{x}_I
+\]</span> where <span class="math inline">\(C_i\)</span> are the contrast weights and <span class="math inline">\(\bar{x}_i\)</span> are the sample means.</li>
+<li><strong>Standard error</strong>: <span class="math display">\[
+SE(g) = S_p \sqrt{ \frac{C_1^2}{n_1} + \frac{C_2^2}{n_2} + \dots + \frac{C_I^2}{n_I} }
+\]</span> where <span class="math inline">\(S_p = \sqrt{MSE}\)</span> is the pooled standard deviation (assuming equal variances and independent observations).</li>
+<li><strong>Test statistic</strong>: <span class="math display">\[
+t = \frac{g - \gamma}{SE(g)}
+\]</span> This follows a <em>t</em>-distribution with degrees of freedom: <span class="math display">\[
+df = N - I
+\]</span> where <span class="math inline">\(N\)</span> is the total number of observations and <span class="math inline">\(I\)</span> is the number of groups.</li>
+</ul>
+</section>
+</section>
+<section id="worked-example-difference-of-sums" class="level3 example">
+<h3 class="anchored" data-anchor-id="worked-example-difference-of-sums">Worked Example: Difference of Sums</h3>
+<ul>
+<li><strong>Hypotheses</strong>: <span class="math display">\[
+H_0: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} = \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2}
+\]</span> <span class="math display">\[
+H_A: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} \ne \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2}
+\]</span></li>
+<li><strong>Contrast coefficients</strong>: <span class="math display">\[
+\gamma = 1\mu_{\text{Amp}} - 1\mu_{\text{Crutch}} + 1\mu_{\text{Hear}} + 0\mu_{\text{None}} - 1\mu_{\text{Wheel}}
+\]</span></li>
+<li><strong>Estimate <span class="math inline">\(\gamma\)</span> with <span class="math inline">\(g\)</span> using group means</strong>: <span class="math display">\[
+g = 1\bar{x}_{\text{Amp}} - 1\bar{x}_{\text{Crutch}} + 1\bar{x}_{\text{Hear}} + 0\bar{x}_{\text{None}} - 1\bar{x}_{\text{Wheel}}
+\]</span> <span class="math display">\[
+g = (1)(4.43) + (-1)(5.92) + (1)(4.05) + (0)(4.9) + (-1)(5.34) = -2.78
+\]</span></li>
+</ul>
+<p>The estimated contrast represents the estimated difference between the sum of the populations means of the Amputee and Hearing groups and the sum of the populations means of of the Crutch and Wheelchair groups.</p>
+<ul>
+<li><strong>Standard error</strong>: <span class="math display">\[
+SE(g) = \sqrt{2.6666 \left( \frac{1^2}{14} + \frac{(-1)^2}{14} + \frac{1^2}{14} + \frac{0^2}{14} + \frac{(-1)^2}{14} \right)} = 0.8729
+\]</span> where <span class="math inline">\(S_p = \sqrt{MSE} = \sqrt{2.6666}\)</span></li>
+</ul>
+<section id="confidence-interval-95-for-the-difference-of-sums" class="level4">
+<h4 class="anchored" data-anchor-id="confidence-interval-95-for-the-difference-of-sums">Confidence Interval (95%) for the Difference of Sums</h4>
+<ul>
+<li><strong>Formula</strong>: <span class="math display">\[
+g \pm t_{df, 0.975} \cdot SE(g)
+\]</span></li>
+<li><strong>Degrees of freedom</strong>: <span class="math display">\[
+df = 70 - 5 = 65 \quad \Rightarrow \quad t_{65, 0.975} = 1.991
+\]</span></li>
+<li><strong>Calculation</strong>: <span class="math display">\[
+-2.78 \pm (1.991)(0.8729)
+\]</span></li>
+<li><strong>Interval for the difference of sums</strong>: <span class="math display">\[
+CI = (-4.518, -1.042)
+\]</span></li>
+<li><strong>Interval for the difference of means</strong> (averaging over 2 vs.&nbsp;2 groups): <span class="math display">\[
+CI = \left( \frac{-4.518}{2}, \frac{-1.042}{2} \right) = (-2.259, -0.521)
+\]</span></li>
+</ul>
+<p>There is sufficient evidence that the sum of points assigned to the Amputee and Hearing groups is smaller (<span class="math inline">\(g = -2.8\)</span>) than the sum of points assigned to the Crutch and Wheelchair groups at the <span class="math inline">\(\alpha = 0.05\)</span> confidence level, because the confidence interval does not contain 0.</p>
+</section>
+<section id="summary-of-findings" class="level4">
+<h4 class="anchored" data-anchor-id="summary-of-findings">Summary of Findings</h4>
+<ul>
+<li>The initial ANOVA showed a statistically significant difference across all five groups (<em>p</em> = 0.0301).</li>
+<li>A targeted contrast comparing the average of the Amputee and Hearing groups to that of the Crutch and Wheelchair groups yielded:
+<ul>
+<li>Contrast estimate: <span class="math inline">\(g = -2.78\)</span></li>
+<li>95% CI for difference of means: <span class="math inline">\((-2.26, -0.52)\)</span></li>
+<li><span class="math inline">\(t(65) = -2.78\)</span>, <em>p</em> &lt; 0.01</li>
+</ul></li>
+</ul>
+<p>We conclude that the Amputee and Hearing groups were rated significantly lower, on average, than the Crutch and Wheelchair groups. )</p>
+</section>
+</section>
+<section id="hypothesis-testsums" class="level3 example">
+<h3 class="anchored" data-anchor-id="hypothesis-testsums">Hypothesis Test—Sums</h3>
+<ol type="1">
+<li><p><strong>Hypotheses</strong>: <span class="math display">\[
+H_0: \mu_{\text{Amp}} + \mu_{\text{Hear}} = \mu_{\text{Crutch}} + \mu_{\text{Wheel}}
+\]</span> <span class="math display">\[
+H_A: \mu_{\text{Amp}} + \mu_{\text{Hear}} \ne \mu_{\text{Crutch}} + \mu_{\text{Wheel}}
+\]</span></p></li>
+<li><p><strong>Critical value</strong>: <span class="math display">\[
+t_{65}(0.975) = 1.9971
+\]</span></p></li>
+<li><p><strong><em>t</em>-statistic</strong>: <span class="math display">\[
+SE(g) = 0.8729 \Rightarrow t_{\text{stat}} = \frac{-2.78}{0.8729} = -3.19
+\]</span></p></li>
+<li><p><strong><em>p</em>-value</strong>: <span class="math inline">\(p = 0.0022\)</span></p></li>
+<li><p><strong>Decision</strong>: Reject <span class="math inline">\(H_0\)</span></p></li>
+<li><p><strong>Conclusion</strong>:</p>
+<p>There is strong evidence to suggest that the sum of the means of the Amputee and Hearing groups is less than that of the Crutch and Wheelchair groups (<em>p</em>-value = 0.0022). The 95% confidence interval for the difference of sums is <span class="math inline">\((-4.529, -1.043)\)</span> points.</p></li>
+</ol>
+</section>
+<section id="hypothesis-testmeans-not-sums" class="level3 example">
+<h3 class="anchored" data-anchor-id="hypothesis-testmeans-not-sums">Hypothesis Test—Means (Not Sums)</h3>
+<ol type="1">
+<li><p><strong>Hypotheses</strong>: <span class="math display">\[
+H_0: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} = \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2}
+\]</span> <span class="math display">\[
+H_A: \frac{\mu_{\text{Amp}} + \mu_{\text{Hear}}}{2} \ne \frac{\mu_{\text{Crutch}} + \mu_{\text{Wheel}}}{2}
+\]</span></p></li>
+<li><p><strong>Critical value</strong>: <span class="math display">\[
+t_{65}(0.975) = 1.9971
+\]</span></p></li>
+<li><p><strong>Standard error</strong>: <span class="math display">\[
+SE(g) = \sqrt{2.6666 \left( \frac{(0.5)^2}{14} + \frac{(-0.5)^2}{14} + \frac{(0.5)^2}{14} + \frac{0^2}{14} + \frac{(-0.5)^2}{14} \right)} = \sqrt{0.1905} = 0.4364
+\]</span> <strong>Test statistic</strong>: <span class="math display">\[
+g = -1.393 \quad \Rightarrow \quad t = \frac{g - \gamma}{SE(g)} = \frac{g - 0}{SE(g)} = \frac{-1.393}{0.4364} = -3.19
+\]</span> Same <span class="math inline">\(t\)</span>-statistic as for sums, but different <span class="math inline">\(g\)</span> because the 0.5 vs.&nbsp;1 and different SE.</p></li>
+<li><p><strong><em>p</em>-value</strong>: <span class="math inline">\(p = 0.0022\)</span></p></li>
+<li><p><strong>Decision</strong>: Reject <span class="math inline">\(H_0\)</span></p></li>
+<li><p><strong>Conclusion</strong>:</p>
+<p>There is strong evidence to suggest that the <em>average</em> of the means of the Amputee and Hearing groups is less than that of the Crutch and Wheelchair groups (<em>p</em>-value = 0.0022). The 95% confidence interval for the difference in <em>means</em> is (-2.26, -0.52) points.</p></li>
+</ol>
+<blockquote class="blockquote">
+<p>Note: This is based on means, not sums.</p>
+</blockquote>
+<section id="final-conclusion-client-facingdifference-in-group-means" class="level4">
+<h4 class="anchored" data-anchor-id="final-conclusion-client-facingdifference-in-group-means">Final Conclusion (Client-Facing—Difference in Group Means)</h4>
+<p>There is strong evidence to suggest that the average of the means of the Amputee and Hearing groups is less than the average of the means of the Crutches and Wheelchair groups (<em>p</em>-value = 0.0022).</p>
+<p>We are 95% confident that the average of the mean scores of the Crutches and Wheelchair groups is between 0.5215 and 2.2605 points greater than the average of the mean points of the Amputee and Hearing groups.</p>
+</section>
+</section>
+<section id="why-we-do-a-multiple-comparison-correction-the-bonferroni" class="level3">
+<h3 class="anchored" data-anchor-id="why-we-do-a-multiple-comparison-correction-the-bonferroni">Why We Do a Multiple Comparison Correction — The Bonferroni</h3>
+<section id="motivation" class="level4">
+<h4 class="anchored" data-anchor-id="motivation">Motivation</h4>
+<p>When conducting multiple hypothesis tests, the probability of making at least one <strong>Type I error</strong> (a false positive, rejecting <span class="math inline">\(H_0\)</span> when <span class="math inline">\(H_0\)</span> is true) increases. Bonferroni correction helps control this overall risk by adjusting the significance level for individual tests.</p>
+</section>
+</section>
+<section id="probability-review-two-coin-flips" class="level3">
+<h3 class="anchored" data-anchor-id="probability-review-two-coin-flips">Probability Review: Two Coin Flips</h3>
+<section id="prop-1-independence-of-events" class="level4">
+<h4 class="anchored" data-anchor-id="prop-1-independence-of-events">Prop 1: Independence of Events</h4>
+<p><span class="math display">\[
+P(AB) = P(A) \cdot P(B)
+\]</span></p>
+<p>Example: <span class="math display">\[
+P(\text{HH}) = P(\text{H}) \cdot P(\text{H}) = 0.5 \cdot 0.5 = 0.25
+\]</span></p>
+</section>
+<section id="prop-2-sample-space-of-two-fair-coin-flips" class="level4">
+<h4 class="anchored" data-anchor-id="prop-2-sample-space-of-two-fair-coin-flips">Prop 2: Sample Space of Two Fair Coin Flips</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Outcome</th>
+<th>Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HH</td>
+<td>0.25</td>
+</tr>
+<tr class="even">
+<td>HT</td>
+<td>0.25</td>
+</tr>
+<tr class="odd">
+<td>TH</td>
+<td>0.25</td>
+</tr>
+<tr class="even">
+<td>TT</td>
+<td>0.25</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Probability of at least one head</strong>:</p>
+<p><span class="math display">\[
+P(\text{at least 1 H}) = 1 - P(\text{no heads}) = 1 - P(\text{TT}) = 1 - 0.25 = 0.75
+\]</span></p>
+</section>
+</section>
+<section id="multiple-testing-analogy-coin-flips" class="level3 example">
+<h3 class="anchored" data-anchor-id="multiple-testing-analogy-coin-flips">Multiple Testing Analogy: Coin Flips</h3>
+<p>This parallels the logic behind multiple testing:</p>
+<ul>
+<li>Getting two tails = no Type I error</li>
+<li>Getting at least one head = at least one Type I error</li>
+</ul>
+<p>Just like the probability of getting at least one head increases with more coin flips, the probability of making at least one Type I error increases with more hypothesis tests — unless we adjust for it.</p>
+<p>This illustrates how running multiple independent tests increases the probability of rejecting at least one true null—even if <em>all</em> nulls are actually true. That’s why corrections like the Bonferroni adjustment are necessary.</p>
+</section>
+<section id="familywise-error-rate-with-multiple-tests" class="level3">
+<h3 class="anchored" data-anchor-id="familywise-error-rate-with-multiple-tests">Familywise Error Rate With Multiple Tests</h3>
+<p>Let <span class="math inline">\(K = 2\)</span> (number of independent hypothesis tests), and assume the null hypothesis is true in both.</p>
+<ul>
+<li><strong>TIE</strong> = Type I error<br>
+</li>
+<li><strong>FTR</strong> = Fail to reject <span class="math inline">\(H_0\)</span></li>
+</ul>
+<section id="probability-of-at-least-one-type-i-error-without-correction" class="level4">
+<h4 class="anchored" data-anchor-id="probability-of-at-least-one-type-i-error-without-correction">Probability of at Least One Type I Error Without Correction</h4>
+<p><span class="math display">\[
+P(\text{at least 1 TIE in 2 tests}) = 1 - P(\text{no TIE in 2 tests}) = 1-P(\text{FTR in 2 tests})
+\]</span></p>
+<p>Assuming each test has <span class="math inline">\(\alpha = 0.05\)</span>:</p>
+<p><span class="math display">\[
+= 1 - P(\text{FTR})P(\text{FTR}) = 1 - P(\text{FTR})^2 = 1 - (1 - \alpha)^2 = 1 - (0.95)^2 = 0.0975
+\]</span></p>
+<blockquote class="blockquote">
+<p>This means there’s a 9.75% chance of incorrectly rejecting at least one null hypothesis when both are actually true.</p>
+</blockquote>
+</section>
+</section>
+<section id="bonferroni-adjustment" class="level3">
+<h3 class="anchored" data-anchor-id="bonferroni-adjustment">Bonferroni Adjustment</h3>
+<p>To maintain a <strong>familywise error rate</strong> of <span class="math inline">\(\alpha = 0.05\)</span>, Bonferroni sets a more stringent per-test threshold:</p>
+<p><span class="math display">\[
+\alpha' = \frac{\alpha}{K} = \frac{0.05}{2} = 0.025
+\]</span> where:</p>
+<ul>
+<li><span class="math inline">\(\alpha\)</span> is the desired familywise error rate (e.g., 0.05).</li>
+<li><span class="math inline">\(k\)</span> is the number of comparisons.</li>
+<li><span class="math inline">\(\alpha'\)</span> is the adjusted threshold for each test, the per-comparison significance level.</li>
+</ul>
+<p>Then the familywise error becomes:</p>
+<p><span class="math display">\[
+P(\text{at least 1 TIE in 2 tests}) = 1 - P(\text{no TIE in 2 tests}) = 1 - P(\text{FTR})^2 = 1 - (1 - \alpha')^2 = 1 - (0.975)^2 = 0.0494
+\]</span></p>
+<p>So Bonferroni successfully lowers the overall chance of making a Type I error across all tests back to the desired 0.05 level.</p>
+</section>
+<section id="interpreting-the-diagram" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-the-diagram">Interpreting the Diagram</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fch07_bonferroni.png" class="img-fluid figure-img"></p>
+<figcaption><strong>Bell curve showing original <span class="math inline">\(\alpha\)</span> and Bonferroni-corrected rejection regions.</strong> The Bonferroni-adjusted regions lie farther from 0, reflecting the more stringent critical values.</figcaption>
+</figure>
+</div>
+<p>The shaded areas represent rejection regions under two scenarios:</p>
+<ul>
+<li>Outer shaded tails: Original <span class="math inline">\(\alpha = 0.05\)</span> rejection regions (2.5% in each tail)</li>
+<li>Inner shaded tails: Bonferroni-adjusted <span class="math inline">\(\alpha' = 0.025\)</span> rejection regions (1.25% in each tail)</li>
+</ul>
+<p>The critical value for Bonferroni (CVB) is the <span class="math inline">\(t\)</span>- or <span class="math inline">\(z\)</span>-value that corresponds to <span class="math inline">\(\alpha'\)</span>, which lies further from 0 than the uncorrected critical value. This makes it harder to reject <span class="math inline">\(H_0\)</span>.</p>
+</section>
+<section id="key-concepts-illustrated" class="level3">
+<h3 class="anchored" data-anchor-id="key-concepts-illustrated">Key Concepts Illustrated</h3>
+<ul>
+<li>Without correction: <span class="math display">\[
+P(\text{at least one TIE}) = 1 - (1 - \alpha)^K = 1 - (0.95)^2 = 0.0975
+\]</span></li>
+<li>With Bonferroni correction: <span class="math display">\[
+\alpha' = \frac{0.05}{2} = 0.025 \quad \Rightarrow \quad P(\text{at least one TIE}) = 1 - (0.975)^2 = 0.0494
+\]</span></li>
+<li>CVB (critical value for Bonferroni) moves farther from 0, tightening the rejection region.</li>
+<li>Bonferroni maintains a familywise error rate at or below 0.05.</li>
+</ul>
+</section>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<ul>
+<li>When we conduct multiple comparisons, the overall Type I error rate is inflated.</li>
+<li>The Bonferroni correction addresses this by adjusting the per-comparison significance level: <span class="math display">\[
+\alpha' = \frac{\alpha}{K}
+\]</span></li>
+<li>Pros:
+<ul>
+<li>Simple and widely applicable</li>
+<li>Works for any number of tests</li>
+<li>Makes no assumptions about the test structure</li>
+<li>Can be applied directly to <em>p</em>-values</li>
+</ul></li>
+<li>Cons:
+<ul>
+<li>Can be overly conservative</li>
+<li>Reduces power, making it harder to reject <span class="math inline">\(H_0\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="multiple-comparison-procedures-handicap-study" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-comparison-procedures-handicap-study">Multiple Comparison Procedures — Handicap Study</h3>
+<p>We now explore multiple comparison questions using the Handicap study data. These comparisons build on the need for error rate control, such as the Bonferroni adjustment, after identifying overall group differences.</p>
+<section id="questions-of-interest-qois" class="level4">
+<h4 class="anchored" data-anchor-id="questions-of-interest-qois">Questions of Interest (QOIs)</h4>
+<ol type="1">
+<li><strong>Are any pairs of group means different?</strong><br>
+</li>
+<li><strong>Does the Amputee group have a different mean score than the None group?</strong><br>
+</li>
+<li><strong>Which specific pairs of groups differ?</strong><br>
+</li>
+<li><strong>Do the means of the four Handicap groups differ from the Non-Handicap (None) group?</strong></li>
+</ol>
+<p>Each of these questions involves multiple comparisons and may require adjustment for familywise error rates.</p>
+</section>
+<section id="qoi-1-are-any-group-means-different" class="level4">
+<h4 class="anchored" data-anchor-id="qoi-1-are-any-group-means-different">QOI 1: Are Any Group Means Different?</h4>
+<p>We begin with an overall test to determine if there are any mean differences across the five groups. This involves an ANOVA and is the first step in any further group comparisons.</p>
+<ul>
+<li><strong>Assumptions</strong>:
+<ul>
+<li>Normality<br>
+</li>
+<li>Equal variances (e.g., visual checks and Brown–Forsythe test)<br>
+</li>
+<li>Independence (assumed from study design)</li>
+</ul></li>
+</ul>
+<ol type="1">
+<li><strong>Hypotheses</strong>: <span class="math display">\[
+H_0: \mu_1 = \mu_2 = \dots = \mu_5 \quad \text{(All group means are equal)}
+\]</span> <span class="math display">\[
+H_A: \text{At least two group means differ}
+\]</span></li>
+<li><strong>Critical value</strong>: <span class="math inline">\(F_{\alpha, 4, 65}\)</span></li>
+<li><strong>ANOVA test statistic (<span class="math inline">\(F\)</span>-statistic)</strong>: <span class="math inline">\(F = 2.85\)</span></li>
+<li><strong>p-value</strong>: <span class="math inline">\(p = 0.0301\)</span></li>
+<li><strong>Decision</strong>: Reject <span class="math inline">\(H_0\)</span> (<em>needle in the haystack</em>)</li>
+<li><strong>Conclusion</strong>: There is sufficient evidence at <span class="math inline">\(\alpha = 0.05\)</span> to conclude that at least two group means differ (<span class="math inline">\(p = 0.0301\)</span>, from a standard ANOVA).</li>
+</ol>
+<ul>
+<li>Since the omnibus ANOVA test is significant, we proceed to investigate which group differences are driving the result. Multiple comparison procedures will be necessary to identify specific contrasts.</li>
+</ul>
+<p><strong>Model fitting R code (for context)</strong>:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">aov</span>(Score <span class="sc">~</span> Handicap, <span class="at">data =</span> Handicap)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="qoi-2-does-the-amputee-group-differ-from-the-none-group" class="level4">
+<h4 class="anchored" data-anchor-id="qoi-2-does-the-amputee-group-differ-from-the-none-group">QOI 2: Does the Amputee Group Differ from the None Group?</h4>
+<p>We now test whether the mean score for the Amputee group differs from that of the None group.</p>
+<ul>
+<li>This contrast was identified <em>before</em> looking at the data (i.e., a <strong>planned comparison</strong>), so we do <em>not</em> need to apply a multiple comparison correction.</li>
+</ul>
+<p><strong>Hypotheses</strong>:</p>
+<p><span class="math display">\[
+H_0: \mu_{\text{Amp}} = \mu_{\text{None}}
+\]</span> <span class="math display">\[
+H_A: \mu_{\text{Amp}} \ne \mu_{\text{None}}
+\]</span></p>
+<p><strong>Options for Testing the Contrast</strong>:</p>
+<p>We could use one of the following approaches:</p>
+<ol type="1">
+<li><strong>Two-sample <span class="math inline">\(t\)</span>-test</strong> (just Amputee vs.&nbsp;None):
+<ul>
+<li>Pooled standard deviation<br>
+</li>
+<li>Degrees of freedom: <span class="math inline">\(df = 26\)</span><br>
+</li>
+<li><span class="math inline">\(t\)</span>-distribution</li>
+<li><span class="math inline">\(p\)</span>-value: 0.4678</li>
+</ul></li>
+<li><strong>Fit a GLM model using only Amputee and None</strong>:
+<ul>
+<li>Equivalent <span class="math inline">\(F\)</span>-statistic<br>
+</li>
+<li>Same result as above: <span class="math inline">\(df = 1\)</span>, <span class="math inline">\(26\)</span><br>
+</li>
+<li><span class="math inline">\(F\)</span>-distribution</li>
+<li><span class="math inline">\(p\)</span>-value: 0.4678</li>
+</ul></li>
+<li><strong>Best option</strong>: Use <strong>all 70 observations</strong>:
+<ul>
+<li>Use the <strong>pooled standard deviation</strong> from the full model<br>
+</li>
+<li>Conduct the planned contrast within the <strong>global ANOVA model</strong></li>
+<li>Critical value: $F_{, 4, 65}</li>
+<li><span class="math inline">\(F\)</span>-statistic with extended degrees of freedom: <span class="math inline">\(df = 65\)</span><br>
+</li>
+<li><span class="math inline">\(p\)</span>-value: 0.4477</li>
+</ul></li>
+</ol>
+<p><strong>Conclusion</strong>:</p>
+<ul>
+<li><strong>Decision</strong>: Fail to reject <span class="math inline">\(H_0\)</span></li>
+<li><strong>Interpretation</strong>: There is not sufficient evidence to suggest that the mean rating of the Amputee group is different from the None group (<em>p</em> = 0.4477 from a contrast using all the data).</li>
+</ul>
+</section>
+<section id="qoi-3-which-specific-pairs-of-groups-differ" class="level4">
+<h4 class="anchored" data-anchor-id="qoi-3-which-specific-pairs-of-groups-differ">QOI 3: Which Specific Pairs of Groups Differ?</h4>
+<p>We now explore whether there is evidence that any specific pair of group means differ. These are <strong>not planned comparisons</strong>, so we must adjust for the increased chance of Type I error due to multiple testing.</p>
+<ul>
+<li>There are 5 groups, which gives <span class="math inline">\(K = \binom{5}{2} = 10\)</span> pairwise comparisons.</li>
+<li>Without correction, the risk of at least one false positive (rejecting <span class="math inline">\(H_0\)</span> when it is true) increases.</li>
+<li>The Bonferroni correction provides a simple solution by adjusting the significance threshold.</li>
+</ul>
+<p><strong>Unadjusted Procedure</strong><br>
+Compare each group pair using pairwise comparisons without correction:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>proc glm data=Handicap;
+  class Handicap;
+  model Score = Handicap;
+  means Handicap / hovtest=bf;
+  ls means Handicap / pdiff;
+run;</code></pre>
+</details>
+</div>
+<ul>
+<li>Compare each pair’s raw <em>p</em>-value to <span class="math inline">\(\alpha = 0.05\)</span></li>
+<li>Inflated Type I error risk due to multiple tests</li>
+</ul>
+<p><strong>Bonferroni Adjustment and Procedure</strong>:<br>
+To control the familywise error rate, adjust <span class="math inline">\(\alpha\)</span> using the Bonferroni correction:</p>
+<ul>
+<li>Adjusted threshold: <span class="math inline">\(\alpha' = \frac{\alpha}{K} = \frac{0.05}{10} = 0.005\)</span></li>
+<li>Use Bonferroni-adjusted confidence intervals and <em>p</em>-values to control the error rate across the family of comparisons.</li>
+</ul>
+<p>The Bonferroni-adjusted analysis in SAS uses the adjust=bon option:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>proc glm data=Handicap;
+  class Handicap;
+  model Score = Handicap;
+  means Handicap / hovtest=bf;
+  ls means Handicap / pdiff adjust=bon cl; *cl = confidence level;
+run;</code></pre>
+</details>
+</div>
+<ul>
+<li>The <code>cl</code> option provides Bonferroni-adjusted confidence intervals.</li>
+<li>These intervals are wider because:
+<ul>
+<li><span class="math inline">\(\alpha\)</span>’ is smaller than <span class="math inline">\(\alpha\)</span>.</li>
+<li>The critical value is larger.</li>
+<li>The multiplier increases.</li>
+<li>Wider intervals result from a more conservative correction.</li>
+</ul></li>
+<li>The <code>cldiff</code> option gives both directions (e.g., <span class="math inline">\(A - B\)</span> and <span class="math inline">\(B - A\)</span>).</li>
+<li>Each <em>p</em>-value is multiplied by <span class="math inline">\(K\)</span> before comparison to the original <span class="math inline">\(\alpha\)</span>: <span class="math display">\[
+K \cdot p_{\text{adj}} \leq \alpha
+\]</span></li>
+</ul>
+<p><strong>Interpretation</strong>:</p>
+<ul>
+<li>This procedure protects against Type I error across the entire family of tests.</li>
+<li>It is conservative but appropriate when many unplanned comparisons are being made.</li>
+</ul>
+<p><strong>Conclusion</strong>:</p>
+<p>After applying the Bonferroni adjustment,only 1 of the 10 tests produced a statistically significant result. Therefore, there is evidence (<em>p</em>-value = 0.0035 from a <em>t</em>-test) that the Crutches and Hearing groups have different mean ratings. A 95% Bonferroni-adjusted confidence interval for the difference in means between the Crutches and Hearing groups is <span class="math inline">\((0.0779,\ 3.6649)\)</span>.</p>
+</section>
+<section id="qoi-4-do-the-means-of-the-four-handicap-groups-differ-from-the-non-handicap-none-group" class="level4">
+<h4 class="anchored" data-anchor-id="qoi-4-do-the-means-of-the-four-handicap-groups-differ-from-the-non-handicap-none-group">QOI 4: Do the Means of the Four Handicap Groups Differ from the Non-Handicap (None) Group?</h4>
+<p>Assume we are interested in testing whether the means of the four handicap groups differ from the mean of the non-handicap group (i.e., the None group).</p>
+<ul>
+<li>Use <strong>Dunnett’s procedure</strong> because we are comparing the control group (None) to all the others — a pairwise set of <strong>dependent</strong> comparisons (repeating the control group).</li>
+</ul>
+<p>Option 1: Dunnett-adjusted confidence intervals</p>
+<ul>
+<li>Specify the control group on the right side using <code>dunnett('None')</code></li>
+<li>Also provides Dunnett-corrected confidence intervals</li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>proc glm data=Handicap;
+  class Handicap;
+  model Score = Handicap;
+  means Handicap / hovtest=bf dunnett('None');
+run;</code></pre>
+</details>
+</div>
+<p>Option 2: Dunnett-adjusted <em>p</em>-values only</p>
+<ul>
+<li>Use <code>control('None')</code> to specify the control group</li>
+<li>Provides Dunnett-adjusted <em>p</em>-values for all pairwise comparisons with the None group</li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>proc glm data=Handicap;
+  class Handicap;
+  model Score = Handicap;
+  ls means Handicap / pdiff=control('None');
+run;</code></pre>
+</details>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./foundation-chapter06.html" class="pagination-link" aria-label="Comparisons Among Several Samples">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Comparisons Among Several Samples</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./foundation-chapter08.html" class="pagination-link" aria-label="Linear Correlation and Simple Linear Regression">
+        <span class="nav-page-text"><span class="chapter-title">Linear Correlation and Simple Linear Regression</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

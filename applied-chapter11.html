@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Principal Component Analysis – Henderson's Statistics Notes for Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./applied-chapter12.html" rel="next">
+<link href="./applied-chapter10.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-626149efe8f5d16e1d391ba177679bf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./applied-chapter01.html">Applied Statistics</a></li><li class="breadcrumb-item"><a href="./applied-chapter11.html"><span class="chapter-title">Principal Component Analysis</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Henderson’s Statistics Notes for Data Science</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Henderson’s Statistics Notes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Statistical Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Drawing Statistical Conclusions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inference Using T-Distributions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Data Screening, Assumptions, and Transformations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Type I, Type II Error, and Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Alternatives to the T-Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Comparisons Among Several Samples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Linear Combinations and the Multiple Comparison Problem</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Linear Correlation and Simple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Quantifying Uncertainty: Confidence, Prediction and Calibration Intervals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regression Diagnostics and Model Refinement</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferences for Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Selection and Validation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-review-questions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Review Questions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Applied Statistics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression (MLR) Revisited</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bias Variance Trade-off</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bootstrap</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Communicating with Clients</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Repeated Measures</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Classification</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">2 x 2 Contingency Tables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter11.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Principal Component Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Clustering</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-r-code.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix A: R Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-sas-code.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix B: SAS Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix_hypothesis_test_flowchart.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix C: Hypothesis Test Flowchart</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#objectives" id="toc-objectives" class="nav-link active" data-scroll-target="#objectives">Objectives</a></li>
+  <li><a href="#what-is-pca" id="toc-what-is-pca" class="nav-link" data-scroll-target="#what-is-pca">What Is PCA?</a></li>
+  <li><a href="#pca-and-data-reduction" id="toc-pca-and-data-reduction" class="nav-link" data-scroll-target="#pca-and-data-reduction">PCA and Data Reduction</a></li>
+  <li><a href="#performing-pca" id="toc-performing-pca" class="nav-link" data-scroll-target="#performing-pca">Performing PCA</a></li>
+  <li><a href="#applications-of-pca" id="toc-applications-of-pca" class="nav-link" data-scroll-target="#applications-of-pca">Applications of PCA</a></li>
+  <li><a href="#nonlinear-data-reduction" id="toc-nonlinear-data-reduction" class="nav-link" data-scroll-target="#nonlinear-data-reduction">Nonlinear Data Reduction</a></li>
+  <li><a href="#pca-technical-details" id="toc-pca-technical-details" class="nav-link" data-scroll-target="#pca-technical-details">PCA: Technical Details</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./applied-chapter01.html">Applied Statistics</a></li><li class="breadcrumb-item"><a href="./applied-chapter11.html"><span class="chapter-title">Principal Component Analysis</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Principal Component Analysis</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="objectives" class="level2">
+<h2 class="anchored" data-anchor-id="objectives">Objectives</h2>
+<ul>
+<li>Introduce Principal Component Analysis (PCA) as a tool for unsupervised data analysis and dimensionality reduction.<br>
+</li>
+<li>Describe the difference between supervised and unsupervised analysis.<br>
+</li>
+<li>Explain the motivation for reducing data dimensionality.<br>
+</li>
+<li>Explore practical applications of PCA.<br>
+</li>
+<li>Review the technical foundations of PCA.<br>
+</li>
+<li>Introduce nonlinear dimensionality reduction methods (<em>t</em>-SNE, MDS).</li>
+</ul>
+</section>
+<section id="what-is-pca" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-pca">What Is PCA?</h2>
+<section id="supervised-vs.-unsupervised-learning" class="level3">
+<h3 class="anchored" data-anchor-id="supervised-vs.-unsupervised-learning">Supervised vs.&nbsp;Unsupervised Learning</h3>
+<ul>
+<li><strong>Supervised learning</strong>: Both predictors and the response variable are provided. Models aim to:
+<ul>
+<li>Explain relationships.</li>
+<li>Perform hypothesis testing and build confidence intervals.</li>
+<li>Make predictions.</li>
+</ul></li>
+<li><strong>Unsupervised learning</strong>: Only predictors are provided.
+<ul>
+<li>No response variable is used.</li>
+<li>Goals vary; interpretation is often subjective.</li>
+<li>Not used for prediction or traditional explanation as with linear and logistic regression.</li>
+<li>Typically more challenging than supervised methods.</li>
+<li>No standard or easy way to validate results on future data.</li>
+<li>Common applications include:
+<ul>
+<li>Exploratory data analysis (EDA) to support supervised analysis.</li>
+<li>Identifying subgroups or patterns.</li>
+<li>Improving computational efficiency.</li>
+<li>Simplifying downstream prediction tasks.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="unsupervised-tools" class="level3">
+<h3 class="anchored" data-anchor-id="unsupervised-tools">Unsupervised Tools</h3>
+<p>Common techniques include:</p>
+<ul>
+<li><strong>Data reduction</strong>:
+<ul>
+<li>Principal Component Analysis (PCA)<br>
+</li>
+<li><em>t</em>-SNE<br>
+</li>
+<li>Multidimensional Scaling (MDS)</li>
+</ul></li>
+<li><strong>Clustering</strong>:
+<ul>
+<li>Hierarchical<br>
+</li>
+<li><em>k</em>-means clustering</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="pca-and-data-reduction" class="level2">
+<h2 class="anchored" data-anchor-id="pca-and-data-reduction">PCA and Data Reduction</h2>
+<section id="motivation-for-data-reduction" class="level3">
+<h3 class="anchored" data-anchor-id="motivation-for-data-reduction">Motivation for Data Reduction</h3>
+<ul>
+<li>When there are too many variables, it becomes difficult to analyze, visualize, or model the data.</li>
+<li>The goal of PCA is to create a smaller set of variables that preserves as much information as possible.</li>
+<li>What counts as “information” depends on the algorithm.
+<ul>
+<li>For PCA, information is defined in terms of variability.</li>
+</ul></li>
+</ul>
+</section>
+<section id="principal-components" class="level3">
+<h3 class="anchored" data-anchor-id="principal-components">Principal Components</h3>
+<ul>
+<li>PCA creates new variables <span class="math inline">\(Z_1, Z_2, \dots, Z_p\)</span> called <strong>principal components</strong>.</li>
+<li>Each component <span class="math inline">\(Z_j\)</span> is a <strong>linear combination</strong> of the original <span class="math inline">\(X_i\)</span> variables.
+<ul>
+<li>Each principal component uses different weights (coefficients): <span class="math display">\[
+Z_1 = \phi_{11}X_1 + \phi_{12}X_2 + \dots + \phi_{1p}X_p
+\]</span> <span class="math display">\[
+Z_2 = \phi_{21}X_1 + \phi_{22}X_2 + \dots + \phi_{2p}X_p
+\]</span> <span class="math display">\[
+\vdots
+\]</span> <span class="math display">\[
+Z_p = \phi_{p1}X_1 + \phi_{p2}X_2 + \dots + \phi_{pp}X_p
+\]</span></li>
+</ul></li>
+<li>PCA always produces the same number of principal components as the original number of variables.
+<ul>
+<li>So where is the “reduction”?
+<ul>
+<li>Do we keep only a few?<br>
+</li>
+<li>If so, how many? Which ones? Based on what criterion?</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="properties-of-principal-components" class="level3">
+<h3 class="anchored" data-anchor-id="properties-of-principal-components">Properties of Principal Components</h3>
+<ul>
+<li><strong>Uncorrelated</strong> with each other</li>
+<li><strong>Ordered by variance</strong>: <span class="math inline">\(\text{Var}(Z_1) &gt; \text{Var}(Z_2) &gt; \dots &gt; \text{Var}(Z_p)\)</span><br>
+</li>
+<li>Total variance is preserved: <span class="math display">\[
+\sum_{i=1}^p \text{Var}(X_i) = \sum_{i=1}^p \text{Var}(Z_i)
+\]</span></li>
+</ul>
+</section>
+<section id="reducing-dimensions" class="level3">
+<h3 class="anchored" data-anchor-id="reducing-dimensions">Reducing Dimensions</h3>
+<ul>
+<li>Because components are ordered by variance:
+<ul>
+<li>Later components often have very low variance—some essentially zero.<br>
+</li>
+<li>These components carry little information and can be dropped.</li>
+<li>We keep only the first <span class="math inline">\(k\)</span> components where <span class="math inline">\(k &lt; p\)</span>, and <span class="math inline">\(p\)</span> is the original number of variables.</li>
+</ul></li>
+<li>Total variability is approximately preserved: <span class="math display">\[
+\sum_{i=1}^p \text{Var}(X_i) \approx \sum_{i=1}^k \text{Var}(Z_i), \quad \text{where } k &lt; p
+\]</span></li>
+</ul>
+</section>
+</section>
+<section id="performing-pca" class="level2">
+<h2 class="anchored" data-anchor-id="performing-pca">Performing PCA</h2>
+<section id="from-data-to-components" class="level3">
+<h3 class="anchored" data-anchor-id="from-data-to-components">From Data to Components</h3>
+<ul>
+<li>PCA requires:
+<ul>
+<li>Centering (and possibly scaling) the data:
+<ul>
+<li>Centering means subtracting the mean from each variable.</li>
+</ul></li>
+<li>Computing either:
+<ul>
+<li>The <strong>covariance matrix</strong> (if the data are unscaled)</li>
+<li>The <strong>correlation matrix</strong> (if the data are standardized; this is the <em>standard operating procedure</em>)
+<ul>
+<li>Standardizing (scaling) transforms the data to <em>z</em>-scores, allowing PCA to focus on relative variation rather than absolute scales.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>From the matrix, extract:
+<ul>
+<li><strong>Eigenvectors</strong>: the weights (loadings) used to compute <span class="math inline">\(Z_i\)</span></li>
+<li><strong>Eigenvalues</strong>: the variance of each <span class="math inline">\(Z_i\)</span></li>
+<li>Each eigenvalue has an associated eigenvector. There are <span class="math inline">\(p\)</span> of each.</li>
+</ul></li>
+</ul>
+</section>
+<section id="matrix-view" class="level3">
+<h3 class="anchored" data-anchor-id="matrix-view">Matrix View</h3>
+<ul>
+<li>The eigenvector for <span class="math inline">\(Z_1\)</span> is <span class="math inline">\((\phi_{11}, \phi_{12}, \dots, \phi_{1p})\)</span>.</li>
+<li>The <strong>eigenvector matrix</strong> contains all loading coefficients. Eigenvectors are arranged columnwise.
+<ul>
+<li>Transpose the loading matrix and multiply it by the original variable matrix to obtain <span class="math inline">\(p\)</span> rows (one per principal component).</li>
+</ul></li>
+<li>Eigenvalues quantify the variance of each principal component. These are sometimes expressed in matrix form.</li>
+</ul>
+</section>
+<section id="scree-plots-and-component-selection" class="level3">
+<h3 class="anchored" data-anchor-id="scree-plots-and-component-selection">Scree Plots and Component Selection</h3>
+<ul>
+<li>Scree plots:
+<ul>
+<li>Plot eigenvalues in decreasing order.</li>
+<li>Plot variance proportions: <span class="math inline">\(\dfrac{\lambda_i}{\sum_{j=1}^p \lambda_j}\)</span>, where <span class="math inline">\(\lambda_i\)</span> is the <span class="math inline">\(i\)</span>th eigenvalue.</li>
+<li>Plot the cumulative proportion of variance.</li>
+</ul></li>
+<li>Strategies for reduction:
+<ul>
+<li>Keep enough principal components (PCs) to explain approximately 80–90% of the variance (cutoff may be arbitrary).</li>
+<li>Keep the first 3–4 PCs for visualization in EDA.</li>
+<li>Look for an “elbow” in the scree plot, where additional components contribute little to the explained variance.</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="applications-of-pca" class="level2">
+<h2 class="anchored" data-anchor-id="applications-of-pca">Applications of PCA</h2>
+<section id="simplify-regression-and-classification" class="level3">
+<h3 class="anchored" data-anchor-id="simplify-regression-and-classification">Simplify Regression and Classification</h3>
+<ul>
+<li>Apply PCA to the predictors only.</li>
+<li>The resulting predictors (PCs) are uncorrelated—no multicollinearity.</li>
+<li>Reduces dimensionality (i.e., fewer predictors, more compact model).</li>
+<li>Important notes:
+<ul>
+<li>PCA is unsupervised!</li>
+<li>The PCs may not align better with the response variable than the original predictors.</li>
+<li>PCA should be viewed as a preprocessing step, not a predictive tool.</li>
+</ul></li>
+</ul>
+</section>
+<section id="pca-for-eda-in-classification" class="level3">
+<h3 class="anchored" data-anchor-id="pca-for-eda-in-classification">PCA for EDA in Classification</h3>
+<section id="purpose" class="level4">
+<h4 class="anchored" data-anchor-id="purpose">Purpose</h4>
+<ul>
+<li>Gain insight into whether the predictors might work well—this is <em>not</em> for model fitting.</li>
+<li>Consider using feature selection instead:
+<ul>
+<li>If the project requires using original predictors (e.g., for interpretability)</li>
+<li>When the number of predictors is very large</li>
+</ul></li>
+</ul>
+</section>
+<section id="strategy" class="level4">
+<h4 class="anchored" data-anchor-id="strategy">Strategy</h4>
+<ul>
+<li>Plot PCs to visualize group separation.</li>
+<li>If clear separation exists, the predictors may be promising.</li>
+<li>If not:
+<ul>
+<li>Predictors may lack signal or be irrelevant.</li>
+<li>Alternatively, nonlinear methods may be needed:
+<ul>
+<li>Try nonlinear data reduction or increase model complexity.</li>
+</ul></li>
+</ul></li>
+<li>Use this as a sanity check: Is good prediction accuracy likely from these variables?</li>
+</ul>
+</section>
+</section>
+<section id="image-compression" class="level3">
+<h3 class="anchored" data-anchor-id="image-compression">Image Compression</h3>
+<ul>
+<li>Reduce the number of pixels (variables).</li>
+<li>PCA compresses the data by reducing dimensionality.</li>
+<li>Reconstruct the image from a limited number of components.</li>
+</ul>
+</section>
+<section id="common-pitfalls" class="level3">
+<h3 class="anchored" data-anchor-id="common-pitfalls">Common Pitfalls</h3>
+<ul>
+<li><em>Never</em> include the response variable in PCA.</li>
+<li>Interpreting component coefficients can be challenging.
+<ul>
+<li>Strategies exist, such as examining the eigenvectors to summarize key contributions.</li>
+</ul></li>
+<li>PCA is sensitive to outliers.</li>
+<li>Categorical variables can cause misleading results, especially with arbitrary numeric coding.</li>
+<li>PCA preserves only variance:
+<ul>
+<li>Allows visualization of the “global” structure (e.g., linear separation)</li>
+<li>But proximity in PC space does <em>not</em> guarantee proximity in the original space</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="nonlinear-data-reduction" class="level2">
+<h2 class="anchored" data-anchor-id="nonlinear-data-reduction">Nonlinear Data Reduction</h2>
+<section id="beyond-linear-pca" class="level3">
+<h3 class="anchored" data-anchor-id="beyond-linear-pca">Beyond Linear PCA</h3>
+<ul>
+<li>Linear PCA maps data to a linear plane:
+<ul>
+<li>Reduces the dimensionality of the data</li>
+<li>Projects observations onto the “closest” plane or hyperplane</li>
+</ul></li>
+<li><strong>Nonlinear methods</strong> allow curved manifolds:
+<ul>
+<li>Project points onto lower-dimensional, nonlinear surfaces</li>
+<li>Require careful selection of parameters and algorithms</li>
+<li>Often used strictly for EDA, not as inputs for predictive models</li>
+</ul></li>
+</ul>
+</section>
+<section id="common-nonlinear-reduction-techniques" class="level3">
+<h3 class="anchored" data-anchor-id="common-nonlinear-reduction-techniques">Common Nonlinear Reduction Techniques</h3>
+<ul>
+<li><strong>Kernel PCA</strong>
+<ul>
+<li>Uses kernel functions (e.g., polynomial, radial basis function (RBF))<br>
+</li>
+<li>Performs PCA in a transformed feature space<br>
+</li>
+<li>Can be used in predictive models<br>
+</li>
+</ul></li>
+<li><strong>Multidimensional Scaling (MDS)</strong>
+<ul>
+<li>Preserves distances or similarities between points<br>
+</li>
+<li>Typically used for 2D/3D visualizations<br>
+</li>
+<li>Not directly used in predictive models<br>
+</li>
+</ul></li>
+<li><strong><em>t</em>-SNE</strong> (<em>t</em>-Distributed Stochastic Neighbor Embedding)
+<ul>
+<li>Nonparametric<br>
+</li>
+<li>Captures local structure using probability models (i.e., models distances between points probabilistically)
+<ul>
+<li>Seeks a lower-dimensional map that preserves the distribution of pairwise distances<br>
+</li>
+</ul></li>
+<li>Not used in predictive models<br>
+</li>
+<li>Results can vary based on hyperparameters like <em>perplexity</em><br>
+</li>
+<li>Sometimes PCA is applied first to reduce computation time</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="pca-technical-details" class="level2">
+<h2 class="anchored" data-anchor-id="pca-technical-details">PCA: Technical Details</h2>
+<section id="matrix-decomposition" class="level3">
+<h3 class="anchored" data-anchor-id="matrix-decomposition">Matrix Decomposition</h3>
+<ul>
+<li>Assume multiple variables follow a multivariate distribution.</li>
+<li>Principal components are:
+<ul>
+<li>Uncorrelated</li>
+<li>Have variances equal to their corresponding eigenvalues</li>
+<li>Computed using eigenvectors
+<ul>
+<li>These eigenvectors provide the coefficients for creating the principal components as linear combinations of the original variables.</li>
+</ul></li>
+</ul></li>
+<li>Decompose <span class="math inline">\(\Sigma\)</span> or <span class="math inline">\(R\)</span>: <span class="math display">\[\Sigma = \phi \Lambda \phi'
+\]</span> where:
+<ul>
+<li><span class="math inline">\(\phi\)</span> = matrix of eigenvectors<br>
+</li>
+<li><span class="math inline">\(\Lambda\)</span> = diagonal matrix of eigenvalues</li>
+</ul></li>
+<li>Key property: the eigenvector matrix is orthonormal, so its transpose is its inverse: <span class="math display">\[
+\phi^\top \phi = \phi \phi^\top = I
+\]</span></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./applied-chapter10.html" class="pagination-link" aria-label="Multiple Logistic Regression">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Multiple Logistic Regression</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./applied-chapter12.html" class="pagination-link" aria-label="Clustering">
+        <span class="nav-page-text"><span class="chapter-title">Clustering</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

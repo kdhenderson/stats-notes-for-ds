@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Quantifying Uncertainty: Confidence, Prediction and Calibration Intervals – Henderson's Statistics Notes for Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./foundation-chapter10.html" rel="next">
+<link href="./foundation-chapter08.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-626149efe8f5d16e1d391ba177679bf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./foundation-chapter01.html">Statistical Foundations</a></li><li class="breadcrumb-item"><a href="./foundation-chapter09.html"><span class="chapter-title">Quantifying Uncertainty: Confidence, Prediction and Calibration Intervals</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Henderson’s Statistics Notes for Data Science</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Henderson’s Statistics Notes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Statistical Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Drawing Statistical Conclusions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inference Using T-Distributions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Data Screening, Assumptions, and Transformations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Type I, Type II Error, and Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Alternatives to the T-Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Comparisons Among Several Samples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Linear Combinations and the Multiple Comparison Problem</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Linear Correlation and Simple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter09.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Quantifying Uncertainty: Confidence, Prediction and Calibration Intervals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regression Diagnostics and Model Refinement</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferences for Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Selection and Validation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-review-questions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Review Questions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Applied Statistics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression (MLR) Revisited</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bias Variance Trade-off</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bootstrap</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Communicating with Clients</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Repeated Measures</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Classification</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">2 x 2 Contingency Tables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Principal Component Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Clustering</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-r-code.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix A: R Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-sas-code.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix B: SAS Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix_hypothesis_test_flowchart.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix C: Hypothesis Test Flowchart</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#objectives" id="toc-objectives" class="nav-link active" data-scroll-target="#objectives">Objectives</a></li>
+  <li><a href="#useful-resources" id="toc-useful-resources" class="nav-link" data-scroll-target="#useful-resources">Useful Resources</a></li>
+  <li><a href="#statistical-relationships" id="toc-statistical-relationships" class="nav-link" data-scroll-target="#statistical-relationships">Statistical Relationships</a></li>
+  <li><a href="#formal-assumptions" id="toc-formal-assumptions" class="nav-link" data-scroll-target="#formal-assumptions">Formal Assumptions</a></li>
+  <li><a href="#regression-model" id="toc-regression-model" class="nav-link" data-scroll-target="#regression-model">Regression Model</a></li>
+  <li><a href="#using-residual-plots-to-check-regression-validity" id="toc-using-residual-plots-to-check-regression-validity" class="nav-link" data-scroll-target="#using-residual-plots-to-check-regression-validity">Using Residual Plots to Check Regression Validity</a></li>
+  <li><a href="#analysis-of-variance-in-regression" id="toc-analysis-of-variance-in-regression" class="nav-link" data-scroll-target="#analysis-of-variance-in-regression">Analysis of Variance in Regression</a></li>
+  <li><a href="#anova-output-in-software" id="toc-anova-output-in-software" class="nav-link" data-scroll-target="#anova-output-in-software">ANOVA Output in Software</a></li>
+  <li><a href="#inferential-tools-for-predicted-responses" id="toc-inferential-tools-for-predicted-responses" class="nav-link" data-scroll-target="#inferential-tools-for-predicted-responses">Inferential Tools for Predicted Responses</a></li>
+  <li><a href="#regression-for-calibration-inverse-prediction" id="toc-regression-for-calibration-inverse-prediction" class="nav-link" data-scroll-target="#regression-for-calibration-inverse-prediction">Regression for Calibration (Inverse Prediction)</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./foundation-chapter01.html">Statistical Foundations</a></li><li class="breadcrumb-item"><a href="./foundation-chapter09.html"><span class="chapter-title">Quantifying Uncertainty: Confidence, Prediction and Calibration Intervals</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Quantifying Uncertainty: Confidence, Prediction and Calibration Intervals</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="objectives" class="level2">
+<h2 class="anchored" data-anchor-id="objectives">Objectives</h2>
+<ul>
+<li>Calculate and interpret confidence intervals for the slope of a regression line.</li>
+<li>Predict future values using the regression model.</li>
+<li>Obtain and interpret confidence intervals for predicted responses.</li>
+<li>Use a regression model to calibrate one measurement against another.</li>
+</ul>
+</section>
+<section id="useful-resources" class="level2">
+<h2 class="anchored" data-anchor-id="useful-resources">Useful Resources</h2>
+<ul>
+<li><a href="https://www.rossmanchance.com/applets/2021/regshuffle/regshuffle.htm">Rossman Chance Applets: Regression Shuffle</a></li>
+</ul>
+</section>
+<section id="statistical-relationships" class="level2">
+<h2 class="anchored" data-anchor-id="statistical-relationships">Statistical Relationships</h2>
+<ul>
+<li>Key Insight: The value of the explanatory variable determines the mean response value.</li>
+<li>Variability exists in the response variable for a given explanatory value.</li>
+<li>The slope and intercept each have their own sampling distribution and standard error.</li>
+</ul>
+</section>
+<section id="formal-assumptions" class="level2">
+<h2 class="anchored" data-anchor-id="formal-assumptions">Formal Assumptions</h2>
+<ul>
+<li><strong>Linearity</strong>: A linear relationship exists between the means of the response variable distributions and the explanatory variable.</li>
+<li><strong>Independence</strong>: Observations are independent.</li>
+<li><strong>Normality</strong>: The response variable <span class="math inline">\(y\)</span> is normally distributed for each fixed <span class="math inline">\(x\)</span> value.
+<ul>
+<li>Errors are in <span class="math inline">\(y\)</span>, not <span class="math inline">\(x\)</span>.</li>
+<li>Normality is assumed for <span class="math inline">\(y\)</span> at each fixed <span class="math inline">\(x\)</span>, not for <span class="math inline">\(y\)</span> overall.</li>
+</ul></li>
+<li><strong>Constant variance</strong>: The variability in the <span class="math inline">\(y\)</span> distributions is constant across all values of <span class="math inline">\(x\)</span>.</li>
+</ul>
+</section>
+<section id="regression-model" class="level2">
+<h2 class="anchored" data-anchor-id="regression-model">Regression Model</h2>
+<ul>
+<li><strong>Theoretical model</strong>: <span class="math display">\[
+y = \beta_0 + \beta_1 x + \varepsilon
+\]</span>
+<ul>
+<li><span class="math inline">\(y =\)</span> mean <span class="math inline">\(\pm\)</span> residual, where the residual represents the difference between the observed value and the mean.</li>
+<li>Residuals (<span class="math inline">\(\varepsilon\)</span>) follow a normal distribution with mean zero and constant variance (<span class="math inline">\(\sigma^2\)</span>).</li>
+</ul></li>
+<li><strong>Regression line (estimated values)</strong>: <span class="math inline">\(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\)</span></li>
+<li><strong>Residuals</strong>: <span class="math inline">\(e_i = y_i - \hat{y}_i = y_i - (\hat{\beta}_0 + \hat{\beta}_1 x_i)\)</span></li>
+<li><strong>Distribution of residuals</strong>: <span class="math inline">\(\varepsilon \sim N(0, \sigma^2)\)</span>
+<ul>
+<li>Residuals are normally distributed around zero, with estimated standard deviation <span class="math inline">\(\hat{\sigma}\)</span>, i.e., the standard deviation of each <span class="math inline">\(y\)</span> distribution.</li>
+</ul></li>
+</ul>
+</section>
+<section id="using-residual-plots-to-check-regression-validity" class="level2">
+<h2 class="anchored" data-anchor-id="using-residual-plots-to-check-regression-validity">Using Residual Plots to Check Regression Validity</h2>
+<ul>
+<li>Key points:
+<ul>
+<li>Residual plots help validate regression assumptions.</li>
+<li>Random patterns in residuals suggest a valid model.
+<ul>
+<li>Look for randomness, no obvious pattern, constant variability (homoscedasticity), and a mean of zero.</li>
+<li>Watch for outliers or patterns that might suggest curvature or unequal spread.</li>
+<li>Narrower bands of residuals (i.e., smaller spread) suggest a stronger relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>; wider spread suggests a weaker relationship.</li>
+<li>It’s easier to detect deviations from a horizontal line (in residuals) than from a sloped regression line.</li>
+</ul></li>
+<li>A Q–Q plot of residuals assesses normality.</li>
+<li>If residuals are randomly distributed with constant variance, and the Q–Q plot shows normality, the model is appropriate for inference.</li>
+</ul></li>
+</ul>
+</section>
+<section id="analysis-of-variance-in-regression" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-of-variance-in-regression">Analysis of Variance in Regression</h2>
+<section id="data-summary" class="level3">
+<h3 class="anchored" data-anchor-id="data-summary">Data Summary</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>Score 1</th>
+<th>Score 2</th>
+<th>Score 3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>3</td>
+<td>5</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>10</td>
+<td>12</td>
+<td>14</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>20</td>
+<td>22</td>
+<td>24</td>
+</tr>
+</tbody>
+</table>
+<p>Sample size: <span class="math inline">\(n = 9\)</span></p>
+</section>
+<section id="regression-equation" class="level3">
+<h3 class="anchored" data-anchor-id="regression-equation">Regression Equation</h3>
+<p>Fitting a linear model: <span class="math display">\[
+\text{Score} = -4 + 8.5 \cdot \text{Level}
+\]</span></p>
+</section>
+<section id="equal-means-model-vs.-regression-model-comparison" class="level3">
+<h3 class="anchored" data-anchor-id="equal-means-model-vs.-regression-model-comparison">Equal Means Model vs.&nbsp;Regression Model Comparison</h3>
+<section id="total-variability-under-the-equal-means-model" class="level4">
+<h4 class="anchored" data-anchor-id="total-variability-under-the-equal-means-model">Total Variability Under the Equal Means Model</h4>
+<p>The <strong>Equal Means Model (EMM)</strong> assumes a single grand mean across all groups:</p>
+<p><span class="math display">\[
+\bar{y} = 13
+\]</span></p>
+<p>We compute the squared deviations from the grand mean for each observation. These add up to the <strong>Total Sum of Squares (SST)</strong>.</p>
+<div class="mytableblock" title="Equal Means Model: Squared Deviations from Grand Mean">
+<div class="figure-caption">
+<p><strong>Equal Means Model: Squared Deviations from Grand Mean</strong></p>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(\textcolor{#BB4444}{\textbf{Level}}\)</span></th>
+<th><span class="math inline">\(\textcolor{#BB4444}{\textbf{Obs1}}\)</span></th>
+<th><span class="math inline">\(\textcolor{#BB4444}{\textbf{Obs2}}\)</span></th>
+<th><span class="math inline">\(\textcolor{#BB4444}{\textbf{Obs3}}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\textcolor{#BB4444}{1}\)</span></td>
+<td><span class="math inline">\(\textcolor{#BB4444}{(3 - 13)^2 = 100}\)</span></td>
+<td><span class="math inline">\(\textcolor{#BB4444}{(5 - 13)^2 = 64}\)</span></td>
+<td><span class="math inline">\(\textcolor{#BB4444}{(7 - 13)^2 = 36}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\textcolor{#BB4444}{2}\)</span></td>
+<td><span class="math inline">\(\textcolor{#BB4444}{(10 - 13)^2 = 9}\)</span></td>
+<td><span class="math inline">\(\textcolor{#BB4444}{(12 - 13)^2 = 1}\)</span></td>
+<td><span class="math inline">\(\textcolor{#BB4444}{(14 - 13)^2 = 1}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\textcolor{#BB4444}{3}\)</span></td>
+<td><span class="math inline">\(\textcolor{#BB4444}{(20 - 13)^2 = 49}\)</span></td>
+<td><span class="math inline">\(\textcolor{#BB4444}{(22 - 13)^2 = 81}\)</span></td>
+<td><span class="math inline">\(\textcolor{#BB4444}{(24 - 13)^2 = 121}\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math display">\[
+\text{SST} = \sum (y_i - \bar{y})^2 = \textcolor{#BB4444}{462}
+\]</span></p>
+</section>
+<section id="residual-variability-under-the-regression-model" class="level4">
+<h4 class="anchored" data-anchor-id="residual-variability-under-the-regression-model">Residual Variability Under the Regression Model</h4>
+<p>We now compute residuals from the fitted regression model:</p>
+<p><span class="math display">\[
+\hat{y}_i = -4 + 8.5 \cdot x_i
+\]</span></p>
+<div class="mytableblock" title="Regression Model: Squared Residuals">
+<div class="figure-caption">
+<p><strong>Regression Model: Squared Residuals</strong></p>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(\textcolor{#44AA55}{\textbf{Level}}\)</span></th>
+<th><span class="math inline">\(\textcolor{#44AA55}{\textbf{Obs1}}\)</span></th>
+<th><span class="math inline">\(\textcolor{#44AA55}{\textbf{Obs2}}\)</span></th>
+<th><span class="math inline">\(\textcolor{#44AA55}{\textbf{Obs3}}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\textcolor{#44AA55}{1}\)</span></td>
+<td><span class="math inline">\(\textcolor{#44AA55}{(3 - 32.5)^2 = 6.25}\)</span></td>
+<td><span class="math inline">\(\textcolor{#44AA55}{(5 - 32.5)^2 = 20.25}\)</span></td>
+<td><span class="math inline">\(\textcolor{#44AA55}{(7 - 32.5)^2 = 56.25}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\textcolor{#44AA55}{2}\)</span></td>
+<td><span class="math inline">\(\textcolor{#44AA55}{(10 - 13)^2 = 9}\)</span></td>
+<td><span class="math inline">\(\textcolor{#44AA55}{(12 - 13)^2 = 1}\)</span></td>
+<td><span class="math inline">\(\textcolor{#44AA55}{(14 - 13)^2 = 1}\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\textcolor{#44AA55}{3}\)</span></td>
+<td><span class="math inline">\(\textcolor{#44AA55}{(20 - 19.5)^2 = 0.25}\)</span></td>
+<td><span class="math inline">\(\textcolor{#44AA55}{(22 - 19.5)^2 = 6.25}\)</span></td>
+<td><span class="math inline">\(\textcolor{#44AA55}{(24 - 19.5)^2 = 20.25}\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><span class="math display">\[
+\text{SSE} = \sum (y_i - \hat{y}_i)^2 = \textcolor{#44AA55}{28.5}
+\]</span></p>
+</section>
+<section id="decomposition-of-variance" class="level4">
+<h4 class="anchored" data-anchor-id="decomposition-of-variance">Decomposition of Variance</h4>
+<div class="mytableblock" title="ANOVA Table: Comparing Regression to Equal Means Model">
+<div class="figure-caption">
+<p><strong>ANOVA Table: Comparing Regression to Equal Means Model</strong></p>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 13%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 19%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(\textcolor{#4477DD}{\textbf{Source}}\)</span></th>
+<th><span class="math inline">\(\textcolor{#4477DD}{\textbf{df}}\)</span></th>
+<th><span class="math inline">\(\textcolor{#4477DD}{\textbf{SS}}\)</span></th>
+<th><span class="math inline">\(\textcolor{#4477DD}{\textbf{MS}}\)</span></th>
+<th><span class="math inline">\(\textcolor{#4477DD}{\textbf{F}}\)</span></th>
+<th><span class="math inline">\(\textcolor{#4477DD}{\mathit{p}\text{-value}}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\textcolor{#4477DD}{\text{Model}}\)</span></td>
+<td><span class="math inline">\(\textcolor{#4477DD}{1}\)</span></td>
+<td><span class="math inline">\(\textcolor{#4477DD}{433.5}\)</span></td>
+<td><span class="math inline">\(\textcolor{#4477DD}{433.5}\)</span></td>
+<td><span class="math inline">\(\textcolor{#4477DD}{106.47}\)</span></td>
+<td><span class="math inline">\(\textcolor{#4477DD}{&lt; 0.0001}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\textcolor{#44AA55}{\text{Error}}\)</span></td>
+<td><span class="math inline">\(\textcolor{#44AA55}{7}\)</span></td>
+<td><span class="math inline">\(\textcolor{#44AA55}{28.5}\)</span></td>
+<td><span class="math inline">\(\textcolor{#AA9933}{4.07}\)</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\textcolor{#BB4444}{\text{Total}}\)</span></td>
+<td><span class="math inline">\(\textcolor{#BB4444}{8}\)</span></td>
+<td><span class="math inline">\(\textcolor{#BB4444}{462}\)</span></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote class="blockquote">
+<p><strong>Note</strong>: The regression model estimates both a slope and an intercept, using 2 degrees of freedom. This reduces the error degrees of freedom from 8 (in the Equal Means Model) to 7:</p>
+<p><span class="math display">\[
+\text{df}_{\text{Error}} = n - 2 = 9 - 2 = 7
+\]</span></p>
+</blockquote>
+</section>
+<section id="r2-and-rmse-interpretation" class="level4">
+<h4 class="anchored" data-anchor-id="r2-and-rmse-interpretation"><span class="math inline">\(R^2\)</span> and RMSE Interpretation</h4>
+<p>The <span class="math inline">\(R^2\)</span> value quantifies how much of the total variability in the response is explained by the regression model. It is based on the decomposition of total variability into two parts: variability explained by the model (SSR) and unexplained variability due to error (SSE):</p>
+<p><span class="math display">\[
+R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}
+\]</span> <span class="math display">\[
+R^2 = \frac{\textcolor{#4477DD}{433.5}}{\textcolor{#BB4444}{462}} = 1 - \frac{\textcolor{#44AA55}{28.5}}{\textcolor{#BB4444}{462}} = 0.938
+\]</span></p>
+<p>This means 93.8% of the variability in scores is explained by the regression model.</p>
+<p>The <strong>error variance</strong> is measured by the <strong>Mean Squared Error (MSE)</strong>, and the square root of MSE gives the <strong>Root Mean Squared Error (RMSE)</strong>:</p>
+<p><span class="math display">\[
+\textcolor{#AA9933}{
+  \text{MSE} = 4.07 \quad \Rightarrow \quad
+  \text{RMSE} = \hat{\sigma} \text{ of each } y \text{ distribution} = \sqrt{4.07} \approx 2.02
+}
+\]</span></p>
+</section>
+<section id="visual-comparison-of-models" class="level4">
+<h4 class="anchored" data-anchor-id="visual-comparison-of-models">Visual Comparison of Models</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fch09_residualAnalysis.png" class="img-fluid figure-img"></p>
+<figcaption><strong>Visual Comparison of Residuals: EMM vs.&nbsp;Regression Model.</strong> The regression model reduces residual error compared to the EMM. Residuals from both models are shown for a single point to illustrate how <span class="math inline">\(R^2\)</span> captures relative model improvement.</figcaption>
+</figure>
+</div>
+</section>
+<section id="f-distribution-under-the-null-hypothesis" class="level4">
+<h4 class="anchored" data-anchor-id="f-distribution-under-the-null-hypothesis">F Distribution Under the Null Hypothesis</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fch09_fdistribution.png" class="img-fluid figure-img"></p>
+<figcaption><strong>F Distribution Under the Null Hypothesis.</strong> Area to the right of <span class="math inline">\(F = 106.47\)</span> is shaded. This corresponds to a <em>p</em>-value &lt; 0.0001 under the equal means model.</figcaption>
+</figure>
+</div>
+<p>The F-test compares how much variability is explained by the regression model relative to unexplained error. A large value like <span class="math inline">\(F = 106.47\)</span> indicates a significantly better fit than the Equal Means Model.</p>
+<p>Because the <em>p</em>-value is less than 0.0001, we reject the null hypothesis that all group means are equal. The regression model explains a substantial proportion of the total variability in scores.</p>
+</section>
+</section>
+</section>
+<section id="anova-output-in-software" class="level2">
+<h2 class="anchored" data-anchor-id="anova-output-in-software">ANOVA Output in Software</h2>
+<section id="sas-code" class="level3">
+<h3 class="anchored" data-anchor-id="sas-code">SAS Code</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>proc glm data=ToyExample;
+  model score = level / solution;
+run;</code></pre>
+</details>
+</div>
+</section>
+<section id="r-code" class="level3">
+<h3 class="anchored" data-anchor-id="r-code">R Code</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(score <span class="sc">~</span> level, <span class="at">data =</span> anovaData)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit)      <span class="co"># ANOVA table: sums of squares, F-stat</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)    <span class="co"># Coefficient table, t-tests, R², F-stat</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="images/fch09_ANOVA_sasOutput.png" class="img-fluid" data-fig-title="ANOVA Output in SAS."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="images/fch09_ANOVA_ROutput.png" class="img-fluid" data-fig-title="ANOVA Output in R."></p>
+</div>
+</div>
+</div>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="images/fch09_regression_ROutput.png" class="img-fluid" data-fig-title="Regression Summary from summary(fit) in R."></p>
+</div>
+</div>
+</div>
+<div class="figure-caption">
+<strong>ANOVA and Regression Output from SAS and R.</strong> The top row compares ANOVA tables from SAS and <code>anova(fit)</code> in R, both showing the F-statistic and <em>p</em>-value for the model. The lower R output from <code>summary(fit)</code> includes the regression coefficients, <span class="math inline">\(t\)</span>-tests, <span class="math inline">\(R^2\)</span>, and overall F-test.
+</div>
+</section>
+</section>
+<section id="inferential-tools-for-predicted-responses" class="level2">
+<h2 class="anchored" data-anchor-id="inferential-tools-for-predicted-responses">Inferential Tools for Predicted Responses</h2>
+<p>Regression models are used to predict response values given specific explanatory values.</p>
+<p>There is uncertainty in the prediction due to sampling variability and model estimation error.</p>
+<p>Do we want:</p>
+<ul>
+<li>a <strong>confidence interval</strong> for the <em>mean response</em> at a given <span class="math inline">\(x\)</span> value?<br>
+</li>
+<li>or a <strong>prediction interval</strong> for an <em>individual value</em> at that <span class="math inline">\(x\)</span>?</li>
+</ul>
+<section id="confidence-intervals-for-the-mean-response" class="level3">
+<h3 class="anchored" data-anchor-id="confidence-intervals-for-the-mean-response">Confidence Intervals for the Mean Response</h3>
+<p>The regression line is modeling the mean of <span class="math inline">\(Y\)</span> at values of <span class="math inline">\(X\)</span>.</p>
+<p><strong>Mean of <span class="math inline">\(Y\)</span>, given <span class="math inline">\(X_0\)</span></strong>:</p>
+<p><span class="math display">\[
+\hat{Y}_{\text{mean} \mid X_0} = \hat{\beta}_0 + \hat{\beta}_1 X_0
+\]</span></p>
+<p>We want to know how confident we are that <span class="math inline">\(\hat{Y}\)</span> is near the true <span class="math inline">\(Y\)</span> value.</p>
+<p><strong>Standard error of the mean at <span class="math inline">\(X = X_0\)</span></strong>:</p>
+<p><span class="math display">\[
+SE\left( \hat{Y}_{\text{mean} \mid X_0} \right) = \hat{\sigma} \sqrt{ \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2} }
+\]</span></p>
+<p>where <span class="math inline">\(S_X^2\)</span> is the sample variance of the explanatory variable <span class="math inline">\(X\)</span>.</p>
+<p>As <span class="math inline">\(X_0 \to \bar{X}\)</span>:</p>
+<p><span class="math display">\[
+SE\left( \hat{Y}_{\text{mean} \mid X_0} \right) = SE\left( \bar{Y} \right) = \hat{\sigma} \sqrt{ \frac{1}{n} + 0}
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>See the <a href="foundation-chapter08.html#example-study-hours-and-exam-grades">Study Hours and Exam Grades example</a> for a worked calculation of <span class="math inline">\(\bar{X}\)</span>, <span class="math inline">\(s_X^2\)</span>, and <span class="math inline">\(\hat{\sigma}\)</span>, which are used in computing <span class="math inline">\(SE\left( \hat{Y}_{\text{mean} \mid X_0} \right)\)</span>.</p>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fch09_se_meanResponse.png" class="img-fluid figure-img"></p>
+<figcaption><strong>Sampling Distribution of the Mean Response at <span class="math inline">\(X_0\)</span>.</strong> The dot marks the predicted mean response <span class="math inline">\(\hat{Y}_{\text{mean} \mid X_0}\)</span> from the regression line. The sideways bell curve illustrates its sampling distribution across repeated samples. The vertical lines mark one standard error above and below the mean response; this is narrower than the full 95% confidence interval.</figcaption>
+</figure>
+</div>
+<p><strong>Confidence interval for the mean response</strong>:</p>
+<p><span class="math display">\[
+\text{CI} = \hat{Y} \pm t_{\alpha/2, n - 2} \cdot SE\left( \hat{Y}_{\text{mean} \mid X_0} \right)
+\]</span></p>
+<p>The interval is wider for values of <span class="math inline">\(X_0\)</span> that are farther from <span class="math inline">\(\bar{X}\)</span>.</p>
+</section>
+<section id="prediction-intervals-for-individual-responses" class="level3">
+<h3 class="anchored" data-anchor-id="prediction-intervals-for-individual-responses">Prediction Intervals for Individual Responses</h3>
+<p><strong>Individual value of <span class="math inline">\(Y\)</span>, given <span class="math inline">\(X_0\)</span></strong>:</p>
+<p><span class="math display">\[
+\text{Pred}\{Y \mid X_0\} = \hat{Y}_{\text{ind} \mid X_0} = \hat{\beta}_0 + \hat{\beta}_1 X_0
+\]</span></p>
+<p>This is the predicted <em>mean</em> response at <span class="math inline">\(X_0\)</span>, obtained from the regression line. To estimate how far an individual observation might deviate from the predicted value, we must account for uncertainty in both the regression model and the individual value.</p>
+<p><strong>Standard error for predicting an individual</strong>:</p>
+<p>Combines uncertainty from estimating the mean (estimation error) and natural variability in individuals (random sampling error):</p>
+<p><span class="math display">\[
+SE\left( \hat{Y}_{\text{ind} \mid X_0} \right) = \hat{\sigma} \sqrt{
+1 + \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2} }
+\]</span></p>
+<p>To highlight the two sources of uncertainty:</p>
+<p><span class="math display">\[
+SE\left( \hat{Y}_{\text{ind} \mid X_0} \right) = \hat{\sigma} \sqrt{
+\underbrace{1}_{\text{individual variability}} +
+\underbrace{\frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2}}_{\text{estimation uncertainty}} }
+\]</span></p>
+<p>Note that the second term under the square root matches the formula for the standard error of the mean response at <span class="math inline">\(X_0\)</span>:</p>
+<p><span class="math display">\[
+SE\left( \hat{Y}_{\text{mean} \mid X_0} \right)^2 = \hat{\sigma}^2 \left(
+\frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2} \right)
+\]</span> Thus:</p>
+<p><span class="math display">\[
+SE\left( \hat{Y}_{\text{ind} \mid X_0} \right) = \hat{\sigma}
+\sqrt{\underbrace{1}_{\text{individual variability}} +
+\underbrace{\text{estimation variance}}_{\text{mean response}}}
+\]</span></p>
+<ul>
+<li>The 1 reflects random variation in individual responses. Even if we knew the true mean exactly, individuals naturally vary around it.</li>
+<li>The remaining terms reflect sampling variability in the regression coefficients used to compute <span class="math inline">\(\hat{Y}_{\text{ind} \mid X_0}\)</span>.</li>
+</ul>
+<p><strong>Prediction interval</strong>:</p>
+<p><span class="math display">\[
+\text{PI} = \hat{Y}_{\text{ind}} \pm t_{\alpha/2, n - 2} \cdot SE\left( \hat{Y}_{\text{ind} \mid X_0} \right)
+\]</span></p>
+<p>Prediction intervals are wider than confidence intervals because they include additional uncertainty for individual outcomes.<br>
+They are narrowest when <span class="math inline">\(X_0 = \bar{X}\)</span> and widen as <span class="math inline">\(X_0\)</span> moves farther from the sample mean.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fch09_CI_PI_intervals.png" class="img-fluid figure-img"></p>
+<figcaption><strong>Regression Line with Confidence and Prediction Intervals.</strong> The dotted blue line shows the fitted regression line, and the vertical dotted line marks the sample mean <span class="math inline">\(\overline{X}\)</span>. The shaded green band represents the 95% confidence interval (CI) for the mean response <span class="math inline">\(\hat{Y}\)</span>, while the shaded orange band shows the 95% prediction interval (PI) for an individual response. The solid blue bell curve represents the sampling distribution of the predicted mean response at <span class="math inline">\(\overline{X}\)</span> under repeated sampling. The center dot marks <span class="math inline">\(\hat{Y}(\overline{X})\)</span>, and the upper and lower green dots indicate the 95% CI bounds, <span class="math inline">\(\hat{Y} \pm t \cdot SE_{\text{mean}}\)</span>. The green bell-shaped curves mirror these bounds, visually suggesting the plausible range of values that the mean response might take across repeated samples.</figcaption>
+</figure>
+</div>
+<p><strong>Understanding the Confidence Interval</strong>:</p>
+<p>See supplementary figure below for an illustration of how the confidence interval represents plausible sampling distributions of the <em>mean</em> response.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fch09_CI_mean_distributions.png" class="img-fluid figure-img"></p>
+<figcaption><strong>Plausible Sampling Distributions for the Mean Response at <span class="math inline">\(\bar{X}\)</span>.</strong> Each curve represents a possible sampling distribution of <span class="math inline">\(\hat{Y}(\bar{X})\)</span> if the true population mean were at that location. The central blue distribution corresponds to the sample estimate, while the green curves show other plausible means consistent with the 95% confidence interval. The confidence interval for the mean spans the horizontal segment beneath the distributions.</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="regression-for-calibration-inverse-prediction" class="level2">
+<h2 class="anchored" data-anchor-id="regression-for-calibration-inverse-prediction">Regression for Calibration (Inverse Prediction)</h2>
+<p>Rather than predicting <span class="math inline">\(y\)</span> for a given <span class="math inline">\(x\)</span>, <strong>calibration</strong> estimates the <span class="math inline">\(x\)</span> value that would produce a desired <span class="math inline">\(y\)</span> (i.e., solve for <span class="math inline">\(x\)</span> when <span class="math inline">\(y = y_0\)</span>).</p>
+<p><strong>Prediction equation</strong>:</p>
+<p><span class="math display">\[
+\text{Pred}\{Y \mid X_0\} = \hat{Y}_{\text{ind} \mid X_0} = \hat{\beta}_0 + \hat{\beta}_1 X_0
+\]</span></p>
+<p><strong>Calibration equation</strong> (solving for <span class="math inline">\(X_0\)</span> given <span class="math inline">\(y_0\)</span>):</p>
+<p><span class="math display">\[
+\hat{X} = \frac{y_0 - \hat{\beta}_0}{\hat{\beta}_1}
+\]</span></p>
+<section id="confidence-interval-for-the-mean-calibration-target" class="level3">
+<h3 class="anchored" data-anchor-id="confidence-interval-for-the-mean-calibration-target">Confidence Interval for the Mean (Calibration Target)</h3>
+<p>Given a desired outcome (e.g., a grade of <span class="math inline">\(y = 75\)</span>), we can estimate the value of <span class="math inline">\(X\)</span>, the number of study hours that would produce it:</p>
+<p><span class="math display">\[
+\hat{X} = \frac{75 - 40.99}{6.71} = 5.07
+\]</span></p>
+<p>To construct a confidence interval for the mean <span class="math inline">\(X\)</span>, we treat this as an inverse prediction problem and quantify the uncertainty in the estimate of <span class="math inline">\(\hat{X}\)</span>.</p>
+<p><strong>Standard error of the calibration estimate</strong>:</p>
+<p><span class="math display">\[
+SE(\hat{X}) = \frac{SE\left( \hat{Y}_{\text{mean} \mid X_0} \right)}{|\hat{\beta}_1|}
+\]</span></p>
+<p>Using:</p>
+<ul>
+<li><span class="math inline">\(n = 13\)</span>, <span class="math inline">\(\bar{X} = 3.92\)</span>, <span class="math inline">\(S_X^2 = 5.74\)</span></li>
+<li><span class="math inline">\(\hat{\sigma} = 11.65\)</span> (from MSE <span class="math inline">\(= 135.62\)</span>)</li>
+<li><span class="math inline">\(\hat{X} = 5.07\)</span></li>
+<li><span class="math inline">\(\hat{\beta}_1 = 6.71\)</span></li>
+</ul>
+<p>Compute <span class="math inline">\(SE(\hat{X})\)</span>:</p>
+<p><span class="math display">\[
+SE(\hat{X}) = \frac{11.65}{|6.71|} \sqrt{ \frac{1}{13} + \frac{(5.07 - 3.92)^2}{(13 - 1) \cdot 5.74} } = \frac{11.65}{|6.71|} \cdot \sqrt{0.0889} = 0.538
+\]</span></p>
+<p><strong>95% Confidence Interval for <span class="math inline">\(\hat{X}\)</span></strong>:</p>
+<p>Using <span class="math inline">\(t_{0.975, n-2} \approx 2.02\)</span>:</p>
+<p><span class="math display">\[
+\text{95% CI} = \hat{X} \pm t_{0.975, n-2} \cdot SE(\hat{X}) = 5.07 \pm 2.02 \cdot 0.538 = (3.983,\ 6.157)
+\]</span></p>
+<p>Interpretation:</p>
+<blockquote class="blockquote">
+<p>We are 95% confident that the number of study hours a student would need to earn a mean grade of 75 is in the interval (3.983, 6.157) hours.</p>
+</blockquote>
+</section>
+<section id="prediction-interval-for-an-individual-x" class="level3">
+<h3 class="anchored" data-anchor-id="prediction-interval-for-an-individual-x">Prediction Interval for an Individual <span class="math inline">\(X\)</span></h3>
+<p>Sometimes we want to predict the <span class="math inline">\(X\)</span> value associated with <strong>a single observation</strong> that yields a specific <span class="math inline">\(y\)</span>.</p>
+<p>We still estimate:</p>
+<p><span class="math display">\[
+\hat{X} = 5.07
+\]</span></p>
+<p>But the standard error includes an extra term for individual-level variation:</p>
+<p><span class="math display">\[
+SE\left( \hat{Y}_{\text{ind} \mid X_0} \right) = \hat{\sigma} \sqrt{ 1 + \frac{1}{n} + \frac{(X_0 - \bar{X})^2}{(n - 1) S_X^2} }
+\]</span></p>
+<p>Then:</p>
+<p><span class="math display">\[
+SE(\hat{X}) = \frac{SE\left( \hat{Y}_{\text{ind} \mid X_0} \right)}{|\hat{\beta}_1|}
+\]</span> This yields a wider interval than the confidence interval for the mean, because it reflects both model error and individual-level error.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./foundation-chapter08.html" class="pagination-link" aria-label="Linear Correlation and Simple Linear Regression">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Linear Correlation and Simple Linear Regression</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./foundation-chapter10.html" class="pagination-link" aria-label="Regression Diagnostics and Model Refinement">
+        <span class="nav-page-text"><span class="chapter-title">Regression Diagnostics and Model Refinement</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

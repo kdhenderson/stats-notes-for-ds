@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Appendix B: SAS Code Examples for Statistical Foundations – Henderson's Statistics Notes for Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./appendix_hypothesis_test_flowchart.html" rel="next">
+<link href="./appendix-r-code.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-626149efe8f5d16e1d391ba177679bf0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./appendix-r-code.html">Appendices</a></li><li class="breadcrumb-item"><a href="./appendix-sas-code.html"><span class="chapter-title">Appendix B: SAS Code Examples for Statistical Foundations</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Henderson’s Statistics Notes for Data Science</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Henderson’s Statistics Notes</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Statistical Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Drawing Statistical Conclusions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inference Using T-Distributions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Data Screening, Assumptions, and Transformations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Type I, Type II Error, and Power</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Alternatives to the T-Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Comparisons Among Several Samples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Linear Combinations and the Multiple Comparison Problem</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Linear Correlation and Simple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Quantifying Uncertainty: Confidence, Prediction and Calibration Intervals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Regression Diagnostics and Model Refinement</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferences for Multiple Linear Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Model Selection and Validation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./foundation-review-questions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Review Questions</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Applied Statistics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Linear Regression (MLR) Revisited</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bias Variance Trade-off</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">The Bootstrap</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Communicating with Clients</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Repeated Measures</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Classification</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">2 x 2 Contingency Tables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Multiple Logistic Regression</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Principal Component Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./applied-chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Clustering</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-r-code.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix A: R Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix-sas-code.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Appendix B: SAS Code Examples for Statistical Foundations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix_hypothesis_test_flowchart.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Appendix C: Hypothesis Test Flowchart</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./appendix-r-code.html">Appendices</a></li><li class="breadcrumb-item"><a href="./appendix-sas-code.html"><span class="chapter-title">Appendix B: SAS Code Examples for Statistical Foundations</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-title">Appendix B: SAS Code Examples for Statistical Foundations</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Quick Navigation:</p>
+<ul>
+<li><a href="#1-data-import--summary-statistics">1. Data Import &amp; Summary Statistics</a><br>
+</li>
+<li><a href="#2-visualization--assumption-checks">2. Visualization &amp; Assumption Checks</a><br>
+</li>
+<li><a href="#3-permutation-test">3. Permutation Test</a><br>
+</li>
+<li><a href="#4-t-tests-and-power-analysis">4. t-Tests &amp; Power Analysis</a><br>
+</li>
+<li><a href="#5-anova-and-extra-sum-of-squares">5. ANOVA and Extra Sum of Squares</a><br>
+</li>
+<li><a href="#6-non-parametric-tests">6. Non-Parametric Tests</a><br>
+</li>
+<li><a href="#7-correlation--simple-regression">7. Correlation &amp; Simple Regression</a><br>
+</li>
+<li><a href="#8-residual-analysis">8. Residual Analysis</a></li>
+</ul>
+<div class="appendix">
+<section id="data-import-summary-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="data-import-summary-statistics">1. Data Import &amp; Summary Statistics</h2>
+<blockquote class="blockquote">
+<p>Most SAS procedures require your dataset to be sorted by group for grouped analysis or plotting. You can either import data from a file or create a dataset manually for small examples.</p>
+</blockquote>
+<section id="a.-import-or-create-a-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="a.-import-or-create-a-dataset">1A. Import or Create a Dataset</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* OPTION 1: Import a CSV from your SAS Studio home directory */
+
+%web_drop_table(WORK.mydata);
+
+filename reffile '/home/your-username/path-to-your-data.csv';
+
+proc import datafile=reffile
+    dbms=csv
+    out=WORK.mydata
+    replace;
+    getnames=yes;
+run;
+
+/* View structure and preview the dataset */
+proc contents data=WORK.mydata;
+run;
+
+%web_open_table(WORK.mydata);
+    
+    
+/* OPTION 2: Manually create a small dataset column-wise (each row = one observation) */
+
+data mydata;
+    input variable1 variable2;
+    datalines;
+    1 A
+    2 B
+    3 C
+    4 D
+    5 E
+    ;
+run;
+
+proc print data = mydata;
+run;
+
+
+/* OPTION 3: Create a row-wise dataset (data entered horizontally using @@) */
+data mydata;
+    input variable @@;
+    datalines;
+    1 2 3 4 5 6
+    ;
+run;
+    
+proc print data = mydata;
+run;
+    </code></pre>
+</details>
+</div>
+</section>
+<section id="b.-summary-view-sorting" class="level3">
+<h3 class="anchored" data-anchor-id="b.-summary-view-sorting">1B. Summary View &amp; Sorting</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Preview the data */
+proc print data = dataset;
+run;
+
+/* Sort data by explanatory variable (required for some procedures) */
+proc sort data = dataset;
+    by explanatory;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="c.-summary-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="c.-summary-statistics">1C. Summary Statistics</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Summary stats: n, mean, sd, min, max */
+proc means data = dataset;
+    var response;
+run;
+
+/* Medians by group */
+proc means data = dataset median;
+    class explanatory;
+    var response;
+run;
+
+/* Manual p-value from t-statistic (two-sided) */
+data mypval;
+    pv = 2 * (1 - cdf("t", tstat, df));
+run;
+proc print data = mypval;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="d.-log-transformation-filtering" class="level3">
+<h3 class="anchored" data-anchor-id="d.-log-transformation-filtering">1D. Log Transformation &amp; Filtering</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Create a log-transformed version of response */
+data ldataset;
+    set dataset;
+    logResponse = log(response);
+run;
+
+/* Remove outlier (e.g., filter response &lt; 1200) */
+data datasetNoOutlier;
+    set dataset;
+    where response &lt; 1200;
+run;
+
+/* Scatter plot without outlier */
+proc sgplot data = datasetNoOutlier;
+    scatter x = explanatory y = response;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="e.-categorical-recoding-viewing-subsets" class="level3">
+<h3 class="anchored" data-anchor-id="e.-categorical-recoding-viewing-subsets">1E. Categorical Recoding &amp; Viewing Subsets</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Create ordinal version of categorical variable */
+
+data educMultiGrp;
+    set educMultiGrp;
+    if Educ = '&lt;12' then EO = 1;
+    else if Educ = '12' then EO = 2;
+    else if Educ = '13-15' then EO = 3;
+    else if Educ = '16' then EO = 4;
+    else if Educ = '&gt;16' then EO = 5;
+run;
+
+/* Create a column to collapse levels */
+data educMultiGrp;
+    set educMultiGrp;
+    if Educ = "&lt;12" then Combine = "&lt;12";
+    else if Educ = "12" then Combine = "12";
+    else if Educ = "13-15" then Combine = "13-15";
+    else if Educ in ("16", "&gt;16") then Combine = "16+";
+run;
+
+/* View first 50 rows of a dataset */
+proc print data = lIncome5Grps(obs=50);
+run;
+</code></pre>
+</details>
+</div>
+</section>
+</section>
+<section id="visualization-assumption-checks" class="level2">
+<h2 class="anchored" data-anchor-id="visualization-assumption-checks">2. Visualization &amp; Assumption Checks</h2>
+<blockquote class="blockquote">
+<p>Use <code>proc univariate</code>, <code>proc sgplot</code>, and <code>proc ttest</code> to visualize distributions and assess assumptions of normality and variance.<br>
+Many visualizations require sorting your dataset by the grouping variable.</p>
+</blockquote>
+<section id="a.-univariate-plots-no-grouping" class="level3">
+<h3 class="anchored" data-anchor-id="a.-univariate-plots-no-grouping">2A. Univariate Plots (No Grouping)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Histogram and QQ plot (ungrouped) */
+proc univariate data = dataset;
+    var response;
+    histogram response;
+    qqplot response;
+run;
+
+/* Boxplot (ungrouped) */
+proc sgplot data = dataset;
+    vbox response;
+run;
+
+/* Scatterplot of response vs explanatory */
+proc sgplot data = dataset;
+    scatter x = explanatory y = response;
+    * title "Scatterplot of ";
+run;
+
+/* Turn off the title */
+title;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="b.-histograms-and-qq-plots-by-group" class="level3">
+<h3 class="anchored" data-anchor-id="b.-histograms-and-qq-plots-by-group">2B. Histograms and QQ Plots by Group</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Sort by grouping variable (required for BY statement) */
+proc sort data = dataset;
+    by explanatory;
+run;
+proc print data = dataset;
+run;
+
+/* Histograms grouped by explanatory */
+proc univariate data = dataset;
+    by explanatory;
+    histogram response;
+run;
+
+/* QQ plots grouped by explanatory */
+proc univariate data = dataset;
+    * title "QQ Plot by ";
+    by explanatory;
+    qqplot response / normal(mu=est sigma=est);
+run;
+
+
+proc sgplot data = dataset;
+    * title "Histogram by ";
+    by explanatory;
+    histogram response / transparency=0.5;
+    density response; * with a normal distribution curve;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="c.-boxplots-and-density-plots-by-group" class="level3">
+<h3 class="anchored" data-anchor-id="c.-boxplots-and-density-plots-by-group">2C. Boxplots and Density Plots by Group</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Boxplot by group */
+proc sgplot data=dataset;
+    * title "Boxplot of";
+    vbox response / category=explanatory;
+run;
+
+/* Histogram with overlaid normal curve by group */
+proc sgplot data = dataset;
+    by explanatory;
+    histogram response / transparency = 0.5;
+    density response;  /* Normal curve */
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="d.-visualizations-from-proc-ttest" class="level3">
+<h3 class="anchored" data-anchor-id="d.-visualizations-from-proc-ttest">2D. Visualizations from proc ttest</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* `proc ttest` also generates histogram, QQ plot, and boxplot (grouped) */
+proc ttest data = dataset;
+    class explanatory;
+    var response;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="e.-custom-histogram-with-set-bin-width" class="level3">
+<h3 class="anchored" data-anchor-id="e.-custom-histogram-with-set-bin-width">2E. Custom Histogram with Set Bin Width</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Adjust histogram range and bin width */
+proc univariate data = dataset noprint;
+    by explanatory;
+    histogram response / endpoints = 0 to 1000 by 50 normal; /* Adjust as needed */
+    inset n mean std / pos = ne;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+</section>
+<section id="permutation-test" class="level2">
+<h2 class="anchored" data-anchor-id="permutation-test">3. Permutation Test</h2>
+<section id="a.-observed-difference-in-means" class="level3">
+<h3 class="anchored" data-anchor-id="a.-observed-difference-in-means">3A. Observed Difference in Means</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Use proc ttest to compute observed difference between groups */
+proc ttest data = dataset;
+    class group;
+    var response;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="b.-generate-permutations-with-proc-iml" class="level3">
+<h3 class="anchored" data-anchor-id="b.-generate-permutations-with-proc-iml">3B. Generate Permutations with proc iml</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Shuffle response values across group labels using IML */
+
+/* Borrowed code from internet: randomizes observations and creates a matrix with one row per permutation */
+
+/* NOTE: Replace `dataset`, `group` and `response` with your actual variable names */
+
+proc iml;
+    use dataset;
+    read all var {group response} into x;  /* Make sure to specify class variable first */
+    
+      nPerms = 10000;                 /* Number of permutations */
+    permuted = t(ranperm(x[,2], nPerms));  /* Create permuted response matrix */
+    combined = x[,1] || permuted;   /* Combine original group column with each permuted column */
+
+    create newds from combined;
+    append from combined;
+quit;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="c.-build-permutation-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="c.-build-permutation-distribution">3C. Build Permutation Distribution</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Use proc ttest to calculate mean differences for each permutation */
+
+ods output off;
+ods exclude all;   /* Suppress output */
+  
+/* The ods output line below is optional if you want to capture confidence intervals */
+/* ods output conflimits=diff; */
+
+proc ttest data = newds plots = none;
+    class col1;
+    var col2 - col10001;
+run;
+
+ods output on;
+ods exclude none;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="d.-plot-permutation-histogram-calculate-p-value" class="level3">
+<h3 class="anchored" data-anchor-id="d.-plot-permutation-histogram-calculate-p-value">3D. Plot Permutation Histogram &amp; Calculate p-value</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>                                                                    
+/* Plot the distribution of permuted mean differences (Pooled method only) */
+proc univariate data = diff;
+    where method = "Pooled";
+    var mean;
+    histogram mean;
+run;
+
+/* Count number of permuted differences as or more extreme than observed */
+/* Replace `obsDiff` with your observed test statistic from 3A */
+/* Adjust for one-tailed or two-tailed test accordingly */
+data numdiffs;
+    set diff;
+    where method = "Pooled";
+    if abs(mean) &gt;= abs(obsDiff);
+run;
+
+/* Print matching rows (just for visual check) */
+proc print data = numdiffs;
+    where method = "Pooled";
+run;    
+
+/* Manual Step:
+   - Check the number of rows in `numdiffs` (from the log or output)
+   - Divide that by the total number of permutations (e.g., 10000)
+   - This gives your p-value */
+</code></pre>
+</details>
+</div>
+</section>
+</section>
+<section id="t-tests-and-power-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="t-tests-and-power-analysis">4. <span class="math inline">\(t\)</span>-Tests and Power Analysis</h2>
+<blockquote class="blockquote">
+<p>This section includes basic <span class="math inline">\(t\)</span>-test syntax, F-tests for equal variances, and power analysis using <code>proc power</code>.</p>
+</blockquote>
+<section id="a.-basic-t-tests-and-critical-values" class="level3">
+<h3 class="anchored" data-anchor-id="a.-basic-t-tests-and-critical-values">4A. Basic <span class="math inline">\(t\)</span>-Tests and Critical Values</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Compute critical t-value for two-sided test at α = 0.05 */
+data criticalvalue;
+    critval = quantile("T", 0.975, df);
+run;
+proc print data = criticalvalue;
+run;
+
+/* One-sample t-test (H0: mean = muUnderNull) */
+/* * proc ttest outputs histogram, boxplot and qqplot */
+proc ttest data = dataset h0 = muUnderNull sides = 2 alpha = 0.05;
+    var response;
+run;
+
+/* Paired t-test (H0: mean difference = 0, computed as Group2 - Group1) */
+proc ttest data = dataset;
+    paired explanatory2*explanatory1;
+run;
+
+/* Two-sample t-test (equal variance and Welch's handled together) */
+/* Pooled uses pooled st.dev. and Satterthwaite uses Welch's */
+proc ttest data = dataset h0 = 0 sides = 2 alpha = 0.05;
+    class explanatory;
+    var response;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="b.-equality-of-variances-tests" class="level3">
+<h3 class="anchored" data-anchor-id="b.-equality-of-variances-tests">4B. Equality of Variances Tests</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* F-test for equality of variances is run automatically as part of proc ttest */
+/* The F-test (default in proc ttest) assumes normal distributions. It's useful as secondary evidence for variance equality if visuals are inconclusive. Null: population variances are equal. */
+
+/* Brown-Forsythe test does not require normality assumptions */
+proc glm data = dataset;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / hovtest = bf;  /* Brown-Forsythe test */
+run;  
+</code></pre>
+</details>
+</div>
+</section>
+<section id="c.-power-analysis-one--and-two-sample" class="level3">
+<h3 class="anchored" data-anchor-id="c.-power-analysis-one--and-two-sample">4C. Power Analysis (One- and Two-Sample)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Power for one-sample t-test */
+proc power;
+    onesamplemeans
+        sides = 1
+        alpha = 0.05
+        nullmean = 0
+        mean = xbar
+        stddev = s
+        ntotal = n
+        power = .;
+run;
+
+/* Power for two-sample t-test */
+proc power;
+    twosamplemeans
+        sides = 1
+        alpha = 0.05
+        meandiff = effectSize
+        stddev = s
+        npergroup = n1
+        power = .; /* specify a dot or omit this line to solve for the unknown parameter */
+
+run;
+
+/* Example: specify total sample size and mean for each using `nullmean and meandiff` */
+proc power;
+    twosamplemeans
+        sides = 1
+        alpha = 0.05
+        nulldiff = 0
+        meandiff = 3
+        stddev = 4.5
+        ntotal = 47;  /* e.g. 24 in group 1, 23 in group 2 */
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="d.-power-curve-plots" class="level3">
+<h3 class="anchored" data-anchor-id="d.-power-curve-plots">4D. Power Curve Plots</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Power vs. sample size (one-sample) */
+ods graphics on;
+
+proc power;
+    onesamplemeans
+        sides = 1
+        alpha = 0.05
+        nullmean = 0
+        ntotal = 60 80
+        mean = 0.07
+        stddev = 0.2
+        power = .;
+    plot x = n min = 60 max = 80;
+run;
+
+ods graphics off;
+
+/* Power vs. effect size (two-sample) */
+ods graphics on;
+
+proc power;
+    twosamplemeans
+        sides = 1
+        alpha = 0.05
+        nulldiff = 0
+        meandiff = 3 to 5 by 0.1
+        ntotal = 47
+        stddev = 4.5
+        power = .;
+    plot x = effect min = 3 max = 5;
+run;
+
+ods graphics off;
+        </code></pre>
+</details>
+</div>
+</section>
+</section>
+<section id="anova-and-extra-sum-of-squares" class="level2">
+<h2 class="anchored" data-anchor-id="anova-and-extra-sum-of-squares">5. ANOVA and Extra Sum of Squares</h2>
+<blockquote class="blockquote">
+<p>This section includes one-way ANOVA, multiple comparisons, linear contrasts, and extra sum of squares tests for nested or grouped comparisons.</p>
+</blockquote>
+<section id="a.-one-way-anova-with-variance-checks" class="level3">
+<h3 class="anchored" data-anchor-id="a.-one-way-anova-with-variance-checks">5A. One-Way ANOVA with Variance Checks</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* One-way ANOVA: for EMM and SMM (full), tests if any group means differ (i.e. any pair has difference of means) */
+/* Brown-Forsythe test is included to check equal variance assumption (does not require normality) */
+proc glm data = dataset;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / hovtest = bf;  /* Brown-Forsythe test (homogeneity of variance) */
+run;
+
+/* Manually compute F critical value */
+data critical_value;
+    set calculations;
+    critical_value = finv(1 - alpha, dfn, dfd);  /* right-tailed (1-alpha) */
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="b.-multiple-comparisons-tukey-pairwise-tests" class="level3">
+<h3 class="anchored" data-anchor-id="b.-multiple-comparisons-tukey-pairwise-tests">5B. Multiple Comparisons (Tukey + Pairwise Tests)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Example: pairwise t-tests with Tukey adjustment and confidence intervals */
+proc glm data = playersHeight;
+    class Sport;
+    model Height = Sport;
+    means Sport / hovtest = bf;
+    lsmeans Sport / pdiff adjust = tukey cl;
+run;
+
+/* Optionally show differences both directions (A–B and B–A) */
+proc glm data = playersHeight;
+    class Sport;
+    model Height = Sport;
+    means Sport / hovtest = bf tukey cldiff;
+run;
+
+/* The cl option provides CIs for the means, 
+ while cldiff provides CIs for the differences between means. */
+</code></pre>
+</details>
+</div>
+</section>
+<section id="c.-linear-contrasts" class="level3">
+<h3 class="anchored" data-anchor-id="c.-linear-contrasts">5C. Linear Contrasts</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Test linear contrasts using CONTRAST and ESTIMATE */
+/* CONTRAST is used to test hypotheses (gives SS, F-statistic), while ESTIMATE provides point estimate and SE (used to construct confidence intervals). */
+/* These compare one group mean to a linear combination of others */
+
+/* didn't state order = data so groups are in alphabetical order;
+order = data; keeps the data in the order it came in: proc glm data = Handicap order = data;
+contrast gives you the sum of squares
+estimate gives you the estimate of the gamma */  
+  
+proc glm data = dataset;
+    class explanatory;
+    model response = explanatory;
+    means explanatory;
+
+    /* Grp1 vs sum or average of others (assuming 5 groups) */
+    contrast 'Grp1 vs Sum of Other 4 Groups' explanatory 4 -1 -1 -1 -1;
+    estimate 'Grp1 vs Sum of Other 4 Groups' explanatory 4 -1 -1 -1 -1;
+    estimate 'Grp1 vs Avg of Other 4 Groups' explanatory 4 -1 -1 -1 -1 / divisor = 4;
+
+    /* Grp1 vs Grp2 */
+    contrast 'Grp1 vs Grp2' explanatory 1 -1 0 0 0;
+    estimate 'Estimate Grp1 vs Grp2' explanatory 1 -1 0 0 0;
+run;  
+  
+
+/* To compute a 95% CI manually for the difference in averages of above (point estimate +- multiplier * standard error): critical t-value (multiplier for 95% CI) */
+data quantile;
+    quant = quantile("t", 0.975, df); * where df=n-groups;
+run;
+proc print data = quantile;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="d.-bonferroni-adjustment-for-selected-comparisons" class="level3">
+<h3 class="anchored" data-anchor-id="d.-bonferroni-adjustment-for-selected-comparisons">5D. Bonferroni Adjustment for Selected Comparisons</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Simultaneous CIs for selected differences (e.g. μ2–μ3, μ2–μ5, μ3–μ5) */
+/* k=3 (comparing 3 pairs) */
+
+proc glm data = dataset order = data;
+    class explanatory;
+    model response = explanatory;
+    means explanatory;
+    lsmeans explanatory / pdiff cl;
+
+    /* ESTIMATE used to extract estimate and SEs for CI construction */
+    estimate 'mu2 - mu3' explanatory 0 1 -1 0 0;
+    estimate 'mu2 - mu5' explanatory 0 1 0 0 -1;
+    estimate 'mu3 - mu5' explanatory 0 0 1 0 -1;
+run;
+
+
+/* to get 95% CI for the difference in averages of above
+point estimate +- multiplier * standard error */
+/* Bonferroni multiplier: 1 - α/(2k) for two-tailed test with k comparisons; df=n-totalgrps */
+data quantile;
+    quant = quantile("t", 1 - 0.05/6, df);  /* adjust denominator for # comparisons and tails */
+run;
+proc print data = quantile;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="e.-summary-choosing-a-multiple-comparison-adjustment" class="level3">
+<h3 class="anchored" data-anchor-id="e.-summary-choosing-a-multiple-comparison-adjustment">5E. Summary: Choosing a Multiple Comparison Adjustment</h3>
+<ul>
+<li>When deciding multiple comparison correction:
+<ul>
+<li>Were the comparisons planned before looking at the data or unplanned? If planned, no need to make multiple comparison correction. Can use LSD.</li>
+<li>Are the groups being compared to a single control or reference group? If so, use Dunnett’s.</li>
+<li>Are the groups normally distributed with equal standard deviation? If so, use Tukey-Kramer.</li>
+<li>If we are doing some or all unplanned pairwise comparisons, without a reference/control group and without the assumption of normality or equal variance, use Bonferroni.</li>
+</ul></li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Commands for various multiple comparison methods */
+
+* LSD (Least Significant Difference, use when comparisons are planned) with CI half-width;
+proc glm data = dataset order = data;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / lsd;  * means returns the half-width;
+    lsmeans explanatory / pdiff cl;
+run;
+
+* Dunnett (compare each group to a control/reference group);
+proc glm data = dataset order = data;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / dunnett('Control');
+    lsmeans explanatory / pdiff = control('Control') adjust = dunnett cl;
+run;  
+/* Calculate the half-widths: HalfWidth = (UpperCL - LowerCL) / 2 */
+
+* Tukey-Kramer (assumes normality + equal variance; unplanned all-pairwise) with CI half-width;
+proc glm data = dataset order = data;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / tukey;
+    lsmeans explanatory / pdiff adjust = tukey cl;
+run;
+
+* Bonferroni (safest if assumptions are not met or comparisons are partially unplanned) with CI half-width;
+proc glm data = dataset order = data;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / bon;
+    lsmeans explanatory / pdiff adjust = bon cl;
+run;
+
+* View all options together (Jaren’s code);
+proc glm data = dataset;
+    class explanatory;
+    model response = explanatory;
+    means explanatory / lsd tukey dunnett bon scheffe;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="f.-extra-sum-of-squares-f-test" class="level3">
+<h3 class="anchored" data-anchor-id="f.-extra-sum-of-squares-f-test">5F. Extra Sum of Squares F-Test</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Conduct an anova (explanatory=group) */
+proc glm data = data;
+class explanatory;
+model response = explanatory;
+run;
+
+/* Extra-sum-of-squares */
+/* Compare full and reduced models using BYOA-style calculations */
+data calculations;
+    alpha = 0.05;  
+    dftotal = 2580;
+    dfd = 2579;
+    dfn = dftotal - dfd;
+    ssred = 2234.10;
+    ssfull = 2232.12;
+    ssmodel = ssred - ssfull;
+    mse = ssfull / dfd;
+    msmodel = ssmodel / dfn;
+    fstat = msmodel / mse;
+run;
+
+/* Compute critical F and p-value for the above hypothesis test. */
+data critical_value;
+    set calculations;
+    critical_value = finv(1 - alpha, dfn, dfd); *1-alpha for right-tail;
+run;
+
+data f_test;
+    set critical_value;
+    p_value = 1 - probf(fstat, dfn, dfd); *1-probf for right-tail;
+run;
+proc print data = f_test;
+run;
+
+/* another way to get p-value */
+data quantile;
+    myquant = 1-CDF('F', fstat, dfn, dfd)
+run;
+proc print data = quantile;
+run;
+
+/* You can check against a contrast if relevant */
+proc glm data = dataset;
+    class explanatory;
+    model response = explanatory;
+    means explanatory;
+    contrast 'Contrast Grp1 vs. Grp2' explanatory 0 0 0 1 -1 0;
+    estimate 'Estimate Grp1 vs. Grp2' explanatory 0 0 0 1 -1 0;
+run;
+</code></pre>
+</details>
+</div>
+<hr>
+<p>/* WELCH’S ANOVA (for normal distributions, but unequal variance) */ proc glm data = dataset; class explanatory; model response = explanatory; means explanatory / welch; run;</p>
+<p>data critical_value; critical_value = finv(1-0.05, 4, 706.2); *1-alpha for right-tail; run; proc print data = critical_value; run;</p>
+<p>/* KRUSKAL-WALLIS TEST <em>/ /</em> This is appropriate especially in the case of unequal variances when there is significant deviations from normality especially in the case of very small sample size (no CLT) and is appropriate when you want inference on the median (skewed data) it is basically doing an ANOVA on the ranked data <em>/ /</em> If following up with a comparison of specific groups, must use rank-sum. */</p>
+<p>proc npar1way data = dataset Wilcoxon; class explanatory; var response; run;</p>
+<hr>
+</section>
+</section>
+<section id="non-parametric-tests" class="level2">
+<h2 class="anchored" data-anchor-id="non-parametric-tests">6. Non-Parametric Tests</h2>
+<blockquote class="blockquote">
+<p>Note: The permutation test (Section 3) is also a non-parametric method.</p>
+</blockquote>
+<section id="a.-wilcoxon-rank-sum-test-mannwhitney-u-test" class="level3">
+<h3 class="anchored" data-anchor-id="a.-wilcoxon-rank-sum-test-mannwhitney-u-test">6A. Wilcoxon Rank-Sum Test (Mann–Whitney U Test)</h3>
+<blockquote class="blockquote">
+<p>Used for inference on the median of two independent samples.</p>
+</blockquote>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Exact Wilcoxon Rank-Sum Test (with Hodges-Lehmann CI) */
+/* Best for small samples. Computationally intensive for large samples. */
+proc npar1way data = dataset wilcoxon;
+    class explanatory;
+    var response;
+    exact HL wilcoxon;
+run;
+
+/* For one-sided alpha = 0.05, specify alpha = 0.10 to match CI to one-sided test */
+/* HL = Hodges-Lehmann estimator of the median difference for confidence intervals. */
+proc npar1way data = dataset wilcoxon alpha = 0.10;
+    class explanatory;
+    var response;
+    exact HL wilcoxon;
+run;
+
+
+/* Rank-Sum Test: NORMAL Approximation
+the larger the sample size, you can use the z approximation
+the smaller, the more conservative, choose the t approximation */
+/* Normal approximation for large samples */
+/* z-approximation used when sample size is large. Choose t-approximation for smaller samples or to be more conservative. */
+proc npar1way data = dataset wilcoxon;
+    class explanatory;
+    var response;
+run;
+
+/* CI using normal approximation with HL estimator (asymptotic CI version) */
+/* To get the CI to match a one-sided alpha = 0.5, set alpha = 0.1 */
+proc npar1way data = dataset wilcoxon HL alpha = 0.10;
+    class explanatory;
+    var response;
+run;
+
+/* One-sided critical value from normal (Z) distribution */
+data critval;
+    cv = quantile("normal", 0.95); alpha for left, 1-alpha for right;
+run;
+proc print data = critval;
+run;
+</code></pre>
+</details>
+</div>
+<hr>
+</section>
+<section id="b.-wilcoxon-signed-rank-test-paired-samples" class="level3">
+<h3 class="anchored" data-anchor-id="b.-wilcoxon-signed-rank-test-paired-samples">6B. Wilcoxon Signed-Rank Test (Paired Samples)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Create difference column for paired data */
+data dataset;
+    set dataset;
+    diff = before - after;
+run;
+
+proc print data = dataset;
+run;
+
+/* Run Wilcoxon Signed-Rank test using diff */
+/* This seems to give an incorrect output for S, but close for 2-sided p-value */
+proc univariate data = dataset;
+    var diff;
+run;
+
+/* Critical value for normal approximation (one-sided z-distribution) */
+data critval;
+    cv = quantile("normal", 0.95);  /* alpha for left, 1-alpha for right */
+run;
+proc print data = critval;
+run;
+
+* This is extra code for the by hand calculations;
+* Calculate the absolute differences and rank them;
+data ranked;
+    set dataset;
+    abs_diff = abs(diff);
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="c.-manual-z-approximation-for-signed-rank" class="level3">
+<h3 class="anchored" data-anchor-id="c.-manual-z-approximation-for-signed-rank">6C. Manual Z-Approximation for Signed-Rank</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Step 1: Calculate absolute differences */
+data ranked;
+    set dataset;
+    abs_diff = abs(diff);
+run;
+
+/* Step 2: Rank the absolute differences */
+proc rank data=ranked out=ranked ties=mean;
+    var abs_diff;
+    ranks rank_abs_diff;
+run;
+
+/* Step 3: Identify and sum ranks for positive differences */
+data stats;
+    set ranked;
+    if diff &gt; 0 then S = rank_abs_diff;
+    else S = 0;
+run;
+
+proc means data = stats sum noprint;
+    var S;
+    output out=sums sum(S)=sum_S n=n_obs;
+run;
+
+/* Step 4: Calculate expected mean, standard deviation, and Z-statistic */
+data final;
+    set sums;
+    mean_S = n_obs * (n_obs + 1) / 4;
+    sd_S = sqrt(n_obs * (n_obs + 1) * (2 * n_obs + 1) / 24);
+    Z_statistic = (sum_S - 0.5 - mean_S) / sd_S;
+run;
+
+proc print data = final;
+    var sum_S mean_S sd_S Z_statistic;
+run;
+
+/* Step 5: Compute p-value for one-sided test */
+data pvalue;
+    set final; /* not sure if this line is needed */
+    pv = 1 - probnorm(Z_statistic);
+run;
+
+proc print data = pvalue;
+run;
+</code></pre>
+</details>
+</div>
+<hr>
+</section>
+<section id="d.-kruskalwallis-test-for-inference-on-the-median-of-3-groups" class="level3">
+<h3 class="anchored" data-anchor-id="d.-kruskalwallis-test-for-inference-on-the-median-of-3-groups">6D. Kruskal–Wallis Test (For Inference on the Median of 3+ Groups)</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Appropriate when normality or equal variance assumptions are violated,
+   or when analyzing medians across three or more groups */
+/* Test statistic: X^2 (chi-square) */
+proc npar1way data = dataset wilcoxon;
+    class explanatory;
+    var response;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+</section>
+<section id="correlation-simple-regression" class="level2">
+<h2 class="anchored" data-anchor-id="correlation-simple-regression">7. Correlation &amp; Simple Regression</h2>
+<blockquote class="blockquote">
+<p>This section includes Pearson correlation, simple linear regression, and options for confidence and prediction intervals.</p>
+</blockquote>
+<section id="a.-pearson-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="a.-pearson-correlation">7A. Pearson Correlation</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Pearson's R Correlation Coefficient */
+
+/* Scatterplot of response vs. explanatory */
+proc sgscatter data = dataset;
+    plot response * explanatory / markerattrs = (symbol = circlefilled);
+    title "Scatterplot: Response vs. Explanatory";
+run;
+
+/* T-Critical value (two-sided t-test) */
+data criticalvalue;
+    critval = quantile("T", 0.975, df = n - 2);
+run;
+proc print data = criticalvalue;
+run;
+
+/* Correlation coefficient and p-value */
+proc corr data = dataset;
+    var response explanatory; /* not sure if this line is needed */
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="b.-simple-linear-regression-coefficients-and-fit" class="level3">
+<h3 class="anchored" data-anchor-id="b.-simple-linear-regression-coefficients-and-fit">7B. Simple Linear Regression: Coefficients and Fit</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Linear regression: parameter estimates and summary stats */
+proc reg data = dataset;
+    model response = explanatory;
+run;
+
+/* Optional: set alpha to change significance level and CI width (e.g., 99%) */
+proc reg data = dataset alpha = 0.01;
+    model response = explanatory / clb;  /* clb = confidence limits for betas */
+run;
+
+/* Alternate method to get the parameter estimate table using proc glm */
+proc glm data = dataset;
+    model response = explanatory / solution;  /* shows estimate table */
+run;
+
+/* Add confidence intervals for coefficients (alternative way) */
+proc glm data = dataset alpha = 0.01;
+    model response = explanatory / solution clparm;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="c.-confidence-prediction-intervals-for-new-observations" class="level3">
+<h3 class="anchored" data-anchor-id="c.-confidence-prediction-intervals-for-new-observations">7C. Confidence &amp; Prediction Intervals for New Observations</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Example dataset with missing response values for prediction */
+/* Add new data */
+data dataset;
+    input explanatory response;
+    datalines;
+    62 65
+    90 64
+    50 48
+    35 57
+    200 601
+    100 146
+    90 47
+    95 .
+    200 .
+    ;
+run;
+
+/* CI for mean response (CLM = confidence limits for mean) */
+proc reg data = dataset;
+    model response = explanatory / clm;
+run;
+
+/* PI for individual response (CLI = confidence limits for individual) */
+proc reg data = dataset;
+    model response = explanatory / cli;
+run;    
+
+/* Optionally using proc glm */
+proc glm data = dataset;
+    model response = explanatory / solution clm;  /* confidence interval for mean */
+run;
+
+proc glm data = dataset;
+    model response = explanatory / solution cli;  /* prediction interval for individual */
+run;
+</code></pre>
+</details>
+</div>
+</section>
+</section>
+<section id="residual-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="residual-analysis">8. Residual Analysis</h2>
+<blockquote class="blockquote">
+<p>This section focuses on residual diagnostics to evaluate model assumptions such as linearity, homoscedasticity, and outliers.</p>
+</blockquote>
+<section id="a.-residual-plots-diagnostics" class="level3">
+<h3 class="anchored" data-anchor-id="a.-residual-plots-diagnostics">8A. Residual Plots &amp; Diagnostics</h3>
+<blockquote class="blockquote">
+<p>SAS automatically produces residual plots (and other diagnostics) with <code>proc reg</code> if ODS graphics are enabled.</p>
+</blockquote>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+ods graphics on;
+
+proc reg data = dataset;
+    model response = explanatory;
+run;
+
+ods graphics off;
+
+/* If you need customized residual plots (e.g. residuals vs. predicted), use proc sgplot after outputting residuals: */
+
+/* Save residuals and predicted values */
+proc reg data = dataset;
+    model response = explanatory;
+    output out = diagnostics r = residual p = predicted;
+run;
+
+/* Residuals vs. Fitted Values */
+proc sgplot data = diagnostics;
+    scatter x = predicted y = residual;
+    refline 0 / axis = y;
+run;
+
+/* Residuals vs. Explanatory Variable */
+proc sgplot data = diagnostics;
+    scatter x = explanatory y = residual;
+    refline 0 / axis = y;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="b.-studentized-residuals" class="level3">
+<h3 class="anchored" data-anchor-id="b.-studentized-residuals">8B. Studentized Residuals</h3>
+<blockquote class="blockquote">
+<p>Studentized residuals help detect outliers by standardizing residuals using their estimated standard errors.</p>
+</blockquote>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Use PROC REG to compute studentized residuals */
+proc reg data = dataset;
+    model response = explanatory;
+    output out = diagnostics
+        rstudent = studentized_resid  /* Studentized residuals */
+        h = leverage;                 /* Leverage values (optional) */
+run;
+
+proc print data = diagnostics;
+    var response explanatory studentized_resid leverage;
+run;
+
+/* Optional: plot studentized residuals */
+proc sgplot data = diagnostics;
+    scatter x = explanatory y = studentized_resid;
+    refline 0 / axis = y;
+run;
+</code></pre>
+</details>
+</div>
+</section>
+<section id="c.-influence-diagnostics" class="level3">
+<h3 class="anchored" data-anchor-id="c.-influence-diagnostics">8C. Influence Diagnostics</h3>
+<blockquote class="blockquote">
+<p>Influence diagnostics help identify observations that have an unusually large effect on the model. These include leverage, Cook’s distance, and DFFITS.</p>
+</blockquote>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<pre class="sas cell-code"><code>
+/* Influence statistics from PROC REG */
+ods graphics on;
+
+proc reg data = dataset;
+    model response = explanatory;
+    output out = influence_out
+        rstudent = studentized_resid
+        cookd = cooks_d
+        dffits = dffits_val
+        h = leverage;
+run;
+
+ods graphics off;
+
+proc print data = influence_out;
+    var response explanatory studentized_resid cooks_d dffits_val leverage;
+run;
+
+/* Visualize Cook’s Distance for all observations */
+proc sgplot data = influence_out;
+    scatter x = _N_ y = cooks_d;
+    refline 4 / axis = y;  /* Optional threshold line (e.g. rule of thumb for large values) */
+run;
+</code></pre>
+</details>
+</div>
+</section>
+</section>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./appendix-r-code.html" class="pagination-link" aria-label="Appendix A: R Code Examples for Statistical Foundations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Appendix A: R Code Examples for Statistical Foundations</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./appendix_hypothesis_test_flowchart.html" class="pagination-link" aria-label="Appendix C: Hypothesis Test Flowchart">
+        <span class="nav-page-text"><span class="chapter-title">Appendix C: Hypothesis Test Flowchart</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
