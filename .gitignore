@@ -8,7 +8,7 @@
 .Ruserdata
 
 # Quarto build and cache directories
-.quarto/
+/.quarto/
 _book/
 *.html
 *.pdf
@@ -47,5 +47,3 @@ images/images_removed/
 # git add .gitignore
 # git commit -m "Ignore images_removed directory"
 # git push
-
-/.quarto/

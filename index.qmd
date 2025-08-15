@@ -1,5 +1,5 @@
 ---
-title: "Henderson's Statistics Notes"
+title: "Henderson's Statistics Notes (Draft)"
 format:
   html:
     number-sections: false
