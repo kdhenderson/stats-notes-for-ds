@@ -1,7 +1,16 @@
 project:
   type: book
-  output-dir: _book
-  title: "Henderson's Statistics Notes for Data Science"
+
+site-url: https://kdhenderson.github.io/stats-notes-for-ds/
+
+website:
+  repo-url: https://github.com/kdhenderson/stats-notes-for-ds
+  # (Optional) show buttons in the navbar:
+  # repo-actions: [source, issue]
+
+# (Optional: only rebuild pages that changed)
+execute:
+  freeze: auto
 
 bibliography: references.bib 
 biblio-title: References 
@@ -24,6 +33,7 @@ format:
       Except where otherwise noted, content is licensed under <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
 
 book:
+  title: "Henderson's Statistics Notes for Data Science"
   author: 
     - name: "Kristin Henderson"
       affiliation: "SMU MSDS Program"
