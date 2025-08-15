@@ -1,0 +1,22 @@
+name: Quarto Publish
+on:
+  push:
+    branches: [ main ]   # change to your default branch if not 'main'
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: quarto-dev/quarto-actions/setup@v2
+      # Add language toolchains here if needed (e.g., setup-python, setup-r)
+      - uses: quarto-dev/quarto-actions/render@v2
+      - uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
