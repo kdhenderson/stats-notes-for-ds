@@ -6,7 +6,7 @@
     "section": "",
     "text": "Introduction\nThis book serves as a companion for students in the SMU Master of Science in Data Science program, specifically for the Statistical Foundations and Applied Statistics courses. It is designed to summarize both the theoretical understanding and practical applications of statistical methods.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Henderson's Statistics Notes (Draft)</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Henderson's Statistics Notes</span>"
     ]
   },
   {
@@ -16,7 +16,7 @@
     "section": "Book Structure",
     "text": "Book Structure\n\nPart 1: Statistical Foundations: Covers the theoretical groundwork.\nPart 2: Applied Statistics: Focuses on real-world statistical applications.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Henderson's Statistics Notes (Draft)</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Henderson's Statistics Notes</span>"
     ]
   },
   {
@@ -26,7 +26,7 @@
     "section": "License",
     "text": "License\nThis book is licensed under a Creative Commons Attribution 4.0 International License (CC BY 4.0).\nAll code examples are licensed under the MIT License.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Henderson's Statistics Notes (Draft)</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Henderson's Statistics Notes</span>"
     ]
   },
   {
@@ -36,7 +36,7 @@
     "section": "Software and Output",
     "text": "Software and Output\nThis book includes example output from SAS® and R, generated using instructional or simulated datasets. These outputs are used solely for teaching and demonstration purposes. SAS is a registered trademark of SAS Institute Inc., and R is open-source software licensed under the GNU General Public License.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Henderson's Statistics Notes (Draft)</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Henderson's Statistics Notes</span>"
     ]
   },
   {
@@ -46,7 +46,7 @@
     "section": "Author Contributions",
     "text": "Author Contributions\n\nProfessor of Applied Statistics and Professor of Statistical Foundations: Developed the original course materials and lectures on which this book is based.\nKristin Henderson: Compiled, adapted, and updated these notes from the original course materials, and prepared the Quarto book for publication.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Henderson's Statistics Notes (Draft)</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Henderson's Statistics Notes</span>"
     ]
   },
   {
