@@ -9,18 +9,19 @@ execute:
 
 Quick Navigation:
 
-- [1. Data Import & Summary Statistics](#1-data-import--summary-statistics)  
-- [2. Visualization & Assumption Checks](#2-visualization--assumption-checks)  
-- [3. Permutation Test](#3-permutation-test)  
-- [4. t-Tests & Power Analysis](#4-t-tests-and-power-analysis)  
-- [5. ANOVA and Extra Sum of Squares](#5-anova-and-extra-sum-of-squares)  
-- [6. Non-Parametric Tests](#6-non-parametric-tests)  
-- [7. Correlation & Simple Regression](#7-correlation--simple-regression)  
-- [8. Residual Analysis](#8-residual-analysis)  
+- [1. Data Import & Summary Statistics](#data-import-summary)
+- [2. Visualization & Assumption Checks](#viz-assumption-checks)
+- [3. Permutation Test](#permutation-test)
+- [4. *t*-Tests and Power Analysis](#t-tests-power)
+- [5. ANOVA and Extra Sum of Squares](#anova-extra-ss)
+- [6. Non-Parametric Tests](#nonparam-tests)
+- [7. Correlation & Simple Regression](#correlation-simple-regression)
+- [8. Residual Analysis](#residual-analysis)
+
 
 ::: {.appendix}
 
-## 1. Data Import & Summary Statistics
+## 1. Data Import & Summary Statistics {#data-import-summary}
 
 > Most SAS procedures require your dataset to be sorted by group for grouped analysis or plotting.
 > You can either import data from a file or create a dataset manually for small examples.
@@ -167,7 +168,7 @@ run;
 ```
 
 
-## 2. Visualization & Assumption Checks
+## 2. Visualization & Assumption Checks {#viz-assumption-checks}
 
 > Use `proc univariate`, `proc sgplot`, and `proc ttest` to visualize distributions and assess assumptions of normality and variance.  
 > Many visualizations require sorting your dataset by the grouping variable.
@@ -274,7 +275,7 @@ run;
 ```
 
 
-## 3. Permutation Test
+## 3. Permutation Test {#permutation-test}
 
 ### 3A. Observed Difference in Means
 ```{sas}
@@ -331,7 +332,7 @@ ods exclude none;
 
 ```
 
-### 3D. Plot Permutation Histogram & Calculate p-value
+### 3D. Plot Permutation Histogram & Calculate *p*-value
 ```{sas}
                                                                     
 /* Plot the distribution of permuted mean differences (Pooled method only) */
@@ -363,11 +364,11 @@ run;
 ```
 
 
-## 4. $t$-Tests and Power Analysis
+## 4. *t*-Tests and Power Analysis {#t-tests-power}
 
-> This section includes basic $t$-test syntax, F-tests for equal variances, and power analysis using `proc power`.
+> This section includes basic *t*-test syntax, F-tests for equal variances, and power analysis using `proc power`.
 
-### 4A. Basic $t$-Tests and Critical Values
+### 4A. Basic *t*-Tests and Critical Values
 ```{sas}
 
 /* Compute critical t-value for two-sided test at α = 0.05 */
@@ -492,7 +493,7 @@ ods graphics off;
 ```
 
 
-## 5. ANOVA and Extra Sum of Squares
+## 5. ANOVA and Extra Sum of Squares {#anova-extra-ss}
 
 > This section includes one-way ANOVA, multiple comparisons, linear contrasts, and extra sum of squares tests for nested or grouped comparisons.
 
@@ -514,7 +515,6 @@ data critical_value;
 run;
 
 ```
-
 
 ### 5B. Multiple Comparisons (Tukey + Pairwise Tests)
 ```{sas}
@@ -538,7 +538,6 @@ run;
  while cldiff provides CIs for the differences between means. */
 
 ```
-
 
 ### 5C. Linear Contrasts
 ```{sas}
@@ -715,46 +714,33 @@ run;
 
 ```
 
----
+### 5G. Welch’s ANOVA (Unequal Variances)
+```{sas}
 
-/* WELCH'S ANOVA (for normal distributions, but unequal variance) */
+/* Appropriate for normal distributions with unequal variance */
 proc glm data = dataset;
     class explanatory;
     model response = explanatory;
     means explanatory / welch;
 run;
 
+/* Critical F-value calculation */
 data critical_value;
-    critical_value = finv(1-0.05, 4, 706.2); *1-alpha for right-tail;
+    critical_value = finv(1-0.05, 4, 706.2); /* 1-alpha for right-tail */
 run;
 proc print data = critical_value;
 run;
 
-
-/* KRUSKAL-WALLIS TEST */
-/* This is appropriate especially in the case of unequal variances
-when there is significant deviations from normality
-especially in the case of very small sample size (no CLT)
-and is appropriate when you want inference on the median (skewed data)
-it is basically doing an ANOVA on the ranked data */
-/* If following up with a comparison of specific groups, must use rank-sum. */
-
-proc npar1way data = dataset Wilcoxon;
-	class explanatory;
-	var response;
-run;
-
----
+```
 
 
-## 6. Non-Parametric Tests
+## 6. Non-Parametric Tests {#nonparam-tests}
 
 > Note: The permutation test (Section 3) is also a non-parametric method.
 
 ### 6A. Wilcoxon Rank-Sum Test (Mann–Whitney U Test)
 
 > Used for inference on the median of two independent samples. 
-
 ```{sas}
 
 /* Exact Wilcoxon Rank-Sum Test (with Hodges-Lehmann CI) */
@@ -799,8 +785,6 @@ proc print data = critval;
 run;
 
 ```
-
----
 
 ### 6B. Wilcoxon Signed-Rank Test (Paired Samples)
 ```{sas}
@@ -886,14 +870,15 @@ run;
 
 ```
 
----
-
 ### 6D. Kruskal–Wallis Test (For Inference on the Median of 3+ Groups)
 ```{sas}
 
 /* Appropriate when normality or equal variance assumptions are violated,
-   or when analyzing medians across three or more groups */
-/* Test statistic: X^2 (chi-square) */
+   or when sample sizes are small (CLT not reliable). 
+   Works by ranking all data and running ANOVA on the ranks.
+   If following up with group comparisons, use rank-sum tests. */
+/* Test statistic: χ² (chi-square). For very small n, request exact p-values with the EXACT option 
+   (avoids large-sample χ² approximation).*/
 proc npar1way data = dataset wilcoxon;
     class explanatory;
     var response;
@@ -902,7 +887,7 @@ run;
 ```
 
 
-## 7. Correlation & Simple Regression
+## 7. Correlation & Simple Regression {#correlation-simple-regression}
 
 > This section includes Pearson correlation, simple linear regression, and options for confidence and prediction intervals.
 
@@ -998,14 +983,13 @@ run;
 ```
 
 
-## 8. Residual Analysis
+## 8. Residual Analysis {#residual-analysis}
 
 > This section focuses on residual diagnostics to evaluate model assumptions such as linearity, homoscedasticity, and outliers.
 
 ### 8A. Residual Plots & Diagnostics
 
 > SAS automatically produces residual plots (and other diagnostics) with `proc reg` if ODS graphics are enabled.
-
 ```{sas}
 
 ods graphics on;
@@ -1041,7 +1025,6 @@ run;
 ### 8B. Studentized Residuals
 
 > Studentized residuals help detect outliers by standardizing residuals using their estimated standard errors.
-
 ```{sas}
 
 /* Use PROC REG to compute studentized residuals */
@@ -1067,7 +1050,6 @@ run;
 ### 8C. Influence Diagnostics
 
 > Influence diagnostics help identify observations that have an unusually large effect on the model. These include leverage, Cook's distance, and DFFITS.
-
 ```{sas}
 
 /* Influence statistics from PROC REG */
