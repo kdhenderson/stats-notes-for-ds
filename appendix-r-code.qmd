@@ -11,7 +11,7 @@ Quick Navigation:
 - [1. Data Import & Summary Statistics](#data-import-summary)  
 - [2. Visualization & Assumption Checks](#viz-assumption-checks)  
 - [3. Permutation Test](#permutation-test) 
-- [4. t-Tests & Power Analysis](#t-tests-power) 
+- [4. *t*-Tests & Power Analysis](#t-tests-power) 
 - [5. One-Way ANOVA & Extra Sum of Squares](#anova-extra-ss)  
 - [6. Multiple Comparisons](#multiple-comparisons)  
 - [7. Contrasts](#contrasts)  
@@ -134,7 +134,7 @@ box = dataset %>%
 ```
 
 
-## 3. Permutation Test: Generate Permutation Distribution for Group Mean Difference {permutation-test}
+## 3. Permutation Test: Generate Permutation Distribution for Group Mean Difference {#permutation-test}
 ```{r}
 
 # Step 1: Calculate the observed difference in sample means
@@ -175,7 +175,7 @@ pvalue
 ```
 
 
-## 4. $t$-Tests and Power Analysis {#t-tests-power}
+## 4. *t*-Tests and Power Analysis {#t-tests-power}
 
 ### 4A. Basic $t$-Tests
 ```{r}
