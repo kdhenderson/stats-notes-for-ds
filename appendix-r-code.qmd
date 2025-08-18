@@ -8,23 +8,23 @@ execute:
 
 Quick Navigation:
 
-- [1. Data Import & Summary Statistics](#1-data-import--summary-statistics)  
-- [2. Visualization & Assumption Checks](#2-visualization--assumption-checks)  
-- [3. Permutation Test](#3-permutation-test-generate-permutation-distribution-for-group-mean-difference)  
-- [4. t-Tests & Power Analysis](#4-t-tests--power-analysis)  
-- [5. One-Way ANOVA & Extra Sum of Squares](#5-one-way-anova--extra-sum-of-squares)  
-- [6. Multiple Comparisons](#6-multiple-comparisons)  
-- [7. Contrasts](#7-contrasts)  
-- [8. Non-Parametric Tests](#8-non-parametric-tests)  
-- [9. Correlation & Simple Linear Regression](#9-correlation--simple-linear-regression)  
-- [10. Residual Analysis](#10-residual-analysis)  
-- [11. Log-Log Models & Back-Transformation](#11-log-log-models--back-transformation)  
-- [12. Multiple Linear Regression (MLR)](#12-multiple-linear-regression-mlr)  
-- [13. Variable Selection](#13-variable-selection)  
+- [1. Data Import & Summary Statistics](#data-import-summary)  
+- [2. Visualization & Assumption Checks](#viz-assumption-checks)  
+- [3. Permutation Test](#permutation-test) 
+- [4. t-Tests & Power Analysis](#t-tests-power) 
+- [5. One-Way ANOVA & Extra Sum of Squares](#anova-extra-ss)  
+- [6. Multiple Comparisons](#multiple-comparisons)  
+- [7. Contrasts](#contrasts)  
+- [8. Non-Parametric Tests](#nonparam-tests)  
+- [9. Correlation & Simple Linear Regression](#correlation-simple-regression)  
+- [10. Residual Analysis](#residual-analysis)  
+- [11. Log-Log Models & Back-Transformation](#log-log-models)  
+- [12. Multiple Linear Regression (MLR)](#multiple-regression)  
+- [13. Variable Selection](#variable-selection)  
 
 ::: {.appendix}
 
-## 1. Data Import & Summary Statistics
+## 1. Data Import & Summary Statistics {#data-import-summary}
 
 ### 1A. Import and Explore the Dataset
 ```{r}
@@ -51,7 +51,7 @@ dataset %>% group_by(explanatory) %>%
 ```
 
 
-## 2. Visualization & Assumption Checks
+## 2. Visualization & Assumption Checks {#viz-assumption-checks}
 
 ### 2A. Base R Plots (One Variable or Group Subsets)
 ```{r}
@@ -134,7 +134,7 @@ box = dataset %>%
 ```
 
 
-## 3. Permutation Test: Generate Permutation Distribution for Group Mean Difference
+## 3. Permutation Test: Generate Permutation Distribution for Group Mean Difference {permutation-test}
 ```{r}
 
 # Step 1: Calculate the observed difference in sample means
@@ -175,7 +175,7 @@ pvalue
 ```
 
 
-## 4. $t$-Tests and Power Analysis
+## 4. $t$-Tests and Power Analysis {#t-tests-power}
 
 ### 4A. Basic $t$-Tests
 ```{r}
@@ -258,7 +258,7 @@ powerdf %>% ggplot(aes(x = samplesizes, y = powerholder)) +
 ```
 
 
-## 5. One-Way ANOVA and Extra Sum of Squares
+## 5. One-Way ANOVA and Extra Sum of Squares {#anova-extra-ss}
 
 ### 5A. One-Way ANOVA
 ```{r}
@@ -336,7 +336,7 @@ cat("p-Value F-test:", p_value, "\n")
 ```
 
 
-## 6. Multiple Comparisons
+## 6. Multiple Comparisons {#multiple-comparisons}
 
 ### 6A. Tukey HSD using `multcomp` (Tukey-Kramer Adjustment)
 ```{r}
@@ -385,7 +385,7 @@ tukey_result
 ```
 
 
-## 7. Contrasts
+## 7. Contrasts {#contrasts}
 
 > Only use planned contrasts **after** a significant ANOVA result.
 
@@ -446,7 +446,7 @@ CI_upper
 ```
 
 
-## 8. Non-Parametric Tests
+## 8. Non-Parametric Tests {#nonparam-tests}
 
 ### 8A. Wilcoxon Rank-Sum Test (Mann-Whitney)
 ```{r}
@@ -516,7 +516,7 @@ p_value_one_tailed
 ```
 
 
-## 9. Correlation and Simple Linear Regression
+## 9. Correlation and Simple Linear Regression {#correlation-simple-regression}
 
 ### 9A. Pearson Correlation
 ```{r}
@@ -681,7 +681,7 @@ cat("This means that", round(R_squared * 100, 2), "% of the variability in Respo
 ```
 
 
-## 10. Residual Analysis
+## 10. Residual Analysis {#residual-analysis}
 
 ### 10A. Fit Model and Add Residuals
 ```{r}
@@ -826,7 +826,7 @@ ggplot(dataset, aes(x = explanatory, y = response)) +
 ```
 
 
-## 11. Log-Log Models & Back-Transformation
+## 11. Log-Log Models & Back-Transformation {#log-log-models}
 
 ### 11A. Back-Transform the Slope and Interpret
 ```{r}
@@ -914,7 +914,7 @@ pf(fstat, dfn, dfd, lower.tail = FALSE)
 ```
 
 
-## 12. Multiple Linear Regression (MLR)
+## 12. Multiple Linear Regression (MLR) {#multiple-regression}
 
 ### 12A. MLR with Only Numeric Predictors (Same Slopes)
 ```{r}
@@ -995,7 +995,7 @@ plot(fit)
 ```
 
 
-## 13. Variable Selection
+## 13. Variable Selection {#variable-selection}
 
 ### 13A. Stepwise Selection by $p$-Value
 ```{r}
