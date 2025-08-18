@@ -387,35 +387,33 @@ window.Quarto = {
 
 <p>Quick Navigation:</p>
 <ul>
-<li><a href="#1-data-import--summary-statistics">1. Data Import &amp; Summary Statistics</a><br>
+<li><a href="#data-import-summary">1. Data Import &amp; Summary Statistics</a><br>
 </li>
-<li><a href="#2-visualization--assumption-checks">2. Visualization &amp; Assumption Checks</a><br>
+<li><a href="#viz-assumption-checks">2. Visualization &amp; Assumption Checks</a><br>
 </li>
-<li><a href="#3-permutation-test-generate-permutation-distribution-for-group-mean-difference">3. Permutation Test</a><br>
+<li><a href="foundation-chapter05.html#permutation-test">3. Permutation Test</a></li>
+<li><a href="#t-tests-power">4. t-Tests &amp; Power Analysis</a></li>
+<li><a href="#anova-extra-ss">5. One-Way ANOVA &amp; Extra Sum of Squares</a><br>
 </li>
-<li><a href="#4-t-tests--power-analysis">4. t-Tests &amp; Power Analysis</a><br>
+<li><a href="#multiple-comparisons">6. Multiple Comparisons</a><br>
 </li>
-<li><a href="#5-one-way-anova--extra-sum-of-squares">5. One-Way ANOVA &amp; Extra Sum of Squares</a><br>
+<li><a href="#contrasts">7. Contrasts</a><br>
 </li>
-<li><a href="#6-multiple-comparisons">6. Multiple Comparisons</a><br>
+<li><a href="#nonparam-tests">8. Non-Parametric Tests</a><br>
 </li>
-<li><a href="#7-contrasts">7. Contrasts</a><br>
+<li><a href="#correlation-simple-regression">9. Correlation &amp; Simple Linear Regression</a><br>
 </li>
-<li><a href="#8-non-parametric-tests">8. Non-Parametric Tests</a><br>
+<li><a href="#residual-analysis">10. Residual Analysis</a><br>
 </li>
-<li><a href="#9-correlation--simple-linear-regression">9. Correlation &amp; Simple Linear Regression</a><br>
+<li><a href="#log-log-models">11. Log-Log Models &amp; Back-Transformation</a><br>
 </li>
-<li><a href="#10-residual-analysis">10. Residual Analysis</a><br>
+<li><a href="#multiple-regression">12. Multiple Linear Regression (MLR)</a><br>
 </li>
-<li><a href="#11-log-log-models--back-transformation">11. Log-Log Models &amp; Back-Transformation</a><br>
-</li>
-<li><a href="#12-multiple-linear-regression-mlr">12. Multiple Linear Regression (MLR)</a><br>
-</li>
-<li><a href="#13-variable-selection">13. Variable Selection</a></li>
+<li><a href="#variable-selection">13. Variable Selection</a></li>
 </ul>
 <div class="appendix">
-<section id="data-import-summary-statistics" class="level2">
-<h2 class="anchored" data-anchor-id="data-import-summary-statistics">1. Data Import &amp; Summary Statistics</h2>
+<section id="data-import-summary" class="level2">
+<h2 class="anchored" data-anchor-id="data-import-summary">1. Data Import &amp; Summary Statistics</h2>
 <section id="a.-import-and-explore-the-dataset" class="level3">
 <h3 class="anchored" data-anchor-id="a.-import-and-explore-the-dataset">1A. Import and Explore the Dataset</h3>
 <div class="cell">
@@ -445,8 +443,8 @@ window.Quarto = {
 </div>
 </section>
 </section>
-<section id="visualization-assumption-checks" class="level2">
-<h2 class="anchored" data-anchor-id="visualization-assumption-checks">2. Visualization &amp; Assumption Checks</h2>
+<section id="viz-assumption-checks" class="level2">
+<h2 class="anchored" data-anchor-id="viz-assumption-checks">2. Visualization &amp; Assumption Checks</h2>
 <section id="a.-base-r-plots-one-variable-or-group-subsets" class="level3">
 <h3 class="anchored" data-anchor-id="a.-base-r-plots-one-variable-or-group-subsets">2A. Base R Plots (One Variable or Group Subsets)</h3>
 <div class="cell">
@@ -534,8 +532,8 @@ window.Quarto = {
 </div>
 </section>
 </section>
-<section id="permutation-test-generate-permutation-distribution-for-group-mean-difference" class="level2">
-<h2 class="anchored" data-anchor-id="permutation-test-generate-permutation-distribution-for-group-mean-difference">3. Permutation Test: Generate Permutation Distribution for Group Mean Difference</h2>
+<section id="permutation-test-generate-permutation-distribution-for-group-mean-difference-permutation-test" class="level2">
+<h2 class="anchored" data-anchor-id="permutation-test-generate-permutation-distribution-for-group-mean-difference-permutation-test">3. Permutation Test: Generate Permutation Distribution for Group Mean Difference {permutation-test}</h2>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -576,8 +574,8 @@ window.Quarto = {
 </details>
 </div>
 </section>
-<section id="t-tests-and-power-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="t-tests-and-power-analysis">4. <span class="math inline">\(t\)</span>-Tests and Power Analysis</h2>
+<section id="t-tests-power" class="level2">
+<h2 class="anchored" data-anchor-id="t-tests-power">4. <span class="math inline">\(t\)</span>-Tests and Power Analysis</h2>
 <section id="a.-basic-t-tests" class="level3">
 <h3 class="anchored" data-anchor-id="a.-basic-t-tests">4A. Basic <span class="math inline">\(t\)</span>-Tests</h3>
 <div class="cell">
@@ -665,8 +663,8 @@ window.Quarto = {
 </div>
 </section>
 </section>
-<section id="one-way-anova-and-extra-sum-of-squares" class="level2">
-<h2 class="anchored" data-anchor-id="one-way-anova-and-extra-sum-of-squares">5. One-Way ANOVA and Extra Sum of Squares</h2>
+<section id="anova-extra-ss" class="level2">
+<h2 class="anchored" data-anchor-id="anova-extra-ss">5. One-Way ANOVA and Extra Sum of Squares</h2>
 <section id="a.-one-way-anova" class="level3">
 <h3 class="anchored" data-anchor-id="a.-one-way-anova">5A. One-Way ANOVA</h3>
 <div class="cell">
@@ -870,8 +868,8 @@ window.Quarto = {
 </div>
 </section>
 </section>
-<section id="non-parametric-tests" class="level2">
-<h2 class="anchored" data-anchor-id="non-parametric-tests">8. Non-Parametric Tests</h2>
+<section id="nonparam-tests" class="level2">
+<h2 class="anchored" data-anchor-id="nonparam-tests">8. Non-Parametric Tests</h2>
 <section id="a.-wilcoxon-rank-sum-test-mann-whitney" class="level3">
 <h3 class="anchored" data-anchor-id="a.-wilcoxon-rank-sum-test-mann-whitney">8A. Wilcoxon Rank-Sum Test (Mann-Whitney)</h3>
 <div class="cell">
@@ -946,8 +944,8 @@ window.Quarto = {
 </div>
 </section>
 </section>
-<section id="correlation-and-simple-linear-regression" class="level2">
-<h2 class="anchored" data-anchor-id="correlation-and-simple-linear-regression">9. Correlation and Simple Linear Regression</h2>
+<section id="correlation-simple-regression" class="level2">
+<h2 class="anchored" data-anchor-id="correlation-simple-regression">9. Correlation and Simple Linear Regression</h2>
 <section id="a.-pearson-correlation" class="level3">
 <h3 class="anchored" data-anchor-id="a.-pearson-correlation">9A. Pearson Correlation</h3>
 <div class="cell">
@@ -1272,8 +1270,8 @@ window.Quarto = {
 </div>
 </section>
 </section>
-<section id="log-log-models-back-transformation" class="level2">
-<h2 class="anchored" data-anchor-id="log-log-models-back-transformation">11. Log-Log Models &amp; Back-Transformation</h2>
+<section id="log-log-models" class="level2">
+<h2 class="anchored" data-anchor-id="log-log-models">11. Log-Log Models &amp; Back-Transformation</h2>
 <section id="a.-back-transform-the-slope-and-interpret" class="level3">
 <h3 class="anchored" data-anchor-id="a.-back-transform-the-slope-and-interpret">11A. Back-Transform the Slope and Interpret</h3>
 <div class="cell">
@@ -1368,8 +1366,8 @@ window.Quarto = {
 </div>
 </section>
 </section>
-<section id="multiple-linear-regression-mlr" class="level2">
-<h2 class="anchored" data-anchor-id="multiple-linear-regression-mlr">12. Multiple Linear Regression (MLR)</h2>
+<section id="multiple-regression" class="level2">
+<h2 class="anchored" data-anchor-id="multiple-regression">12. Multiple Linear Regression (MLR)</h2>
 <section id="a.-mlr-with-only-numeric-predictors-same-slopes" class="level3">
 <h3 class="anchored" data-anchor-id="a.-mlr-with-only-numeric-predictors-same-slopes">12A. MLR with Only Numeric Predictors (Same Slopes)</h3>
 <div class="cell">
