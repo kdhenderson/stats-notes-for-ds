@@ -341,13 +341,13 @@ cat("p-Value F-test:", p_value, "\n")
 ### 6A. Tukey HSD using `multcomp` (Tukey-Kramer Adjustment)
 ```{r}
 
-# Use multcomp to conduct pairwise comparisons with Tukey-Kramer multiple comparison correction
+# Use the multcomp package to conduct pairwise comparisons with the Tukey-Kramer multiple comparison correction
 library(multcomp)
 
-# Fit must come from an ANOVA or linear model with a factor
+# Fit must come from an ANOVA or linear model with a factor variable
 gfit = glht(fit, linfct = mcp(groups = "Tukey")) # 'groups' is your factor variable
 
-# Summary of pairwise tests
+# See pairwise comparisons and adjusted p-values
 summary(gfit)
 
 # Extract confidence intervals for all pairwise comparisons
@@ -359,11 +359,11 @@ confint_gfit
 ### 6B. Tukey HSD using agricolae
 ```{r}
 
-# Tukey using agricolae
+# Tukey HSD using the agricolae package
 # Different way to extract half_width
 library(agricolae)
 
-# Run Tukey HSD test
+# Run Tukey HSD test (grouping variable must be specified)
 tukey_half = HSD.test(fit, 'groups') # put groups variable in
 
 # Extract minimum significant difference (half-width of CI)
@@ -378,7 +378,7 @@ tukey_half$statistics$MSD
 # Note: This function works correctly on models fit with aov()
 # (I haven't used this before, so confirm it is the correct function.)
 
-# This will also give you the adjusted CIs and p-values
+# Provides adjusted CIs and p-values
 tukey_result = TukeyHSD(fit)
 tukey_result
 
@@ -387,13 +387,14 @@ tukey_result
 
 ## 7. Contrasts {#contrasts}
 
-> Only use planned contrasts **after** a significant ANOVA result.
+> Perform planned contrasts only *after* a significant ANOVA result. Use adjusted *p*-values when doing multiple, unplanned comparisons.
 
 ### 7A. Setup and Specifying Contrasts
 ```{r}
 
 # Contrast of the average of the mean of 2 groups of 2
 
+# Load emmeans for estimated marginal means (least squares means) and contrasts
 library(emmeans)
 
 # Check the order of factor levels - for assigning contrast coefficients
@@ -403,10 +404,10 @@ unique(dataset$groups)
 fit = lm(response ~ groups, data = dataset)
 
 # Get least-squares means for each group
-leastsquare = lsmeans(fit, "groups") # put groups variable in
+leastsquare = emmeans(fit, "groups") # put groups variable in
 
 # Define contrast weights: compare (A+B) vs (C+D)
-Contrasts = list(Grp1and2vsGrp3and4 = c(.5, .5, -.5, -.5))
+contrasts = list(Grp1and2vsGrp3and4 = c(.5, .5, -.5, -.5))
 
 ```
 
@@ -414,14 +415,18 @@ Contrasts = list(Grp1and2vsGrp3and4 = c(.5, .5, -.5, -.5))
 ```{r}
 
 # With adjustment
-contrastResultsCorr = contrast(leastsquare, Contrasts, adjust = "sidak") # slightly less conservative than bonferroni
+contrastResultsCorr = contrast(leastsquare, contrasts, adjust = "sidak") # slightly less conservative than bonferroni
 sum_contrastResultsCorr = summary(contrastResultsCorr)
 sum_contrastResultsCorr
+# Confidence interval
+confint(contrastResultsCorr, level = 0.95) 
 
 # Without adjustment
-contrastResults = contrast(leastsquare, Contrasts) # no adjustment
+contrastResults = contrast(leastsquare, contrasts) # no adjustment
 sum_contrastResults = summary(contrastResults)
 sum_contrastResults
+# Confidence interval
+confint(contrastResults, level = 0.95) 
 
 ```
 

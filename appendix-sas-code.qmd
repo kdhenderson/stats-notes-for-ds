@@ -9,19 +9,19 @@ execute:
 
 Quick Navigation:
 
-- [1. Data Import & Summary Statistics](#data-import-summary)
-- [2. Visualization & Assumption Checks](#viz-assumption-checks)
+- [1. Data Import and Summary Statistics](#data-import-summary)
+- [2. Visualization and Assumption Checks](#viz-assumption-checks)
 - [3. Permutation Test](#permutation-test)
 - [4. *t*-Tests and Power Analysis](#t-tests-power)
 - [5. ANOVA and Extra Sum of Squares](#anova-extra-ss)
 - [6. Non-Parametric Tests](#nonparam-tests)
-- [7. Correlation & Simple Regression](#correlation-simple-regression)
+- [7. Correlation and Simple Regression](#correlation-simple-regression)
 - [8. Residual Analysis](#residual-analysis)
 
 
 ::: {.appendix}
 
-## 1. Data Import & Summary Statistics {#data-import-summary}
+## 1. Data Import and Summary Statistics {#data-import-summary}
 
 > Most SAS procedures require your dataset to be sorted by group for grouped analysis or plotting.
 > You can either import data from a file or create a dataset manually for small examples.
@@ -79,7 +79,7 @@ run;
     
 ```
 
-### 1B. Summary View & Sorting
+### 1B. Summary View and Sorting
 ```{sas}
 
 /* Preview the data */
@@ -116,7 +116,7 @@ run;
 
 ```
 
-### 1D. Log Transformation & Filtering
+### 1D. Log Transformation and Filtering
 ```{sas}
 
 /* Create a log-transformed version of response */
@@ -138,7 +138,7 @@ run;
 
 ```
 
-### 1E. Categorical Recoding & Viewing Subsets
+### 1E. Categorical Recoding and Viewing Subsets
 ```{sas}
 
 /* Create ordinal version of categorical variable */
@@ -168,7 +168,7 @@ run;
 ```
 
 
-## 2. Visualization & Assumption Checks {#viz-assumption-checks}
+## 2. Visualization and Assumption Checks {#viz-assumption-checks}
 
 > Use `proc univariate`, `proc sgplot`, and `proc ttest` to visualize distributions and assess assumptions of normality and variance.  
 > Many visualizations require sorting your dataset by the grouping variable.
@@ -332,7 +332,7 @@ ods exclude none;
 
 ```
 
-### 3D. Plot Permutation Histogram & Calculate *p*-value
+### 3D. Plot Permutation Histogram and Calculate *p*-value
 ```{sas}
                                                                     
 /* Plot the distribution of permuted mean differences (Pooled method only) */
@@ -542,20 +542,21 @@ run;
 ### 5C. Linear Contrasts
 ```{sas}
 
-/* Test linear contrasts using CONTRAST and ESTIMATE */
-/* CONTRAST is used to test hypotheses (gives SS, F-statistic), while ESTIMATE provides point estimate and SE (used to construct confidence intervals). */
-/* These compare one group mean to a linear combination of others */
+/* Test linear contrasts using CONTRAST and ESTIMATE statements.
+   CONTRAST is used to test hypotheses (produces sum of squares and F-statistic).
+   ESTIMATE provides a point estimate and standard error (used for CIs).
+   These allow comparisons of one group mean to a linear combination of others. */
 
-/* didn't state order = data so groups are in alphabetical order;
-order = data; keeps the data in the order it came in: proc glm data = Handicap order = data;
-contrast gives you the sum of squares
-estimate gives you the estimate of the gamma */  
+/* Note: SAS orders categorical levels alphabetically by default.
+   To retain original data order (e.g., to match planned contrast coefficients),
+   use 'order = data' in PROC GLM:
+   proc glm data = Handicap order = data; */  
   
 proc glm data = dataset;
     class explanatory;
     model response = explanatory;
     means explanatory;
-
+   
     /* Grp1 vs sum or average of others (assuming 5 groups) */
     contrast 'Grp1 vs Sum of Other 4 Groups' explanatory 4 -1 -1 -1 -1;
     estimate 'Grp1 vs Sum of Other 4 Groups' explanatory 4 -1 -1 -1 -1;
@@ -565,14 +566,16 @@ proc glm data = dataset;
     contrast 'Grp1 vs Grp2' explanatory 1 -1 0 0 0;
     estimate 'Estimate Grp1 vs Grp2' explanatory 1 -1 0 0 0;
 run;  
-  
+   
 
-/* To compute a 95% CI manually for the difference in averages of above (point estimate +- multiplier * standard error): critical t-value (multiplier for 95% CI) */
+/* Manually compute the critical t-value for a 95% confidence interval.
+   This is used in: point estimate ± (multiplier × standard error)
+*/
 data quantile;
-    quant = quantile("t", 0.975, df); * where df=n-groups;
+    quant = quantile("t", 0.975, df);  * where df = n − number of groups;
 run;
 proc print data = quantile;
-run;
+run;   
 
 ```
 
@@ -608,7 +611,7 @@ run;
 
 ### 5E. Summary: Choosing a Multiple Comparison Adjustment
 
-- When deciding multiple comparison correction:
+- When choosing a multiple comparison correction:
   - Were the comparisons planned before looking at the data or unplanned? If planned, no need to make multiple comparison correction. Can use LSD.
   - Are the groups being compared to a single control or reference group? If so, use Dunnett’s.
   - Are the groups normally distributed with equal standard deviation? If so, use Tukey-Kramer.
@@ -887,7 +890,7 @@ run;
 ```
 
 
-## 7. Correlation & Simple Regression {#correlation-simple-regression}
+## 7. Correlation and Simple Regression {#correlation-simple-regression}
 
 > This section includes Pearson correlation, simple linear regression, and options for confidence and prediction intervals.
 
@@ -941,7 +944,7 @@ run;
 
 ```
 
-### 7C. Confidence & Prediction Intervals for New Observations
+### 7C. Confidence and Prediction Intervals for New Observations
 ```{sas}
 
 /* Example dataset with missing response values for prediction */
@@ -987,7 +990,7 @@ run;
 
 > This section focuses on residual diagnostics to evaluate model assumptions such as linearity, homoscedasticity, and outliers.
 
-### 8A. Residual Plots & Diagnostics
+### 8A. Residual Plots and Diagnostics
 
 > SAS automatically produces residual plots (and other diagnostics) with `proc reg` if ODS graphics are enabled.
 ```{sas}
