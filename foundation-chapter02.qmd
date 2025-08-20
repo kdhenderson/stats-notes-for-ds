@@ -42,7 +42,7 @@ CI = \bar{X} \pm t_{\text{crit}} \left( \frac{s}{\sqrt{n}} \right)
 $$
 where $t_{\text{crit}}$ is based on the desired confidence level and degrees of freedom.
 
-**Example confidence interval statement**: "With $\_\_$% confidence, the true mean $\mu$ is between $\_\_$ and $\_\_$, based on a sample $n = \_\_$ from this population."
+**Example confidence interval statement**: "With $(1-\alpha) \times 100\%$ confidence, the true mean $\mu$ is between [lower bound] and [upper bound], based on a sample of size $n$ from this population."
 
 
 ## Hypothesis Testing
@@ -73,7 +73,7 @@ $$
 
 - For a one-sided test, the sign of the numerator matters. Always subtract $\mu_0$ from the sample mean $\bar{X}$.
 
-### P-Value
+### *p*-Value
 - Calculated assuming $H_0$ is true.  
 - A small *p*-value suggests the observed difference is unlikely due to random variation alone.  
 - The *p*-value is the area in one or both tails beyond the observed *t*-statistic, depending on the form of $H_a$.  
@@ -100,7 +100,7 @@ $$
 - **Critical value**: `qt(probability, df)`  
   - For a two-sided test, use $\alpha/2$ and $1 - \alpha/2$.  
   - For a one-sided test, use $\alpha$ or $1 - \alpha$.
-- **p-value**: `pt(t_statistic, df, lower.tail = TRUE/FALSE)`  
+- ***p*-value**: `pt(t_statistic, df, lower.tail = TRUE/FALSE)`  
   - Multiply by 2 for a two-sided *p*-value.
 
 

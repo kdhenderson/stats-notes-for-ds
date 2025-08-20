@@ -27,7 +27,7 @@ title: "Data Screening, Assumptions, and Transformations"
 4. Quantitative data  
 5. Nearly normal distribution  
 6. Equal standard deviations for two-sample tests  
-   - Also called *homoscedasticity*, meaning the groups have the same shape and spread.
+   - Also called **homoscedasticity**, meaning the groups have the same shape and spread.
 
 
 ## Paired *t*-Test
@@ -134,12 +134,12 @@ These propositions come from basic properties of logarithms and allow us to tran
 
 We apply the previous propositions to interpret results from a *t*-test on log-transformed data. Suppose:
 $$
-\text{mean}(\log x) - \text{mean}(\log y) = \gamma
+\text{mean}(\log(x)) - \text{mean}(\log(y)) = \gamma
 $$
 
 Because the distribution is approximately normal, we assume the mean and median are roughly equal:
 $$
-\text{median}(\log x) - \text{median}(\log y) = \gamma
+\text{median}(\log(x)) - \text{median}(\log(y)) = \gamma
 $$
 
 The logarithmic function is monotonically increasing:

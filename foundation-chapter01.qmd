@@ -56,7 +56,7 @@ Random sampling uses chance to select a representative sample, allowing us to in
    - **Alternative hypothesis ($H_a$)**: Suggests an effect or difference exists.
 2. **Test statistic**: A sample estimate (e.g., difference in means) divided by a measure of variability (e.g., standard error).
    - Example: A *t*-statistic in a two-sample *t*-test.
-3. **P-Value**: Probability of observing by random chance a result as extreme as the sample, assuming $H_0$ is true. Calculated using the test statistic.
+3. ***p*-value**: Probability of observing by random chance a result as extreme as the sample, assuming $H_0$ is true. Calculated using the test statistic.
 4. **Decision**: Compare the *p*-value to the significance level ($\alpha$). Under the assumption that the population means are equal, a small *p*-value indicates that the observed result would be unlikely due to chance alone.
    - If $p < \alpha$: Reject $H_0$.
    - Otherwise: Fail to reject $H_0$.
@@ -81,7 +81,7 @@ Random sampling uses chance to select a representative sample, allowing us to in
 ### Permutation Testing
 - **Purpose**: Tests results against all possible randomizations to assess how unusual the observed result is.
   - In an experiment, permutations represent all possible assignments of participants to treatment groups.
-- **P-value calculation**: Count how many permutations are as extreme as the observed result, and divide by the total number of permutations.
+- ***p*-value calculation**: Count how many permutations are as extreme as the observed result, and divide by the total number of permutations.
   - Example: If 10 out of 1,000 permutations are as extreme as the observed result, the *p*-value is $10 / 1{,}000 = 0.01$.
 
 
