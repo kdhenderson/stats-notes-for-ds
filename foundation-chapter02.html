@@ -412,7 +412,7 @@ window.Quarto = {
 <p>The formula for a confidence interval is: <span class="math display">\[
 CI = \bar{X} \pm t_{\text{crit}} \left( \frac{s}{\sqrt{n}} \right)
 \]</span> where <span class="math inline">\(t_{\text{crit}}\)</span> is based on the desired confidence level and degrees of freedom.</p>
-<p><strong>Example confidence interval statement</strong>: “With <span class="math inline">\(\_\_\)</span>% confidence, the true mean <span class="math inline">\(\mu\)</span> is between <span class="math inline">\(\_\_\)</span> and <span class="math inline">\(\_\_\)</span>, based on a sample <span class="math inline">\(n = \_\_\)</span> from this population.”</p>
+<p><strong>Example confidence interval statement</strong>: “With <span class="math inline">\((1-\alpha) \times 100\%\)</span> confidence, the true mean <span class="math inline">\(\mu\)</span> is between [lower bound] and [upper bound], based on a sample of size <span class="math inline">\(n\)</span> from this population.”</p>
 </section>
 <section id="hypothesis-testing" class="level2">
 <h2 class="anchored" data-anchor-id="hypothesis-testing">Hypothesis Testing</h2>
@@ -463,7 +463,7 @@ t = \frac{\bar{X} - \mu_0}{\frac{s}{\sqrt{n}}}
 </ul>
 </section>
 <section id="p-value" class="level3">
-<h3 class="anchored" data-anchor-id="p-value">P-Value</h3>
+<h3 class="anchored" data-anchor-id="p-value"><em>p</em>-Value</h3>
 <ul>
 <li>Calculated assuming <span class="math inline">\(H_0\)</span> is true.<br>
 </li>
@@ -505,7 +505,7 @@ t = \frac{\bar{X} - \mu_0}{\frac{s}{\sqrt{n}}}
 </li>
 <li>For a one-sided test, use <span class="math inline">\(\alpha\)</span> or <span class="math inline">\(1 - \alpha\)</span>.</li>
 </ul></li>
-<li><strong>p-value</strong>: <code>pt(t_statistic, df, lower.tail = TRUE/FALSE)</code>
+<li><strong><em>p</em>-value</strong>: <code>pt(t_statistic, df, lower.tail = TRUE/FALSE)</code>
 <ul>
 <li>Multiply by 2 for a two-sided <em>p</em>-value.</li>
 </ul></li>
