@@ -54,6 +54,8 @@ $$
 - It measures the test's ability to detect true differences between population distributions.
 - Higher power means a greater likelihood of detecting a real effect.
 
+Example power statement: "At [power level]% power, this study can detect an effect size of $\Delta$ or larger at $\alpha$ = [significance level] with $n$ = [sample size]."
+
 
 ## Effect Size
 
@@ -121,7 +123,7 @@ proc power;
 		mean = 20450
 		stddev = 500
 		ntotal = 8
-		power = .;
+		power = .;  /* parameter to solve for */
 run;
 
 /* Two-sample t-test */
@@ -133,7 +135,7 @@ proc power;
 		meandiff = 4
 		stddev = 3
 		npergroup = 50
-		power = .;
+		power = .;  /* parameter to solve for */
 run;		
 		
 ```
@@ -180,7 +182,7 @@ proc power;
 		ntotal = 60 80
 		mean = 0.07
 		stddev = 0.2
-		power = .;
+		power = .;  /* parameter to solve for */
 		plot x = n min = 60 max = 80;
 run;
 
@@ -197,7 +199,7 @@ proc power;
 		meandiff = 3 to 5 by 0.1 
 		ntotal = 47
 		stddev = 4.5
-		power = .;
+		power = .;  /* parameter to solve for */
 		plot x = effect min = 3 max = 5;
 run;
 
@@ -208,13 +210,13 @@ ods graphics off;
 
 ## Summary of Start-to-Finish Analysis for Client Presentation
 
-### Initial Meetings
-- Define key parameters, such as power (e.g., at least 80%).
+### Initial Meetings & Research Planning Phase
+- Define key parameters, such as desired power (e.g., at least 80%).
 - Conduct a power analysis to determine required sample sizes for different power thresholds.
-- Provide multiple options based on budget and desired power.
-- Visualize trade-offs to illustrate how power changes with sample size using a power curve.
+- Provide multiple design options based on budget and desired power.
+- Create power curves to visualize trade-offs between sample size and power.
 
-### Final Presentation
+### Final Presentation & Results Communication
 - Restate the research question and test parameters.
 - Display descriptive statistics and plots (e.g., boxplots, histograms).
 - Present test results, including *p*-values and confidence intervals.

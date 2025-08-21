@@ -82,7 +82,7 @@ $$
 
 ## Linking Hypothesis Tests and Confidence Intervals
 
-- A $(1 - \alpha)\%$ confidence interval corresponds to a two-sided hypothesis test at significance level $\alpha$.  
+- A $(1 - \alpha) \times 100\%$ confidence interval corresponds to a two-sided hypothesis test at significance level $\alpha$.  
 - If the null value is outside the interval, we reject $H_0$ at level $\alpha$. 
 - Confidence intervals provide an alternative way to evaluate hypothesis test results.
 
