@@ -459,6 +459,7 @@ window.Quarto = {
 <li>It measures the test’s ability to detect true differences between population distributions.</li>
 <li>Higher power means a greater likelihood of detecting a real effect.</li>
 </ul>
+<p>Example power statement: “At [power level]% power, this study can detect an effect size of <span class="math inline">\(\Delta\)</span> or larger at <span class="math inline">\(\alpha\)</span> = [significance level] with <span class="math inline">\(n\)</span> = [sample size].”</p>
 </section>
 <section id="effect-size" class="level2">
 <h2 class="anchored" data-anchor-id="effect-size">Effect Size</h2>
@@ -537,7 +538,7 @@ proc power;
         mean = 20450
         stddev = 500
         ntotal = 8
-        power = .;
+        power = .;  /* parameter to solve for */
 run;
 
 /* Two-sample t-test */
@@ -549,7 +550,7 @@ proc power;
         meandiff = 4
         stddev = 3
         npergroup = 50
-        power = .;
+        power = .;  /* parameter to solve for */
 run;        
         </code></pre>
 </details>
@@ -599,7 +600,7 @@ proc power;
         ntotal = 60 80
         mean = 0.07
         stddev = 0.2
-        power = .;
+        power = .;  /* parameter to solve for */
         plot x = n min = 60 max = 80;
 run;
 
@@ -616,7 +617,7 @@ proc power;
         meandiff = 3 to 5 by 0.1 
         ntotal = 47
         stddev = 4.5
-        power = .;
+        power = .;  /* parameter to solve for */
         plot x = effect min = 3 max = 5;
 run;
 
@@ -627,17 +628,17 @@ ods graphics off;
 </section>
 <section id="summary-of-start-to-finish-analysis-for-client-presentation" class="level2">
 <h2 class="anchored" data-anchor-id="summary-of-start-to-finish-analysis-for-client-presentation">Summary of Start-to-Finish Analysis for Client Presentation</h2>
-<section id="initial-meetings" class="level3">
-<h3 class="anchored" data-anchor-id="initial-meetings">Initial Meetings</h3>
+<section id="initial-meetings-research-planning-phase" class="level3">
+<h3 class="anchored" data-anchor-id="initial-meetings-research-planning-phase">Initial Meetings &amp; Research Planning Phase</h3>
 <ul>
-<li>Define key parameters, such as power (e.g., at least 80%).</li>
+<li>Define key parameters, such as desired power (e.g., at least 80%).</li>
 <li>Conduct a power analysis to determine required sample sizes for different power thresholds.</li>
-<li>Provide multiple options based on budget and desired power.</li>
-<li>Visualize trade-offs to illustrate how power changes with sample size using a power curve.</li>
+<li>Provide multiple design options based on budget and desired power.</li>
+<li>Create power curves to visualize trade-offs between sample size and power.</li>
 </ul>
 </section>
-<section id="final-presentation" class="level3">
-<h3 class="anchored" data-anchor-id="final-presentation">Final Presentation</h3>
+<section id="final-presentation-results-communication" class="level3">
+<h3 class="anchored" data-anchor-id="final-presentation-results-communication">Final Presentation &amp; Results Communication</h3>
 <ul>
 <li>Restate the research question and test parameters.</li>
 <li>Display descriptive statistics and plots (e.g., boxplots, histograms).</li>
