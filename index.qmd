@@ -5,6 +5,7 @@ format:
     number-sections: false
 ---
 
+
 # Introduction
 
 This book serves as a companion for students in the SMU Master of Science in Data Science program, specifically for the Statistical Foundations and Applied Statistics courses. It is designed to summarize both the theoretical understanding and practical applications of statistical methods.
