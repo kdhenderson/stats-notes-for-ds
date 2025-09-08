@@ -42,7 +42,7 @@ CI = \bar{X} \pm t_{\text{crit}} \left( \frac{s}{\sqrt{n}} \right)
 $$
 where $t_{\text{crit}}$ is based on the desired confidence level and degrees of freedom.
 
-**Example confidence interval statement**: "With $(1-\alpha) \times 100\%$ confidence, the true mean $\mu$ is between [lower bound] and [upper bound], based on a sample of size $n$ from this population."
+Example confidence interval statement: "With $(1-\alpha) \times 100\%$ confidence, the true mean $\mu$ is between [lower bound] and [upper bound], based on a sample of size $n$ from this population."
 
 
 ## Hypothesis Testing

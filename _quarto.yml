@@ -40,20 +40,12 @@ book:
       orcid: "0000-0002-9265-7709"
       email: kdhenderson@gmail.com
       corresponding: true
-    - name: "Professor of Applied Statistics"
-      affiliation: "SMU MSDS Program"
-      email: "TBD"
-    - name: "Professor of Statistical Foundations"
-      affiliation: "SMU MSDS Program"
-      email: "TBD"
-    # Professors listed as placeholders; will confirm with them before publication.
-    # Add later to index.qmd author contributions if relevant: *All authors reviewed and approved the final version of this book.*
   date: last-modified
   chapters:
     - index.qmd  # Introduction or preface
     - part: "Statistical Foundations"
       chapters:
-        - foundation-chapter01.qmd  # Add additional chapters as they are created
+        - foundation-chapter01.qmd
         - foundation-chapter02.qmd
         - foundation-chapter03.qmd
         - foundation-chapter04.qmd
