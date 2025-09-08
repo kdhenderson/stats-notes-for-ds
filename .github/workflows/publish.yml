@@ -12,11 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-        
-      # NEW: compute last commit date for the whole repo
-      - name: Compute last modified date
-        run: echo "BOOK_LAST_MOD=$(git log -1 --date=short --format=%cs)" >> $GITHUB_ENV
-  
       - uses: quarto-dev/quarto-actions/setup@v2
       # Add language toolchains here if needed (e.g., setup-python, setup-r)
       - uses: quarto-dev/quarto-actions/render@v2
