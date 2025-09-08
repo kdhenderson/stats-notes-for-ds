@@ -40,11 +40,11 @@
     ]
   },
   {
-    "objectID": "index.html#author-contributions",
-    "href": "index.html#author-contributions",
+    "objectID": "index.html#acknowledgments",
+    "href": "index.html#acknowledgments",
     "title": "Henderson’s Statistics Notes for Data Science",
-    "section": "Author Contributions",
-    "text": "Author Contributions\n\nProfessor of Applied Statistics and Professor of Statistical Foundations: Developed the original course materials and lectures on which this book is based.\nKristin Henderson: Compiled, adapted, and updated these notes from the original course materials, and prepared the Quarto book for publication.",
+    "section": "Acknowledgments",
+    "text": "Acknowledgments\nI thank Dr. Sadler and Dr. Turner for the lectures and course materials that formed the basis of these notes; any errors are my own. I also thank Dr. Sadler for suggesting that I compile these notes into a book.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Henderson's Statistics Notes</span>"
     ]
