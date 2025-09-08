@@ -1,9 +1,11 @@
 ---
 title: "Henderson's Statistics Notes"
+date: "2025-08-15"          # original publication date
 format:
   html:
     number-sections: false
 ---
+<small>Published: {{< meta date >}} · Revised: {{< env BOOK_LAST_MOD >}}</small>
 
 # Introduction
 

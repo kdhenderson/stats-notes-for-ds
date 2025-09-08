@@ -4,7 +4,7 @@ project:
 site-url: https://kdhenderson.github.io/stats-notes-for-ds/
 
 # Global dates (apply to all pages)
-date-modified: last-modified      # auto from git history
+# date-modified: last-modified      # auto from git history
 # Optional: you can also set a global original date:
 # date: "2025-08-15"
 
@@ -45,7 +45,7 @@ book:
       orcid: "0000-0002-9265-7709"
       email: kdhenderson@gmail.com
       corresponding: true
-  date: "2025-08-15"           # original publication date
+  # date: "2025-08-15"           # original publication date
   chapters:
     - index.qmd  # Introduction or preface
     - part: "Statistical Foundations"
