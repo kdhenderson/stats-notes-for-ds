@@ -29,8 +29,10 @@ quarto render
 
 See the [LICENSE](LICENSE) file for details.
 
-## Authors
+## Author
 
 - Kristin Henderson
-- Professor of Applied Statistics (placeholder)
-- Professor of Statistical Foundations (placeholder)
+
+## Acknowledgments
+
+I thank Dr. Sadler and Dr. Turner for the lectures and course materials that formed the basis of these notes; any errors are my own. I also thank Dr. Sadler for suggesting that I compile these notes into a book.
